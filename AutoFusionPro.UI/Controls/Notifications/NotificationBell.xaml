@@ -1,0 +1,307 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Controls.Notifications.NotificationBell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Notifications"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.ViewNotification"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="300" 
+             d:Background="{DynamicResource WhiteBrush}" 
+             d:Foreground="{DynamicResource Accent.Turquoise.BackgroundBrush}">
+
+    <UserControl.Resources>
+        <Style x:Key="NotificationItemStyle"
+               TargetType="Border">
+            <Setter Property="Margin"
+                    Value="0,5,0,5" />
+            <Setter Property="Padding"
+                    Value="10" />
+            <Setter Property="CornerRadius"
+                    Value="8" />
+            <Setter Property="Background"
+                    Value="{DynamicResource Card.BackgroundBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsRead}"
+                             Value="True">
+                    <Setter Property="Opacity"
+                            Value="0.7" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NotificationTitleStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="{StaticResource FontSizeSmall}" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+            <Setter Property="Margin"
+                    Value="0,0,0,5" />
+            <Setter Property="FontFamily"
+                    Value="{DynamicResource DynamicFontFamilyMedium}" />
+        </Style>
+
+        <Style x:Key="NotificationMessageStyle"
+               TargetType="TextBlock">
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+            <Setter Property="FontSize"
+                    Value="{StaticResource FontSizeCaption}" />
+            <Setter Property="Margin"
+                    Value="0,0,0,8" />
+            <Setter Property="FontFamily"
+                    Value="{DynamicResource DynamicFontFamilyRegular}" />
+        </Style>
+
+        <Style x:Key="NotificationTimeStyle"
+               TargetType="TextBlock">
+            <Setter Property="Opacity"
+                    Value="0.6" />
+            <Setter Property="FontSize"
+                    Value="{StaticResource FontSizeCaption}" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="FontFamily"
+                    Value="{DynamicResource DynamicFontFamilyLight}" />
+        </Style>
+
+        <!-- Data template for the notification type icon -->
+        <DataTemplate x:Key="NotificationTypeIconTemplate">
+            <Border Width="24"
+                    Height="24"
+                    CornerRadius="12"
+                    Margin="0,0,8,0">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}"
+                                         Value="Info">
+                                <Setter Property="Background"
+                                        Value="#3498db" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}"
+                                         Value="Warning">
+                                <Setter Property="Background"
+                                        Value="#f39c12" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}"
+                                         Value="Error">
+                                <Setter Property="Background"
+                                        Value="#e74c3c" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}"
+                                         Value="Success">
+                                <Setter Property="Background"
+                                        Value="#2ecc71" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontFamily="{StaticResource FontAwesome}"
+                           Foreground="White"
+                           FontSize="12">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type}"
+                                             Value="Info">
+                                    <Setter Property="Text"
+                                            Value="&#xf05a;" />
+                                    <!-- info circle -->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}"
+                                             Value="Warning">
+                                    <Setter Property="Text"
+                                            Value="&#xf071;" />
+                                    <!-- exclamation triangle -->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}"
+                                             Value="Error">
+                                    <Setter Property="Text"
+                                            Value="&#xf057;" />
+                                    <!-- times circle -->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type}"
+                                             Value="Success">
+                                    <Setter Property="Text"
+                                            Value="&#xf058;" />
+                                    <!-- check circle -->
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Bell icon with badge -->
+        <Button x:Name="BellButton"
+                Width="40"
+                Height="40" Style="{StaticResource IconButtonStyle}"
+                Command="{Binding ToggleNotificationPanelCommand}">
+            <Grid>
+                <TextBlock Text="&#xf0f3;"
+                           FontFamily="{StaticResource FontAwesome}"
+                           FontSize="18"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+
+                <!-- Notification Badge -->
+                <Border Background="{DynamicResource Window.BackgroundBrush}"
+                        CornerRadius="10"
+                        Width="20"
+                        Height="20"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="-5,-5,0,0"
+                        Visibility="{Binding HasUnreadNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="{Binding UnreadCount}"
+                               Foreground="{DynamicResource Text.PrimaryBrush}"
+                               FontSize="10"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontWeight="Bold" />
+                </Border>
+            </Grid>
+        </Button>
+
+        <!-- Notification Panel (Popup) -->
+        <Popup x:Name="NotificationPopup"
+               StaysOpen="False" FlowDirection="{Binding CurrentWorkFlow}"
+               IsOpen="{Binding IsNotificationPanelOpen}"
+               PlacementTarget="{Binding ElementName=BellButton}"
+               Placement="Bottom"
+               AllowsTransparency="True"
+               PopupAnimation="Fade"
+               Width="350"
+               MaxHeight="500">
+            <Border Background="{DynamicResource Dialog.BackgroundBrush}"
+                    BorderBrush="{DynamicResource Card.BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8" 
+                    Padding="10"
+                    Effect="{StaticResource ShadowEffect}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Grid Grid.Row="0"
+                          Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="{DynamicResource NotificationsStr}"
+                                   FontWeight="Bold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                   VerticalAlignment="Center" />
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal">
+                            <Button Content="{DynamicResource MarkAllReadStr}"
+                                    Command="{Binding MarkAllAsReadCommand}"
+                                    FontSize="{StaticResource FontSizeRegular}"
+                                    Visibility="{Binding HasUnreadNotifications, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Margin="0,0,8,0" />
+
+                            <Button Content="{DynamicResource ClearAllStr}"
+                                    Command="{Binding DeleteAllNotificationsCommand}"
+                                    FontSize="{StaticResource FontSizeCaption}"
+                                    Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </StackPanel>
+                    </Grid>
+                    <Separator BorderBrush="{DynamicResource Border.PrimaryBrush}"
+                               Margin="0,0,0,8" Grid.Row="1"/>
+
+                    <!-- Notification List -->
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalAlignment="Stretch" >
+                        <ItemsControl ItemsSource="{Binding Notifications}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource NotificationItemStyle}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Type Icon -->
+                                            <ContentControl Grid.Column="0"
+                                                            ContentTemplate="{StaticResource NotificationTypeIconTemplate}"
+                                                            Content="{Binding}" />
+
+                                            <!-- Notification Content -->
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding Title}" 
+                                                           Style="{StaticResource NotificationTitleStyle}" />
+                                                <TextBlock Text="{Binding Message}"
+                                                           Style="{StaticResource NotificationMessageStyle}" />
+                                                <TextBlock Text="{Binding Timestamp, StringFormat={}{0:dd MMM yyyy - HH:mm}}"
+                                                           Style="{StaticResource NotificationTimeStyle}" />
+                                            </StackPanel>
+
+                                            <!-- Action Buttons -->
+                                            <StackPanel Grid.Column="2"
+                                                        Orientation="Vertical"
+                                                        Margin="5,0,0,0">
+                                                <Button Style="{StaticResource IconButton}"
+                                                        Margin="0,0,0,5"
+                                                        Command="{Binding DataContext.MarkAsReadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding Id}"
+                                                        Visibility="{Binding IsRead, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                                                    <TextBlock Text="&#xf00c;"
+                                                               FontFamily="{StaticResource FontAwesome}"
+                                                               FontSize="12" />
+                                                </Button>
+
+                                                <Button Style="{StaticResource IconButton}"
+                                                        Command="{Binding DataContext.DeleteNotificationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                                        CommandParameter="{Binding Id}">
+                                                    <TextBlock Text="&#xf1f8;"
+                                                               FontFamily="{StaticResource FontAwesome}"
+                                                               FontSize="12" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Empty State -->
+                    <TextBlock Grid.Row="3"
+                               Text="{DynamicResource NoNotificationsStr}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                               Opacity="0.6"
+                               Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

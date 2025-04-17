@@ -1,0 +1,45 @@
+﻿<Window x:Class="AutoFusionPro.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoFusionPro.UI"
+        xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+        xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels"
+        xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="{Binding SystemName}"
+        Height="550"
+        Background="{DynamicResource Window.BackgroundBrush}"
+        d:DataContext="{d:DesignInstance Type=viewModel:MainWindowViewModel}"
+        Width="800" 
+        MinHeight="380"
+        MinWidth="700"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen">
+
+    <!-- Main Content Area -->
+    <Grid>
+        <ContentControl Content="{Binding CurrentView}"
+                        x:Name="MainContentControl">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentView}"
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <!-- Loading indicator for when CurrentView is null -->
+        <Grid Visibility="{Binding IsInitializing, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TextBlock Text="Loading..."
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="24" />
+        </Grid>
+    </Grid>
+</Window>

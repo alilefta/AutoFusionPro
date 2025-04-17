@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="12.0.0-preview1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0-preview1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AutoFusionPro.Core\AutoFusionPro.Core.csproj" />
+	  <ProjectReference Include="..\AutoFusionPro.Domain\AutoFusionPro.Domain.csproj" />
+	</ItemGroup>
+
+
+</Project>

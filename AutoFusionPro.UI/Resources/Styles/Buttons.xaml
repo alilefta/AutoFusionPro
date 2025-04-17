@@ -1,0 +1,772 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+                    xmlns:converters="clr-namespace:AutoFusionPro.UI.Resources.Converters"
+                    xmlns:ap="clr-namespace:AutoFusionPro.UI.Resources.AttachedProps"
+                    xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml">
+    <!-- Spinner Animation -->
+    <Storyboard x:Key="SpinnerAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                         From="0"
+                         To="360"
+                         Duration="0:0:1"
+                         RepeatBehavior="Forever" />
+    </Storyboard>
+
+
+
+    <Style TargetType="TextBlock">
+        <Setter Property="LineHeight"
+                Value="20" />
+    </Style>
+        
+    <!-- Text with Icon (Optional) Multi-Color Button Style  -->
+    <Style x:Key="RegularButtonStyle" TargetType="{x:Type local:XButton}">
+        <Setter Property="Background"
+                Value="{StaticResource Button.Primary.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="{StaticResource Button.Primary.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource Button.Primary.BorderBrush}" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="8,8" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource AlmaraiRegular}" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="CornerRadius"
+                Value="4" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Symbol"
+                Value="Empty" />
+        <Setter Property="SymbolSpacing"
+                Value="5" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="MinHeight"
+                Value="32" />
+        <Setter Property="MaxHeight"
+                Value="40" />
+        <Setter Property="MinWidth"
+                Value="70" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:XButton}">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid>
+                            <!-- Loading Spinner -->
+                            <Grid x:Name="PART_Spinner"
+                                  Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}">
+                                <Ellipse x:Name="spinner"
+                                         Width="25"
+                                         Height="25"
+                                         RenderTransformOrigin="0.5,0.5"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center"
+                                         Stroke="{TemplateBinding Foreground}"
+                                         StrokeDashArray="26,12"
+                                         StrokeThickness="1">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform x:Name="Rotation"
+                                                         Angle="0" />
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.Triggers>
+                                        <EventTrigger RoutedEvent="Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation From="0"
+                                                                     To="360"
+                                                                     Storyboard.TargetName="Rotation"
+                                                                     Storyboard.TargetProperty="Angle" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Ellipse.Triggers>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Button Content -->
+                            <Border Visibility="{Binding IsLoading, Converter={StaticResource BooleanToInverseVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Padding="{TemplateBinding Padding}">
+                                <Grid 
+                                      HorizontalAlignment="Center">
+                                    <!-- Fixed structure with two columns -->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Text Content (Always in first column) -->
+                                    <TextBlock x:Name="textContent"
+                                               Grid.Column="0"
+                                               Text="{TemplateBinding Content}"
+                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               VerticalAlignment="Center"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               FontFamily="{TemplateBinding FontFamily}" />
+
+                                    <!-- Symbol (Always in second column) -->
+                                    <wpfUi:SymbolIcon x:Name="PART_Symbol"
+                                                      Grid.Column="1"
+                                                      Symbol="{TemplateBinding Symbol}"
+                                                      FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
+                                                      Foreground="{TemplateBinding Foreground}"
+                                                      VerticalAlignment="Center"
+                                                      FontSize="{TemplateBinding FontSize}"
+                                                      Margin="{Binding SymbolSpacing, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DoubleLeftMarginConverter}}"
+                                                      Visibility="{Binding Symbol, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource SymbolIconToVisibilityConverter}}" />
+                                </Grid>
+                            </Border>
+
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Button Type Triggers -->
+                        <Trigger Property="ButtonType"
+                                 Value="Primary">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Primary.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Secondary">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Secondary.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Success">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Success.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Danger">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Danger.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Warning">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Warning.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Info">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Info.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Light">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Light.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource Button.Light.ForegroundBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{StaticResource Button.Light.BorderBrush}" />
+                            <Setter Property="BorderThickness"
+                                    Value="1" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Dark">
+                            <Setter Property="Background"
+                                    Value="{StaticResource Button.Dark.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Link">
+                            <Setter Property="Background"
+                                    Value="{StaticResource TransparentBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource Button.Link.BackgroundBrush}" />
+                            <Setter TargetName="textContent" 
+                                    Property="TextDecorations"
+                                    Value="Underline" />
+                        </Trigger>
+
+                        <!-- Loading & Disabled States -->
+                        <Trigger Property="IsLoading"
+                                 Value="True">
+                            <Setter Property="IsEnabled"
+                                    Value="False" />
+                            <Setter TargetName="PART_Spinner"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource SpinnerAnimation}"
+                                                 x:Name="SpinnerStoryboard" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <!-- Button State Triggers -->
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.85" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.7" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SideMenuButtonWithContentStyle" 
+           TargetType="{x:Type local:XSideMenuButton}">
+        <Setter Property="Background"
+                Value="{DynamicResource Button.Menu.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Button.Menu.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Button.Menu.BorderBrush}" />
+        <Setter Property="CornerRadius"
+                Value="10" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="14,8,8,8" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource CairoRegular}" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Symbol"
+                Value="Empty" />
+        <Setter Property="SymbolSpacing"
+                Value="8" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="MinHeight"
+                Value="39" />
+        <Setter Property="MaxHeight"
+                Value="40" />
+        <Setter Property="Margin"
+                Value="0,0,5,0" />
+        <Setter Property="MinWidth"
+                Value="20" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="ToolTipService.InitialShowDelay"
+                Value="200" />
+        <Setter Property="IsCollapsedMode"
+                Value="False" />
+        <Setter Property="IsLoading"
+                Value="False" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <Setter Property="SnapsToDevicePixels"
+                Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:XSideMenuButton}">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid>
+                            <!-- Loading Spinner -->
+                            <Grid x:Name="PART_Spinner"
+                                  Visibility="Collapsed">
+                                <Ellipse x:Name="spinner"
+                                         Width="25"
+                                         Height="25"
+                                         RenderTransformOrigin="0.5,0.5"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center"
+                                         Stroke="{TemplateBinding Foreground}"
+                                         StrokeDashArray="26,12"
+                                         StrokeThickness="1">
+                                    <Ellipse.RenderTransform>
+                                        <RotateTransform x:Name="Rotation"
+                                                         Angle="0" />
+                                    </Ellipse.RenderTransform>
+                                    <Ellipse.Triggers>
+                                        <EventTrigger RoutedEvent="Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation From="0"
+                                                                     To="360"
+                                                                     Storyboard.TargetName="Rotation"
+                                                                     Storyboard.TargetProperty="Angle" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Ellipse.Triggers>
+                                </Ellipse>
+                            </Grid>
+
+                            <!-- Button Content -->
+                            <Border Visibility="Visible"
+                                    x:Name="PART_ContentArea"
+                                    Padding="{TemplateBinding Padding}">
+                                <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                                    <!-- Fixed structure with two columns -->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*"
+                                                          x:Name="TextColumn" />
+                                        <!-- Text Column -->
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- Symbol (Always in second column) -->
+                                    <wpfUi:SymbolIcon x:Name="PART_Symbol"
+                                                      Grid.Column="0"
+                                                      Symbol="{TemplateBinding Symbol}"
+                                                      FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
+                                                      Foreground="{TemplateBinding Foreground}"
+                                                      Opacity="0.95"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="Center"
+                                                      FontSize="18"
+                                                      Margin="{Binding SymbolSpacing, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DoubleMarginConverter}, ConverterParameter='RIGHT'}"
+                                                      Visibility="{Binding Symbol, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource SymbolIconToVisibilityConverter}}" />
+
+                                    <!-- Text Content (Always in first column) -->
+                                    <TextBlock x:Name="textContent"
+                                               Grid.Column="1"
+                                               Text="{TemplateBinding Content}"
+                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               VerticalAlignment="Center"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               FontFamily="{TemplateBinding FontFamily}"
+                                               Opacity="1" />
+                                    <!-- Using ContentPresenter for flexibility, but TextBlock is fine too --><!--
+                                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                                      Grid.Column="1"
+                                                      ContentSource="Content"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      RecognizesAccessKey="True"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      Opacity="1" />
+                                    --><!-- Opacity controlled by trigger -->
+
+
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Loading & Disabled States -->
+                        <Trigger Property="IsLoading"
+                                 Value="True">
+                            <!--<Setter Property="IsEnabled"
+                                    Value="False" />-->
+                            <Setter Property="IsEnabled"
+                                    Value="False" />
+                            <!-- Hide regular content -->
+                            <Setter TargetName="PART_ContentArea"
+                                    Property="Visibility"
+                                    Value="Collapsed" />
+                            <!-- Show spinner -->
+                            <Setter TargetName="PART_Spinner"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                            <!-- Optional: Add specific spinner animation triggers if needed -->
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource SpinnerAnimation}"
+                                                 x:Name="SpinnerStoryboard" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <!-- Selected State -->
+                        <Trigger Property="IsSelected"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Menu.Background.SelectedBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Button.Menu.Foreground.SelectedBrush}" />
+                        </Trigger>
+
+                        <!-- Collapsed Mode Trigger -->
+                        <Trigger Property="IsCollapsedMode"
+                                 Value="True">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Center" />
+
+                            <Setter Property="Margin"
+                                    Value="0,0,0,0" />
+                            
+                            <Setter TargetName="textContent"
+                                    Property="Visibility"
+                                    Value="Collapsed" />
+
+                            <!-- Center the symbol -->
+                            <Setter TargetName="PART_Symbol"
+                                    Property="HorizontalAlignment"
+                                    Value="Center" />
+
+                            <Setter TargetName="TextColumn"
+                                    Property="Width"
+                                    Value="0" />
+                            <Setter Property="Padding"
+                                    Value="8" />
+
+                            <Setter Property="SymbolSpacing"
+                                    Value="0" />
+
+                            <!-- Add animations for text -->
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="textContent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="textContent"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <!-- Button State Triggers -->
+                        <!--<Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.85" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource MenuButtonBackgroundHoverBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource MenuButtonForegroundHoverBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource MenuButtonBorderHoverBrush}" />
+                        </Trigger>-->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                                           Value="True" />
+                                <Condition Property="IsSelected"
+                                           Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="border"
+                                        Property="Opacity"
+                                        Value="0.85" />
+                                <Setter Property="Background"
+                                        Value="{DynamicResource Button.Menu.Background.HoverBrush}" />
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource Button.Menu.Foreground.HoverBrush}" />
+                                <Setter Property="BorderBrush"
+                                        Value="{DynamicResource Button.Menu.BorderBrush}" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+
+                        
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.7" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Menu.Background.PressedBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Button.Menu.Foreground.PressedBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Button.Menu.Border.PressedBrush}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+                                           Value="False" />
+                                <Condition Property="IsLoading"
+                                           Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.5" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Menu.Background.DisabledBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Button.Menu.Foreground.DisabledBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Button.Menu.Border.DisabledBrush}" />
+                        </MultiTrigger>
+                        <!-- Don't change appearance if loading, handled by IsLoading trigger -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled"
+                                           Value="False" />
+                                <Condition Property="IsLoading"
+                                           Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="border"
+                                    Property="Opacity"
+                                    Value="0.5" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Menu.Background.DisabledBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Button.Menu.Foreground.DisabledBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Button.Menu.Border.DisabledBrush}" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- Focus Visual Style -->
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2"
+                               StrokeDashArray="1 2"
+                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                               SnapsToDevicePixels="true"
+                               StrokeThickness="1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- Base Button Style -->
+    <Style x:Key="BaseButtonStyle"
+           TargetType="{x:Type Button}">
+        <Setter Property="FocusVisualStyle"
+                Value="{StaticResource FocusVisual}" />
+        <Setter Property="Padding"
+                Value="6,4" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="MinHeight"
+                Value="32" />
+        <Setter Property="MaxHeight"
+                Value="40" />
+        <Setter Property="MinWidth"
+                Value="70" />
+        <Setter Property="Width"
+                Value="Auto" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
+    </Style>
+
+    <!-- Icon only Button Style -->
+    <Style x:Key="IconButton"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
+        <Setter Property="FontFamily"
+                Value="{StaticResource FontAwesome}" />
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Foreground"
+                Value="#FFE25050" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="Height"
+                Value="Auto" />
+        <Setter Property="Padding"
+                Value="10,8" />
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="Width"
+                Value="30" />
+        <Setter Property="MinHeight"
+                Value="10" />
+        <Setter Property="MinWidth"
+                Value="10" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                        <!-- Add a render scale transform -->
+                        <Border.RenderTransform>
+                            <ScaleTransform />
+                        </Border.RenderTransform>
+                        <Border.RenderTransformOrigin>
+                            <Point X="0.5"
+                                   Y="0.5" />
+                        </Border.RenderTransformOrigin>
+                        <Grid>
+                            <Viewbox>
+                                <TextBlock Focusable="False"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           Margin="{TemplateBinding Padding}"
+                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                           Text="{TemplateBinding Content}"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           FontFamily="{StaticResource FontAwesome}" />
+                            </Viewbox>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="1.4"
+                                                     Duration="0:0:0.15"
+                                                     Storyboard.TargetName="border"
+                                                     Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)" />
+                                    <DoubleAnimation To="1.4"
+                                                     Duration="0:0:0.15"
+                                                     Storyboard.TargetName="border"
+                                                     Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="1"
+                                                     Duration="0:0:0.15"
+                                                     Storyboard.TargetName="border"
+                                                     Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)" />
+                                    <DoubleAnimation To="1"
+                                                     Duration="0:0:0.15"
+                                                     Storyboard.TargetName="border"
+                                                     Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+   
+
+    <!-- Icon Only -->
+    <Style x:Key="IconOnlyButtonStyle"
+           TargetType="{x:Type local:XButton}"
+           BasedOn="{StaticResource RegularButtonStyle}" >
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Button.Default.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource TransparentBrush}" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="OverridesDefaultStyle"
+                Value="False" />
+    </Style>
+
+    <Style x:Key="IconButtonStyle"
+           TargetType="Button">
+        <!-- Base style -->
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

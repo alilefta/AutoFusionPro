@@ -1,0 +1,114 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DropShadowEffect x:Key="DefaultShadowDepth1"
+                      ShadowDepth="1"
+                      Direction="270"
+                      Color="{StaticResource Neutral750}"
+                      Opacity="0.2"
+                      BlurRadius="5" />
+
+    <!-- Modern ToolTip Style -->
+    <Style x:Key="ModernSideMenuToolTipStyle"
+           TargetType="ToolTip">
+        <!-- Override default look -->
+        <Setter Property="OverridesDefaultStyle"
+                Value="True" />
+        <!-- Use theme brushes -->
+        <Setter Property="Background"
+                Value="{DynamicResource Tooltip.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Tooltip.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <!-- Padding inside the tooltip -->
+        <Setter Property="Padding"
+                Value="10,6" />
+        <!-- Font settings -->
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
+        <!-- Or your preferred UI font -->
+        <Setter Property="FontSize"
+                Value="12" />
+        <!-- Placement -->
+        <Setter Property="Placement"
+                Value="Right" />
+        <Setter Property="VerticalOffset"
+                Value="2" />
+        <Setter Property="HorizontalOffset"
+                Value="10" />
+        <!-- Optional: Add a subtle animation -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <!-- Use a Grid to layout the Arrow and the Content Border -->
+                    <Grid x:Name="ToolTipGrid"
+                          Effect="{StaticResource DefaultShadowDepth1}"
+                          Opacity="0">
+                        <!-- Start with Opacity 0 for animation -->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <!-- Column for the Arrow -->
+                            <ColumnDefinition Width="*" />
+                            <!-- Column for the Content -->
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Arrow Path (Pointing Left because Placement="Right") -->
+                        <Path x:Name="ArrowPath"
+                              Grid.Column="0"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Right"
+                              Data="M 0,5 L 5,0 L 5,10 Z"
+                              Height="10"
+                              Width="5"
+                              Fill="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"
+                              Stretch="Fill"
+                              Margin="0,0,-1,0"/>
+                            <!-- Negative right margin pulls it slightly over the border join -->
+
+                            <!-- Main Content Border -->
+                            <Border x:Name="ContentBorder"
+                                    Grid.Column="1"
+                                    Background="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"
+                                    CornerRadius="6">
+                                <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                  Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsOpen"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="ToolTipGrid"
+                                                         From="0"
+                                                         To="1"
+                                                         Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="ToolTipGrid"
+                                                         To="0" Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

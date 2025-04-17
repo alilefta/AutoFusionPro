@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.Shell.ShellView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Shell"
+             xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:notifi="clr-namespace:AutoFusionPro.UI.Controls.Notifications"
+             xmlns:menu="clr-namespace:AutoFusionPro.UI.Views.Controls.SideMenu"
+             xmlns:ui="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:pages="clr-namespace:AutoFusionPro.Core.Enums.NavigationPages;assembly=AutoFusionPro.Core"
+             xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.Shell"
+             xmlns:user="clr-namespace:AutoFusionPro.UI.Views.User"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d" 
+             Background="{DynamicResource Window.BackgroundBrush}"
+             d:DataContext="{d:DesignInstance Type=viewModel:ShellViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Side Menu -->
+        <menu:SideMenuControl DataContext="{Binding}" Grid.Row="0" Grid.RowSpan="2"/>
+
+        
+        <!-- Title Bar -->
+        <Border Padding="20,5,20,5"
+                Grid.Column="1"
+                Background="{DynamicResource Sidebar.BackgroundBrush}"
+                Grid.Row="0"
+                MaxHeight="60"
+                CornerRadius="0,0,5,5"
+                Margin="5,0"
+                Panel.ZIndex="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding CurrentViewName, Converter={StaticResource ViewNameToUserFriendlyConverter}}"
+                           VerticalAlignment="Center" 
+                           FontSize="{StaticResource FontSizeSectionTitle}"
+                           FontFamily="{DynamicResource DynamicFontFamilyMedium}"/>
+
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center"
+                           x:Name="TimeTextBlock"
+                           VerticalAlignment="Center"
+                           FontSize="{StaticResource FontSizeBody}"
+                           FontFamily="{DynamicResource DynamicFontFamilyRegular}"/>
+
+                <!-- Search Input field--><!--
+                <Border Grid.Column="1"
+                        MaxWidth="400">
+                    <Grid Grid.Column="1">
+                        <wpfUi:TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}" 
+                                       FontFamily="{DynamicResource AlmaraiRegular}"
+                                       Tag="{DynamicResource SearchStr}"
+                                       Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                       IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"/>
+                        <Button Style="{StaticResource IconButton}"
+                                Content="{StaticResource FontAwesomeXMarkIcon}"
+                                Margin="0,0,5,0"
+                                Command="{Binding ClearSearchCommand}"
+                                Visibility="{Binding EnableClearSearchButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+                </Border>-->
+
+
+                <!--<Border CornerRadius="50"
+                        Width="30"
+                        Height="30"
+                        Background="{DynamicResource ProgressBar.ForegroundBrush}"
+                        Grid.Column="2" />-->
+                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                            Margin="0,0,8,0">
+                    <notifi:NotificationBell DataContext="{Binding NotificationViewModel}" 
+                                             VerticalAlignment="Center" />
+                    <user:UserAvatar DataContext="{Binding UserAvatarViewModel}"
+                                     Margin="5,0,0,0"
+                                     VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        
+        <!-- Main Content -->
+        <Grid Grid.Column="1" Grid.Row="1"
+              Margin="5,0,0,0">
+            <ContentControl Grid.Column="1"
+                            Content="{Binding CurrentView}"
+                            Visibility="{Binding IsLoadingContent, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
+                        <Style.Triggers>
+                            <!-- Fade and Slide In Transition -->
+                            <Trigger Property="Content"
+                                     Value="{x:Null}">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+                <ContentControl.Triggers>
+                    <EventTrigger RoutedEvent="ContentControl.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                 From="0"
+                                                 To="1"
+                                                 Duration="0:0:0.3" />
+                                <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                    From="20,0,0,0"
+                                                    To="0,0,0,0"
+                                                    Duration="0:0:0.3" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ContentControl.Triggers>
+            </ContentControl>
+
+            <!-- Loading Spinner with Fade and Scale Transition -->
+            <controls:DonutSpinner x:Name="LoadingSpinner"
+                                   Width="80"
+                                   Height="80"
+                                   Grid.Column="1"
+                                   SpinnerColor="{StaticResource LoadingIndicator.BackgroundBrush}"
+                                   Visibility="{Binding IsLoadingContent, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   Style="{StaticResource DonutSpinnerTransitionStyle}" />
+        </Grid>
+
+    </Grid>
+</UserControl>

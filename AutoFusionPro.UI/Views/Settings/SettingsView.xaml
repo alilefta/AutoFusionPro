@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.Settings.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Settings"
+             xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.Settings"
+             xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="1200"
+             d:DataContext="{d:DesignInstance Type=viewModel:SettingsViewModel}"
+             Background="{DynamicResource AppBackgroundBrush}" 
+             FlowDirection="{Binding CurrentWorkFlow}">
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<TextBlock Text="{DynamicResource SettingsStr}"
+                       Grid.Row="0"
+                       FontSize="24" Margin="40,16"/>-->
+            <TabControl Style="{StaticResource ModernAnimatedTabControlStyle}" Grid.Row="1">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="{DynamicResource GeneralSettingsStr}" 
+                                       VerticalAlignment="Center" 
+                                       FontFamily="{DynamicResource AlmaraiRegular}" 
+                                       FontWeight="Regular"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <local:GeneralSettingsTabItem />
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE136;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="{DynamicResource UserAccountsStr}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Background="{DynamicResource WhiteBrush}">
+                        <TextBlock Text="{DynamicResource UserAccountsStr}"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE12A;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="{DynamicResource BackupAndRestoreStr}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Background="{DynamicResource WhiteBrush}">
+                        <TextBlock Text="Backup &amp; Restore Content"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE142;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="{DynamicResource AboutStr}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Background="{DynamicResource WhiteBrush}">
+                        <TextBlock Text="About Content"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal" Margin="10,20">
+                <wpfUi:Button Command="{Binding SaveSettingsCommand}"
+                              Content="{DynamicResource SaveChangesStr}"
+                              Appearance="Primary" />
+                <wpfUi:Button Command="{Binding RestoreDefaultsCommand}"
+                              Content="{DynamicResource RestoreDefaultStr}"
+                              Margin="10,0,0,0"
+                              Appearance="Primary" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

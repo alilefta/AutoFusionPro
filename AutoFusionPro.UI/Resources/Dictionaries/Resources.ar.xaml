@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+
+    <FontFamily x:Key="DynamicFontFamilyLight">pack://application:,,,/Assets/Fonts/#Cairo Light</FontFamily>
+    <FontFamily x:Key="DynamicFontFamilyRegular">pack://application:,,,/Assets/Fonts/#Cairo Regular</FontFamily>
+    <FontFamily x:Key="DynamicFontFamilyMedium">pack://application:,,,/Assets/Fonts/#Cairo Medium</FontFamily>
+    <FontFamily x:Key="DynamicFontFamilyBold">pack://application:,,,/Assets/Fonts/#Cairo Bold</FontFamily>
+
+    <sys:String x:Key="DashboardStr">لوحة التحكم</sys:String>
+
+    <!-- Settings View -->
+    <sys:String x:Key="SettingsStr">الاعدادات</sys:String>
+    <sys:String x:Key="DarkModeStr">الوضع الليلي</sys:String>
+
+    <sys:String x:Key="RestoreDefaultStr">استعادة الاعدادات الافتراضية</sys:String>
+    <sys:String x:Key="SaveChangesStr">حفظ التغييرات</sys:String>
+    <sys:String x:Key="LanguageAndThemeStr">اللغة ونمط العرض</sys:String>
+    <sys:String x:Key="GeneralSettingsStr">اعدادات عامة</sys:String>
+    <sys:String x:Key="UserAccountsStr">حسابات المستخدمين</sys:String>
+    <sys:String x:Key="BackupAndRestoreStr">النسخ الاحتياطي والاستعادة</sys:String>
+    <sys:String x:Key="AboutStr">حول التطبيق</sys:String>
+    <sys:String x:Key="LanguageStr">اللغة</sys:String>
+    <sys:String x:Key="PatientsStr">المرضى</sys:String>
+    
+    
+    <!-- Shell View -->
+    <sys:String x:Key="SearchStr">بحث</sys:String>
+    <sys:String x:Key="ViewProfileStr">حسابي</sys:String>
+    <sys:String x:Key="LogoutStr">تسجيل الخروج</sys:String>
+    
+    <!-- Notifications -->
+    <sys:String x:Key="NoNotificationsStr">لايوجد اشعارات</sys:String>
+    <sys:String x:Key="MarkAllReadStr">تحديد الكل كمقروء</sys:String>
+    <sys:String x:Key="ClearAllStr">حذف الكل</sys:String>
+    <sys:String x:Key="NotificationsStr">الاشعارات</sys:String>
+
+
+</ResourceDictionary>

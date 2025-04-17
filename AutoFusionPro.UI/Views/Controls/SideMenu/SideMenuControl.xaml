@@ -1,0 +1,356 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.Controls.SideMenu.SideMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:AutoFusionPro.UI"
+             xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:ui="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:pages="clr-namespace:AutoFusionPro.Core.Enums.NavigationPages;assembly=AutoFusionPro.Core"
+             xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.Shell"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             d:DataContext="{d:DesignInstance Type=viewModel:ShellViewModel}"
+             mc:Ignorable="d"
+             d:Width="200"
+             d:Height="800"
+             Background="{DynamicResource Sidebar.BackgroundBrush}" 
+             Width="220">
+    <!-- Padding should be calculated based on the CurrentSideMenuWidth -->
+
+    <UserControl.Resources>
+        <!-- Collapse/ExpandAnimation is being used by the Code-Behind of this Class View-->
+        <!-- Define animations for width transition -->
+        <Storyboard x:Key="CollapseAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Width"
+                             From="220"
+                             To="56"
+                             Duration="0:0:0.25">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Key="ExpandAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Width"
+                             From="56"
+                             To="220"
+                             Duration="0:0:0.25">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <!-- Use ThicknessAnimation for Margin -->
+        <Storyboard x:Key="CollapseLogoAnimation">
+            <ThicknessAnimation Storyboard.TargetProperty="Padding"
+                                From="8,12,8,12"
+                                To="0,12,0,12"
+                                Duration="0:0:0.25">
+                <ThicknessAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut" />
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+
+        <!-- Add an expand logo animation -->
+        <Storyboard x:Key="ExpandLogoAnimation">
+            <ThicknessAnimation Storyboard.TargetProperty="Padding"
+                                From="0,12,0,12"
+                                To="8,12,8,12"
+                                Duration="0:0:0.25">
+                <ThicknessAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut" />
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+        </Storyboard>
+
+
+        <!-- Animate Collapse Text Content for Logo-->
+        <Storyboard x:Key="CollapseLogoTextAnimation">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="10,0,0,0"
+                                To="30,0,0,0"
+                                Duration="0:0:0.25">
+                <ThicknessAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut" />
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+            <DoubleAnimation Duration="0:0:0.25"
+                             Storyboard.TargetProperty="Opacity"
+                             From="1"
+                             To="0" />
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"
+                                           BeginTime="0:0:0.25">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.25"
+                                        Value="{x:Static Visibility.Collapsed}" />
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+
+        <Storyboard x:Key="ExpandLogoTextAnimation">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                From="30,0,0,0"
+                                To="10,0,0,0"
+                                Duration="0:0:0.25">
+                <ThicknessAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut" />
+                </ThicknessAnimation.EasingFunction>
+            </ThicknessAnimation>
+            <DoubleAnimation Duration="0:0:0.25"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="1" />
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"
+                                           BeginTime="0:0:0.0">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.0"
+                                        Value="{x:Static Visibility.Visible}" />
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+
+    </UserControl.Resources>
+    
+    <Border CornerRadius="5"
+            Padding="8">
+        <Grid x:Name="SideMenuPanel"
+              Margin="0,0,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Navigation Buttons Container -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Logo Here -->
+                    <Border Grid.Row="0"
+                            Grid.Column="0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Collapsed}"
+                                                 Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard Storyboard="{StaticResource CollapseLogoAnimation}"
+                                                             Name="BeginCollapsePaddingLogo" />
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="BeginCollapsePaddingLogo" />
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding Collapsed}"
+                                                 Value="False">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard Storyboard="{StaticResource ExpandLogoAnimation}"
+                                                             Name="BeginExpandPaddingLogo" />
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="BeginExpandPaddingLogo" />
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left">
+                            <Ellipse HorizontalAlignment="Center"
+                                     Width="38"
+                                     Height="38"
+                                     Margin="1,0,0,0">
+                                <Ellipse.Fill>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                                         EndPoint="1,1">
+                                        <GradientStop Color="#4a6bfd"
+                                                      Offset="0.0" />
+                                        <GradientStop Color="#2a52db"
+                                                      Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <!-- Visibility="{Binding Collapsed, Converter={StaticResource BooleanToInverseVisibilityConverter}}"-->
+                            <TextBlock Text="DentaFusion"
+                                       FontWeight="SemiBold"
+                                       FontSize="18"
+                                       VerticalAlignment="Center" Foreground="{DynamicResource Text.PrimaryBrush}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Collapsed}"
+                                                         Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource CollapseLogoTextAnimation}"
+                                                                     Name="BeginCollapseLogoText" />
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <StopStoryboard BeginStoryboardName="BeginCollapseLogoText" />
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Collapsed}"
+                                                         Value="False">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource ExpandLogoTextAnimation}"
+                                                                     Name="BeginExpandLogoText" />
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <StopStoryboard BeginStoryboardName="BeginExpandLogoText" />
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Back and Toggle Collapse/Expand buttons-->
+                    <Grid Grid.Row="1"
+                          Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Back Button -->
+                        <Button Command="{Binding NavigateBack}"
+                                 HorizontalContentAlignment="Center"
+                                 Visibility="{Binding Collapsed, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                            <wpfUi:SymbolIcon Symbol="ArrowLeft48" />
+                        </Button>
+
+                        <!-- Collapse/Expand Toggle Button -->
+                        <Button Grid.Column="1"
+                                Command="{Binding ToggleSideMenuCollapse}"
+                                HorizontalContentAlignment="Center">
+                            <wpfUi:SymbolIcon Symbol="{Binding CollapseButtonIcon, FallbackValue={x:Static wpfUi:SymbolRegular.LineHorizontal320}}"
+                                              FontFamily="{StaticResource FluentSystemIconsFontRegular}" />
+                        </Button>
+                    </Grid>
+                </Grid>
+
+                <!-- Menu Items -->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Hidden"
+                              Margin="0,20,0,0">
+                    <StackPanel Orientation="Vertical">
+                        
+                        <!-- Dashboard Button-->
+                        <ui:XSideMenuButton Content="{DynamicResource DashboardStr}"
+                                            Command="{Binding NavigateCommand}"
+                                            CommandParameter="{x:Static pages:ApplicationPage.Dashboard}"
+                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
+                                            IsCollapsedMode="{Binding Collapsed}"
+                                            IsSelected="{Binding IsDashboardSelected}"
+                                            Symbol="DataTrending48">
+                            <ui:XSideMenuButton.Style>
+                                <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                       BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsLoadingContent}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding LoadingPage}"
+                                                           Value="{x:Static pages:ApplicationPage.Dashboard}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="IsLoading"
+                                                        Value="True" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ui:XSideMenuButton.Style>
+                        </ui:XSideMenuButton>
+
+                        <!-- Patients Button --><!--
+                        <ui:XSideMenuButton Content="{DynamicResource PatientsStr}"
+                                            Margin="0,8,0,0"
+                                            Command="{Binding NavigateCommand}"
+                                            CommandParameter="{x:Static pages:ApplicationPage.Patients}"
+                                            Symbol="Patient32"
+                                            IsCollapsedMode="{Binding Collapsed}"
+                                            IsSelected="{Binding IsPatientsSelected}"
+                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}">
+                            <ui:XSideMenuButton.Style>
+                                <Style BasedOn="{StaticResource SideMenuButtonWithContentStyle}"
+                                       TargetType="{x:Type ui:XSideMenuButton}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsLoadingContent}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding LoadingPage}"
+                                                           Value="{x:Static pages:ApplicationPage.Patients}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="IsLoading"
+                                                        Value="True" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ui:XSideMenuButton.Style>
+                        </ui:XSideMenuButton>-->
+
+                    </StackPanel>
+                </ScrollViewer>
+
+
+                <!-- Lower part of Side Menu -->
+                <StackPanel Grid.Row="2"
+                            Orientation="Vertical"
+                            VerticalAlignment="Bottom"
+                            Margin="0,10,0,15">
+                    
+                    <!-- Settings Button-->
+                    <ui:XSideMenuButton Content="{DynamicResource SettingsStr}"
+                                        Command="{Binding NavigateCommand}"
+                                        CommandParameter="{x:Static pages:ApplicationPage.Settings}"
+                                        IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
+                                        IsCollapsedMode="{Binding Collapsed}"
+                                        IsSelected="{Binding IsSettingsSelected}"
+                                        Symbol="Settings48">
+                        <ui:XSideMenuButton.Style>
+                            <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                   BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsLoadingContent}"
+                                                       Value="True" />
+                                            <Condition Binding="{Binding LoadingPage}"
+                                                       Value="{x:Static pages:ApplicationPage.Settings}" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="IsLoading"
+                                                    Value="True" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:XSideMenuButton.Style>
+                    </ui:XSideMenuButton>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

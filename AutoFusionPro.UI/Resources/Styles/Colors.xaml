@@ -1,0 +1,188 @@
+﻿<!-- ============================================ -->
+<!--            Resources/Colors.xaml             -->
+<!-- ============================================ -->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ==================== Neutral Palette ==================== -->
+    <!-- Lightest -->
+    <Color x:Key="Neutral0">#FFFFFF</Color>
+    <Color x:Key="Neutral50">#F8F9FA</Color>
+    <!-- Light App Background -->
+
+    <Color x:Key="Neutral100">#F5F5F5</Color>
+    <!-- Light Alternate Row -->
+    <Color x:Key="Neutral150">#F0F0F0</Color>
+    <!-- Light Tooltip/Hover/Header/Toolbar -->
+    <Color x:Key="Neutral200">#EAEAEA</Color>
+    <!-- Light Sidebar -->
+    <Color x:Key="Neutral250">#E0E0E0</Color>
+    <!-- Light Progress BG / Light Pressed BG -->
+    <Color x:Key="Neutral300">#DDDDDD</Color>
+    <!-- Light Divider -->
+    <Color x:Key="Neutral350">#CCCCCC</Color>
+    <!-- Light Border / Light Button Border / Scroll Thumb -->
+    <!-- Mid -->
+    <Color x:Key="Neutral400">#AAAAAA</Color>
+    <!-- Light Disabled Text / Scroll Thumb Hover -->
+    <Color x:Key="Neutral500">#95A5A6</Color>
+    <!-- Secondary Color (Used in Dark) -->
+    <Color x:Key="Neutral600">#777777</Color>
+    <!-- Light Subtle Text -->
+    <Color x:Key="Neutral650">#707070</Color>
+    <!-- Dark Disabled Text -->
+    <!-- Dark -->
+    <Color x:Key="Neutral700">#444444</Color>
+    <!-- Dark Divider / Dark Scroll Thumb / Dark Menu Border Pressed -->
+    <Color x:Key="Neutral750">#333333</Color>
+    <!-- Light Body Text / Dark Tooltip BG / Dark Menu Pressed BG -->
+    <Color x:Key="Neutral800">#2E2E2E</Color>
+    <!-- Dark Border -->
+    <Color x:Key="Neutral850">#2A2A2A</Color>
+    <!-- Dark Alt Row / Dark Hover / Dark Scroll BG / Dark Menu Hover BG -->
+    <Color x:Key="Neutral900">#252525</Color>
+    <!-- Dark Card BG -->
+    <Color x:Key="Neutral925">#202020</Color>
+    <!-- Dark Header/Toolbar BG -->
+    <Color x:Key="Neutral950">#1E1E1E</Color>
+    <!-- Dark Dialog BG -->
+    <Color x:Key="Neutral975">#181818</Color>
+    <!-- Dark Sidebar BG -->
+    <Color x:Key="Neutral990">#121212</Color>
+    <!-- Dark App Background -->
+    <!-- Darkest -->
+    <Color x:Key="Neutral1000">#000000</Color>
+
+    <!-- ==================== Primary Palette (Blue) ==================== -->
+    <Color x:Key="Primary100">#E1F0FF</Color>
+    <!-- Light Selection Background -->
+    <Color x:Key="Primary200">#A6C9E2</Color>
+    <!-- Light SideMenu Selected Border -->
+    <Color x:Key="Primary300">#61AFEF</Color>
+    <!-- Dark Link Text -->
+    <Color x:Key="Primary400">#5DADE2</Color>
+    <!-- Dark Info Color / Dark Primary Light -->
+    <Color x:Key="Primary500">#3498DB</Color>
+    <!-- Light Info Color / Light Primary Light / Dark Primary -->
+    <Color x:Key="Primary600">#2980B9</Color>
+    <!-- Dark Primary Dark -->
+    <Color x:Key="Primary700">#007ACC</Color>
+    <!-- Light Primary / Light Focus Border / Light Progress FG -->
+    <Color x:Key="Primary800">#0069B3</Color>
+    <!-- Light Primary Hover -->
+    <Color x:Key="Primary900">#005A9E</Color>
+    <!-- Light Primary Pressed / Light Primary Dark -->
+    <Color x:Key="Primary950">#1F2B3A</Color>
+    <!-- Dark SideMenu Selected Background -->
+    <Color x:Key="Primary975">#1E3A5F</Color>
+    <!-- Dark Selection Background -->
+
+    <!-- ================= Accent Palette 1 (Orange - Secondary Accent) ================ -->
+    <Color x:Key="Orange300">#F6B040</Color>
+    <!-- Dark Accent Light -->
+    <Color x:Key="Orange400">#F39C12</Color>
+    <!-- Warning Color / Dark Accent -->
+    <Color x:Key="Orange500">#FFA500</Color>
+    <!-- Light Accent -->
+    <Color x:Key="Orange600">#FFB733</Color>
+    <!-- Light Accent Light -->
+    <Color x:Key="Orange700">#E69500</Color>
+    <!-- Light Accent Dark -->
+    <Color x:Key="Orange800">#D68910</Color>
+    <!-- Dark Accent Dark -->
+
+    <!-- ================= Accent Palette 2 (Teal) ================ -->
+    <Color x:Key="Teal300">#A8E6CF</Color>
+    <!-- AppointmentAvailable / PatientStable -->
+    <Color x:Key="Teal500">#20C997</Color>
+    <Color x:Key="Teal700">#158765</Color>
+
+    <!-- ================= Accent Palette 3 (Purple) ================ -->
+    <Color x:Key="Purple500">#8E44AD</Color>
+    <Color x:Key="Purple700">#7D3C98</Color>
+
+    <!-- ================= Accent Palette 4 (Warm Orange) ================ -->
+    <Color x:Key="WarmOrange500">#FF9F43</Color>
+    <Color x:Key="WarmOrange700">#EE8425</Color>
+
+    <!-- ================= Accent Palette 5 (Coral / Red-ish) ================ -->
+    <Color x:Key="Coral300">#FFD3B6</Color>
+    <!-- AppointmentBooked / PatientWarning -->
+    <Color x:Key="Coral400">#FFAAA5</Color>
+    <!-- AppointmentUrgent -->
+    <Color x:Key="Coral500">#FF6B6B</Color>
+    <Color x:Key="Coral600">#FF8B94</Color>
+    <!-- PatientCritical -->
+    <Color x:Key="Coral700">#CC5A5A</Color>
+
+    <!-- ================= Accent Palette 6 (Turquoise) ================ -->
+    <Color x:Key="Turquoise500">#1ABC9C</Color>
+    <Color x:Key="Turquoise700">#16A085</Color>
+
+    <!-- ================= Accent Palette 7 (Amethyst) ================ -->
+    <Color x:Key="Amethyst500">#9B59B6</Color>
+    <!-- No dark variant provided, reusing light -->
+
+    <!-- ==================== Status Palettes ==================== -->
+    <!-- Success (Green) -->
+    <Color x:Key="Success300">#A8E6CF</Color>
+    <!-- Same as Teal300 -->
+    <Color x:Key="Success500">#27AE60</Color>
+    <!-- Light -->
+    <Color x:Key="Success600">#2ECC71</Color>
+    <!-- Dark -->
+    <!-- Warning (Yellow/Orange) -->
+    <Color x:Key="Warning500">#F39C12</Color>
+    <!-- Same as Orange400 -->
+    <!-- Error (Red) -->
+    <Color x:Key="Error400">#FF8B94</Color>
+    <!-- Same as Coral600 -->
+    <Color x:Key="Error500">#C0392B</Color>
+    <!-- Light -->
+    <Color x:Key="Error600">#E74C3C</Color>
+    <!-- Dark -->
+    <!-- Info (Blue) -->
+    <Color x:Key="Info500">#3498DB</Color>
+    <!-- Same as Primary500 (Light) -->
+    <Color x:Key="Info600">#5DADE2</Color>
+    <!-- Same as Primary400 (Dark) -->
+
+    <!-- ==================== Link Palette ==================== -->
+    <Color x:Key="Link500">#0366D6</Color>
+    <!-- Light -->
+    <Color x:Key="Link600">#61AFEF</Color>
+    <!-- Dark (Same as Primary300) -->
+
+
+    <SolidColorBrush x:Key="WhiteBrush"
+                     Color="White" />
+    <SolidColorBrush x:Key="TransparentBrush"
+                     Color="Transparent" />
+
+
+
+    <Color x:Key="SubtleFillColorTransparent">#00FFFFFF</Color>
+    <Color x:Key="CardStrokeColorDefault">#19000000</Color>
+    <Color x:Key="SecondaryColor">#b3cde0</Color>
+
+
+    <!-- Neutral Colors -->
+    <Color x:Key="LightColor">#F8F9FA</Color>
+    <SolidColorBrush x:Key="LightBrush"
+                     Color="{StaticResource LightColor}" />
+
+    <Color x:Key="DarkColor">#343A40</Color>
+    <SolidColorBrush x:Key="DarkBrush"
+                     Color="{StaticResource DarkColor}" />
+
+    <Color x:Key="GrayColor">#6C757D</Color>
+    <SolidColorBrush x:Key="GrayBrush"
+                     Color="{StaticResource GrayColor}" />
+
+    <Color x:Key="BlackColor">#000000</Color>
+    <SolidColorBrush x:Key="BlackBrush"
+                     Color="{StaticResource BlackColor}" />
+
+
+</ResourceDictionary>

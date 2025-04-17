@@ -1,0 +1,695 @@
+﻿<!-- ============================================ -->
+<!--      Resources/Themes/DarkTheme.xaml         -->
+<!-- ============================================ -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml">
+
+    <!-- ==================== Base ==================== -->
+    <SolidColorBrush x:Key="Window.BackgroundBrush"
+                     Color="{StaticResource Neutral990}" />
+    <SolidColorBrush x:Key="Content.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+    <!-- Card/Dialog Bodies -->
+    <SolidColorBrush x:Key="Sidebar.BackgroundBrush"
+                     Color="{StaticResource Neutral975}" />
+    <SolidColorBrush x:Key="Header.BackgroundBrush"
+                     Color="{StaticResource Neutral925}" />
+    <SolidColorBrush x:Key="Toolbar.BackgroundBrush"
+                     Color="{StaticResource Neutral925}" />
+    <SolidColorBrush x:Key="StatusBar.BackgroundBrush"
+                     Color="{StaticResource Neutral925}" />
+    <SolidColorBrush x:Key="Dialog.BackgroundBrush"
+                     Color="{StaticResource Neutral0}" />
+    <SolidColorBrush x:Key="Dialog.Title.ForegroundBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="Dialog.Subtitle.ForegroundBrush"
+                     Color="{StaticResource Neutral650}" />
+
+    <SolidColorBrush x:Key="Dialog.ForegroundBrush"
+                     Color="{StaticResource Neutral250}" />
+
+    <SolidColorBrush x:Key="Tooltip.BackgroundBrush"
+                     Color="{StaticResource Neutral150}" />
+    <SolidColorBrush x:Key="Tooltip.ForegroundBrush"
+                     Color="{StaticResource Neutral800}" />
+
+    <!-- ==================== Text ==================== -->
+    <SolidColorBrush x:Key="Text.PrimaryBrush"
+                     Color="{StaticResource Neutral100}" />
+    <!-- Main Body -->
+    <SolidColorBrush x:Key="Text.SecondaryBrush"
+                     Color="{StaticResource Neutral400}" />
+    <!-- Subtle -->
+    <SolidColorBrush x:Key="Text.HeaderBrush"
+                     Color="{StaticResource Neutral50}" />
+    <!-- Lighter Header -->
+    <SolidColorBrush x:Key="Text.DisabledBrush"
+                     Color="{StaticResource Neutral650}" />
+    <SolidColorBrush x:Key="Text.LinkBrush"
+                     Color="{StaticResource Link600}" />
+    <SolidColorBrush x:Key="Text.AccentBrush"
+                     Color="{StaticResource Primary300}" />
+    <!-- Text on accent bg -->
+    <SolidColorBrush x:Key="Text.ErrorBrush"
+                     Color="{StaticResource Error600}" />
+    <SolidColorBrush x:Key="Text.SuccessBrush"
+                     Color="{StaticResource Success600}" />
+    <SolidColorBrush x:Key="Text.WarningBrush"
+                     Color="{StaticResource Warning500}" />
+    <SolidColorBrush x:Key="Text.InfoBrush"
+                     Color="{StaticResource Info600}" />
+    <SolidColorBrush x:Key="Text.OnPrimaryBrush"
+                     Color="{StaticResource Neutral0}" />
+    <!-- Text on Primary Button -->
+    <SolidColorBrush x:Key="Text.OnAccentBrush"
+                     Color="{StaticResource Neutral0}" />
+    <!-- Text on Accent Button/BG -->
+
+    <!-- ==================== Borders & Dividers ==================== -->
+    <SolidColorBrush x:Key="Border.PrimaryBrush"
+                     Color="{StaticResource Neutral800}" />
+    <!-- Default Borders -->
+    <SolidColorBrush x:Key="Border.SecondaryBrush"
+                     Color="{StaticResource Neutral700}" />
+    <!-- Dividers -->
+    <SolidColorBrush x:Key="Border.FocusBrush"
+                     Color="{StaticResource Primary500}" />
+    <!-- Input Focus -->
+    <SolidColorBrush x:Key="Border.ErrorBrush"
+                     Color="{StaticResource Error600}" />
+    <SolidColorBrush x:Key="Border.AccentBrush"
+                     Color="{StaticResource Primary400}" />
+    <!-- e.g., Selected Tab -->
+
+    <!-- ==================== Controls General ==================== -->
+    <SolidColorBrush x:Key="Control.Background.HoverBrush"
+                     Color="{StaticResource Neutral850}" />
+    <SolidColorBrush x:Key="Control.Background.PressedBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="Control.Background.SelectedBrush"
+                     Color="{StaticResource Primary975}" />
+    <SolidColorBrush x:Key="Control.Background.DisabledBrush"
+                     Color="{StaticResource Neutral900}" />
+
+
+
+    <!-- ==================== Toogle Button ==================== -->
+    <SolidColorBrush x:Key="ToggleButton.BackgroundBrush"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="ToggleButton.Thumb.BackgroundBrush"
+                     Color="{StaticResource Success500}" />
+
+
+    <!-- ==================== Tab Controls ==================== -->
+
+    <!-- Normal -->
+    <SolidColorBrush x:Key="TabView.BackgroundBrush"
+                     Color="{StaticResource Neutral800}" />
+
+    <SolidColorBrush x:Key="TabView.BorderBrush"
+                     Color="{StaticResource Neutral600}" />
+
+    <SolidColorBrush x:Key="TabViewItem.ForegroundBrush"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="TabViewItem.Header.BackgroundBrush"
+                     Color="{StaticResource SubtleFillColorTransparent}" />
+
+
+    <!-- Selected -->
+    <SolidColorBrush x:Key="TabViewItem.Selected.ForegroundBrush"
+                     Color="{StaticResource Primary300}" />
+    <SolidColorBrush x:Key="TabViewItem.Selected.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+
+    <SolidColorBrush x:Key="TabViewItem.Selected.BorderBrush"
+                     Color="{StaticResource Primary300}" />
+
+    <SolidColorBrush x:Key="TabViewItem.Header.Selected.ForegroundBrush"
+                     Color="{StaticResource Primary600}" />
+
+    <!-- Hover -->
+    <SolidColorBrush x:Key="TabViewItem.ForegroundBrush.Hover"
+                     Color="{StaticResource Neutral300}" />
+    <SolidColorBrush x:Key="TabViewItem.BackgroundBrush.Hover"
+                     Color="{StaticResource Neutral800}" />
+    
+    <!-- ==================== Loading Indicator ==================== -->
+    <SolidColorBrush x:Key="LoadingIndicator.BackgroundBrush"
+                     Color="{StaticResource Primary800}" />
+
+
+    <!-- ==================== Button: Default (Dark Appearance) ==================== -->
+    <SolidColorBrush x:Key="Button.Default.BackgroundBrush"
+                     Color="{StaticResource Neutral800}" />
+    <SolidColorBrush x:Key="Button.Default.ForegroundBrush"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="Button.Default.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="Button.Default.Background.HoverBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="Button.Default.Background.PressedBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="Button.Default.Background.DisabledBrush"
+                     Color="{StaticResource Neutral800}" />
+    <SolidColorBrush x:Key="Button.Default.Foreground.DisabledBrush"
+                     Color="{StaticResource Neutral650}" />
+    <SolidColorBrush x:Key="Button.Default.Border.DisabledBrush"
+                     Color="{StaticResource Neutral700}" />
+
+    <!-- ==================== Button: Primary ==================== -->
+    <SolidColorBrush x:Key="Button.Primary.BackgroundBrush"
+                     Color="{StaticResource Primary500}" />
+    <SolidColorBrush x:Key="Button.Primary.ForegroundBrush"
+                     Color="{StaticResource Neutral0}" />
+    <SolidColorBrush x:Key="Button.Primary.BorderBrush"
+                     Color="{StaticResource Primary500}" />
+    <SolidColorBrush x:Key="Button.Primary.Background.HoverBrush"
+                     Color="{StaticResource Primary600}" />
+    <SolidColorBrush x:Key="Button.Primary.Background.PressedBrush"
+                     Color="{StaticResource Primary700}" />
+    <SolidColorBrush x:Key="Button.Primary.Background.DisabledBrush"
+                     Color="{StaticResource Neutral800}" />
+    <SolidColorBrush x:Key="Button.Primary.Foreground.DisabledBrush"
+                     Color="{StaticResource Neutral600}" />
+    <SolidColorBrush x:Key="Button.Primary.Border.DisabledBrush"
+                     Color="{StaticResource Neutral800}" />
+
+    <!-- ==================== Button: Secondary, Info, Danger, Light  ==================== -->
+    <SolidColorBrush x:Key="Button.Secondary.BackgroundBrush"
+                     Color="{StaticResource Neutral500}" />
+    
+    <SolidColorBrush x:Key="Button.Success.BackgroundBrush"
+                     Color="{StaticResource Success600}" />
+
+    <SolidColorBrush x:Key="Button.Danger.BackgroundBrush"
+                     Color="{StaticResource Error600}" />
+    <SolidColorBrush x:Key="Button.Warning.BackgroundBrush"
+                     Color="{StaticResource Orange400}" />
+    <SolidColorBrush x:Key="Button.Info.BackgroundBrush"
+                     Color="{StaticResource Turquoise500}" />
+    <SolidColorBrush x:Key="Button.Light.BackgroundBrush"
+                     Color="{StaticResource Neutral150}" />
+    <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="Button.Link.BackgroundBrush"
+                     Color="{StaticResource Primary500}" />
+
+    <SolidColorBrush x:Key="Button.Light.ForegroundBrush"
+                     Color="{StaticResource Neutral750}" />
+
+    <SolidColorBrush x:Key="Button.Light.BorderBrush"
+                     Color="{StaticResource Neutral750}" />
+
+
+
+
+
+    <!-- ==================== Button: Menu (Side Menu) ==================== -->
+    <SolidColorBrush x:Key="Button.Menu.BackgroundBrush"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="Button.Menu.ForegroundBrush"
+                     Color="{StaticResource Neutral300}" />
+    <!-- Lighter Neutral -->
+    <SolidColorBrush x:Key="Button.Menu.BorderBrush"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="Button.Menu.Background.HoverBrush"
+                     Color="{StaticResource Neutral850}" />
+    <SolidColorBrush x:Key="Button.Menu.Foreground.HoverBrush"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="Button.Menu.Background.PressedBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="Button.Menu.Foreground.PressedBrush"
+                     Color="{StaticResource Neutral50}" />
+    <SolidColorBrush x:Key="Button.Menu.Border.PressedBrush"
+                     Color="{StaticResource Neutral700}" />
+    
+    <SolidColorBrush x:Key="Button.Menu.Background.SelectedBrush"
+                     Color="{StaticResource Primary950}" />
+    <SolidColorBrush x:Key="Button.Menu.Foreground.SelectedBrush"
+                     Color="{StaticResource Primary100}" />
+    <SolidColorBrush x:Key="Button.Menu.Border.SelectedBrush"
+                     Color="{StaticResource Primary600}" />
+    
+    <SolidColorBrush x:Key="Button.Menu.Background.DisabledBrush"
+                     Color="Transparent" />
+    <SolidColorBrush x:Key="Button.Menu.Foreground.DisabledBrush"
+                     Color="{StaticResource Neutral650}" />
+    <SolidColorBrush x:Key="Button.Menu.Border.DisabledBrush"
+                     Color="Transparent" />
+
+    <!-- ==================== Card (Custom Card) ==================== -->
+    <SolidColorBrush x:Key="Card.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+    <SolidColorBrush x:Key="Card.BorderBrush"
+                     Color="{StaticResource Neutral800}" />
+    <SolidColorBrush x:Key="Card.Header.BackgroundBrush"
+                     Color="{StaticResource Neutral950}" />
+    <SolidColorBrush x:Key="Card.Header.ForegroundBrush"
+                     Color="{StaticResource Neutral50}" />
+    <SolidColorBrush x:Key="Card.Body.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+    <SolidColorBrush x:Key="Card.Body.ForegroundBrush"
+                     Color="{StaticResource Neutral100}" />
+
+    <!-- ==================== ScrollBar ==================== -->
+    <SolidColorBrush x:Key="ScrollBar.Track.BackgroundBrush"
+                     Color="{StaticResource Neutral850}" />
+    <SolidColorBrush x:Key="ScrollBar.Thumb.BackgroundBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Background.HoverBrush"
+                     Color="{StaticResource Neutral600}" />
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Background.PressedBrush"
+                     Color="{StaticResource Neutral500}" />
+
+    <!-- ==================== ProgressBar ==================== -->
+    <SolidColorBrush x:Key="ProgressBar.BackgroundBrush"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="ProgressBar.ForegroundBrush"
+                     Color="{StaticResource Primary500}" />
+
+
+
+    <!-- Search Textbox -->
+    <SolidColorBrush x:Key="TextBox.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+    <SolidColorBrush x:Key="TextBox.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="TextBox.ForegroundBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="TextBox.Lens.ForegroundBrush"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="TextBox.Focus.BackgroundBrush"
+                     Color="{StaticResource Neutral900}" />
+    <SolidColorBrush x:Key="TextBox.Focus.BorderBrush"
+                     Color="{StaticResource Primary700}" />
+    <SolidColorBrush x:Key="TextBox.Focus.ForegroundBrush"
+                     Color="{StaticResource Neutral300}" />
+    <SolidColorBrush x:Key="TextBox.Focus.Lens.ForegroundBrush"
+                     Color="{StaticResource Primary700}" />
+
+    <SolidColorBrush x:Key="TextBox.Hover.BorderBrush"
+                     Color="{StaticResource Neutral600}" />
+
+
+    <!-- ==================== DataGrid ==================== -->
+    <SolidColorBrush x:Key="DataGrid.Row.Background.AlternateBrush"
+                     Color="{StaticResource Neutral850}" />
+
+    <!-- ==================== Status ==================== -->
+    <SolidColorBrush x:Key="Status.Success.BackgroundBrush"
+                     Color="{StaticResource Success600}" />
+    <SolidColorBrush x:Key="Status.Warning.BackgroundBrush"
+                     Color="{StaticResource Warning500}" />
+    <SolidColorBrush x:Key="Status.Error.BackgroundBrush"
+                     Color="{StaticResource Error600}" />
+    <SolidColorBrush x:Key="Status.Info.BackgroundBrush"
+                     Color="{StaticResource Info600}" />
+    <SolidColorBrush x:Key="Status.ForegroundBrush"
+                     Color="{StaticResource Neutral0}" />
+    <!-- Text on status bg -->
+
+    <!-- ==================== Clinical Specific ==================== -->
+    <SolidColorBrush x:Key="Clinical.Appointment.AvailableBrush"
+                     Color="{StaticResource Teal700}" />
+    <SolidColorBrush x:Key="Clinical.Appointment.BookedBrush"
+                     Color="{StaticResource Coral700}" />
+    <!-- Need Darker Coral -->
+    <SolidColorBrush x:Key="Clinical.Appointment.UrgentBrush"
+                     Color="{StaticResource Coral700}" />
+    <!-- Need Darker Coral -->
+    <SolidColorBrush x:Key="Clinical.Patient.CriticalBrush"
+                     Color="{StaticResource Error600}" />
+    <!-- Map to Error -->
+    <SolidColorBrush x:Key="Clinical.Patient.StableBrush"
+                     Color="{StaticResource Teal700}" />
+    <SolidColorBrush x:Key="Clinical.Patient.WarningBrush"
+                     Color="{StaticResource Orange700}" />
+    <!-- Need Darker Orange/Coral -->
+
+    <!-- ==================== Named Accent Brushes ==================== -->
+    <SolidColorBrush x:Key="Accent.Teal.BackgroundBrush"
+                     Color="{StaticResource Teal700}" />
+    <SolidColorBrush x:Key="Accent.Purple.BackgroundBrush"
+                     Color="{StaticResource Purple700}" />
+    <SolidColorBrush x:Key="Accent.WarmOrange.BackgroundBrush"
+                     Color="{StaticResource WarmOrange700}" />
+    <SolidColorBrush x:Key="Accent.Coral.BackgroundBrush"
+                     Color="{StaticResource Coral700}" />
+    <SolidColorBrush x:Key="Accent.Turquoise.BackgroundBrush"
+                     Color="{StaticResource Turquoise700}" />
+    <SolidColorBrush x:Key="Accent.Amethyst.BackgroundBrush"
+                     Color="{StaticResource Amethyst500}" />
+    <!-- Reusing light, no dark provided -->
+    <SolidColorBrush x:Key="Accent.Orange.BackgroundBrush"
+                     Color="{StaticResource Orange400}" />
+    <!-- Secondary Accent -->
+    
+    
+    
+
+    <!-- Accent Colors -->
+    <!-- Professional Medical Look-->
+    <!-- Medical feel, represents wellness and cleanliness--><!--
+    <Color x:Key="AccentTeal">#158765</Color>
+    --><!-- Dignified, often used in health-care (especially for women's health)--><!--
+    <Color x:Key="AccentPurple">#7D3C98</Color>
+
+    --><!-- Higher Visibility/Energy-->
+    <!-- Good for calls-to-action, energetic without being too alarming--><!--
+    <Color x:Key="AccentWarmOrange">#EE8425</Color>
+    --><!-- Warmer than red, softer than orange, good attention-grabber--><!--
+    <Color x:Key="AccentCoral">#CC5A5A</Color>
+
+    --><!-- Modern, Distinctive Look-->
+    <!-- Fresh, distinctive color in health-care that pairs well with blues--><!--
+    <Color x:Key="AccentTurquoise">#16A085</Color>
+
+    --><!-- Professional yet distinctive --><!--
+    <Color x:Key="AccentAmethyst">#8E44AD</Color>
+
+    <SolidColorBrush x:Key="CardBorder"
+                     Color="#3E3E42" />
+    <SolidColorBrush x:Key="TextPrimary"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextSecondary"
+                     Color="#BBBBBB" />-->
+
+    <!-- Primary Colors --><!--
+    <Color x:Key="PrimaryColor">#3498DB</Color>
+    <Color x:Key="PrimaryColorLight">#5DADE2</Color>
+    <Color x:Key="PrimaryColorDark">#2980B9</Color>
+    <Color x:Key="SecondaryColor">#95A5A6</Color>
+    <Color x:Key="AccentColor">#F39C12</Color>
+    <Color x:Key="AccentColorLight">#F6B040</Color>
+    <Color x:Key="AccentColorDark">#D68910</Color>-->
+
+    <!-- Text Colors --><!--
+    <Color x:Key="HeaderTextColor">#EAEAEA</Color>
+    <Color x:Key="BodyTextColor">#D0D3D4</Color>
+    <Color x:Key="SubtleTextColor">#96999C</Color>
+    <Color x:Key="DisabledTextColor">#707070</Color>
+    <Color x:Key="LinkTextColor">#61AFEF</Color>
+    <Color x:Key="ErrorTextColor">#E74C3C</Color>
+    <Color x:Key="SuccessTextColor">#2ECC71</Color>
+    <Color x:Key="WarningTextColor">#F39C12</Color>
+    <Color x:Key="InfoTextColor">#5DADE2</Color>
+
+    --><!-- Background Colors --><!--
+    <Color x:Key="AppBackgroundColor">#121212</Color>
+    <Color x:Key="DialogBackground">#1E1E1E</Color>
+    <Color x:Key="SidebarBackground">#181818</Color>
+    <Color x:Key="CardBackgroundColor">#252525</Color>
+    <Color x:Key="TooltipBackground">#303030</Color>
+    <Color x:Key="AlternateRowBackground">#2A2A2A</Color>
+    <Color x:Key="SelectionBackground">#1E3A5F</Color>
+    <Color x:Key="HoverBackground">#2A2A2A</Color>
+    <Color x:Key="FocusBackground">#1C2938</Color>
+    <Color x:Key="HeaderBackground">#202020</Color>
+
+    --><!-- Side menu --><!--
+    <Color x:Key="CustomSideMenuSelectedBackground">#1F2B3A</Color>
+    <Color x:Key="CustomSideMenuSelectedForeground">#E4F1FF</Color>
+    <Color x:Key="CustomSideMenuSelectedBorder">#3D5063</Color>-->
+
+    <!-- Custom Cards Colors --><!--
+    <SolidColorBrush x:Key="CustomCardHeaderBackgroundBrush"
+                     Color="#1E1E1E" />
+    <SolidColorBrush x:Key="CustomCardHeaderForegroundBrush"
+                     Color="#FAFAFA" />
+    <SolidColorBrush x:Key="CustomCardBodyBackgroundBrush"
+                     Color="#121212" />
+    <SolidColorBrush x:Key="CustomCardBodyForegroundBrush"
+                     Color="#E0E0E0" />
+    <SolidColorBrush x:Key="CustomCardBackgroundBrush"
+                     Color="#1C1C1C" />
+    <SolidColorBrush x:Key="CustomCardBorderBrush"
+                     Color="#2A2A2A" />
+
+    --><!-- Status Colors --><!--
+    <Color x:Key="SuccessColor">#2ECC71</Color>
+    <Color x:Key="WarningColor">#F39C12</Color>
+    <Color x:Key="ErrorColor">#E74C3C</Color>
+    <Color x:Key="InfoColor">#3498DB</Color>
+
+    --><!-- Borders & Dividers --><!--
+    <Color x:Key="DividerColor">#444444</Color>
+    <Color x:Key="BorderColor">#2E2E2E</Color>
+    <Color x:Key="FocusBorderColor">#3498DB</Color>
+
+    --><!-- Control-Specific Colors --><!--
+    <Color x:Key="LightButtonBackground">#2D2D2D</Color>
+    <Color x:Key="LightButtonBackgroundHover">#383838</Color>
+    <Color x:Key="LightButtonBackgroundPressed">#404040</Color>
+    <Color x:Key="LightButtonBorder">#444444</Color>
+    <Color x:Key="LightButtonTextColor">#D0D3D4</Color>
+
+    <Color x:Key="PrimaryButtonBackground">#3498DB</Color>
+    <Color x:Key="PrimaryButtonBackgroundHover">#2980B9</Color>
+    <Color x:Key="PrimaryButtonBackgroundPressed">#1F618D</Color>
+    <Color x:Key="PrimaryButtonBorder">#3498DB</Color>
+    <Color x:Key="PrimaryButtonTextColor">#FFFFFF</Color>
+
+    <Color x:Key="ProgressBarBackground">#333333</Color>
+    <Color x:Key="ProgressBarForeground">#3498DB</Color>
+
+    <Color x:Key="ScrollBarBackground">#2A2A2A</Color>
+    <Color x:Key="ScrollBarThumb">#444444</Color>
+    <Color x:Key="ScrollBarThumbHover">#5A5A5A</Color>
+
+    <Color x:Key="ScrollbarForeground">#212121</Color>
+    <Color x:Key="ScrollbarBackground">#F9F9F9</Color>
+
+    <Color x:Key="ToolbarBackground">#202020</Color>
+    <Color x:Key="StatusBarBackground">#202020</Color>
+    <Color x:Key="CardHeaderBackgroundColor">#2A2A2A</Color>
+
+    --><!-- Menu Button Colors - Dark Theme --><!--
+    <Color x:Key="MenuButtonBackground">Transparent</Color>
+    <Color x:Key="MenuButtonBackgroundHover">#2A2A2A</Color>
+    <Color x:Key="MenuButtonBackgroundPressed">#333333</Color>
+    <Color x:Key="MenuButtonBackgroundDisabled">Transparent</Color>
+
+    <Color x:Key="MenuButtonForeground">#CCCCCC</Color>
+    <Color x:Key="MenuButtonForegroundHover">#EEEEEE</Color>
+    <Color x:Key="MenuButtonForegroundPressed">#FFFFFF</Color>
+    <Color x:Key="MenuButtonForegroundDisabled">#666666</Color>
+
+    <Color x:Key="MenuButtonBorder">Transparent</Color>
+    <Color x:Key="MenuButtonBorderHover">Transparent</Color>
+    <Color x:Key="MenuButtonBorderPressed">#444444</Color>
+    <Color x:Key="MenuButtonBorderDisabled">Transparent</Color>
+
+    <SolidColorBrush x:Key="CustomSideMenuSelectedBackgroundBrush"
+                     Color="{DynamicResource CustomSideMenuSelectedBackground}" />
+    <SolidColorBrush x:Key="CustomSideMenuSelectedForegroundBrush"
+                     Color="{DynamicResource CustomSideMenuSelectedForeground}" />
+    <SolidColorBrush x:Key="CustomSideMenuSelectedBorderBrush"
+                     Color="{DynamicResource CustomSideMenuSelectedBorder}" />
+
+
+    --><!-- Clinical-Specific Colors --><!--
+    <Color x:Key="AppointmentAvailable">#1F6650</Color>
+    <Color x:Key="AppointmentBooked">#86553F</Color>
+    <Color x:Key="AppointmentUrgent">#8F403A</Color>
+    <Color x:Key="PatientCritical">#8F3641</Color>
+    <Color x:Key="PatientStable">#1F6650</Color>
+    <Color x:Key="PatientWarning">#86553F</Color>
+
+    --><!-- Brushes --><!--
+    <SolidColorBrush x:Key="PrimaryBrush"
+                     Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="PrimaryLightBrush"
+                     Color="{StaticResource PrimaryColorLight}" />
+    <SolidColorBrush x:Key="PrimaryDarkBrush"
+                     Color="{StaticResource PrimaryColorDark}" />
+    <SolidColorBrush x:Key="SecondaryBrush"
+                     Color="{StaticResource SecondaryColor}" />
+    <SolidColorBrush x:Key="AccentBrush"
+                     Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="AccentLightBrush"
+                     Color="{StaticResource AccentColorLight}" />
+    <SolidColorBrush x:Key="AccentDarkBrush"
+                     Color="{StaticResource AccentColorDark}" />
+
+    <SolidColorBrush x:Key="HeaderTextBrush"
+                     Color="{StaticResource HeaderTextColor}" />
+    <SolidColorBrush x:Key="BodyTextBrush"
+                     Color="{StaticResource BodyTextColor}" />
+    <SolidColorBrush x:Key="SubtleTextBrush"
+                     Color="{StaticResource SubtleTextColor}" />
+    <SolidColorBrush x:Key="DisabledTextBrush"
+                     Color="{StaticResource DisabledTextColor}" />
+    <SolidColorBrush x:Key="LinkTextBrush"
+                     Color="{StaticResource LinkTextColor}" />
+    <SolidColorBrush x:Key="ErrorTextBrush"
+                     Color="{StaticResource ErrorTextColor}" />
+    <SolidColorBrush x:Key="SuccessTextBrush"
+                     Color="{StaticResource SuccessTextColor}" />
+    <SolidColorBrush x:Key="WarningTextBrush"
+                     Color="{StaticResource WarningTextColor}" />
+    <SolidColorBrush x:Key="InfoTextBrush"
+                     Color="{StaticResource InfoTextColor}" />
+
+    <SolidColorBrush x:Key="AppBackgroundBrush"
+                     Color="{StaticResource AppBackgroundColor}" />
+    <SolidColorBrush x:Key="DialogBackgroundBrush"
+                     Color="{StaticResource DialogBackground}" />
+    <SolidColorBrush x:Key="SidebarBackgroundBrush"
+                     Color="{StaticResource SidebarBackground}" />
+    <SolidColorBrush x:Key="CardBackgroundBrush"
+                     Color="{StaticResource CardBackgroundColor}" />
+    <SolidColorBrush x:Key="TooltipBackgroundBrush"
+                     Color="{StaticResource TooltipBackground}" />
+    <SolidColorBrush x:Key="AlternateRowBackgroundBrush"
+                     Color="{StaticResource AlternateRowBackground}" />
+    <SolidColorBrush x:Key="SelectionBackgroundBrush"
+                     Color="{StaticResource SelectionBackground}" />
+    <SolidColorBrush x:Key="HoverBackgroundBrush"
+                     Color="{StaticResource HoverBackground}" />
+    <SolidColorBrush x:Key="FocusBackgroundBrush"
+                     Color="{StaticResource FocusBackground}" />
+    <SolidColorBrush x:Key="HeaderBackgroundBrush"
+                     Color="{StaticResource HeaderBackground}" />
+
+    <SolidColorBrush x:Key="SuccessBrush"
+                     Color="{StaticResource SuccessColor}" />
+    <SolidColorBrush x:Key="WarningBrush"
+                     Color="{StaticResource WarningColor}" />
+    <SolidColorBrush x:Key="ErrorBrush"
+                     Color="{StaticResource ErrorColor}" />
+    <SolidColorBrush x:Key="InfoBrush"
+                     Color="{StaticResource InfoColor}" />
+
+    <SolidColorBrush x:Key="DividerBrush"
+                     Color="{StaticResource DividerColor}" />
+    <SolidColorBrush x:Key="BorderBrush"
+                     Color="{StaticResource BorderColor}" />
+    <SolidColorBrush x:Key="FocusBorderBrush"
+                     Color="{StaticResource FocusBorderColor}" />
+
+    <SolidColorBrush x:Key="LightButtonBackgroundBrush"
+                     Color="{StaticResource LightButtonBackground}" />
+    <SolidColorBrush x:Key="LightButtonBackgroundHoverBrush"
+                     Color="{StaticResource LightButtonBackgroundHover}" />
+    <SolidColorBrush x:Key="LightButtonBackgroundPressedBrush"
+                     Color="{StaticResource LightButtonBackgroundPressed}" />
+    <SolidColorBrush x:Key="LightButtonBorderBrush"
+                     Color="{StaticResource LightButtonBorder}" />
+    <SolidColorBrush x:Key="LightButtonTextBrush"
+                     Color="{StaticResource LightButtonTextColor}" />
+
+    <SolidColorBrush x:Key="PrimaryButtonBackgroundBrush"
+                     Color="{StaticResource PrimaryButtonBackground}" />
+    <SolidColorBrush x:Key="PrimaryButtonBackgroundHoverBrush"
+                     Color="{StaticResource PrimaryButtonBackgroundHover}" />
+    <SolidColorBrush x:Key="PrimaryButtonBackgroundPressedBrush"
+                     Color="{StaticResource PrimaryButtonBackgroundPressed}" />
+    <SolidColorBrush x:Key="PrimaryButtonBorderBrush"
+                     Color="{StaticResource PrimaryButtonBorder}" />
+    <SolidColorBrush x:Key="PrimaryButtonTextBrush"
+                     Color="{StaticResource PrimaryButtonTextColor}" />
+
+
+    <SolidColorBrush x:Key="ProgressBarBackgroundBrush"
+                     Color="{StaticResource ProgressBarBackground}" />
+    <SolidColorBrush x:Key="ProgressBarForegroundBrush"
+                     Color="{StaticResource ProgressBarForeground}" />
+
+    <SolidColorBrush x:Key="ScrollBarBackgroundBrush"
+                     Color="{StaticResource ScrollBarBackground}" />
+    <SolidColorBrush x:Key="ScrollBarThumbBrush"
+                     Color="{StaticResource ScrollBarThumb}" />
+    <SolidColorBrush x:Key="ScrollBarThumbHoverBrush"
+                     Color="{StaticResource ScrollBarThumbHover}" />
+
+    <SolidColorBrush x:Key="ToolbarBackgroundBrush"
+                     Color="{StaticResource ToolbarBackground}" />
+    <SolidColorBrush x:Key="StatusBarBackgroundBrush"
+                     Color="{StaticResource StatusBarBackground}" />
+    <SolidColorBrush x:Key="CardHeaderBackgroundBrush"
+                     Color="{StaticResource CardHeaderBackgroundColor}" />
+
+    --><!-- Menu Button Brushes - Dark Theme --><!--
+    <SolidColorBrush x:Key="MenuButtonBackgroundBrush"
+                     Color="{StaticResource MenuButtonBackground}" />
+    <SolidColorBrush x:Key="MenuButtonBackgroundHoverBrush"
+                     Color="{StaticResource MenuButtonBackgroundHover}" />
+    <SolidColorBrush x:Key="MenuButtonBackgroundPressedBrush"
+                     Color="{StaticResource MenuButtonBackgroundPressed}" />
+    <SolidColorBrush x:Key="MenuButtonBackgroundDisabledBrush"
+                     Color="{StaticResource MenuButtonBackgroundDisabled}" />
+
+    <SolidColorBrush x:Key="MenuButtonForegroundBrush"
+                     Color="{StaticResource MenuButtonForeground}" />
+    <SolidColorBrush x:Key="MenuButtonForegroundHoverBrush"
+                     Color="{StaticResource MenuButtonForegroundHover}" />
+    <SolidColorBrush x:Key="MenuButtonForegroundPressedBrush"
+                     Color="{StaticResource MenuButtonForegroundPressed}" />
+    <SolidColorBrush x:Key="MenuButtonForegroundDisabledBrush"
+                     Color="{StaticResource MenuButtonForegroundDisabled}" />
+
+    <SolidColorBrush x:Key="MenuButtonBorderBrush"
+                     Color="{StaticResource MenuButtonBorder}" />
+    <SolidColorBrush x:Key="MenuButtonBorderHoverBrush"
+                     Color="{StaticResource MenuButtonBorderHover}" />
+    <SolidColorBrush x:Key="MenuButtonBorderPressedBrush"
+                     Color="{StaticResource MenuButtonBorderPressed}" />
+    <SolidColorBrush x:Key="MenuButtonBorderDisabledBrush"
+                     Color="{StaticResource MenuButtonBorderDisabled}" />
+
+    --><!-- Clinical-Specific Brushes --><!--
+    <SolidColorBrush x:Key="AppointmentAvailableBrush"
+                     Color="{StaticResource AppointmentAvailable}" />
+    <SolidColorBrush x:Key="AppointmentBookedBrush"
+                     Color="{StaticResource AppointmentBooked}" />
+    <SolidColorBrush x:Key="AppointmentUrgentBrush"
+                     Color="{StaticResource AppointmentUrgent}" />
+    <SolidColorBrush x:Key="PatientCriticalBrush"
+                     Color="{StaticResource PatientCritical}" />
+
+    <SolidColorBrush x:Key="PatientStableBrush"
+                     Color="{StaticResource PatientStable}" />
+    <SolidColorBrush x:Key="PatientWarningBrush"
+                     Color="{StaticResource PatientWarning}" />
+
+
+    --><!-- Accent Colors Brushes --><!--
+    <SolidColorBrush x:Key="AccentTealBrush"
+                     Color="{StaticResource AccentTeal}" />
+    <SolidColorBrush x:Key="AccentWarmOrangeBrush"
+                     Color="{StaticResource AccentWarmOrange}" />
+    <SolidColorBrush x:Key="AccentCoralBrush"
+                     Color="{StaticResource AccentCoral}" />
+    <SolidColorBrush x:Key="AccentPurpleBrush"
+                     Color="{StaticResource AccentPurple}" />
+    <SolidColorBrush x:Key="AccentTurquoiseBrush"
+                     Color="{StaticResource AccentTurquoise}" />
+    <SolidColorBrush x:Key="AccentAmethystBrush"
+                     Color="{StaticResource AccentAmethyst}" />
+
+
+    --><!-- ToolTip Colors --><!--
+    <SolidColorBrush x:Key="ModernToolTipBackgroundBrush"
+                     Color="#F5F5F5" />
+    <SolidColorBrush x:Key="ModernToolTipForegroundBrush"
+                     Color="#222222" />
+
+    --><!-- Scroll Bar --><!--
+    <SolidColorBrush x:Key="ScrollbarForegroundBrush"
+                     Color="{DynamicResource ScrollbarForeground}" />
+
+    <SolidColorBrush x:Key="ScrollbarBackgroundBrush"
+                     Color="{DynamicResource ScrollbarBackground}" />-->
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <wpfUi:ThemesDictionary Theme="Dark" />
+        <wpfUi:ControlsDictionary />
+        <ResourceDictionary Source="../Styles/ScrollBar.xaml" />
+
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

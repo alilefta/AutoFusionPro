@@ -1,0 +1,812 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Cards">
+
+    <!-- Shadow Effect -->
+    <DropShadowEffect x:Key="ShadowEffect"
+                      ShadowDepth="1"
+                      Direction="270"
+                      Color="#22000000"
+                      BlurRadius="5"
+                      Opacity="0.3" />
+
+
+    <!-- Base Card Style (Common properties for all cards) -->
+    <Style x:Key="BaseCardStyle"
+           TargetType="Border">
+        <Setter Property="Background"
+                Value="{DynamicResource Card.BackgroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Card.BorderBrush}" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="CornerRadius"
+                Value="8" />
+        <Setter Property="Padding"
+                Value="16" />
+        <Setter Property="Margin"
+                Value="8" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="10"
+                                  ShadowDepth="1"
+                                  Opacity="0.2"
+                                  Color="{DynamicResource Neutral990}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Card Header Style -->
+    <Style x:Key="CardHeaderStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize"
+                Value="16" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Card.Header.ForegroundBrush}" />
+        <Setter Property="Margin"
+                Value="0,0,0,12" />
+    </Style>
+
+    <!-- Card Label Style -->
+    <Style x:Key="CardLabelStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Card.Body.ForegroundBrush}" />
+        <Setter Property="Margin"
+                Value="0,4,0,2" />
+    </Style>
+
+    <!-- Card Value Style -->
+    <Style x:Key="CardValueStyle"
+           TargetType="TextBlock">
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Card.Body.ForegroundBrush}" />
+        <Setter Property="Margin"
+                Value="0,0,0,8" />
+        <Setter Property="TextWrapping"
+                Value="Wrap" />
+    </Style>
+
+    <!-- Card Button Style -->
+    <Style x:Key="CardButtonStyle"
+           TargetType="Button">
+        <Setter Property="Background"
+                Value="{DynamicResource Button.Primary.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Padding"
+                Value="12,6" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{DynamicResource Button.Primary.Background.HoverBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Appointment Status Indicators -->
+    <Style x:Key="StatusIndicatorStyle"
+           TargetType="Border">
+        <Setter Property="Width"
+                Value="12" />
+        <Setter Property="Height"
+                Value="12" />
+        <Setter Property="CornerRadius"
+                Value="6" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Margin"
+                Value="0,0,8,0" />
+    </Style>
+
+    <Style x:Key="ResponsiveCardStyle"
+           TargetType="Border"
+           BasedOn="{StaticResource BaseCardStyle}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=ActualWidth}"
+                         Value="LessThan800">
+                <Setter Property="Width"
+                        Value="Auto" />
+                <Setter Property="MaxWidth"
+                        Value="450" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="AccessibleCardLabelStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource CardLabelStyle}">
+        <Setter Property="FontSize"
+                Value="{Binding Source={x:Static SystemParameters.HighContrast}, Converter={StaticResource HighContrastFontSizeConverter}}" />
+        <Setter Property="AutomationProperties.Name"
+                Value="{Binding Text, RelativeSource={RelativeSource Self}}" />
+    </Style>
+    
+    <!-- Use Cases -->
+
+    <!-- 1. Patient Information Card --><!--
+    <Border Style="{StaticResource BaseCardStyle}"
+            Width="350">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            --><!-- Patient Card Header --><!--
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal">
+                <Ellipse Width="48"
+                         Height="48"
+                         Margin="0,0,12,0">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="/Assets/default-avatar.png" />
+                    </Ellipse.Fill>
+                </Ellipse>
+                <StackPanel>
+                    <TextBlock Text="John Doe"
+                               FontSize="18"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="ID: PT-20230987"
+                               Foreground="#767676"
+                               FontSize="12" />
+                </StackPanel>
+            </StackPanel>
+
+            --><!-- Divider --><!--
+            <Rectangle Grid.Row="1"
+                       Height="1"
+                       Fill="#E0E0E0"
+                       Margin="0,12" />
+
+            --><!-- Patient Details --><!--
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="PERSONAL INFORMATION"
+                           Style="{StaticResource CardLabelStyle}"
+                           Margin="0,0,0,8" />
+
+                <WrapPanel>
+                    <StackPanel Margin="0,0,24,8"
+                                Width="120">
+                        <TextBlock Text="Age"
+                                   Style="{StaticResource CardLabelStyle}" />
+                        <TextBlock Text="42 years"
+                                   Style="{StaticResource CardValueStyle}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,0,0,8"
+                                Width="120">
+                        <TextBlock Text="Sex"
+                                   Style="{StaticResource CardLabelStyle}" />
+                        <TextBlock Text="Male"
+                                   Style="{StaticResource CardValueStyle}" />
+                    </StackPanel>
+                </WrapPanel>
+
+                <StackPanel Margin="0,0,0,8">
+                    <TextBlock Text="Phone"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock Text="(555) 123-4567"
+                               Style="{StaticResource CardValueStyle}" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,0,8">
+                    <TextBlock Text="Email"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock Text="john.doe@example.com"
+                               Style="{StaticResource CardValueStyle}" />
+                </StackPanel>
+
+                <TextBlock Text="MEDICAL INFORMATION"
+                           Style="{StaticResource CardLabelStyle}"
+                           Margin="0,8,0,8" />
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,4">
+                    <Border Background="#FFC107"
+                            Style="{StaticResource StatusIndicatorStyle}" />
+                    <TextBlock Text="Allergies: Penicillin"
+                               Style="{StaticResource CardValueStyle}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,4">
+                    <Border Background="#F44336"
+                            Style="{StaticResource StatusIndicatorStyle}" />
+                    <TextBlock Text="Blood Type: O+"
+                               Style="{StaticResource CardValueStyle}" />
+                </StackPanel>
+            </StackPanel>
+
+            --><!-- Actions --><!--
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,8,0,0">
+                <Button Content="Edit"
+                        Style="{StaticResource CardButtonStyle}"
+                        Margin="0,0,8,0" />
+                <Button Content="View History"
+                        Style="{StaticResource CardButtonStyle}">
+                    <Button.Background>
+                        <SolidColorBrush Color="#6C757D" />
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+
+    --><!-- 2. Appointment Card --><!--
+    <Border Style="{StaticResource BaseCardStyle}"
+            Width="300">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            --><!-- Status Bar --><!--
+            <Border Grid.Row="0"
+                    Background="#4CAF50"
+                    CornerRadius="4,4,0,0"
+                    Padding="12,6">
+                <TextBlock Text="CONFIRMED"
+                           FontSize="12"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center" />
+            </Border>
+
+            --><!-- Date and Time --><!--
+            <StackPanel Grid.Row="1"
+                        Margin="0,12,0,0">
+                <TextBlock Text="Wednesday, May 15, 2025"
+                           HorizontalAlignment="Center"
+                           FontWeight="SemiBold"
+                           FontSize="16" />
+                <TextBlock Text="10:30 AM - 11:15 AM"
+                           HorizontalAlignment="Center"
+                           Foreground="#767676"
+                           Margin="0,4,0,0" />
+            </StackPanel>
+
+            --><!-- Appointment Details --><!--
+            <Grid Grid.Row="2"
+                  Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                --><!-- Patient --><!--
+                <Border Grid.Row="0"
+                        Grid.Column="0"
+                        Width="32"
+                        Height="32"
+                        Background="#E3F2FD"
+                        CornerRadius="16"
+                        Margin="0,0,12,12">
+                    <TextBlock Text="👤"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16" />
+                </Border>
+                <StackPanel Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,0,0,12">
+                    <TextBlock Text="PATIENT"
+                               Style="{StaticResource CardLabelStyle}"
+                               Margin="0,0,0,2" />
+                    <TextBlock Text="John Doe"
+                               Style="{StaticResource CardValueStyle}"
+                               Margin="0" />
+                </StackPanel>
+
+                --><!-- Doctor --><!--
+                <Border Grid.Row="1"
+                        Grid.Column="0"
+                        Width="32"
+                        Height="32"
+                        Background="#E8F5E9"
+                        CornerRadius="16"
+                        Margin="0,0,12,12">
+                    <TextBlock Text="👨‍⚕️"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16" />
+                </Border>
+                <StackPanel Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,0,0,12">
+                    <TextBlock Text="DOCTOR"
+                               Style="{StaticResource CardLabelStyle}"
+                               Margin="0,0,0,2" />
+                    <TextBlock Text="Dr. Sarah Johnson"
+                               Style="{StaticResource CardValueStyle}"
+                               Margin="0" />
+                </StackPanel>
+
+                --><!-- Purpose --><!--
+                <Border Grid.Row="2"
+                        Grid.Column="0"
+                        Width="32"
+                        Height="32"
+                        Background="#FFF3E0"
+                        CornerRadius="16"
+                        Margin="0,0,12,0">
+                    <TextBlock Text="📋"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16" />
+                </Border>
+                <StackPanel Grid.Row="2"
+                            Grid.Column="1">
+                    <TextBlock Text="PURPOSE"
+                               Style="{StaticResource CardLabelStyle}"
+                               Margin="0,0,0,2" />
+                    <TextBlock Text="Regular Checkup"
+                               Style="{StaticResource CardValueStyle}"
+                               Margin="0" />
+                </StackPanel>
+            </Grid>
+
+            --><!-- Actions --><!--
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,16,0,0">
+                <Button Content="Reschedule"
+                        Style="{StaticResource CardButtonStyle}"
+                        Margin="0,0,8,0">
+                    <Button.Background>
+                        <SolidColorBrush Color="#FFC107" />
+                    </Button.Background>
+                </Button>
+                <Button Content="Cancel"
+                        Style="{StaticResource CardButtonStyle}">
+                    <Button.Background>
+                        <SolidColorBrush Color="#F44336" />
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+
+    --><!-- 3. Medical Record Card --><!--
+    <Border Style="{StaticResource BaseCardStyle}"
+            Width="400">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            --><!-- Header --><!--
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        Margin="0,0,0,12">
+                <Border Background="#3F51B5"
+                        Width="4"
+                        Height="24"
+                        CornerRadius="2"
+                        Margin="0,0,12,0" />
+                <TextBlock Text="MEDICAL RECORD"
+                           FontSize="18"
+                           FontWeight="SemiBold" />
+            </StackPanel>
+
+            --><!-- Visit Info --><!--
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Visit Date"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock Text="May 10, 2025"
+                               Style="{StaticResource CardValueStyle}" />
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Background="#E3F2FD"
+                        CornerRadius="4"
+                        Padding="8,4">
+                    <TextBlock Text="Dr. Sarah Johnson"
+                               FontSize="12"
+                               Foreground="#0078D7" />
+                </Border>
+            </Grid>
+
+            --><!-- Divider --><!--
+            <Rectangle Grid.Row="2"
+                       Height="1"
+                       Fill="#E0E0E0"
+                       Margin="0,8,0,16"
+                       VerticalAlignment="Top" />
+
+            --><!-- Record Content --><!--
+            <StackPanel Grid.Row="2"
+                        Margin="0,24,0,0">
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="CHIEF COMPLAINT"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock Text="Recurring headaches and mild dizziness for past two weeks."
+                               Style="{StaticResource CardValueStyle}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="DIAGNOSIS"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock Text="Tension headache, possibly stress-related. No signs of serious neurological issues."
+                               Style="{StaticResource CardValueStyle}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel Margin="0,0,0,16">
+                    <TextBlock Text="PRESCRIPTION"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <Border Background="#F5F5F5"
+                            CornerRadius="4"
+                            Padding="12,8"
+                            Margin="0,4,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Ibuprofen 400mg"
+                                       FontWeight="SemiBold" />
+                            <TextBlock Text="Take one tablet every 6 hours as needed for pain"
+                                       Foreground="#555555"
+                                       TextWrapping="Wrap"
+                                       Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="NOTES"
+                               Style="{StaticResource CardLabelStyle}" />
+                    <TextBlock TextWrapping="Wrap"
+                               Style="{StaticResource CardValueStyle}">
+                    Patient advised to monitor sleep schedule and reduce screen time. Recommended stress management techniques. Follow-up in two weeks if symptoms persist. Consider referral to neurologist if no improvement.
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+            --><!-- Actions --><!--
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,16,0,0">
+                <Button Content="Print"
+                        Style="{StaticResource CardButtonStyle}"
+                        Margin="0,0,8,0">
+                    <Button.Background>
+                        <SolidColorBrush Color="#6C757D" />
+                    </Button.Background>
+                </Button>
+                <Button Content="Edit Record"
+                        Style="{StaticResource CardButtonStyle}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+
+    --><!-- 4. Dashboard Summary Card --><!--
+    <Border Style="{StaticResource BaseCardStyle}"
+            Width="250"
+            Height="180">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            --><!-- Header --><!--
+            <TextBlock Grid.Row="0"
+                       Text="Today's Appointments"
+                       Style="{StaticResource CardHeaderStyle}" />
+
+            --><!-- Content --><!--
+            <StackPanel Grid.Row="1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="12"
+                           FontSize="48"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Foreground="#3F51B5" />
+                <TextBlock Text="Scheduled Patients"
+                           HorizontalAlignment="Center"
+                           Foreground="#767676"
+                           Margin="0,4,0,0" />
+            </StackPanel>
+
+            --><!-- Footer --><!--
+            <Grid Grid.Row="2"
+                  Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="3"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Foreground="#4CAF50" />
+                    <TextBlock Text="Completed"
+                               FontSize="10"
+                               HorizontalAlignment="Center"
+                               Foreground="#767676" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="8"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Foreground="#FF9800" />
+                    <TextBlock Text="Upcoming"
+                               FontSize="10"
+                               HorizontalAlignment="Center"
+                               Foreground="#767676" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2"
+                            HorizontalAlignment="Center">
+                    <TextBlock Text="1"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Foreground="#F44336" />
+                    <TextBlock Text="Canceled"
+                               FontSize="10"
+                               HorizontalAlignment="Center"
+                               Foreground="#767676" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+
+    --><!-- 5. Action/Navigation Card --><!--
+    <Border Style="{StaticResource BaseCardStyle}"
+            Width="180"
+            Height="120">
+        <Grid>
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <Border Width="48"
+                        Height="48"
+                        Background="#E3F2FD"
+                        CornerRadius="24"
+                        Margin="0,0,0,12">
+                    <TextBlock Text="📅"
+                               FontSize="24"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="Schedule Appointment"
+                           HorizontalAlignment="Center"
+                           FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+    </Border>-->
+
+    <!-- Base Card Style -->
+    <Style TargetType="{x:Type local:CardBase}">
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Card.Body.ForegroundBrush}" />
+        <Setter Property="CardBackground"
+                Value="{DynamicResource Card.Body.BackgroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Card.BorderBrush}" />
+        <Setter Property="HeaderForeground"
+                Value="{DynamicResource Card.Header.ForegroundBrush}" />
+        <Setter Property="HeaderBackground"
+                Value="{DynamicResource Card.Header.BackgroundBrush}" />
+
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:CardBase}">
+                    <Border Background="{TemplateBinding CardBackground}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="0"
+                            Margin="5"
+                            Effect="{StaticResource ShadowEffect}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Card Header -->
+                            <Border Grid.Row="0"
+                                    Background="{TemplateBinding HeaderBackground}"
+                                    BorderThickness="0,0,0,1"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource TemplatedParent}, 
+                                        Converter={StaticResource TopCornerRadiusConverter}}">
+                                <Grid Margin="15,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding Icon}"
+                                                      Margin="0,0,10,0"
+                                                      VerticalAlignment="Center"
+                                                      Visibility="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}, 
+                                                                 Converter={StaticResource NullToVisibilityConverter}}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="{TemplateBinding Header}"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"
+                                               Foreground="{TemplateBinding HeaderForeground}"
+                                               FontFamily="{TemplateBinding FontFamily}"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Card Content -->
+                            <ContentPresenter Grid.Row="1"
+                                              Content="{TemplateBinding Content}"
+                                              Margin="15"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" 
+                                              TextElement.FontFamily="{TemplateBinding FontFamily}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Info Card Style -->
+    <Style TargetType="{x:Type local:InfoCard}"
+           BasedOn="{StaticResource {x:Type local:CardBase}}">
+    </Style>
+
+
+    <!-- Form Card Style -->
+    <Style TargetType="{x:Type local:FormCard}"
+           BasedOn="{StaticResource {x:Type local:CardBase}}">
+        <Setter Property="IsRequired"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FormCard}">
+                    <Border Background="{TemplateBinding CardBackground}"
+                            BorderBrush="{DynamicResource Card.BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="0"
+                            Margin="5"
+                            Effect="{StaticResource ShadowEffect}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Card Header -->
+                            <Border Grid.Row="0"
+                                    Background="{TemplateBinding HeaderBackground}"
+                                    BorderThickness="0,0,0,1"
+                                    BorderBrush="{DynamicResource Card.BorderBrush}"
+                                    CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource TemplatedParent}, 
+                                        Converter={StaticResource TopCornerRadiusConverter}}">
+                                <Grid Margin="15,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding Icon}"
+                                                      Margin="0,0,10,0"
+                                                      VerticalAlignment="Center"
+                                                      Visibility="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}, 
+                                                                 Converter={StaticResource NullToVisibilityConverter}}" />
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"
+                                               FontWeight="SemiBold"
+                                               FontSize="14"
+                                               VerticalAlignment="Center" />
+
+                                    <!-- Required indicator -->
+                                    <TextBlock Grid.Column="2"
+                                               Text="*"
+                                               FontWeight="Bold"
+                                               Foreground="Red"
+                                               Visibility="{Binding IsRequired, RelativeSource={RelativeSource TemplatedParent}, 
+                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                               VerticalAlignment="Top"
+                                               Margin="5,0,0,0" />
+                                </Grid>
+                            </Border>
+
+                            <!-- Card Content -->
+                            <ContentPresenter Grid.Row="1"
+                                              Content="{TemplateBinding Content}"
+                                              Margin="15" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- FieldLabel Style -->
+    <Style TargetType="{x:Type local:FieldLabel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:FieldLabel}">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,5">
+                        <TextBlock Text="{TemplateBinding Text}"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Center" />
+
+                        <!-- Required indicator -->
+                        <TextBlock Text="*"
+                                   FontWeight="Bold"
+                                   Foreground="Red"
+                                   Visibility="{Binding IsRequired, RelativeSource={RelativeSource TemplatedParent}, 
+                                              Converter={StaticResource BoolToVisibilityConverter}}"
+                                   VerticalAlignment="Top"
+                                   Margin="2,0,0,0" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+</ResourceDictionary>

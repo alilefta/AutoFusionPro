@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Serilog" Version="4.2.1-dev-02340" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.1-dev-02307" />
+		<PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0-dev-02301" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AutoFusionPro.Core\AutoFusionPro.Core.csproj" />
+		<ProjectReference Include="..\AutoFusionPro.Domain\AutoFusionPro.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

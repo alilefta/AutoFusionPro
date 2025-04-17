@@ -1,0 +1,281 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+	<StartupObject>AutoFusionPro.UI.App</StartupObject>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoFusionPro.Application\AutoFusionPro.Application.csproj" />
+    <ProjectReference Include="..\AutoFusionPro.Core\AutoFusionPro.Core.csproj" />
+    <ProjectReference Include="..\AutoFusionPro.Infrastructure\AutoFusionPro.Infrastructure.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Remove="App.config" />
+		<None Remove="Assets\Fonts\Almarai-Bold.ttf" />
+		<None Remove="Assets\Fonts\Almarai-ExtraBold.ttf" />
+		<None Remove="Assets\Fonts\Almarai-Light.ttf" />
+		<None Remove="Assets\Fonts\Almarai-Regular.ttf" />
+		<None Remove="Assets\Fonts\beranda.round-regular.ttf" />
+		<None Remove="Assets\Fonts\Cairo-Black.ttf" />
+		<None Remove="Assets\Fonts\Cairo-Bold.ttf" />
+		<None Remove="Assets\Fonts\Cairo-ExtraBold.ttf" />
+		<None Remove="Assets\Fonts\Cairo-ExtraLight.ttf" />
+		<None Remove="Assets\Fonts\Cairo-Light.ttf" />
+		<None Remove="Assets\Fonts\Cairo-Medium.ttf" />
+		<None Remove="Assets\Fonts\Cairo-Regular.ttf" />
+		<None Remove="Assets\Fonts\Cairo-SemiBold.ttf" />
+		<None Remove="Assets\Fonts\Cairo-VariableFont_slnt,wght.ttf" />
+		<None Remove="Assets\Fonts\ElMessiri-Bold.ttf" />
+		<None Remove="Assets\Fonts\ElMessiri-Medium.ttf" />
+		<None Remove="Assets\Fonts\ElMessiri-Regular.ttf" />
+		<None Remove="Assets\Fonts\ElMessiri-SemiBold.ttf" />
+		<None Remove="Assets\Fonts\FluentSystemIcons-Filled.ttf" />
+		<None Remove="Assets\Fonts\FluentSystemIcons-Regular.ttf" />
+		<None Remove="Assets\Fonts\Font Awesome 6 Free-Solid-900.otf" />
+		<None Remove="Assets\Fonts\fontawesome-webfont.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSans-Bold.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSans-Light.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSans-Medium.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSans-Regular.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-Bold.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-ExtraLight.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-Light.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-Medium.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-Regular.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-SemiBold.ttf" />
+		<None Remove="Assets\Fonts\IBMPlexSansArabic-Thin.ttf" />
+		<None Remove="Assets\Fonts\Inter_18pt-Bold.ttf" />
+		<None Remove="Assets\Fonts\Inter_18pt-Light.ttf" />
+		<None Remove="Assets\Fonts\Inter_18pt-Medium.ttf" />
+		<None Remove="Assets\Fonts\Inter_18pt-Regular.ttf" />
+		<None Remove="Assets\Fonts\Lato-Black.ttf" />
+		<None Remove="Assets\Fonts\Lato-BlackItalic.ttf" />
+		<None Remove="Assets\Fonts\Lato-Bold.ttf" />
+		<None Remove="Assets\Fonts\Lato-BoldItalic.ttf" />
+		<None Remove="Assets\Fonts\Lato-Italic.ttf" />
+		<None Remove="Assets\Fonts\Lato-Light.ttf" />
+		<None Remove="Assets\Fonts\Lato-LightItalic.ttf" />
+		<None Remove="Assets\Fonts\Lato-Regular.ttf" />
+		<None Remove="Assets\Fonts\Lato-Thin.ttf" />
+		<None Remove="Assets\Fonts\Lato-ThinItalic.ttf" />
+		<None Remove="Assets\Fonts\Roboto-Bold.ttf" />
+		<None Remove="Assets\Fonts\Roboto-Light.ttf" />
+		<None Remove="Assets\Fonts\Roboto-Medium.ttf" />
+		<None Remove="Assets\Fonts\Roboto-Regular.ttf" />
+		<None Remove="Assets\Images\croppedRound.png" />
+		<None Remove="Assets\Images\DentaFusionPro_white_full.png" />
+		<None Remove="Assets\Images\DentaFusionPro_white_logo.jpg" />
+		<None Remove="Assets\Images\no_image_placeholder.png" />
+		<None Remove="Assets\Images\OscarIcon.ico" />
+		<None Remove="Assets\Images\OscarIcon.jpeg" />
+		<None Remove="Assets\Images\OscarIconWhite.png" />
+		<None Remove="Assets\Images\OscarLogo.png" />
+		<None Remove="Assets\Images\placeholderImage.png" />
+		<None Remove="Assets\Photos\Avatars\Avatar1.jpg" />
+		<None Remove="Assets\Photos\Avatars\Avatar2.jpg" />
+		<None Remove="Assets\Photos\Avatars\Avatar3.jpg" />
+		<None Remove="Assets\Photos\Avatars\Avatar4.jpg" />
+		<None Remove="Assets\Photos\Avatars\Avatar5.jpeg" />
+		<None Remove="Assets\Photos\Avatars\Avatar6.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Assets\Icons\" />
+		<Folder Include="Dialogs\" />
+		<Folder Include="Resources\Templates\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.1.25080.5" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="System.Text.Json" Version="9.0.3" />
+		<PackageReference Include="WPF-UI" Version="4.0.2" />
+		<PackageReference Include="LiveCharts" Version="0.9.7" />
+		<PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc3.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Assets\Fonts\Almarai-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Almarai-ExtraBold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Almarai-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Almarai-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\beranda.round-regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-Black.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-ExtraBold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-ExtraLight.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-SemiBold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Cairo-VariableFont_slnt,wght.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\ElMessiri-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\ElMessiri-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\ElMessiri-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\ElMessiri-SemiBold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\FluentSystemIcons-Filled.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\FluentSystemIcons-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Font Awesome 6 Free-Solid-900.otf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\fontawesome-webfont.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSans-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSans-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSans-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSans-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-ExtraLight.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-SemiBold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\IBMPlexSansArabic-Thin.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Inter_18pt-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Inter_18pt-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Inter_18pt-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Inter_18pt-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Black.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-BlackItalic.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-BoldItalic.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Italic.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-LightItalic.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-Thin.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Lato-ThinItalic.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Roboto-Bold.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Roboto-Light.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Roboto-Medium.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Fonts\Roboto-Regular.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Assets\Images\croppedRound.png" />
+		<Resource Include="Assets\Images\DentaFusionPro_white_full.png" />
+		<Resource Include="Assets\Images\DentaFusionPro_white_logo.jpg" />
+		<Resource Include="Assets\Images\no_image_placeholder.png" />
+		<Resource Include="Assets\Images\OscarIcon.ico" />
+		<Resource Include="Assets\Images\OscarIcon.jpeg" />
+		<Resource Include="Assets\Images\OscarIconWhite.png" />
+		<Resource Include="Assets\Images\OscarLogo.png" />
+		<Resource Include="Assets\Images\placeholderImage.png" />
+		<Resource Include="Assets\Photos\Avatars\Avatar1.jpg" />
+		<Resource Include="Assets\Photos\Avatars\Avatar2.jpg" />
+		<Resource Include="Assets\Photos\Avatars\Avatar3.jpg" />
+		<Resource Include="Assets\Photos\Avatars\Avatar4.jpg" />
+		<Resource Include="Assets\Photos\Avatars\Avatar5.jpeg" />
+		<Resource Include="Assets\Photos\Avatars\Avatar6.png" />
+	</ItemGroup>
+</Project>
