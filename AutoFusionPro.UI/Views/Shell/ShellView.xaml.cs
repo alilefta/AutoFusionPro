@@ -1,4 +1,5 @@
-﻿using AutoFusionPro.Core.Exceptions;
+﻿using AutoFusionPro.Application.Services;
+using AutoFusionPro.Core.Exceptions;
 using AutoFusionPro.UI.ViewModels.Shell;
 using System.Globalization;
 using System.Windows;
@@ -12,10 +13,12 @@ namespace AutoFusionPro.UI.Views.Shell
     /// </summary>
     public partial class ShellView : UserControl
     {
-        public ShellView()
+        public ShellView(IWpfToastNotificationService toastService)
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+
+            toastService.IntitializeContainer(ToastContainer);
 
         }
 
@@ -35,6 +38,22 @@ namespace AutoFusionPro.UI.Views.Shell
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+
+            //// Make sure ToastContainer exists before initializing
+            //var toastContainer = this.FindName("ToastContainer") as ItemsControl;
+
+            //if (toastContainer != null)
+            //{
+            //    // Initialize the toast notification service with the found container
+            //    ToastNotificationService.Instance.Initialize(toastContainer);
+            //    System.Diagnostics.Debug.WriteLine("Toast notification service initialized successfully.");
+            //}
+            //else
+            //{
+            //    System.Diagnostics.Debug.WriteLine("WARNING: ToastContainer not found in ShellView.");
+            //}
+
+
             var culture = new CultureInfo("ar-IQ"); // or just "ar" for general Arabic
             TimeTextBlock.Text = DateTime.Now.ToString("dddd, MMMM dd - hh:mm tt", culture); // Show immediately
 

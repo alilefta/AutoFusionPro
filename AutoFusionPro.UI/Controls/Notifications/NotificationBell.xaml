@@ -22,7 +22,7 @@
             <Setter Property="CornerRadius"
                     Value="8" />
             <Setter Property="Background"
-                    Value="{DynamicResource Card.BackgroundBrush}" />
+                    Value="{DynamicResource NotificationPopup.Item.BackgroundBrush}" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsRead}"
                              Value="True">
@@ -35,7 +35,7 @@
         <Style x:Key="NotificationTitleStyle"
                TargetType="TextBlock">
             <Setter Property="FontSize"
-                    Value="{StaticResource FontSizeSmall}" />
+                    Value="{StaticResource FontSizeRegular}" />
             <Setter Property="TextWrapping"
                     Value="Wrap" />
             <Setter Property="Margin"
@@ -150,26 +150,28 @@
         <!-- Bell icon with badge -->
         <Button x:Name="BellButton"
                 Width="40"
-                Height="40" Style="{StaticResource IconButtonStyle}"
+                Height="40" 
+                Style="{StaticResource IconButtonStyle}"
                 Command="{Binding ToggleNotificationPanelCommand}">
             <Grid>
                 <TextBlock Text="&#xf0f3;"
                            FontFamily="{StaticResource FontAwesome}"
                            FontSize="18"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center" 
+                           Foreground="{DynamicResource Text.SecondaryBrush}"/>
 
                 <!-- Notification Badge -->
-                <Border Background="{DynamicResource Window.BackgroundBrush}"
-                        CornerRadius="10"
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Margin="-5,-5,0,0"
+                <Border Background="{DynamicResource LightBrush}"
+                        CornerRadius="20"
+                        Width="15"
+                        Height="14"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="-5,15,0,0"
                         Visibility="{Binding HasUnreadNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="{Binding UnreadCount}"
-                               Foreground="{DynamicResource Text.PrimaryBrush}"
+                    <TextBlock Text="{Binding UnreadCount, FallbackValue=2}"
+                               Foreground="{DynamicResource NotificationCount.ForegroundBrush}"
                                FontSize="10"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -188,8 +190,8 @@
                PopupAnimation="Fade"
                Width="350"
                MaxHeight="500">
-            <Border Background="{DynamicResource Dialog.BackgroundBrush}"
-                    BorderBrush="{DynamicResource Card.BorderBrush}"
+            <Border Background="{DynamicResource NotificationPopup.BackgroundBrush}"
+                    BorderBrush="{DynamicResource  NotificationPopup.BorderBrush}"
                     BorderThickness="1"
                     CornerRadius="8" 
                     Padding="10"
@@ -211,6 +213,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{DynamicResource NotificationsStr}"
+                                   Foreground="{DynamicResource NotificationPopup.Heading.ForegroundBrush}"
                                    FontWeight="Bold"
                                    FontSize="{StaticResource FontSizeRegular}"
                                    FontFamily="{DynamicResource DynamicFontFamilyMedium}"
@@ -230,7 +233,8 @@
                                     Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </StackPanel>
                     </Grid>
-                    <Separator BorderBrush="{DynamicResource Border.PrimaryBrush}"
+                    
+                    <Separator BorderBrush="{DynamicResource Seprator.BorderBrush}"
                                Margin="0,0,0,8" Grid.Row="1"/>
 
                     <!-- Notification List -->
@@ -295,6 +299,7 @@
                     <!-- Empty State -->
                     <TextBlock Grid.Row="3"
                                Text="{DynamicResource NoNotificationsStr}"
+                               Foreground="{DynamicResource NotificationPopup.Item.ForegroundBrush}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontFamily="{DynamicResource DynamicFontFamilyRegular}"

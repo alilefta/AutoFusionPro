@@ -1,11 +1,13 @@
 ﻿using AutoFusionPro.Application.DependencyInjection;
 using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions;
 using AutoFusionPro.Core.Services;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.DependencyInjection;
 using AutoFusionPro.Infrastructure.HostCreation;
 using AutoFusionPro.Infrastructure.Logging;
+using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
@@ -29,6 +31,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
+using Wpf.Ui;
 
 namespace AutoFusionPro.UI
 {
@@ -252,8 +255,7 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<ILoadingService, LoadingService>();
 
-
-
+                services.AddSingleton<IWpfToastNotificationService, ToastNotificationService>();
 
                 // Views
                 services.AddSingleton<MainWindow>();

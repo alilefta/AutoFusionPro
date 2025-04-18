@@ -15,7 +15,7 @@
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource Button.Default.ForegroundBrush}" />
             <Setter Property="BorderBrush"
                     Value="Transparent" />
             <Setter Property="Padding"
@@ -56,14 +56,14 @@
                                      Value="True">
                                 <Setter TargetName="border"
                                         Property="Background"
-                                        Value="#E0E0E0" />
+                                        Value="{DynamicResource Button.Default.Background.HoverBrush}" />
                             </Trigger>
                             <!-- Pressed effect -->
                             <Trigger Property="IsPressed"
                                      Value="True">
                                 <Setter TargetName="border"
                                         Property="Background"
-                                        Value="#C0C0C0" />
+                                        Value="{DynamicResource Button.Default.Background.PressedBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -117,7 +117,7 @@
 
             <Border Width="45"
                     Height="45"
-                    BorderBrush="#991B1D5B"
+                    BorderBrush="{DynamicResource Avatar.BorderBrush}"
                     BorderThickness="2"
                     CornerRadius="25"
                     HorizontalAlignment="Center"
@@ -176,7 +176,7 @@
                     </Grid>
                 </Button>
 
-                <Separator BorderBrush="{DynamicResource Border.PrimaryBrush}" Margin="0,5"/>
+                <Separator BorderBrush="{DynamicResource Seprator.BorderBrush}" Margin="0,5"/>
 
                 <Button Style="{StaticResource FlyoutButtonStyle}"
                         Command="{Binding LogoutCommand}"

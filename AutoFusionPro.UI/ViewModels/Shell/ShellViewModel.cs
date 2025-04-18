@@ -1,20 +1,20 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using AutoFusionPro.Application.Commands;
+﻿using AutoFusionPro.Application.Commands;
 using AutoFusionPro.Application.Interfaces;
-using AutoFusionPro.Core.Enums;
+using AutoFusionPro.Application.Services;
+using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Services;
+using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.ViewModels.UserControls;
+using AutoFusionPro.UI.ViewModels.ViewNotification;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
-using System.Windows;
-using AutoFusionPro.Core.Enums.NavigationPages;
-using AutoFusionPro.UI.ViewModels.Dashboard;
-using AutoFusionPro.UI.ViewModels.UserControls;
-using Microsoft.Extensions.DependencyInjection;
-using AutoFusionPro.UI.ViewModels.ViewNotification;
 
 namespace AutoFusionPro.UI.ViewModels.Shell
 {
@@ -35,6 +35,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
         [ObservableProperty]
         private NotificationViewModel _notificationViewModel;
+        private readonly IWpfToastNotificationService _toastNotificationService;
 
         #endregion
 
@@ -125,7 +126,8 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             INavigationService navigationService, 
             ISessionManager sessionManager, 
             IServiceProvider serviceProvider,
-            NotificationViewModel notificationViewModel)
+            NotificationViewModel notificationViewModel, 
+            IWpfToastNotificationService toastNotificationService)
         {
 
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
@@ -135,6 +137,8 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             _globalSettingsService = globalSettingsService ?? throw new ArgumentNullException(nameof(globalSettingsService));
 
             _notificationViewModel = notificationViewModel ?? throw new ArgumentNullException(nameof(notificationViewModel));
+
+            _toastNotificationService = toastNotificationService ?? throw new ArgumentNullException(nameof(toastNotificationService));
 
             CurrentWorkFlow = localizationService.CurrentFlowDirection;
             localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
@@ -151,7 +155,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             // Initialize User Avatar
             ILogger<UserAvatarViewModel> userAvatarLogger = serviceProvider.GetRequiredService<ILogger<UserAvatarViewModel>>();
             UserAvatarViewModel UserAvatarViewModel = new UserAvatarViewModel(_localizationService, sessionManager, serviceProvider, userAvatarLogger, this);
-
 
         }
 
@@ -190,6 +193,9 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             CurrentView = _navigationService.CurrentView;
             CurrentViewName = _navigationService.CurrentViewName;
             SelectedPage = _navigationService.CurrentViewName;
+
+            _toastNotificationService.Show("Test", "Hello",Core.Enums.UI.ToastType.Success , duration: TimeSpan.FromSeconds(90));
+
         }
 
         public override async Task InitializeAsync(object? parameter = null)

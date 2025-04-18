@@ -34,6 +34,13 @@
 
     <!-- Notifications -->
     <sys:String x:Key="NoNotificationsStr">No Notifications</sys:String>
+    <sys:String x:Key="MarkAllReadStr">Mark all as read</sys:String>
+    <sys:String x:Key="ClearAllStr">Clear All</sys:String>
+    <sys:String x:Key="NotificationsStr">Notifications</sys:String>
 
+    <sys:String x:Key="SuccessStr">Success</sys:String>
+    <sys:String x:Key="WarningStr">Warning</sys:String>
+    <sys:String x:Key="ErrorStr">Error</sys:String>
+    <sys:String x:Key="InfoStr">Information</sys:String>
 
 </ResourceDictionary>

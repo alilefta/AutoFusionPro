@@ -294,8 +294,10 @@
     <SolidColorBrush x:Key="Status.ForegroundBrush"
                      Color="{StaticResource Neutral0}" />
     <!-- Text on status bg -->
-    
-    
+
+   
+
+
     <!-- Search Textbox -->
     <SolidColorBrush x:Key="TextBox.BackgroundBrush"
                      Color="{StaticResource Neutral200}" />
@@ -348,6 +350,92 @@
                      Color="{StaticResource Amethyst500}" />
     <SolidColorBrush x:Key="Accent.Orange.BackgroundBrush"
                      Color="{StaticResource Orange500}" />
+
+
+
+    <!-- ==================== Toast Notification ==================== -->
+    <!-- Primary -->
+    <SolidColorBrush x:Key="Toast.Primary.BackgroundBrush"
+                     Color="{StaticResource Primary600}" />
+    <SolidColorBrush x:Key="Toast.Primary.ForegroundBrush"
+                     Color="{StaticResource Neutral200}" />
+    <SolidColorBrush x:Key="Toast.Primary.BorderBrush"
+                     Color="{StaticResource Neutral400}" />
+
+    <!-- Info  -->
+    <SolidColorBrush x:Key="Toast.Info.BackgroundBrush"
+                     Color="{StaticResource Sky100}" />
+    <SolidColorBrush x:Key="Toast.Info.ForegroundBrush"
+                     Color="{StaticResource Sky700}" />
+    <SolidColorBrush x:Key="Toast.Info.BorderBrush"
+                     Color="{StaticResource Sky300}" />    
+    
+    
+    <!-- Success  -->
+    <SolidColorBrush x:Key="Toast.Success.BackgroundBrush"
+                     Color="{StaticResource Green100}" />
+    <SolidColorBrush x:Key="Toast.Success.ForegroundBrush"
+                     Color="{StaticResource Green700}" />
+    <SolidColorBrush x:Key="Toast.Success.BorderBrush"
+                     Color="{StaticResource Green300}" />
+
+
+    <!-- Error  -->
+    <SolidColorBrush x:Key="Toast.Error.BackgroundBrush"
+                     Color="{StaticResource Red100}" />
+    <SolidColorBrush x:Key="Toast.Error.ForegroundBrush"
+                     Color="{StaticResource Red700}" />
+    <SolidColorBrush x:Key="Toast.Error.BorderBrush"
+                     Color="{StaticResource Red300}" />
+
+    <!-- Warning-->
+    <SolidColorBrush x:Key="Toast.Warning.BackgroundBrush"
+                     Color="{StaticResource Yellow100}" />
+    <SolidColorBrush x:Key="Toast.Warning.ForegroundBrush"
+                     Color="{StaticResource Amber700}" />
+    <SolidColorBrush x:Key="Toast.Warning.BorderBrush"
+                     Color="{StaticResource Yellow300}" />
+    
+    
+    <!-- Neutral -->
+    <SolidColorBrush x:Key="Toast.Neutral.BackgroundBrush"
+                     Color="{StaticResource Gray100}" />
+    <SolidColorBrush x:Key="Toast.Neutral.ForegroundBrush"
+                     Color="{StaticResource Gray800}" />
+    <SolidColorBrush x:Key="Toast.Neutral.BorderBrush"
+                     Color="{StaticResource Gray300}" />
+
+
+
+    <!-- ==================== Normal Notifications ==================== -->
+
+    <SolidColorBrush x:Key="NotificationCount.ForegroundBrush"
+                     Color="{StaticResource Red500}" />
+
+    <SolidColorBrush x:Key="NotificationPopup.BackgroundBrush"
+                     Color="{StaticResource Gray400}" />
+
+    <SolidColorBrush x:Key="NotificationPopup.Item.ForegroundBrush"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="NotificationPopup.Heading.ForegroundBrush"
+                     Color="{StaticResource Neutral750}" />
+
+    <SolidColorBrush x:Key="NotificationPopup.BorderBrush"
+                     Color="{StaticResource Neutral600}" />
+
+    <SolidColorBrush x:Key="NotificationPopup.Item.BackgroundBrush"
+                     Color="{StaticResource Orange300}" />
+
+
+    <!-- ==================== Avatar Buttons ==================== -->
+    <SolidColorBrush x:Key="Avatar.BorderBrush"
+                     Color="{StaticResource Amber500}" />
+
+
+    <SolidColorBrush x:Key="Seprator.BorderBrush"
+                     Color="{StaticResource Gray400}" />
+
     <!-- Secondary Accent -->
 
 

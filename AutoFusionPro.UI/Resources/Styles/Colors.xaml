@@ -55,28 +55,72 @@
     <Color x:Key="Neutral1000">#000000</Color>
 
     <!-- ==================== Primary Palette (Blue) ==================== -->
-    <Color x:Key="Primary100">#E1F0FF</Color>
+    <Color x:Key="Primary100">#dbeafe</Color>
     <!-- Light Selection Background -->
-    <Color x:Key="Primary200">#A6C9E2</Color>
+    <Color x:Key="Primary200">#bedbff</Color>
     <!-- Light SideMenu Selected Border -->
-    <Color x:Key="Primary300">#61AFEF</Color>
+    <Color x:Key="Primary300">#8ec5ff</Color>
     <!-- Dark Link Text -->
-    <Color x:Key="Primary400">#5DADE2</Color>
+    <Color x:Key="Primary400">#51a2ff</Color>
     <!-- Dark Info Color / Dark Primary Light -->
-    <Color x:Key="Primary500">#3498DB</Color>
+    <Color x:Key="Primary500">#2b7fff</Color>
     <!-- Light Info Color / Light Primary Light / Dark Primary -->
-    <Color x:Key="Primary600">#2980B9</Color>
+    <Color x:Key="Primary600">#155dfc</Color>
     <!-- Dark Primary Dark -->
-    <Color x:Key="Primary700">#007ACC</Color>
+    <Color x:Key="Primary700">#1447e6</Color>
     <!-- Light Primary / Light Focus Border / Light Progress FG -->
-    <Color x:Key="Primary800">#0069B3</Color>
+    <Color x:Key="Primary800">#193cb8</Color>
     <!-- Light Primary Hover -->
-    <Color x:Key="Primary900">#005A9E</Color>
+    <Color x:Key="Primary900">#1c398e</Color>
     <!-- Light Primary Pressed / Light Primary Dark -->
-    <Color x:Key="Primary950">#1F2B3A</Color>
+    <Color x:Key="Primary950">#162456</Color>
     <!-- Dark SideMenu Selected Background -->
-    <Color x:Key="Primary975">#1E3A5F</Color>
+    <Color x:Key="Primary975">#040939</Color>
     <!-- Dark Selection Background -->
+
+
+    <!-- ==================== Gray Colors ==================== -->
+    <Color x:Key="Gray100">#f3f4f6</Color>
+    <Color x:Key="Gray200">#e5e7eb</Color>
+    <Color x:Key="Gray300">#d1d5dc</Color>
+    <Color x:Key="Gray400">#99a1af</Color>
+    <Color x:Key="Gray500">#6a7282</Color>
+    <Color x:Key="Gray600">#4a5565</Color>
+    <Color x:Key="Gray700">#364153</Color>
+    <Color x:Key="Gray800">#1e2939</Color>
+    <Color x:Key="Gray900">#101828</Color>
+    <Color x:Key="Gray950">#030712</Color>
+
+
+    <!-- ==================== Sky Colors ==================== -->
+    <Color x:Key="Sky100">#dff2fe</Color>
+    <Color x:Key="Sky300">#74d4ff</Color>
+    <Color x:Key="Sky400">#00bcff</Color>
+    <Color x:Key="Sky500">#00a6f4</Color>
+    <Color x:Key="Sky700">#0069a8</Color>
+    <Color x:Key="Sky800">#00598a</Color>
+
+    <!-- ==================== Green Colors ==================== -->
+    <Color x:Key="Green100">#dcfce7</Color>
+    <Color x:Key="Green300">#7bf1a8</Color>
+    <Color x:Key="Green400">#05df72</Color>
+    <Color x:Key="Green500">#00c951</Color>
+    <Color x:Key="Green700">#008236</Color>
+    <Color x:Key="Green800">#016630</Color>
+
+
+    <!-- ==================== Yellow Colors ==================== -->
+    <Color x:Key="Yellow100">#fef9c2</Color>
+    <Color x:Key="Yellow300">#ffdf20</Color>
+    <Color x:Key="Yellow400">#fcc800</Color>
+    <Color x:Key="Yellow700">#a65f00</Color>
+    <Color x:Key="Yellow800">#894b00</Color>
+
+
+    <!-- ==================== Amber Colors ==================== -->
+    <Color x:Key="Amber500">#fd9a00</Color>
+    <Color x:Key="Amber700">#bb4d00</Color>
+
 
     <!-- ================= Accent Palette 1 (Orange - Secondary Accent) ================ -->
     <Color x:Key="Orange300">#F6B040</Color>
@@ -154,6 +198,20 @@
     <Color x:Key="Link600">#61AFEF</Color>
     <!-- Dark (Same as Primary300) -->
 
+
+    <!-- ==================== Red Colors ==================== -->
+
+    <Color x:Key="Red50">#fef2f2</Color>
+    <Color x:Key="Red100">#ffe2e2</Color>
+    <Color x:Key="Red200">#ffc9c9</Color>
+    <Color x:Key="Red300">#ffa2a2</Color>
+    <Color x:Key="Red400">#ff6467</Color>
+    <Color x:Key="Red500">#fb2c36</Color>
+    <Color x:Key="Red600">#e7000b</Color>
+    <Color x:Key="Red700">#c10007</Color>
+    <Color x:Key="Red800">#9f0712</Color>
+    <Color x:Key="Red900">#82181a</Color>
+    
 
     <SolidColorBrush x:Key="WhiteBrush"
                      Color="White" />

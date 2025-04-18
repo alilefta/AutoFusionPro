@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Shell"
              xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
-             xmlns:notifi="clr-namespace:AutoFusionPro.UI.Controls.Notifications"
+             xmlns:notify="clr-namespace:AutoFusionPro.UI.Controls.Notifications"
+             xmlns:toast="clr-namespace:AutoFusionPro.UI.Controls.Notifications.ToastNotifications"
              xmlns:menu="clr-namespace:AutoFusionPro.UI.Views.Controls.SideMenu"
              xmlns:ui="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:pages="clr-namespace:AutoFusionPro.Core.Enums.NavigationPages;assembly=AutoFusionPro.Core"
@@ -15,7 +16,9 @@
              mc:Ignorable="d" 
              Background="{DynamicResource Window.BackgroundBrush}"
              d:DataContext="{d:DesignInstance Type=viewModel:ShellViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+             d:DesignHeight="450" 
+             d:DesignWidth="800" 
+             Loaded="UserControl_Loaded">
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -83,7 +86,7 @@
                         Grid.Column="2" />-->
                 <StackPanel Grid.Column="2" Orientation="Horizontal"
                             Margin="0,0,8,0">
-                    <notifi:NotificationBell DataContext="{Binding NotificationViewModel}" 
+                    <notify:NotificationBell DataContext="{Binding NotificationViewModel}" 
                                              VerticalAlignment="Center" />
                     <user:UserAvatar DataContext="{Binding UserAvatarViewModel}"
                                      Margin="5,0,0,0"
@@ -141,5 +144,13 @@
                                    Style="{StaticResource DonutSpinnerTransitionStyle}" />
         </Grid>
 
+        <!-- Toast Container -->
+        <toast:ToastContainer x:Name="ToastContainer"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Right"
+                              Margin="0,0,15,0"
+                              Panel.ZIndex="1000" />
     </Grid>
 </UserControl>

@@ -4,15 +4,40 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Dashboard"
+             xmlns:toastTypes="clr-namespace:AutoFusionPro.Core.Enums.UI;assembly=AutoFusionPro.Core"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:DashboardViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
              Background="{DynamicResource Window.BackgroundBrush}">
     <Grid>
-        <TextBlock Text="Dashboard View"
-                   FontSize="18"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Foreground="{DynamicResource Text.PrimaryBrush}" />
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Dashboard View"
+                       FontSize="18"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource Text.PrimaryBrush}" />
+
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Error}" Content="Error Toast" />
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Primary}"
+                    Content="Primary Toast" />
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Info}"
+                    Content="Info Toast" />
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Warning}"
+                    Content="Warning Toast" />
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Success}"
+                    Content="Success Toast" />
+            <Button Command="{Binding ShowToast}"
+                    CommandParameter="{x:Static toastTypes:ToastType.Neutral}"
+                    Content="Neutral Toast" />
+        </StackPanel>
     </Grid>
 </UserControl>

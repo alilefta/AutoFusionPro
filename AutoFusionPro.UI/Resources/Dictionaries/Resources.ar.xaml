@@ -35,6 +35,11 @@
     <sys:String x:Key="MarkAllReadStr">تحديد الكل كمقروء</sys:String>
     <sys:String x:Key="ClearAllStr">حذف الكل</sys:String>
     <sys:String x:Key="NotificationsStr">الاشعارات</sys:String>
+    
+    <sys:String x:Key="SuccessStr">نجاح</sys:String>
+    <sys:String x:Key="WarningStr">تحذير</sys:String>
+    <sys:String x:Key="ErrorStr">خطأ</sys:String>
+    <sys:String x:Key="InfoStr">معلومات</sys:String>
 
 
 </ResourceDictionary>

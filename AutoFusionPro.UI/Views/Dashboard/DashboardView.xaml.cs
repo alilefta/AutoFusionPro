@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using AutoFusionPro.UI.ViewModels.Dashboard;
+using System.Windows.Controls;
 
 namespace AutoFusionPro.UI.Views.Dashboard
 {
@@ -7,9 +8,10 @@ namespace AutoFusionPro.UI.Views.Dashboard
     /// </summary>
     public partial class DashboardView : UserControl
     {
-        public DashboardView()
+        public DashboardView(DashboardViewModel dashboardViewModel)
         {
             InitializeComponent();
+            DataContext = dashboardViewModel;
         }
     }
 }
