@@ -212,15 +212,15 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
                 // TODO : To be uncommented after development
                 // Ensure we have a valid session
-                //await _sessionManager.Initialized;
+                await _sessionManager.Initialized;
 
-                //if (!_sessionManager.IsUserLoggedIn)
-                //{
-                //    _logger.LogWarning("HomeViewModel initialized without a valid user");
-                //    NavigateOnLogoutEvent?.Invoke(this, EventArgs.Empty);
+                if (!_sessionManager.IsUserLoggedIn)
+                {
+                    _logger.LogWarning("HomeViewModel initialized without a valid user");
+                    NavigateOnLogoutEvent?.Invoke(this, EventArgs.Empty);
 
-                //    return;
-                //}
+                    return;
+                }
 
                 await RunOnUiThread(async () =>
                 {

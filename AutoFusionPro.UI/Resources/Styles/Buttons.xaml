@@ -23,11 +23,11 @@
     <!-- Text with Icon (Optional) Multi-Color Button Style  -->
     <Style x:Key="RegularButtonStyle" TargetType="{x:Type local:XButton}">
         <Setter Property="Background"
-                Value="{StaticResource Button.Primary.BackgroundBrush}" />
+                Value="{DynamicResource Button.Primary.BackgroundBrush}" />
         <Setter Property="Foreground"
-                Value="{StaticResource Button.Primary.ForegroundBrush}" />
+                Value="{DynamicResource Button.Primary.ForegroundBrush}" />
         <Setter Property="BorderBrush"
-                Value="{StaticResource Button.Primary.BorderBrush}" />
+                Value="{DynamicResource Button.Primary.BorderBrush}" />
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Padding"
@@ -44,10 +44,6 @@
                 Value="4" />
         <Setter Property="Cursor"
                 Value="Hand" />
-        <Setter Property="Symbol"
-                Value="Empty" />
-        <Setter Property="SymbolSpacing"
-                Value="5" />
         <Setter Property="Height"
                 Value="Auto" />
         <Setter Property="MinHeight"
@@ -59,7 +55,7 @@
         <Setter Property="Width"
                 Value="Auto" />
         <Setter Property="OverridesDefaultStyle"
-                Value="False" />
+                Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:XButton}">
@@ -103,15 +99,7 @@
                             <!-- Button Content -->
                             <Border Visibility="{Binding IsLoading, Converter={StaticResource BooleanToInverseVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"
                                     Padding="{TemplateBinding Padding}">
-                                <Grid 
-                                      HorizontalAlignment="Center">
-                                    <!-- Fixed structure with two columns -->
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Text Content (Always in first column) -->
+                                <Grid HorizontalAlignment="Center">
                                     <TextBlock x:Name="textContent"
                                                Grid.Column="0"
                                                Text="{TemplateBinding Content}"
@@ -119,18 +107,16 @@
                                                VerticalAlignment="Center"
                                                FontSize="{TemplateBinding FontSize}"
                                                Foreground="{TemplateBinding Foreground}"
-                                               FontFamily="{TemplateBinding FontFamily}" />
+                                               FontFamily="{TemplateBinding FontFamily}">
+                                     <!-- Button Content -->
+				                        <ContentPresenter x:Name="contentPresenter"
+                                                          Focusable="False"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          RecognizesAccessKey="True"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </TextBlock>
 
-                                    <!-- Symbol (Always in second column) -->
-                                    <wpfUi:SymbolIcon x:Name="PART_Symbol"
-                                                      Grid.Column="1"
-                                                      Symbol="{TemplateBinding Symbol}"
-                                                      FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
-                                                      Foreground="{TemplateBinding Foreground}"
-                                                      VerticalAlignment="Center"
-                                                      FontSize="{TemplateBinding FontSize}"
-                                                      Margin="{Binding SymbolSpacing, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DoubleLeftMarginConverter}}"
-                                                      Visibility="{Binding Symbol, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource SymbolIconToVisibilityConverter}}" />
                                 </Grid>
                             </Border>
 
@@ -142,69 +128,69 @@
                         <Trigger Property="ButtonType"
                                  Value="Primary">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Primary.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Primary.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Secondary">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Secondary.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Secondary.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Success">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Success.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Success.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Success.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Danger">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Danger.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Danger.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Warning">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Warning.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Warning.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Info">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Info.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Info.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Light">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Light.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Light.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource Button.Light.ForegroundBrush}" />
+                                    Value="{DynamicResource Button.Light.ForegroundBrush}" />
                             <Setter Property="BorderBrush"
-                                    Value="{StaticResource Button.Light.BorderBrush}" />
+                                    Value="{DynamicResource Button.Light.BorderBrush}" />
                             <Setter Property="BorderThickness"
                                     Value="1" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Dark">
                             <Setter Property="Background"
-                                    Value="{StaticResource Button.Dark.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Dark.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource WhiteBrush}" />
+                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Link">
                             <Setter Property="Background"
-                                    Value="{StaticResource TransparentBrush}" />
+                                    Value="{DynamicResource TransparentBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{StaticResource Button.Link.BackgroundBrush}" />
+                                    Value="{DynamicResource Button.Link.BackgroundBrush}" />
                             <Setter TargetName="textContent" 
                                     Property="TextDecorations"
                                     Value="Underline" />
@@ -245,6 +231,8 @@
                             <Setter TargetName="border"
                                     Property="Opacity"
                                     Value="0.5" />
+                            <Setter Property="Cursor"
+                                    Value="No" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -715,7 +703,7 @@
 
    
 
-    <!-- Icon Only -->
+    <!-- Icon Only --><!--
     <Style x:Key="IconOnlyButtonStyle"
            TargetType="{x:Type local:XButton}"
            BasedOn="{StaticResource RegularButtonStyle}" >
@@ -729,7 +717,7 @@
                 Value="0" />
         <Setter Property="OverridesDefaultStyle"
                 Value="False" />
-    </Style>
+    </Style>-->
 
     <Style x:Key="IconButtonStyle"
            TargetType="Button">
@@ -767,6 +755,116 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Primary Blue Control Button With Spinner Style -->
+    <Style x:Key="PrimaryControlButtonWithSpinnerStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
+        <Setter Property="Background"
+                Value="{DynamicResource Button.Primary.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Button.Primary.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource Button.Primary.BorderBrush}" />
+        <Setter Property="ap:IsBusyProperty.Value"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
 
+                    <Border x:Name="buttonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            SnapsToDevicePixels="true"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            Padding="{TemplateBinding Padding}"
+                            Width="{TemplateBinding Width}"
+                            VerticalAlignment="Center">
+                        <Grid>
+                            <!-- Button Content -->
+                            <TextBlock x:Name="contentBlock"
+                                       TextAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">
+									
+								<!-- Button Content -->
+									<ContentPresenter x:Name="contentPresenter"
+                                                      Focusable="False"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      RecognizesAccessKey="True"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      Visibility="{TemplateBinding ap:IsBusyProperty.Value, Converter={StaticResource BooleanToInverseVisibilityConverter}}" />
+
+                            </TextBlock>
+                            <!-- ProgressRing (Spinner) -->
+                            <Ellipse x:Name="spinner"
+                                     Width="25"
+                                     Height="25"
+                                     RenderTransformOrigin="0.5,0.5"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"
+                                     Stroke="{TemplateBinding Foreground}"
+                                     StrokeDashArray="26,16"
+                                     StrokeThickness="1"
+                                     Visibility="{TemplateBinding ap:IsBusyProperty.Value, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform x:Name="Rotation"
+                                                     Angle="0" />
+                                </Ellipse.RenderTransform>
+
+                                <Ellipse.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <DoubleAnimation From="0"
+                                                                 To="360"
+                                                                 Storyboard.TargetName="Rotation"
+                                                                 Storyboard.TargetProperty="Angle" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Ellipse.Triggers>
+                            </Ellipse>
+                        </Grid>
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Triggers for MouseOver, Pressed, Disabled states -->
+                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Primary.Background.HoverBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Button.Primary.BorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="true">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Primary.Background.PressedBrush}" />
+                            <Setter Property="BorderBrush"
+                                    TargetName="buttonBorder"
+                                    Value="{DynamicResource Button.Primary.BorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Primary.Background.DisabledBrush}" />
+                            <Setter Property="BorderBrush"
+                                    TargetName="buttonBorder"
+                                    Value="{DynamicResource Button.Primary.Border.DisabledBrush}" />
+                            <Setter Property="Foreground"
+                                    TargetName="contentBlock"
+                                    Value="{DynamicResource Button.Primary.Foreground.DisabledBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

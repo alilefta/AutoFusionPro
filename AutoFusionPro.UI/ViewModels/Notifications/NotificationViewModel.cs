@@ -1,15 +1,14 @@
-﻿using AutoFusionPro.Application.Commands;
+﻿using AutoFusionPro.Application.DTOs;
+using AutoFusionPro.Application.Events;
 using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Services;
-using AutoFusionPro.Domain.Models;
-using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.ViewNotification
 {
@@ -21,22 +20,24 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
         private readonly ILocalizationService<FlowDirection> _localizationService;
 
         [ObservableProperty]
-        private ObservableCollection<Notification> _notifications = new();
+        private ObservableCollection<NotificationDto> _notifications = new();
 
         [ObservableProperty]
         private bool _isNotificationPanelOpen;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(MarkAllAsReadCommand))] // Notify command when count changes
+        [NotifyPropertyChangedFor(nameof(HasUnreadNotifications))] // Notify calculated property
         private int _unreadCount;
 
         public bool HasUnreadNotifications => UnreadCount > 0;
         public bool HasNotifications => Notifications.Any();
 
-        public ICommand ToggleNotificationPanelCommand { get; }
-        public ICommand MarkAsReadCommand { get; }
-        public ICommand MarkAllAsReadCommand { get; }
-        public ICommand DeleteNotificationCommand { get; }
-        public ICommand DeleteAllNotificationsCommand { get; }
+        public IRelayCommand ToggleNotificationPanelCommand { get; }
+        public IRelayCommand<int> MarkAsReadCommand { get; }
+        public IRelayCommand MarkAllAsReadCommand { get; }
+        public IRelayCommand<int> DeleteNotificationCommand { get; }
+        public IRelayCommand DeleteAllNotificationsCommand { get; }
 
         public NotificationViewModel(
             INotificationService notificationService,
@@ -49,21 +50,28 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
 
             // Initialize commands
-            ToggleNotificationPanelCommand = new RelayCommand(_ => ToggleNotificationPanel(), o => true);
-            MarkAsReadCommand = new RelayCommand(async id => await MarkAsReadAsync((int)id), o => true);
-            MarkAllAsReadCommand = new RelayCommand(async _ => await MarkAllAsReadAsync(), o => true);
-            DeleteNotificationCommand = new RelayCommand(async id => await DeleteNotificationAsync((int)id), o => true);
-            DeleteAllNotificationsCommand = new RelayCommand(async _ => await DeleteAllNotificationsAsync() , o => true);
+            // Initialize commands with CanExecute
+            ToggleNotificationPanelCommand = new RelayCommand(ToggleNotificationPanel); // CanExecute always true
+            MarkAsReadCommand = new RelayCommand<int>(async (id) => await MarkAsReadAsync(id), (id) => id > 0); // Basic check
+            MarkAllAsReadCommand = new RelayCommand(async () => await MarkAllAsReadAsync(), () => HasUnreadNotifications); // Depends on state
+            DeleteNotificationCommand = new RelayCommand<int>(async (id) => await DeleteNotificationAsync(id), (id) => id > 0); // Basic check
+            DeleteAllNotificationsCommand = new RelayCommand(async () => await DeleteAllNotificationsAsync(), () => HasNotifications); // Depends on state
 
             // Register for notification changes
             _notificationService.NotificationsChanged += OnNotificationsChanged;
-
             _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
+
+
+            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
+            RegisterCleanup(() => _notificationService.NotificationsChanged -= OnNotificationsChanged);
 
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
 
             // Initial load
             _ = LoadNotificationsAsync();
+
+            // Need to react when collection changes for DeleteAllNotificationsCommand CanExecute
+            Notifications.CollectionChanged += (s, e) => DeleteAllNotificationsCommand.NotifyCanExecuteChanged();
         }
 
         private void OnCurrentFlowDirectionChanged()
@@ -73,8 +81,11 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
 
         private async void OnNotificationsChanged(object sender, NotificationChangedEventArgs e)
         {
-            // If the change affects the current user's role, reload notifications
-            if (e.AffectedRole == _sessionManager.CurrentUser.UserRole || _sessionManager.CurrentUser.UserRole == UserRole.Admin)
+            var currentUser = _sessionManager.CurrentUser; // Check once
+            if (currentUser == null) return;
+
+            // Admin sees all user/admin changes, others only see their role changes
+            if (e.AffectedRole == currentUser.UserRole || currentUser.UserRole == UserRole.Admin)
             {
                 await LoadNotificationsAsync();
             }
@@ -93,120 +104,172 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
 
         private async Task LoadNotificationsAsync()
         {
+            if (!_sessionManager.Initialized.IsCompleted) return;
+
+            var currentUser = _sessionManager.CurrentUser;
+            if (currentUser == null)
+            {
+                _logger.LogWarning("Cannot load notifications: Current user is null.");
+                Notifications.Clear(); // Clear list if user logs out
+                UnreadCount = 0;
+                // Manually trigger property changes and CanExecute updates if needed after clear
+                OnPropertyChanged(nameof(HasNotifications));
+                MarkAllAsReadCommand.NotifyCanExecuteChanged();
+                DeleteAllNotificationsCommand.NotifyCanExecuteChanged();
+                return;
+            }
+
             try
             {
-                // Get notifications for the current user role
-                var userRole = _sessionManager.CurrentUser.UserRole;
+                var userRole = currentUser.UserRole;
                 var notificationsList = await _notificationService.GetNotificationsAsync(userRole);
+                var unread = await _notificationService.GetUnreadNotificationsCountAsync(userRole);
 
-                Notifications = new ObservableCollection<Notification>(notificationsList);
-                UnreadCount = await _notificationService.GetUnreadNotificationsCountAsync(userRole);
+                // Update collection efficiently
+                Notifications.Clear();
+                if (notificationsList != null)
+                {
+                    foreach (var notification in notificationsList)
+                    {
+                        Notifications.Add(notification);
+                    }
+                }
 
-                OnPropertyChanged(nameof(HasUnreadNotifications));
-                OnPropertyChanged(nameof(HasNotifications));
+                // Update properties - ObservableProperty handles OnPropertyChanged
+                UnreadCount = unread;
+
+                // No need to manually call OnPropertyChanged for calculated properties
+                // if their dependencies are [ObservableProperty]
+
+                // Explicitly notify commands relying on state
+                MarkAllAsReadCommand.NotifyCanExecuteChanged();
+                DeleteAllNotificationsCommand.NotifyCanExecuteChanged();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error loading notifications");
+                _logger.LogError(ex, "Error loading notifications for role {UserRole}", currentUser.UserRole);
+                // Optionally show error to user
+                // _dialogService?.ShowError("Failed to load notifications.", ex.Message);
             }
         }
 
         private async Task MarkAsReadAsync(int notificationId)
         {
+            // Find local item first
+            var notification = Notifications.FirstOrDefault(n => n.Id == notificationId);
+            if (notification == null || notification.IsRead) // Already read or not found locally
+            {
+                return;
+            }
+
             try
             {
                 await _notificationService.MarkAsReadAsync(notificationId);
 
-                // Update the local notification object
-                var notification = Notifications.FirstOrDefault(n => n.Id == notificationId);
-                if (notification != null)
-                {
-                    notification.IsRead = true;
+                // --- Update UI AFTER success ---
+                // This assumes NotificationDto is a class or mutable record
+                notification.IsRead = true;
 
-                    // Decrement unread count
-                    UnreadCount--;
-                    OnPropertyChanged(nameof(HasUnreadNotifications));
-                }
+                // Update count (use SetProperty to trigger dependent updates)
+                UnreadCount = Math.Max(0, UnreadCount - 1); // Prevent going below zero
+
+                // If the UI binds directly to IsRead within the item template,
+                // the NotificationDto needs to support INotifyPropertyChanged
+                // or be replaced entirely for the change to reflect reliably.
+                // For simplicity here, we assume direct modification works or the list is rebound.
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error marking notification as read");
+                _logger.LogError(ex, "Error marking notification {NotificationId} as read", notificationId);
+                // Optionally show error to user
             }
         }
 
         private async Task MarkAllAsReadAsync()
         {
+            var currentUser = _sessionManager.CurrentUser;
+            if (currentUser == null || UnreadCount == 0) return; // Nothing to do
+
             try
             {
-                await _notificationService.MarkAllAsReadAsync(_sessionManager.CurrentUser.UserRole);
+                await _notificationService.MarkAllAsReadAsync(currentUser.UserRole);
 
-                // Update all notifications in the collection
+                // --- Update UI AFTER success ---
+                bool changed = false;
                 foreach (var notification in Notifications)
                 {
-                    notification.IsRead = true;
+                    if (!notification.IsRead)
+                    {
+                        notification.IsRead = true; // Assumes mutable DTO
+                        changed = true;
+                        // If DTO implements INPC, UI updates. Otherwise, may need list refresh.
+                    }
                 }
-
-                // Reset unread count
-                UnreadCount = 0;
-                OnPropertyChanged(nameof(HasUnreadNotifications));
+                if (changed)
+                {
+                    UnreadCount = 0; // Directly sets _unreadCount via [ObservableProperty]
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error marking all notifications as read");
+                _logger.LogError(ex, "Error marking all notifications as read for role {UserRole}", currentUser.UserRole);
+                // Optionally show error to user
             }
         }
 
         private async Task DeleteNotificationAsync(int notificationId)
         {
+            // Find local item first
+            var notification = Notifications.FirstOrDefault(n => n.Id == notificationId);
+            if (notification == null) return; // Not found locally
+
             try
             {
                 await _notificationService.DeleteNotificationAsync(notificationId);
 
-                // Remove from local collection
-                var notification = Notifications.FirstOrDefault(n => n.Id == notificationId);
-                if (notification != null)
+                // --- Update UI AFTER success ---
+                bool wasUnread = !notification.IsRead;
+                Notifications.Remove(notification); // Remove from ObservableCollection
+
+                if (wasUnread)
                 {
-                    Notifications.Remove(notification);
-
-                    // If it was unread, decrement the counter
-                    if (!notification.IsRead)
-                    {
-                        UnreadCount--;
-                        OnPropertyChanged(nameof(HasUnreadNotifications));
-                    }
-
-                    OnPropertyChanged(nameof(HasNotifications));
+                    UnreadCount = Math.Max(0, UnreadCount - 1);
                 }
+                // HasNotifications updates automatically via CollectionChanged/Linq
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting notification");
+                _logger.LogError(ex, "Error deleting notification {NotificationId}", notificationId);
+                // Optionally show error to user
             }
         }
 
         private async Task DeleteAllNotificationsAsync()
         {
+            var currentUser = _sessionManager.CurrentUser;
+            if (currentUser == null || !Notifications.Any()) return; // Nothing to do
+
+            // Optional: Confirm with user before deleting all
+            // var confirm = await _dialogService.ShowConfirmation("Delete all notifications?");
+            // if (!confirm) return;
+
             try
             {
-                await _notificationService.DeleteAllNotificationsAsync(_sessionManager.CurrentUser.UserRole);
+                await _notificationService.DeleteAllNotificationsAsync(currentUser.UserRole);
 
-                // Clear local collection
+                // --- Update UI AFTER success ---
                 Notifications.Clear();
                 UnreadCount = 0;
-
-                OnPropertyChanged(nameof(HasUnreadNotifications));
-                OnPropertyChanged(nameof(HasNotifications));
+                // HasNotifications updates automatically via CollectionChanged/Linq
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting all notifications");
+                _logger.LogError(ex, "Error deleting all notifications for role {UserRole}", currentUser.UserRole);
+                // Optionally show error to user
             }
         }
 
-        // Clean up
-        public void Cleanup()
-        {
-            _notificationService.NotificationsChanged -= OnNotificationsChanged;
-        }
     }
 }

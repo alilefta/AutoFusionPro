@@ -45,6 +45,10 @@
     <!-- Main Body -->
     <SolidColorBrush x:Key="Text.SecondaryBrush"
                      Color="{StaticResource Neutral600}" />
+
+    <SolidColorBrush x:Key="Text.Optional"
+                     Color="{StaticResource Neutral400}" />
+
     <!-- Subtle -->
     <SolidColorBrush x:Key="Text.HeaderBrush"
                      Color="{StaticResource Neutral900}" />
@@ -188,6 +192,9 @@
 
     <SolidColorBrush x:Key="Button.Success.BackgroundBrush"
                      Color="{StaticResource Success600}" />
+
+    <SolidColorBrush x:Key="Button.Success.ForegroundBrush"
+                     Color="{StaticResource Neutral250}" />
 
     <SolidColorBrush x:Key="Button.Danger.BackgroundBrush"
                      Color="{StaticResource Error600}" />

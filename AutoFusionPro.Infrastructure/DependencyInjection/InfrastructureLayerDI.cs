@@ -35,10 +35,8 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
             // Register repositories
-            //services.AddScoped<IPatientRepository, PatientRepository>();
-            //services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-            //services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
 
             // Register UnitOfWork

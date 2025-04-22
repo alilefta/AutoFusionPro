@@ -43,6 +43,8 @@
     <!-- Subtle -->
     <SolidColorBrush x:Key="Text.HeaderBrush"
                      Color="{StaticResource Neutral50}" />
+
+    <SolidColorBrush x:Key="Text.Optional" Color="{StaticResource Neutral600}"/>
     <!-- Lighter Header -->
     <SolidColorBrush x:Key="Text.DisabledBrush"
                      Color="{StaticResource Neutral650}" />
@@ -182,7 +184,12 @@
                      Color="{StaticResource Neutral500}" />
     
     <SolidColorBrush x:Key="Button.Success.BackgroundBrush"
-                     Color="{StaticResource Success600}" />
+                     Color="{StaticResource Teal700}" />
+
+    <SolidColorBrush x:Key="Button.Success.ForegroundBrush"
+                     Color="{StaticResource Neutral350}" />
+    
+    
 
     <SolidColorBrush x:Key="Button.Danger.BackgroundBrush"
                      Color="{StaticResource Error600}" />

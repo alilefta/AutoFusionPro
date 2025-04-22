@@ -1,0 +1,65 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <!-- Shadow Effect for the popup -->
+    <DropShadowEffect x:Key="ShadowEffect"
+                      BlurRadius="10"
+                      ShadowDepth="1"
+                      Direction="270"
+                      Color="#20000000"
+                      Opacity="0.3" />
+
+    <!-- Modern Error Popup Style -->
+    <Style x:Key="ModernErrorPopup"
+           TargetType="Popup">
+        <Setter Property="AllowsTransparency"
+                Value="True" />
+        <Setter Property="PopupAnimation"
+                Value="Fade" />
+        <Setter Property="StaysOpen"
+                Value="True" />
+        <Setter Property="Placement"
+                Value="Bottom" />
+        <Setter Property="VerticalOffset"
+                Value="5" />
+        <Setter Property="Child">
+            <Setter.Value>
+                <Border CornerRadius="4"
+                        Background="#FFF8F8"
+                        BorderBrush="#FFE0E0"
+                        BorderThickness="1"
+                        Padding="12,8"
+                        Effect="{StaticResource ShadowEffect}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Error Icon -->
+                        <Path Grid.Column="0"
+                              Data="M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z M13,17 L11,17 L11,15 L13,15 L13,17 Z M13,13 L11,13 L11,7 L13,7 L13,13 Z"
+                              Fill="#FF4D4D"
+                              Width="16"
+                              Height="16"
+                              Stretch="Uniform"
+                              Margin="0,0,8,0"
+                              VerticalAlignment="Top" />
+
+                        <!-- Error Message -->
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding}"
+                                   Foreground="#E53935"
+                                   FontSize="12"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="200"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

@@ -3,11 +3,107 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml" 
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Authentication"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Authentication"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource AppBackgroundBrush}">
-    <Grid>
-        <TextBlock Text="Login View"
-                   FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-    </Grid>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:LoginViewModel}"
+             Background="{DynamicResource Window.BackgroundBrush}">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid Background="{DynamicResource Accent.Coral.BackgroundBrush}">
+
+            <!-- Layer 1: Login Panel -->
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="30,10,30,20"
+                    CornerRadius="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BorderThickness="2"
+                    Background="{DynamicResource Card.Header.BackgroundBrush}">
+                <Border.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1"
+                                         StartPoint="0.5,0">
+                        <GradientStop Color="#FFA4A4A4" />
+                        <GradientStop Color="#FF2EA4D4"
+                                      Offset="1" />
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
+
+                <StackPanel FlowDirection="{Binding CurrentWorkFlow}">
+                    <TextBlock Text="{DynamicResource LoginTitleStr}"
+                               Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                               FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource FontSizeXXLarge}"
+                               Margin="0,10,0,10" />
+
+                    <Border Padding="5">
+                        <StackPanel Margin="0,20,0,0"
+                                    FlowDirection="{Binding CurrentWorkFlow}">
+                            <!-- Username -->
+                            <TextBlock Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                       FontFamily="{StaticResource DynamicFontFamilyMedium}"
+                                       Text="{DynamicResource UsernameStr}"
+                                       Margin="0,0,0,10"
+                                       FontWeight="Bold" />
+                            <wpfUi:TextBox Width="220"
+                                           x:Name="UsernameTextBox"
+                                           Text="{Binding Username}"
+                                           FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                           PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                           IsEnabled="{Binding LoginIsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+
+                            <!-- Password -->
+                            <TextBlock Foreground="{DynamicResource Card.Body.ForegroundBrush}"
+                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                       Text="{DynamicResource PasswordStr}"
+                                       Margin="0,20,0,10"
+                                       FontWeight="Bold" />
+                            <wpfUi:PasswordBox Width="220"
+                                               x:Name="PasswordBox"
+                                               Password="{Binding Password, Mode=TwoWay}"
+                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                               PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                               IsEnabled="{Binding LoginIsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+
+                            <StackPanel Margin="10,30,10,0">
+                                <!-- Login Button -->
+                                <xBtn:XButton Command="{Binding LoginCommand}" Style="{DynamicResource RegularButtonStyle}"
+                                        Width="220"
+                                        IsDefault="True"
+                                        IsEnabled="{Binding LoginIsRunning, Converter={StaticResource InverseBooleanConverter}}"
+                                        IsLoading="{Binding LoginIsRunning}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                                   FontSize="{StaticResource FontSizeRegular}"
+                                                   Text="{DynamicResource LoginStr}" />
+                                        <wpfUi:SymbolIcon FontFamily="{StaticResource FluentSystemIconsFontRegular}"
+                                                          Symbol="LockClosed32"
+                                                          Margin="8,0,0,0"
+                                                          VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </xBtn:XButton>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Separator Margin="5,5"
+                               Background="{DynamicResource Seprator.BorderBrush}" />
+
+                    <StackPanel>
+                        <!-- Navigate to Register page-->
+                        <xBtn:XButton Style="{DynamicResource RegularButtonStyle }"
+                                Command="{Binding RegisterCommand}" ButtonType="Info">
+                            <TextBlock FontFamily="{DynamicResource DynamicFontFamilyLight}"
+                                       Text="{DynamicResource OrRegisterANewAccountStr}" />
+                        </xBtn:XButton>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

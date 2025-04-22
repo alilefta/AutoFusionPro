@@ -1,14 +1,14 @@
-﻿using AutoFusionPro.Core.Enums.ModelEnum;
+﻿using AutoFusionPro.Application.DTOs;
+using AutoFusionPro.Application.Events;
+using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Enums.UI;
-using AutoFusionPro.Domain.Models;
-using System.Collections.ObjectModel;
 
 namespace AutoFusionPro.Application.Interfaces
 {
     public interface INotificationService
     {
         // Get notifications for the current user role
-        Task<IEnumerable<Notification>> GetNotificationsAsync(UserRole currentUserRole);
+        Task<IEnumerable<NotificationDto>> GetNotificationsAsync(UserRole currentUserRole);
 
         // Get unread notifications count
         Task<int> GetUnreadNotificationsCountAsync(UserRole currentUserRole);
@@ -32,10 +32,6 @@ namespace AutoFusionPro.Application.Interfaces
         event EventHandler<NotificationChangedEventArgs> NotificationsChanged;
     }
 
-    public class NotificationChangedEventArgs : EventArgs
-    {
-        public UserRole AffectedRole { get; set; }
-        public NotificationChangeType ChangeType { get; set; }
-    }
+
 
 }

@@ -1,4 +1,5 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.DTOs.User;
+using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Core.Services;
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.UI.Helpers;
@@ -19,8 +20,8 @@ namespace AutoFusionPro.UI.ViewModels.UserControls
         private readonly ISessionManager _sessionManager;
         private readonly ILogger<UserAvatarViewModel> _logger;
         private readonly ShellViewModel _shellViewModel;
-        private User _currentlyLoggedInUser;
-        public User CurrentlyLoggedInUser
+        private UserSummaryDto _currentlyLoggedInUser;
+        public UserSummaryDto CurrentlyLoggedInUser
         {
             get => _currentlyLoggedInUser;
             set
@@ -75,10 +76,16 @@ namespace AutoFusionPro.UI.ViewModels.UserControls
 
         private async Task LoadUser()
         {
+
+            if (!_sessionManager.Initialized.IsCompleted) return;
+
+
+
+
             var user = _sessionManager.CurrentUser;
             if (user == null)
             {
-                await MessageBoxHelper.ShowMessageWithoutTitleAsync("An error has occured with fetching User");
+                await MessageBoxHelper.ShowMessageWithoutTitleAsync("An error has occurred with fetching User");
 
                 _logger.LogError("No user is logged in.");
                 return;
@@ -89,17 +96,17 @@ namespace AutoFusionPro.UI.ViewModels.UserControls
 
             try
             {
-                //using(var uow = _unitOfWorkFactory.CreateUnitOfWork())
+                //using (var uow = _unitOfWorkFactory.CreateUnitOfWork())
                 //{
-                //    CurrentlyLoggedInUser = await uow.Users.GetUserByIdAsync(userID);
-                //    if (CurrentlyLoggedInUser == null)
-                //    {
-                //        await MessageBoxHelper.ShowMessageWithoutTitleAsync("No User is logged in!", true, CurrentWorkFlow);
-                //        return;
-                //    }
+                //    //CurrentlyLoggedInUser = await uow.Users.GetUserByIdAsync(userID);
+                //    //if (CurrentlyLoggedInUser == null)
+                //    //{
+                //    //    await MessageBoxHelper.ShowMessageWithoutTitleAsync("No User is logged in!", true, CurrentWorkFlow);
+                //    //    return;
+                //    //}
 
-                //    _ = LoadUserAvatar();
                 //}
+                _ = LoadUserAvatar();
             }
             catch (Exception ex)
             {
@@ -123,7 +130,7 @@ namespace AutoFusionPro.UI.ViewModels.UserControls
                 }
                 else
                 {
-                    UserAvatar = new BitmapImage(new Uri("pack://application:,,,/OscarLab;component/Assets/Photos/Avatars/Avatar1.jpg"));
+                    UserAvatar = new BitmapImage(new Uri("pack://application:,,,/AutoFusionPro.UI;component/Assets/Photos/Avatars/Avatar1.jpg"));
                     _logger.LogInformation("Profile Avatar Loaded");
                 }
             }

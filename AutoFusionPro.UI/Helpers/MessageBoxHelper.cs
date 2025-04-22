@@ -107,7 +107,7 @@ namespace AutoFusionPro.UI.Helpers
                 },
                 CloseButtonAppearance = isError ? Wpf.Ui.Controls.ControlAppearance.Danger : Wpf.Ui.Controls.ControlAppearance.Primary,
                 CloseButtonText = "Close",
-                Owner = System.Windows.Application.Current.MainWindow
+                Owner = System.Windows.Application.Current.MainWindow.IsLoaded ? System.Windows.Application.Current.MainWindow : null
 
 
 

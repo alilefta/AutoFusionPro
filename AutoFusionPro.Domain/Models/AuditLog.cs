@@ -4,7 +4,6 @@ namespace AutoFusionPro.Domain.Models
 {
     public class AuditLog : BaseEntity
     {
-        public int UserId { get; set; }
         public DateTime Timestamp { get; set; }
         public string ActionType { get; set; } = string.Empty;
         public string? EntityType { get; set; }
@@ -16,6 +15,8 @@ namespace AutoFusionPro.Domain.Models
         // Navigation Properties
 
         // Many-to-One: AuditLog is performed by one User
-        public User User { get; set; } = null!; // Required Relationship
+        public User? User { get; set; } // Required Relationship
+        public int UserId { get; set; }
+
     }
 }

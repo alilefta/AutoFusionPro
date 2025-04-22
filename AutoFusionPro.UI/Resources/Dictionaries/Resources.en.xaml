@@ -43,4 +43,13 @@
     <sys:String x:Key="ErrorStr">Error</sys:String>
     <sys:String x:Key="InfoStr">Information</sys:String>
 
+    <!-- Login View -->
+    <sys:String x:Key="TypeSomethingStr">Type Something</sys:String>
+    <sys:String x:Key="LoginStr">Log in</sys:String>
+    <sys:String x:Key="LoginTitleStr">Login</sys:String>
+    <sys:String x:Key="UsernameStr">Username</sys:String>
+    <sys:String x:Key="PasswordStr">Password</sys:String>
+    <sys:String x:Key="OrRegisterANewAccountStr">Or sign up for a new account</sys:String>
+
+
 </ResourceDictionary>

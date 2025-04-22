@@ -41,10 +41,6 @@ namespace AutoFusionPro.Application.Services
             _viewModelFactory = viewModelFactory ?? throw new ArgumentNullException(nameof(viewModelFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _logger.LogInformation("Trying to get dashboard");
-
-            _logger.LogInformation("NavigationService initialized with starting view: {CurrentViewName}", CurrentViewName);
-
         }
 
         public void InitializeDefaultView(ApplicationPage page)

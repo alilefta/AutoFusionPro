@@ -18,7 +18,7 @@
              d:DataContext="{d:DesignInstance Type=viewModel:ShellViewModel}"
              d:DesignHeight="450" 
              d:DesignWidth="800" 
-             Loaded="UserControl_Loaded">
+             Loaded="UserControl_Loaded" Foreground="{DynamicResource Text.PrimaryBrush}">
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -51,6 +51,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding CurrentViewName, Converter={StaticResource ViewNameToUserFriendlyConverter}}"
+                           
                            VerticalAlignment="Center" 
                            FontSize="{StaticResource FontSizeSectionTitle}"
                            FontFamily="{DynamicResource DynamicFontFamilyMedium}"/>
@@ -58,7 +59,7 @@
                 <TextBlock Grid.Column="1" HorizontalAlignment="Center"
                            x:Name="TimeTextBlock"
                            VerticalAlignment="Center"
-                           FontSize="{StaticResource FontSizeBody}"
+                           FontSize="{StaticResource FontSizeBody}" Foreground="{DynamicResource Text.SecondaryBrush}"
                            FontFamily="{DynamicResource DynamicFontFamilyRegular}"/>
 
                 <!-- Search Input field--><!--

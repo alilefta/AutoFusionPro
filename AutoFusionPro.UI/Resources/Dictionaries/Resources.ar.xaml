@@ -42,4 +42,21 @@
     <sys:String x:Key="InfoStr">معلومات</sys:String>
 
 
+    <!-- Login View-->
+    <sys:String x:Key="TypeSomethingStr">اكتب شيئاَ</sys:String>
+    <sys:String x:Key="LoginStr">تسجيل الدخول</sys:String>
+    <sys:String x:Key="LoginTitleStr">تسجيل الدخول</sys:String>
+    <sys:String x:Key="UsernameStr">اسم المستخدم</sys:String>
+    <sys:String x:Key="PasswordStr">كلمة المرور</sys:String>
+    <sys:String x:Key="OrRegisterANewAccountStr">او قم بتسجيل حساب جديد</sys:String>
+    
+    <sys:String x:Key="RegisterTitleStr">تسجيل حساب جديد</sys:String>
+    <sys:String x:Key="RegisterStr">تسجيل الحساب</sys:String>
+    <sys:String x:Key="ConfirmPasswordStr">تأكيد كلمة المرور</sys:String>
+    <sys:String x:Key="PhoneNumberStr">رقم الهاتف</sys:String>
+    <sys:String x:Key="EmailStr">البريد الالكتروني</sys:String>
+    <sys:String x:Key="OptionalStr">(اختياري)</sys:String>
+    <sys:String x:Key="BackToLoginStr">العودة الى تسجيل الدخول</sys:String>
+
+
 </ResourceDictionary>

@@ -21,10 +21,13 @@ namespace AutoFusionPro.Application.DependencyInjection
             // Navigation
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISessionManager, SessionManager>();
+            services.AddTransient<IPasswordHashingService, BCryptPasswordHashingService>(); // Often singleton is fine for stateless hashers
+            services.AddSingleton<IAuthenticationService, AuthenticationService>(); // Scoped often makes sense
+            services.AddSingleton<IUserService, UserService>(); // Scoped
 
             // Register repositories
             //services.AddScoped<IPatientService, PatientService>();
-            services.AddScoped<IAppointmentService, AppointmentService>();
+            //services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddSingleton<INotificationService, NotificationService>();
 
             //services.AddTransient<PatientValidator>();

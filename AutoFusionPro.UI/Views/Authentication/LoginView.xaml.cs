@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using AutoFusionPro.UI.ViewModels.Authentication;
+using System.Windows.Controls;
 
 namespace AutoFusionPro.UI.Views.Authentication
 {
@@ -7,9 +8,10 @@ namespace AutoFusionPro.UI.Views.Authentication
     /// </summary>
     public partial class LoginView : UserControl
     {
-        public LoginView()
+        public LoginView(LoginViewModel loginViewModel)
         {
             InitializeComponent();
+            DataContext = loginViewModel;
         }
     }
 }

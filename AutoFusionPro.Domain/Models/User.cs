@@ -1,15 +1,17 @@
-﻿using AutoFusionPro.Core.Enums.ModelEnum;
+﻿// Ignore Spelling: Username
+
+using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Domain.Models.Base;
 
 namespace AutoFusionPro.Domain.Models
 {
     public class User : BaseEntity
     {
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Username { get; set; }
-        public string? Email { get; set; } = "example@example.com";
-        public string? PhoneNumber { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
 
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }
@@ -20,7 +22,7 @@ namespace AutoFusionPro.Domain.Models
 
 
         public DateTime? DateOfBirth { get; set; }
-        public string? Gender { get; set; }
+        public Gender Gender { get; set; } = Gender.Male;
         public string? Address { get; set; }
         public string? City { get; set; }
 
@@ -47,14 +49,14 @@ namespace AutoFusionPro.Domain.Models
         // One-to-One (Optional): User can be associated with one Staff member (or none)
         //public Staff? Staff { get; set; } // Optional relationship - User may not be linked to Staff
 
-        public ICollection<AuditLog> AuditLog { get; set; } = new List<AuditLog>();
+        public ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
 
         // Navigation properties
-        public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Invoice> Invoices { get; set; }
-        public virtual ICollection<Purchase> Purchases { get; set; }
-        public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; }
-        public virtual ICollection<Payment> ProcessedPayments { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } = [];
+        public virtual ICollection<Invoice> Invoices { get; set; } = [];
+        public virtual ICollection<Purchase> Purchases { get; set; } = [];
+        public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; } = [];
+        public virtual ICollection<Payment> ProcessedPayments { get; set; } = [];
 
     }
 }

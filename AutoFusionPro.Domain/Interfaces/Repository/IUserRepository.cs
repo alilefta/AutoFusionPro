@@ -7,6 +7,6 @@ namespace AutoFusionPro.Domain.Interfaces.Repository
     {
         // Basic CRUD methods got inherited
         Task<User?> GetUserByUsernameAsync(string username);
-        Task DeleteAsync(User user);
+        void Delete(int userId);
     }
 }

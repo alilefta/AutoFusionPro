@@ -28,6 +28,7 @@
     <converters:HighContrastFontSizeConverter x:Key="HighContrastFontSizeConverter" />
     <converters:TopCornerRadiusConverter x:Key="TopCornerRadiusConverter" />
     <converters:ViewNameToUserFriendlyConverter x:Key="ViewNameToUserFriendlyConverter" />
+    <converters:ValidationErrorConverter x:Key="ValidationErrorConverter" />
 
 
 </ResourceDictionary>

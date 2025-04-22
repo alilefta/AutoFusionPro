@@ -260,11 +260,12 @@ namespace AutoFusionPro.UI
                 // Views
                 services.AddSingleton<MainWindow>();
 
-                services.AddTransient<ShellView>();
+                services.AddScoped<ShellView>();
                 services.AddTransient<DashboardView>();
 
-                services.AddTransient<LoginView>();
-                services.AddTransient<RegisterView>();
+                services.AddScoped<LoginView>();
+                services.AddScoped<RegisterView>();
+
                 services.AddTransient<SettingsView>();
 
 
@@ -278,8 +279,8 @@ namespace AutoFusionPro.UI
                 services.AddTransient<SettingsViewModel>();
 
 
-                services.AddTransient<LoginViewModel>();
-                services.AddTransient<RegisterViewModel>();
+                services.AddScoped<LoginViewModel>();
+                services.AddScoped<RegisterViewModel>();
             }
             catch (Exception ex)
             {

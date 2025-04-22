@@ -6,11 +6,11 @@ namespace AutoFusionPro.UI.Controls.Buttons
 {
     public class XButton : System.Windows.Controls.Button
     {
-        //static XButton()
-        //{
-        //    DefaultStyleKeyProperty.OverrideMetadata(typeof(XButton),
-        //        new FrameworkPropertyMetadata(typeof(XButton)));
-        //}
+        static XButton()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(XButton),
+                new FrameworkPropertyMetadata(typeof(XButton)));
+        }
 
         #region Dependency Properties: IsLoading, SymbolIcon, SymbolPos, CornerRadius, 
 
@@ -26,34 +26,6 @@ namespace AutoFusionPro.UI.Controls.Buttons
         {
             get { return (bool)GetValue(IsLoadingProperty); }
             set { SetValue(IsLoadingProperty, value); }
-        }
-
-        // Symbol/Icon property
-        public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register(
-                nameof(Symbol),
-                typeof(SymbolRegular),
-                typeof(XButton),
-                new PropertyMetadata(null));
-
-        public SymbolRegular Symbol
-        {
-            get { return (SymbolRegular)GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
-        }
-
-        // Symbol Spacing
-        public static readonly DependencyProperty SymbolSpacingProperty =
-            DependencyProperty.Register(
-                nameof(SymbolSpacing),
-                typeof(double),
-                typeof(XButton),
-                new PropertyMetadata(8.0));
-
-        public double SymbolSpacing
-        {
-            get { return (double)GetValue(SymbolSpacingProperty); }
-            set { SetValue(SymbolSpacingProperty, value); }
         }
 
         // Corner Radius property

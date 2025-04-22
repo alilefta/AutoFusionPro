@@ -1,40 +1,45 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.DTOs.User;
+using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Models;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Timers;
 
 namespace AutoFusionPro.Application.Services
 {
     public class SessionManager : ISessionManager
     {
-        private const string SessionFilePath = "session.json";
-        private const int SessionTimeoutMinutes = int.MaxValue;
 
-        private TaskCompletionSource<bool> _initializationComplete;
-        private bool _isInitialized;
+        // Consider making path configurable or using AppData folder
+        private const string SessionFileName = "autofusionpro.session";
+        private static readonly string SessionFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), // More robust location
+            "AutoFusionPro", // App-specific folder
+            SessionFileName);
+
+        // Optional: Add entropy for DPAPI for slightly better security
+        private static readonly byte[] s_entropy = Encoding.UTF8.GetBytes("AutoFusionProSessionEntropy");
+
+        private TaskCompletionSource<bool> _initializationComplete = new TaskCompletionSource<bool>();
+        private bool _isInitialized = false;
+
+        private const int SessionTimeoutMinutes = int.MaxValue;
 
         private readonly ILogger<SessionManager> _logger;
         private readonly IUnitOfWork _unitOfWork;
+
         private System.Timers.Timer _sessionTimer;
 
         public DateTime? LoginTime { get; private set; }
         public Task Initialized => _initializationComplete.Task;
-        // Can't use Prop change here
-        public User? CurrentUser { get; private set; }
 
-        //private User _currentUser;
-        //public User CurrentUser
-        //{
-        //    get => _currentUser;
-        //    set
-        //    {
-        //        _currentUser = value;
-        //        OnPropertyChanged(nameof(CurrentUser));
-        //    }
-        //}
+        // Can't use Prop change here
+        public UserDto? CurrentUser { get; private set; }
 
 
 
@@ -52,64 +57,76 @@ namespace AutoFusionPro.Application.Services
 
             _logger = logger;
             _unitOfWork = unitOfWork;
-            StartSessionTimer();
+            //StartSessionTimer();
+
             _logger.LogInformation("SessionManager initialized with session timeout of {SessionTimeoutMinutes} minutes.", SessionTimeoutMinutes);
 
-            // For Testing Purposes. To Be deleted after implementing User auth
-            CurrentUser = new User
-            {
-                Username = "Ali",
-                UserRole = Core.Enums.ModelEnum.UserRole.Admin
-            };
         }
 
         public async Task Initialize()
         {
             if (_isInitialized)
+            {
+                await Initialized; // Ensure caller waits if already initializing/initialized
                 return;
+            }
+
+            // Ensure target directory exists
+            EnsureSessionDirectoryExists();
 
             try
             {
+                _logger.LogInformation("Initializing SessionManager...");
+
                 await TryRestoreSession();
-                StartSessionTimer();
+               // StartSessionTimer();
                 _isInitialized = true;
                 _initializationComplete.SetResult(true);
+                _logger.LogInformation("SessionManager initialization complete. User logged in: {IsLoggedIn}", IsUserLoggedIn);
+
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to initialize SessionManager");
-                _initializationComplete.SetException(ex);
-                throw;
+                ClearSession(); // Clear potentially corrupt session file on error
+                _isInitialized = false; // Mark as not initialized
+                _initializationComplete.TrySetException(ex); // Use TrySetException in case Initialize is called multiple times concurrently
+                // Don't re-throw here, let the caller check the Task status or handle the exception
             }
         }
 
-        public bool IsAdmin()
+        public bool IsUserAdmin()
         {
-            var isAdmin = CurrentUser?.IsAdmin ?? false;
-            _logger.LogInformation("Checked admin status: {IsAdmin}", isAdmin);
-            return isAdmin;
+            // Check Role on the DTO
+            return CurrentUser?.UserRole == UserRole.Admin;
         }
 
         public void SetCurrentUser(User user)
         {
-            CurrentUser = user;
-            LoginTime = DateTime.Now;
+            if (user == null)
+            {
+                Logout(); // Setting null user is equivalent to logging out
+                return;
+            }
 
-            _logger.LogInformation("User {Username} logged in at {LoginTime}.", user.Username, LoginTime);
+            CurrentUser = MapUserToUserDto(user); // Map here
+            LoginTime = DateTime.UtcNow; // Use UtcNow
+
+            _logger.LogInformation("Session set for user {Username} at {LoginTime}.", CurrentUser.Username, LoginTime);
 
             SaveSession();
-            ResetSessionTimer();
+            // REMOVED: ResetSessionTimer();
         }
 
         public void Logout()
         {
-            _logger.LogInformation("User {Username} logged out at {LogoutTime}.", CurrentUser?.Username, DateTime.Now);
-
+            var username = CurrentUser?.Username; // Get username before clearing
             CurrentUser = null;
             LoginTime = null;
 
             ClearSession();
-            StopSessionTimer();
+            // REMOVED: StopSessionTimer();
+            _logger.LogInformation("Session cleared for user {Username} at {LogoutTime}.", username ?? "<unknown>", DateTime.UtcNow);
         }
 
 
@@ -117,53 +134,85 @@ namespace AutoFusionPro.Application.Services
         {
             if (!File.Exists(SessionFilePath))
             {
-                _logger.LogInformation("No session file found");
+                _logger.LogInformation("No session file found at {SessionFilePath}.", SessionFilePath);
                 return false;
             }
 
+            _logger.LogInformation("Attempting to restore session from {SessionFilePath}.", SessionFilePath);
             try
             {
-                var sessionData = await File.ReadAllTextAsync(SessionFilePath);
-                var decryptedData = DecryptSessionData(sessionData);
-                var parts = decryptedData.Split('|');
+                var encryptedDataBytes = await File.ReadAllBytesAsync(SessionFilePath);
+                var sessionData = DecryptSessionData(encryptedDataBytes); // Use DPAPI
+                var parts = sessionData.Split('|'); // Use a more robust format like JSON later if needed
 
-                if (parts.Length != 3)
+                if (parts.Length != 2) // Expecting UserId|LoginTimeTicks
                 {
-                    _logger.LogWarning("Invalid session data format");
+                    _logger.LogWarning("Invalid session data format after decryption.");
+                    ClearSession();
                     return false;
                 }
 
                 if (!int.TryParse(parts[0], out var userId) ||
-                    !DateTime.TryParse(parts[1], out var loginTime))
+                    !long.TryParse(parts[1], out var loginTimeTicks))
                 {
-                    _logger.LogWarning("Could not parse session data");
+                    _logger.LogWarning("Could not parse session data values (UserId or LoginTimeTicks).");
+                    ClearSession();
                     return false;
                 }
 
-                // Disabled session timeout for now
-                //if ((DateTime.Now - loginTime).TotalMinutes > SessionTimeoutMinutes)
-                //{
-                //    _logger.LogWarning("Session has expired");
-                //    return false;
-                //}
+                var loginTime = new DateTime(loginTimeTicks, DateTimeKind.Utc);
 
+                // --- Session Timeout Check (if re-enabled later) ---
+                // const int SessionTimeoutMinutes = 30; // Example timeout
+                // if ((DateTime.UtcNow - loginTime).TotalMinutes > SessionTimeoutMinutes)
+                // {
+                //     _logger.LogWarning("Restored session for User ID {UserId} has expired.", userId);
+                //     ClearSession();
+                //     OnSessionExpired(); // Manually trigger if needed on restore failure
+                //     return false;
+                // }
+                // --- End Timeout Check ---
+
+                // Fetch the full user details from DB using the restored ID
+                // This ensures we have the *latest* user data (e.g., roles, active status)
                 var user = await _unitOfWork.Users.GetByIdAsync(userId);
-                //var user = await uow.Users.GetUserByIdAsync(userId);
 
                 if (user == null)
                 {
-                    _logger.LogWarning("User not found in database");
+                    _logger.LogWarning("User with restored ID {UserId} not found in database. Clearing session.", userId);
+                    ClearSession();
                     return false;
                 }
 
-                CurrentUser = user;
-                LoginTime = loginTime;
-                _logger.LogInformation("Session restored for user {Username}", user.Username);
+                if (!user.IsActive)
+                {
+                    _logger.LogWarning("User with restored ID {UserId} is inactive. Clearing session.", userId);
+                    ClearSession();
+                    return false; // Do not restore session for inactive users
+                }
+
+                // Set the current session using the fetched user data
+                SetCurrentUser(user); // This maps to DTO and sets LoginTime
+                // We might overwrite the restored LoginTime with DateTime.UtcNow here if we want the session timer
+                // to reset upon restore, or keep the original LoginTime from the file.
+                // Let's keep the original time for accurate tracking of original login.
+                this.LoginTime = loginTime; // Re-set LoginTime from file after SetCurrentUser call
+
+                _logger.LogInformation("Session successfully restored for user {Username} (ID: {UserId}). Original login: {LoginTime}",
+                    CurrentUser.Username, CurrentUser.Id, LoginTime);
+
                 return true;
+            }
+            catch (CryptographicException cryptoEx)
+            {
+                _logger.LogError(cryptoEx, "Cryptographic error restoring session. Session data might be corrupt or from a different context.");
+                ClearSession();
+                return false;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error restoring session");
+                _logger.LogError(ex, "Generic error restoring session.");
+                ClearSession(); // Clear potentially corrupt session file
                 return false;
             }
         }
@@ -183,10 +232,20 @@ namespace AutoFusionPro.Application.Services
         {
             if (CurrentUser != null && LoginTime.HasValue)
             {
-                var sessionData = $"{CurrentUser.Id}|{LoginTime}|{CurrentUser.IsAdmin}";
-                var encryptedData = EncryptSessionData(sessionData);
-                File.WriteAllText(SessionFilePath, encryptedData);
-                _logger.LogInformation("Session saved for user {UserId}.", CurrentUser.Id);
+                // Store essential, non-sensitive data needed to re-fetch the user
+                // Storing only ID and LoginTime is generally safer than storing more details.
+                var sessionData = $"{CurrentUser.Id}|{LoginTime.Value.Ticks}";
+                try
+                {
+                    EnsureSessionDirectoryExists();
+                    var encryptedBytes = EncryptSessionData(sessionData); // Use DPAPI
+                    File.WriteAllBytes(SessionFilePath, encryptedBytes);
+                    _logger.LogDebug("Session saved for user {UserId}.", CurrentUser.Id); // Debug level might be better
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to save session file to {SessionFilePath}.", SessionFilePath);
+                }
             }
         }
 
@@ -230,23 +289,89 @@ namespace AutoFusionPro.Application.Services
             }
         }
 
-        private void OnSessionExpired()
+        // --- Session Expiry (kept method signature, but logic removed/disabled) ---
+        protected virtual void OnSessionExpired()
         {
-            _logger.LogWarning("Session expired event triggered.");
-            StopSessionTimer();
+            // This method won't be called without the timer and timeout logic
+            _logger.LogWarning("Session expired event triggered (but timeout logic is currently disabled).");
+            // REMOVED: StopSessionTimer();
             SessionExpired?.Invoke(this, EventArgs.Empty);
         }
 
-        private string EncryptSessionData(string data)
+
+        // ==== OLD Version ==========
+        //private string EncryptSessionData(string data)
+        //{
+        //    var bytes = Encoding.UTF8.GetBytes(data);
+        //    return Convert.ToBase64String(bytes);
+        //}
+
+
+        // --- Encryption using DPAPI (Windows Data Protection API) ---
+        // Note: This encrypts data based on the user's Windows credentials or the local machine.
+        // It's generally suitable for single-user desktop apps.
+        private byte[] EncryptSessionData(string data)
         {
-            var bytes = Encoding.UTF8.GetBytes(data);
-            return Convert.ToBase64String(bytes);
+            try
+            {
+                byte[] dataBytes = Encoding.UTF8.GetBytes(data);
+                // Use CurrentUser scope if you only want the current logged-in Windows user to decrypt
+                // Use LocalMachine scope if any user on the machine should be able to decrypt (less secure)
+                byte[] encryptedBytes = ProtectedData.Protect(dataBytes, s_entropy, DataProtectionScope.CurrentUser);
+                return encryptedBytes;
+            }
+            catch (CryptographicException ex)
+            {
+                _logger.LogError(ex, "DPAPI encryption failed.");
+                throw; // Re-throw to indicate failure
+            }
         }
 
-        private string DecryptSessionData(string encryptedData)
+        // ======= OLD 
+        //private string DecryptSessionData(string encryptedData)
+        //{
+        //    var bytes = Convert.FromBase64String(encryptedData);
+        //    return Encoding.UTF8.GetString(bytes);
+        //}
+
+
+        private string DecryptSessionData(byte[] encryptedData)
         {
-            var bytes = Convert.FromBase64String(encryptedData);
-            return Encoding.UTF8.GetString(bytes);
+            try
+            {
+                byte[] decryptedBytes = ProtectedData.Unprotect(encryptedData, s_entropy, DataProtectionScope.CurrentUser);
+                return Encoding.UTF8.GetString(decryptedBytes);
+            }
+            catch (CryptographicException ex)
+            {
+                _logger.LogError(ex, "DPAPI decryption failed. Data might be corrupt or from different user/machine.");
+                throw; // Re-throw to indicate failure
+            }
+        }
+
+        // --- Mapping Helper ---
+        private UserDto MapUserToUserDto(User user)
+        {
+            // Ensure this mapping includes all fields needed by consumers of CurrentUser DTO
+            return new UserDto(
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                $"{user.FirstName} {user.LastName}",
+                user.Username,
+                user.Email,
+                user.PhoneNumber,
+                user.UserRole,
+                user.IsActive,
+                user.DateRegistered,
+                user.LastLoginDate
+            );
+        }
+
+
+        public string GetCurrentUserUsername()
+        {
+            return CurrentUser?.Username;
         }
 
 
@@ -255,6 +380,15 @@ namespace AutoFusionPro.Application.Services
         //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         //}
 
+        private void EnsureSessionDirectoryExists()
+        {
+            var dir = Path.GetDirectoryName(SessionFilePath);
+            if (dir != null && !Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+                _logger.LogInformation("Created session directory: {DirectoryPath}", dir);
+            }
+        }
 
     }
 }
