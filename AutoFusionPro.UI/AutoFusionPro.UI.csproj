@@ -88,7 +88,6 @@
 
 	<ItemGroup>
 		<Folder Include="Assets\Icons\" />
-		<Folder Include="Dialogs\" />
 		<Folder Include="Resources\Templates\" />
 	</ItemGroup>
 

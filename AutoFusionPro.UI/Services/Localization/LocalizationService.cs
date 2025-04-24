@@ -1,5 +1,4 @@
 ﻿using AutoFusionPro.Core.Enums.SystemEnum;
-using AutoFusionPro.Core.Services;
 using LiveChartsCore.SkiaSharpView;
 using System.Globalization;
 using System.Windows;
@@ -7,7 +6,7 @@ using Wpf.Ui.Appearance;
 
 namespace AutoFusionPro.UI.Services
 {
-    public class LocalizationService : ILocalizationService<FlowDirection>
+    public class LocalizationService : ILocalizationService
     {
         public void ApplyLanguage(Languages language)
         {

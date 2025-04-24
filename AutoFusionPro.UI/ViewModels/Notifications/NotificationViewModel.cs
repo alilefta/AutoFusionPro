@@ -2,13 +2,12 @@
 using AutoFusionPro.Application.Events;
 using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Core.Enums.ModelEnum;
-using AutoFusionPro.Core.Services;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
-using System.Windows;
 
 namespace AutoFusionPro.UI.ViewModels.ViewNotification
 {
@@ -17,7 +16,7 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
         private readonly INotificationService _notificationService;
         private readonly ISessionManager _sessionManager;
         private readonly ILogger<NotificationViewModel> _logger;
-        private readonly ILocalizationService<FlowDirection> _localizationService;
+        private readonly ILocalizationService _localizationService;
 
         [ObservableProperty]
         private ObservableCollection<NotificationDto> _notifications = new();
@@ -42,7 +41,7 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
         public NotificationViewModel(
             INotificationService notificationService,
             ISessionManager sessionManager,
-            ILogger<NotificationViewModel> logger, ILocalizationService<FlowDirection> localizationService)
+            ILogger<NotificationViewModel> logger, ILocalizationService localizationService)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));

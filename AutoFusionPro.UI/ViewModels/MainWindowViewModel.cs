@@ -1,6 +1,6 @@
 ﻿using AutoFusionPro.Application.Interfaces;
-using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Helpers;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.Shell;
@@ -9,14 +9,13 @@ using AutoFusionPro.UI.Views.Shell;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace AutoFusionPro.UI.ViewModels
 {
     public partial class MainWindowViewModel : BaseViewModel
     {
-        private ILocalizationService<FlowDirection> _localizationService;
+        private ILocalizationService _localizationService;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ISessionManager _sessionManager;
@@ -32,7 +31,7 @@ namespace AutoFusionPro.UI.ViewModels
         private UserControl _currentView = new();
 
         public MainWindowViewModel(IServiceProvider serviceProvider, 
-            ILocalizationService<FlowDirection> localizationService, 
+            ILocalizationService localizationService, 
             ILogger<MainWindowViewModel> logger,
             ISessionManager sessionManager)
         {

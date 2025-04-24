@@ -4,6 +4,7 @@ using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Helpers;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
@@ -47,7 +48,7 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
 
         // Use authentication service only if you need to add login immediately after successful registration
         //private readonly IAuthenticationService _authenticationService;
-        private readonly ILocalizationService<FlowDirection> _localizationService;
+        private readonly ILocalizationService _localizationService;
         private ILogger<RegisterViewModel> _logger;
 
 
@@ -102,7 +103,7 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
         #endregion
 
         public RegisterViewModel(IUserService userService, 
-            ILocalizationService<FlowDirection> localizationService, 
+            ILocalizationService localizationService, 
             ILogger<RegisterViewModel> logger)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
@@ -155,7 +156,7 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
             try
             {
 
-                var newUser = new CreateUserDto
+                var newUser = new CreateUserDTO
                 (
                     string.Empty,
                     string.Empty,

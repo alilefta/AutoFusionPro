@@ -29,6 +29,11 @@
     <converters:TopCornerRadiusConverter x:Key="TopCornerRadiusConverter" />
     <converters:ViewNameToUserFriendlyConverter x:Key="ViewNameToUserFriendlyConverter" />
     <converters:ValidationErrorConverter x:Key="ValidationErrorConverter" />
+    
+    <converters:UserFriendlyNotFoundInfoConverter x:Key="UserFriendlyNotFoundInfoConverter" />
+
+    <converters:IsAdminToAccountTypeConverter x:Key="IsAdminToAccountTypeConverter" />
+    <converters:IsAdminToColorConverter x:Key="IsAdminToColorConverter" />
 
 
 </ResourceDictionary>

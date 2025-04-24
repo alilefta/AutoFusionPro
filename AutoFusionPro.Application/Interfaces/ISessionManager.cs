@@ -7,7 +7,7 @@ namespace AutoFusionPro.Application.Interfaces
     {
         // Properties
         DateTime? LoginTime { get; }
-        UserDto? CurrentUser { get; } // Changed to UserDto?
+        UserDTO? CurrentUser { get; } // Changed to UserDto?
         Task Initialized { get; }
         bool IsUserLoggedIn { get; }
 

@@ -15,6 +15,8 @@
                 <ResourceDictionary Source="Resources/Styles/Cards.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Texts.xaml" />
                 <ResourceDictionary Source="Resources/Styles/TabControls.xaml" />
+                <ResourceDictionary Source="Resources/Styles/ListViewStyle.xaml" />
+                <ResourceDictionary Source="Resources/Styles/GridViewStyle.xaml" />
                 <ResourceDictionary Source="Resources/Styles/StoryboardStyles.xaml" />
                 <ResourceDictionary Source="Resources/Dictionaries/Resources.en.xaml" />
                 <ResourceDictionary Source="Resources/Dictionaries/Resources.ar.xaml" />

@@ -1,0 +1,84 @@
+﻿<Window x:Class="AutoFusionPro.UI.Controls.Dialogs.ConfirmLogoutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Dialogs"
+        xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+        mc:Ignorable="d"
+        ShowInTaskbar="True"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="ToolWindow"
+        Height="240"
+        Width="380"
+        FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+        Foreground="{DynamicResource Dialog.ForegroundBrush}"
+        Title="{DynamicResource ConfirmLogoutStr}"
+        Background="{DynamicResource Dialog.BackgroundBrush}"
+        >
+    <Border Padding="20,15">
+        <Grid FlowDirection="{Binding CurrentWorkFlow}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource LogoutStr}"
+                           Margin="0,0,0,5"
+                           Foreground="{DynamicResource Dialog.Title.ForegroundBrush}"
+                           FontFamily="{DynamicResource DynamicFontFamilyMedium}" />
+            </StackPanel>
+            <Separator Grid.Row="1"
+                       BorderBrush="{DynamicResource Seprator.BorderBrush}" />
+
+            <Border Grid.Row="2"
+                    Padding="0,8" >
+                <Grid>
+                    <TextBlock FontSize="16" 
+                               Foreground="{DynamicResource Dialog.Subtitle.ForegroundBrush}"
+                               TextWrapping="Wrap"
+                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                               Text="{DynamicResource ConfirmMessageLogoutStr}" />
+                </Grid>
+            </Border>
+
+            <!-- Button control-->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3" HorizontalAlignment="Right">
+
+                <xBtn:XButton Style="{StaticResource RegularButtonStyle}"
+                              Click="ConfirmLogout"
+                              ButtonType="Danger">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   Text="{DynamicResource LogoutStr}"
+                                   Margin="5,0"
+                                   VerticalAlignment="Center" />
+                        <wpfUi:SymbolIcon FontFamily="{StaticResource FluentSystemIconsFontRegular}"
+                                          Symbol="SignOut24"
+                                          FontSize="20"
+                                          VerticalAlignment="Center"
+                                          RenderTransformOrigin="0.5,0.5" />
+                    </StackPanel>
+
+                </xBtn:XButton>
+
+                <xBtn:XButton Style="{StaticResource RegularButtonStyle}"
+                              Click="CancelLogout" 
+                              ButtonType="Secondary" Margin="5,0,0,0">
+                    <TextBlock FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                               Text="{DynamicResource CancelOpertarionStr}"
+                               Margin="5,0"
+                               VerticalAlignment="Center" />
+                </xBtn:XButton>
+
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

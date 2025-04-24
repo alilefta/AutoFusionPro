@@ -19,16 +19,21 @@
                      Color="{StaticResource Neutral925}" />
     <SolidColorBrush x:Key="StatusBar.BackgroundBrush"
                      Color="{StaticResource Neutral925}" />
+    
+    <!-- Dialogs -->
     <SolidColorBrush x:Key="Dialog.BackgroundBrush"
-                     Color="{StaticResource Neutral0}" />
+                     Color="{StaticResource Neutral900}" />
+    
     <SolidColorBrush x:Key="Dialog.Title.ForegroundBrush"
-                     Color="{StaticResource Neutral750}" />
+                     Color="{StaticResource Neutral100}" />
+    
     <SolidColorBrush x:Key="Dialog.Subtitle.ForegroundBrush"
-                     Color="{StaticResource Neutral650}" />
+                     Color="{StaticResource Neutral400}" />
 
     <SolidColorBrush x:Key="Dialog.ForegroundBrush"
-                     Color="{StaticResource Neutral250}" />
+                     Color="{StaticResource Neutral350}" />
 
+    <!-- ToolTips -->
     <SolidColorBrush x:Key="Tooltip.BackgroundBrush"
                      Color="{StaticResource Neutral150}" />
     <SolidColorBrush x:Key="Tooltip.ForegroundBrush"

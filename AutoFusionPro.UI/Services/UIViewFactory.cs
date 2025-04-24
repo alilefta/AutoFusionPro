@@ -3,6 +3,7 @@ using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Settings;
+using AutoFusionPro.UI.Views.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Windows.Controls;
@@ -28,6 +29,7 @@ namespace AutoFusionPro.UI.Services
                 {
                     ApplicationPage.Dashboard => _serviceProvider.GetRequiredService<DashboardView>(),
                     ApplicationPage.Settings => _serviceProvider.GetRequiredService<SettingsView>(),
+                    ApplicationPage.Account => _serviceProvider.GetRequiredService<UserAccountView>(),
                                       _ => throw new ArgumentOutOfRangeException(nameof(page), page, "Unsupported page type.")
                 };
 

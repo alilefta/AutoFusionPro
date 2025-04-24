@@ -39,7 +39,7 @@ namespace AutoFusionPro.Application.Services
         public Task Initialized => _initializationComplete.Task;
 
         // Can't use Prop change here
-        public UserDto? CurrentUser { get; private set; }
+        public UserDTO? CurrentUser { get; private set; }
 
 
 
@@ -350,22 +350,25 @@ namespace AutoFusionPro.Application.Services
         }
 
         // --- Mapping Helper ---
-        private UserDto MapUserToUserDto(User user)
+        private UserDTO MapUserToUserDto(User user)
         {
             // Ensure this mapping includes all fields needed by consumers of CurrentUser DTO
-            return new UserDto(
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                $"{user.FirstName} {user.LastName}",
-                user.Username,
-                user.Email,
-                user.PhoneNumber,
-                user.UserRole,
-                user.IsActive,
-                user.DateRegistered,
-                user.LastLoginDate
-            );
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserRole = user.UserRole,
+                IsActive = user.IsActive,
+                DateRegistered = user.DateRegistered,
+                LastLoginDate = user.LastLoginDate,
+                ProfilePictureUrl = user.ProfilePictureUrl ?? string.Empty,
+            };
         }
 
 

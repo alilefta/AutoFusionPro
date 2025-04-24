@@ -349,6 +349,35 @@
                         </ui:XSideMenuButton.Style>
                     </ui:XSideMenuButton>
 
+                    <!-- User Profile Button-->
+                    <ui:XSideMenuButton Content="{DynamicResource MyAccountStr}"
+                                        Command="{Binding NavigateCommand}"
+                                        CommandParameter="{x:Static pages:ApplicationPage.Account}"
+                                        IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
+                                        IsCollapsedMode="{Binding Collapsed}"
+                                        IsSelected="{Binding IsMyAccountSelected}"
+                                        Symbol="Person48">
+                        <ui:XSideMenuButton.Style>
+                            <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                   BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsLoadingContent}"
+                                                       Value="True" />
+                                            <Condition Binding="{Binding LoadingPage}"
+                                                       Value="{x:Static pages:ApplicationPage.Account}" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="IsLoading"
+                                                    Value="True" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:XSideMenuButton.Style>
+                    </ui:XSideMenuButton>
+
                 </StackPanel>
             </Grid>
         </Grid>

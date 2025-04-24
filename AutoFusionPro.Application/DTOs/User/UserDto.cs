@@ -1,22 +1,35 @@
 ﻿using AutoFusionPro.Core.Enums.ModelEnum;
+using AutoFusionPro.Core.Enums.SystemEnum;
 
 namespace AutoFusionPro.Application.DTOs.User
 {
     // For displaying user details
-    public record UserDTO(
-        int Id,
-        string FirstName,
-        string LastName,
-        string FullName, // Convenience property
-        string Username,
-        string Email,
-        string PhoneNumber,
-        UserRole UserRole,
-        bool IsActive,
-        DateTime DateRegistered,
-        DateTime? LastLoginDate
-    // Add other relevant fields as needed by the UI
-    );
+    public class UserDTO
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty; // Convenience property
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        public UserRole UserRole { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime DateRegistered { get; set; }
+        public DateTime? LastLoginDate { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+
+        public DateTime? DateOfBirth { get; set; } 
+        public Gender Gender { get; set; } = Gender.Male;
+        public string? Address { get; set; } = string.Empty;
+        public string? City { get; set; } = string.Empty;
+        public Languages? PreferredLanguage { get; set; } = Languages.Arabic;
+
+        // Added for password management
+        public string? PasswordHash { get; set; }
+        public string? Salt { get; set; }
+
+    }
 
 
 
@@ -56,7 +69,14 @@ namespace AutoFusionPro.Application.DTOs.User
         string Email,
         string PhoneNumber, // Optional? Make nullable if so
         UserRole Role,
-        bool IsActive
+        bool IsActive,
+        Gender? Gender,
+        Languages? Language,
+        DateTime? DateOfBirth,
+        string? Address,
+        string? City
+
+
     // Password change should likely be a separate, more secure operation
     );
 
@@ -67,11 +87,13 @@ namespace AutoFusionPro.Application.DTOs.User
         string NewPassword
     );
 
-    public record UserProfileDTO(
-        int UserId, 
-        string Username,
-        string FirstName, 
-        string LastName, 
-        UserRole UserRole,
-        string ProfilePhotoURL);
+    public class UserProfileDTO
+    {
+        public int Id { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public UserRole UserRole { get; set; }
+        public string ProfilePhotoURL { get; set; } = string.Empty;
+    }
 }

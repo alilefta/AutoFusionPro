@@ -1,16 +1,18 @@
 ﻿using AutoFusionPro.Application.Commands;
 using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Services;
-using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
+using AutoFusionPro.UI.Controls.Dialogs;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
-using AutoFusionPro.UI.ViewModels.UserControls;
+using AutoFusionPro.UI.ViewModels.Controls.Dialogs;
+using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -27,15 +29,17 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
         #region Private Fields
 
-        private ILocalizationService<FlowDirection> _localizationService;
+        private ILocalizationService _localizationService;
         private INavigationService _navigationService;
         private readonly ISessionManager _sessionManager;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ShellViewModel> _logger;
         private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
 
         [ObservableProperty]
         private NotificationViewModel _notificationViewModel;
         private readonly IWpfToastNotificationService _toastNotificationService;
+        private readonly IUserService _userService;
 
         #endregion
 
@@ -78,11 +82,13 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         // Add boolean properties for each navigable page
         public bool IsDashboardSelected => SelectedPage == ApplicationPage.Dashboard;
         public bool IsSettingsSelected => SelectedPage == ApplicationPage.Settings;
+        public bool IsMyAccountSelected => SelectedPage == ApplicationPage.Account;
         // Add properties for Schedule, Billing, Inventory, Staff, Reports, etc.
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsDashboardSelected))]
         [NotifyPropertyChangedFor(nameof(IsSettingsSelected))]
+        [NotifyPropertyChangedFor(nameof(IsMyAccountSelected))]
         public ApplicationPage _selectedPage = ApplicationPage.Dashboard;
 
         [ObservableProperty]
@@ -121,24 +127,26 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
 
         public ShellViewModel(ILogger<ShellViewModel> logger,
-            ILocalizationService<FlowDirection> localizationService,
+            ILocalizationService localizationService,
             IGlobalSettingsService<BitmapImage> globalSettingsService,
             INavigationService navigationService, 
             ISessionManager sessionManager, 
             IServiceProvider serviceProvider,
-            NotificationViewModel notificationViewModel, 
-            IWpfToastNotificationService toastNotificationService)
+            IWpfToastNotificationService toastNotificationService,
+            IUserService userService)
         {
 
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _globalSettingsService = globalSettingsService ?? throw new ArgumentNullException(nameof(globalSettingsService));
 
-            _notificationViewModel = notificationViewModel ?? throw new ArgumentNullException(nameof(notificationViewModel));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
 
             _toastNotificationService = toastNotificationService ?? throw new ArgumentNullException(nameof(toastNotificationService));
+
 
             CurrentWorkFlow = localizationService.CurrentFlowDirection;
             localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
@@ -151,11 +159,20 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             NavigateBack = new RelayCommand(o => _navigationService.GoBack(), o => _navigationService.CanGoBack);
             ToggleSideMenuCollapse = new RelayCommand(o => UpdateSideMenuState(), o => true);
 
+        }
+
+        private void SetupViewModels()
+        {
 
             // Initialize User Avatar
-            ILogger<UserAvatarViewModel> userAvatarLogger = serviceProvider.GetRequiredService<ILogger<UserAvatarViewModel>>();
-            UserAvatarViewModel UserAvatarViewModel = new UserAvatarViewModel(_localizationService, sessionManager, serviceProvider, userAvatarLogger, this);
+            ILogger<UserAvatarViewModel> userAvatarLogger = _serviceProvider.GetRequiredService<ILogger<UserAvatarViewModel>>();
+            UserAvatarViewModel = new UserAvatarViewModel(_localizationService, _sessionManager, _serviceProvider, userAvatarLogger, this, _userService);
 
+
+            var notificationViewModel = _serviceProvider.GetRequiredService<NotificationViewModel>();
+            //var toastNotificationService = _serviceProvider.GetRequiredService<ToastNotificationService>();
+
+            NotificationViewModel = notificationViewModel ?? throw new ArgumentNullException(nameof(notificationViewModel));
         }
 
         private async void Navigate(object pageParam)
@@ -193,9 +210,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             CurrentView = _navigationService.CurrentView;
             CurrentViewName = _navigationService.CurrentViewName;
             SelectedPage = _navigationService.CurrentViewName;
-
-            _toastNotificationService.Show("Test", "Hello",Core.Enums.UI.ToastType.Success , duration: TimeSpan.FromSeconds(90));
-
         }
 
         public override async Task InitializeAsync(object? parameter = null)
@@ -209,9 +223,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             {
                 IsLoadingContent = true;
 
-
-                // TODO : To be uncommented after development
-                // Ensure we have a valid session
                 await _sessionManager.Initialized;
 
                 if (!_sessionManager.IsUserLoggedIn)
@@ -221,6 +232,11 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
                     return;
                 }
+
+
+
+                // Ensure the Session exists before initializing related view models
+                SetupViewModels();
 
                 await RunOnUiThread(async () =>
                 {
@@ -260,6 +276,49 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             SystemName = _globalSettingsService.SystemName;
             SystemLogo = _globalSettingsService.GetLogoImage();
         }
+
+        #region User Avatar Menu Methods
+
+        public void RequestUserLogout()
+        {
+            ShowLogoutConfirmDialog();
+        }
+        private void ShowLogoutConfirmDialog()
+        {
+            var confirmLogoutDialog = new ConfirmLogoutDialog();
+            confirmLogoutDialog.Owner = System.Windows.Application.Current.MainWindow;
+
+            var viewModel = new ConfirmLogoutViewModel(_localizationService);
+            confirmLogoutDialog.DataContext = viewModel;
+
+            bool? result = confirmLogoutDialog.ShowDialog();
+
+            if (result == true)
+            {
+                _sessionManager.Logout();
+                NavigateOnLogoutEvent?.Invoke(this, EventArgs.Empty);
+            }
+
+        }
+
+
+        public void RequestShowSettings()
+        {
+            if (!IsLoadingContent)
+            {
+                Navigate(ApplicationPage.Settings);
+            }
+        }
+
+        public void RequestShowUserProfile()
+        {
+            if (!IsLoadingContent)
+            {
+                Navigate(ApplicationPage.Account);
+            }
+        }
+
+        #endregion
     }
 }
 

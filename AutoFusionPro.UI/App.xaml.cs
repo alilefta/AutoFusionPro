@@ -7,19 +7,21 @@ using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.DependencyInjection;
 using AutoFusionPro.Infrastructure.HostCreation;
 using AutoFusionPro.Infrastructure.Logging;
-using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.Settings;
+using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
+using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
 using AutoFusionPro.UI.Views;
 using AutoFusionPro.UI.Views.Authentication;
 using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.Shell;
+using AutoFusionPro.UI.Views.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,7 +33,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
-using Wpf.Ui;
 
 namespace AutoFusionPro.UI
 {
@@ -166,7 +167,7 @@ namespace AutoFusionPro.UI
                     // Load Language Settings
                     var settings = SettingsManager.LoadSettings();
 
-                    var localizationService = _host.Services.GetRequiredService<ILocalizationService<FlowDirection>>();
+                    var localizationService = _host.Services.GetRequiredService<ILocalizationService>();
 
                     localizationService.ApplyLanguage(settings.Language);
                     localizationService.ApplyTheme(settings.IsDarkThemeEnabled);
@@ -247,7 +248,7 @@ namespace AutoFusionPro.UI
                 services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger), Log.Logger);
 
                 // Services
-                services.AddSingleton<ILocalizationService<FlowDirection>, LocalizationService>();
+                services.AddSingleton<ILocalizationService, LocalizationService>();
                 services.AddSingleton<IGlobalSettingsService<BitmapImage>, GlobalSettingsService>();
 
                 services.AddTransient<IViewFactory, UIViewFactory>();
@@ -266,7 +267,10 @@ namespace AutoFusionPro.UI
                 services.AddScoped<LoginView>();
                 services.AddScoped<RegisterView>();
 
-                services.AddTransient<SettingsView>();
+                services.AddScoped<SettingsView>();
+
+                services.AddTransient<UserManagementView>();
+                services.AddTransient<UserAccountView>();
 
 
                 // ViewModels
@@ -275,12 +279,16 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<NotificationViewModel>();
 
-                services.AddTransient<ShellViewModel>();
-                services.AddTransient<SettingsViewModel>();
+                services.AddScoped<ShellViewModel>();
+                services.AddScoped<SettingsViewModel>();
 
 
                 services.AddScoped<LoginViewModel>();
                 services.AddScoped<RegisterViewModel>();
+
+                services.AddTransient<UserManagementViewModel>();
+                services.AddTransient<UserAccountViewModel>();
+
             }
             catch (Exception ex)
             {

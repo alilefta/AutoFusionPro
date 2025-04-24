@@ -13,9 +13,23 @@
                      Color="{StaticResource Neutral50}" />
     <SolidColorBrush x:Key="Content.BackgroundBrush"
                      Color="{StaticResource Neutral0}" />
-    
-    
-    
+
+
+    <!-- Dialogs -->
+    <SolidColorBrush x:Key="Dialog.BackgroundBrush"
+                     Color="{StaticResource Neutral100}" />
+
+    <SolidColorBrush x:Key="Dialog.Title.ForegroundBrush"
+                     Color="{StaticResource Neutral750}" />
+
+    <SolidColorBrush x:Key="Dialog.Subtitle.ForegroundBrush"
+                     Color="{StaticResource Neutral650}" />
+
+    <SolidColorBrush x:Key="Dialog.ForegroundBrush"
+                     Color="{StaticResource Neutral650}" />
+
+
+
     <!-- Card/Dialog Bodies -->
     <SolidColorBrush x:Key="Sidebar.BackgroundBrush"
                      Color="{StaticResource Neutral200}" />
@@ -26,12 +40,6 @@
     <SolidColorBrush x:Key="StatusBar.BackgroundBrush"
                      Color="{StaticResource Neutral150}" />
     
-    <SolidColorBrush x:Key="Dialog.BackgroundBrush"
-                     Color="{StaticResource Neutral0}" />
-    <SolidColorBrush x:Key="Dialog.Title.ForegroundBrush"
-                     Color="{StaticResource Neutral750}" />
-    <SolidColorBrush x:Key="Dialog.Subtitle.ForegroundBrush"
-                     Color="{StaticResource Neutral650}" />
     
     <SolidColorBrush x:Key="Tooltip.BackgroundBrush"
                      Color="{StaticResource Neutral750}" />
@@ -420,7 +428,7 @@
                      Color="{StaticResource Red500}" />
 
     <SolidColorBrush x:Key="NotificationPopup.BackgroundBrush"
-                     Color="{StaticResource Gray400}" />
+                     Color="{StaticResource Neutral100}" />
 
     <SolidColorBrush x:Key="NotificationPopup.Item.ForegroundBrush"
                      Color="{StaticResource Neutral700}" />
@@ -429,7 +437,7 @@
                      Color="{StaticResource Neutral750}" />
 
     <SolidColorBrush x:Key="NotificationPopup.BorderBrush"
-                     Color="{StaticResource Neutral600}" />
+                     Color="{StaticResource Neutral350}" />
 
     <SolidColorBrush x:Key="NotificationPopup.Item.BackgroundBrush"
                      Color="{StaticResource Orange300}" />

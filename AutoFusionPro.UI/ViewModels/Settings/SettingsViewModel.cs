@@ -18,7 +18,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
     {
         private ILogger<SettingsViewModel> _logger;
         private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
-        private ILocalizationService<FlowDirection> _localizationService;
+        private ILocalizationService _localizationService;
 
         private AppSettings _settings;
 
@@ -47,7 +47,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
 
         #endregion
 
-        public SettingsViewModel(ILocalizationService<FlowDirection> localizationService, ILogger<SettingsViewModel> logger, IGlobalSettingsService<BitmapImage> globalSettingsService)
+        public SettingsViewModel(ILocalizationService localizationService, ILogger<SettingsViewModel> logger, IGlobalSettingsService<BitmapImage> globalSettingsService)
         {
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

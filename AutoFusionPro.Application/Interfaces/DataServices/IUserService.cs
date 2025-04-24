@@ -63,8 +63,30 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
         /// <returns></returns>
         Task<bool> TryLogUserIn(string username, string password);
 
+        /// <summary>
+        /// Loading the currently logged in user profile data for the view models. e.g., UserAvatarViewModels
+        /// </summary>
+        /// <param name="id">Currently logged in User ID</param>
+        /// <returns><see cref="UserProfileDTO"/> record</returns>
+        /// <exception cref="ApplicationException">Throws if user not found.</exception>
+        Task<UserProfileDTO> LoadUserProfileAsync(int id);
+
         // Optional: Add methods for password management if needed
         // Task ChangePasswordAsync(ChangePasswordDto passwordDto);
         // Task ResetPasswordAsync(int userId);
+
+        /// <summary>
+        /// Check if username is already exists.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="currentUserId"></param>
+        /// <returns></returns>
+        Task<bool> UsernameExistsAsync(string username, int currentUserId);
+
+
+        // New methods needed for UserAccountViewModel
+        Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
+        Task<bool> UpdateUsernameAsync(int userId, string newUsername);
+        Task<bool> UpdateProfileImageAsync(int userId, string imageFilePath);
     }
 }

@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.User"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:UserAvatarViewModel}"
              d:DesignHeight="120"
              d:DesignWidth="120">
     <UserControl.Resources>
@@ -109,9 +111,10 @@
         </Style>
     </UserControl.Resources>
     
-    <Grid Background="Transparent">
+    <Grid Background="Transparent" x:Name="MainAvatarGrid">
         <!-- Avatar Button -->
-        <Button HorizontalAlignment="Center" Style="{StaticResource AvatarButtonStyle}"
+        <Button HorizontalAlignment="Center" 
+                Style="{StaticResource AvatarButtonStyle}"
                 VerticalAlignment="Center"
                 Click="AvatarButton_Click">
 
@@ -123,8 +126,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
 
-                <Ellipse Width="46"
-                         Height="46">
+                <Ellipse Width="42"
+                         Height="42">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding UserAvatar}"
                                     Stretch="UniformToFill" />
@@ -136,7 +139,7 @@
         <!-- Flyout -->
         <wpfUi:Flyout x:Name="UserFlyout"
                       IsOpen="False"
-                      Placement="Bottom"
+                      Placement="Bottom" BorderBrush="{DynamicResource NotificationPopup.BorderBrush}"
                       HorizontalAlignment="Center">
             <StackPanel>
                 <Button Style="{StaticResource FlyoutButtonStyle}"

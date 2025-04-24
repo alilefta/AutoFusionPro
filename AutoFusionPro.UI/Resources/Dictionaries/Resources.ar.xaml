@@ -57,6 +57,48 @@
     <sys:String x:Key="EmailStr">البريد الالكتروني</sys:String>
     <sys:String x:Key="OptionalStr">(اختياري)</sys:String>
     <sys:String x:Key="BackToLoginStr">العودة الى تسجيل الدخول</sys:String>
+    
+    <sys:String x:Key="CancelOpertarionStr">الغاء الامر</sys:String>
+    <sys:String x:Key="CancelStr">الغاء</sys:String>
+    <sys:String x:Key="ReturnBackStr">العودة</sys:String>
+    <sys:String x:Key="ConfirmMessageLogoutStr">هل تريد تسجيل الخروج من النظام؟</sys:String>
+    <sys:String x:Key="ConfirmLogoutStr">تأكيد تسجيل الخروج</sys:String>
+    <sys:String x:Key="MyAccountStr">حسابي</sys:String>
+    
+    <sys:String x:Key="DeleteStr">حذف</sys:String>
+    <sys:String x:Key="NotFoundStr">لا يوجد</sys:String>
+    <sys:String x:Key="AddStr">اضافة</sys:String>
+    <sys:String x:Key="EditStr">تعديل</sys:String>
+
+    <!-- User Management -->
+    <sys:String x:Key="UsersManagementstr">ادارة حسابات المستخدمين للنظام</sys:String>
+    <sys:String x:Key="AllUsersStr">كل المستخدمين</sys:String>
+    <sys:String x:Key="AddUserStr">اضافة مستخدم</sys:String>
+    <sys:String x:Key="RefreshStr">اعادة تحميل</sys:String>
+    <sys:String x:Key="AccountTypeStr">نوع الحساب</sys:String>
+    <sys:String x:Key="LastTimeActiveStr">اخر ظهور</sys:String>
+    <sys:String x:Key="ManageStr">ادارة</sys:String>
+    <sys:String x:Key="FirstNameStr">الاسم الاول</sys:String>
+    <sys:String x:Key="LastNameStr">الاسم الاخير</sys:String>
+    <sys:String x:Key="IDStr">التسلسل</sys:String>
+    <sys:String x:Key="AdminStr">مدير</sys:String>
+    <sys:String x:Key="UserAccountStr">مستخدم</sys:String>
+    
+    <sys:String x:Key="NewUsernameStr">اسم مستخدم جديد</sys:String>
+    <sys:String x:Key="ChangeUsernameStr">تغيير اسم المستخدم</sys:String>
+    <sys:String x:Key="UsernameExistsStr">اسم المستحدم موجود مسبقاَ</sys:String>
+    <sys:String x:Key="BasicInfoStr">المعلومات الاساسية</sys:String>
+    <sys:String x:Key="GenderStr">الجنس</sys:String>
+    <sys:String x:Key="SelectSomethingStr">اختر شيئاَ</sys:String>
+    <sys:String x:Key="ContactStr">معلومات التواصل</sys:String>
+    <sys:String x:Key="AddressStr">العنوان</sys:String>
+    <sys:String x:Key="CityStr">المدينة</sys:String>
+    <sys:String x:Key="ChangePasswordStr">تغيير كلمة المرور</sys:String>
+    <sys:String x:Key="CurrentPasswordStr">كلمة المرور الحالية</sys:String>
+    <sys:String x:Key="NewPasswordStr">كلمة المرور الجديدة</sys:String>
+    <sys:String x:Key="RetypeNewPasswordStr">اعد كتابة كلمة المرور الجديدة</sys:String>
+    <sys:String x:Key="CancelChangesStr">تراجع عن اجراء التغييرات</sys:String>
+
 
 
 </ResourceDictionary>

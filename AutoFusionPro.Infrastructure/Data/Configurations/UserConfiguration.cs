@@ -1,4 +1,5 @@
-﻿using AutoFusionPro.Domain.Models;
+﻿using AutoFusionPro.Core.Enums.SystemEnum;
+using AutoFusionPro.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -64,8 +65,7 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
                 .HasMaxLength(100);
 
             builder.Property(u => u.PreferredLanguage)
-                .HasMaxLength(10)
-                .HasDefaultValue("en");
+                .HasDefaultValue(Languages.Arabic);
 
             // Date properties
             builder.Property(u => u.DateRegistered)

@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Username
 
 using AutoFusionPro.Core.Enums.ModelEnum;
+using AutoFusionPro.Core.Enums.SystemEnum;
 using AutoFusionPro.Domain.Models.Base;
 
 namespace AutoFusionPro.Domain.Models
@@ -44,7 +45,7 @@ namespace AutoFusionPro.Domain.Models
         // Change SystemRole to an enum
         public UserRole UserRole { get; set; } = UserRole.User;
 
-        public string? PreferredLanguage { get; set; } = "en";
+        public Languages? PreferredLanguage { get; set; } = Languages.Arabic;
 
         // One-to-One (Optional): User can be associated with one Staff member (or none)
         //public Staff? Staff { get; set; } // Optional relationship - User may not be linked to Staff

@@ -27,6 +27,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             _logger = logger;
         }
 
+
+        #region Get User Data
+
         public async Task<UserDTO?> GetUserByIdAsync(int id)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(id);
@@ -45,6 +48,31 @@ namespace AutoFusionPro.Application.Services.DataServices
             var activeUsers = await _unitOfWork.Users.FindAsync(u => u.IsActive);
             return activeUsers.Select(MapUserToUserSummaryDto);
         }
+
+        public async Task<UserProfileDTO> LoadUserProfileAsync(int id)
+        {
+            if (id == 0) {
+                _logger.LogError($"Loading user profile data was failed due to ID = {id} in 'LoadUserProfileAsync(int id)'");
+                throw new ArgumentNullException("id"); 
+            }
+
+            var user = await _unitOfWork.Users.GetByIdAsync(id); 
+
+            if (user == null)
+            {
+                _logger.LogError("The user was not found");
+                throw new ApplicationException("The user was not found, in 'LoadUserProfileAsync(int id)' - 'UserService' ");
+            }
+
+
+
+            return MapUserToUserProfileDTO(user);
+        }
+
+
+        #endregion
+
+        #region Create User
 
         public async Task<UserDTO> CreateUserAsync(CreateUserDTO userDto)
         {
@@ -123,6 +151,11 @@ namespace AutoFusionPro.Application.Services.DataServices
             return MapUserToUserDto(newUser);
         }
 
+        #endregion
+
+
+        #region Edit User Data
+
         public async Task UpdateUserAsync(UpdateUserDTO userDto)
         {
             if (userDto == null) throw new ArgumentNullException(nameof(userDto));
@@ -146,6 +179,11 @@ namespace AutoFusionPro.Application.Services.DataServices
             existingUser.PhoneNumber = userDto.PhoneNumber ?? existingUser.PhoneNumber; // Keep old if null
             existingUser.UserRole = userDto.Role;
             existingUser.IsActive = userDto.IsActive;
+            existingUser.Address = userDto.Address;
+            existingUser.City = userDto.City;
+            existingUser.DateOfBirth = userDto.DateOfBirth;
+            existingUser.Gender = userDto.Gender ?? Gender.Male;
+            existingUser.PreferredLanguage = userDto.Language;
             // DO NOT update Username, PasswordHash, Salt, DateRegistered here.
             // ModifiedAt will be updated by SaveChanges override.
 
@@ -164,24 +202,118 @@ namespace AutoFusionPro.Application.Services.DataServices
             await SetUserActiveStatusAsync(id, true);
         }
 
-        public async Task<UserProfileDTO> LoadUserProfileAsync(int id)
+
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
         {
-            if (id == 0) {
-                _logger.LogError($"Loading user profile data was failed due to ID = {id} in 'LoadUserProfileAsync(int id)'");
-                throw new ArgumentNullException("id"); 
-            }
+            if (userId <= 0) throw new ArgumentException("Invalid user ID", nameof(userId));
+            if (string.IsNullOrEmpty(currentPassword)) throw new ArgumentNullException(nameof(currentPassword));
+            if (string.IsNullOrEmpty(newPassword)) throw new ArgumentNullException(nameof(newPassword));
 
-            var user = await _unitOfWork.Users.GetByIdAsync(id); 
-
+            // Get the user
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             if (user == null)
             {
-                _logger.LogError("The user was not found");
-                throw new ApplicationException("The user was not found, in 'LoadUserProfileAsync(int id)' - 'UserService' ");
+                _logger.LogWarning($"User with ID {userId} not found when trying to change password");
+                return false;
             }
 
+            // Verify current password
+            if (!await _authenticationService.AuthenticateAsync(user.Username, currentPassword))
+            {
+                _logger.LogWarning($"Invalid current password provided for user {user.Username}");
+                return false;
+            }
+
+            // Generate new password hash and salt
+            var (hash, salt) = await _passwordHasher.HashPassword(newPassword);
+
+            // Update password
+            user.PasswordHash = hash;
+            user.Salt = salt;
+
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation($"Password changed successfully for user {user.Username}");
+
+            return true;
+        }
+
+        public async Task<bool> UpdateUsernameAsync(int userId, string newUsername)
+        {
+            if (userId <= 0) throw new ArgumentException("Invalid user ID", nameof(userId));
+            if (string.IsNullOrEmpty(newUsername)) throw new ArgumentNullException(nameof(newUsername));
+
+            // Check if username already exists (excluding current user)
+            if (await UsernameExistsAsync(newUsername, userId))
+            {
+                _logger.LogWarning($"Username '{newUsername}' already exists");
+                return false;
+            }
+
+            // Get the user
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning($"User with ID {userId} not found when trying to update username");
+                return false;
+            }
+
+            // Update username
+            user.Username = newUsername;
+
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation($"Username updated successfully for user ID {userId}");
+
+            return true;
+        }
+
+        public async Task<bool> UpdateProfileImageAsync(int userId, string imageFilePath)
+        {
+            if (userId <= 0) throw new ArgumentException("Invalid user ID", nameof(userId));
+            if (string.IsNullOrEmpty(imageFilePath)) throw new ArgumentNullException(nameof(imageFilePath));
+
+            // Get the user
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning($"User with ID {userId} not found when trying to update profile image");
+                return false;
+            }
+
+            // In a real application, you might:
+            // 1. Copy the image to a designated storage location
+            // 2. Generate a relative path or URL
+            // 3. Maybe create thumbnails
+
+            // For now, we'll just store the path
+            user.ProfilePictureUrl = imageFilePath;
+
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation($"Profile image updated successfully for user ID {userId}");
+
+            return true;
+        }
+
+        #endregion
+
+        #region Helpers
 
 
-            return MapUserToUserProfileDTO(user);
+        public async Task<bool> TryLogUserIn(string username, string password)
+        {
+            bool isAuthenticated = await _authenticationService.AuthenticateAsync(username, password);
+            if (isAuthenticated) return true;
+
+            return false;
+        }
+
+        public async Task<bool> UsernameExistsAsync(string username, int currentUserId)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentNullException(nameof(username));
+
+            // Check if another user has this username
+            return await _unitOfWork.Users.ExistsAsync(u =>
+                u.Username.ToLower() == username.ToLower() && u.Id != currentUserId);
         }
 
         // --- Helper Methods ---
@@ -203,19 +335,23 @@ namespace AutoFusionPro.Application.Services.DataServices
         // Manual Mapping Helpers (Replace with AutoMapper/Mapster if preferred)
         private UserDTO MapUserToUserDto(User user)
         {
-            return new UserDTO(
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                $"{user.FirstName} {user.LastName}",
-                user.Username,
-                user.Email,
-                user.PhoneNumber,
-                user.UserRole,
-                user.IsActive,
-                user.DateRegistered,
-                user.LastLoginDate
-            );
+            return new UserDTO
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserRole = user.UserRole,
+                IsActive = user.IsActive,
+                DateRegistered = user.DateRegistered,
+                LastLoginDate = user.LastLoginDate,
+                ProfilePictureUrl = user.ProfilePictureUrl ?? string.Empty,
+                PasswordHash = user.PasswordHash,
+                Salt = user.Salt
+            };
         }
 
         private UserSummaryDTO MapUserToUserSummaryDto(User user)
@@ -231,16 +367,17 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         private UserProfileDTO MapUserToUserProfileDTO(User user)
         {
-            return new UserProfileDTO(
-                user.Id, user.Username, user.FirstName, user.LastName, user.UserRole, user.ProfilePictureUrl ?? string.Empty);
+            return new UserProfileDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserRole = user.UserRole,
+                ProfilePhotoURL = user.ProfilePictureUrl ?? string.Empty
+            };
         }
 
-        public async Task<bool> TryLogUserIn(string username, string password)
-        {
-            bool isAuthenticated = await _authenticationService.AuthenticateAsync(username, password);
-            if (isAuthenticated) return true;
-
-            return false;
-        }
+        #endregion
     }
 }

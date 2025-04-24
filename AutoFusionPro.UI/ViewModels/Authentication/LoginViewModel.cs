@@ -4,6 +4,7 @@ using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Helpers;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
 
        // private IAuthenticationService _authenticationService;
         private readonly ISessionManager _sessionManager;
-        private readonly ILocalizationService<FlowDirection> _localizationService;
+        private readonly ILocalizationService _localizationService;
         private readonly IUserService _userService;
         private readonly ILogger<LoginViewModel> _logger;
 
@@ -38,7 +39,7 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
         public ICommand RegisterCommand { get; } = null!;
 
         public LoginViewModel(ISessionManager sessionManager, 
-            ILocalizationService<FlowDirection> localizationService, 
+            ILocalizationService localizationService, 
             IUserService userService,
             ILogger<LoginViewModel> logger)
         {

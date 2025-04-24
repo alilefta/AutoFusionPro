@@ -1,9 +1,8 @@
 ﻿using AutoFusionPro.Core.Enums.SystemEnum;
-using System.Windows;
 
 namespace AutoFusionPro.Core.Services
 {
-    public interface ILocalizationService<FD> where FD : Enum
+    public interface IAppLocalizationService<FD> where FD : Enum
     {
         void ApplyLanguage(Languages language);
         void ApplyTheme(bool isDarkThemeEnabled);

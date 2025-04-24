@@ -245,7 +245,7 @@
                                                Margin="10,0,0,0"
                                                PlaceholderText="{DynamicResource TypeSomethingStr}" />
                             </StackPanel>
-                            
+
 
                             <!-- Register Button -->
                             <StackPanel Margin="0,35,0,0">
@@ -253,7 +253,8 @@
                                               HorizontalAlignment="Center"
                                               Style="{DynamicResource RegularButtonStyle}"
                                               IsEnabled="{Binding RegisterIsRunning, Converter={StaticResource InverseBooleanConverter}}"
-                                              IsLoading="{Binding RegisterIsRunning}" ButtonType="Success">
+                                              IsLoading="{Binding RegisterIsRunning}"
+                                              ButtonType="Success">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock FontSize="{StaticResource FontSizeRegular}"
                                                    Text="{DynamicResource RegisterStr}"

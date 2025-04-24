@@ -51,5 +51,46 @@
     <sys:String x:Key="PasswordStr">Password</sys:String>
     <sys:String x:Key="OrRegisterANewAccountStr">Or sign up for a new account</sys:String>
 
+    <sys:String x:Key="CancelOpertarionStr">Cancel</sys:String>
+    <sys:String x:Key="CancelStr">Cancel</sys:String>
+    <sys:String x:Key="ReturnBackStr">Return Back</sys:String>
+    <sys:String x:Key="ConfirmMessageLogoutStr">Do you want to logout from the System?</sys:String>
+    <sys:String x:Key="ConfirmLogoutStr">Confirm Logout</sys:String>
+    <sys:String x:Key="MyAccountStr">My Account</sys:String>
+
+
+    <sys:String x:Key="DeleteStr">Delete</sys:String>
+    <sys:String x:Key="NotFoundStr">Not Found</sys:String>
+    <sys:String x:Key="AddStr">Add</sys:String>
+    <sys:String x:Key="EditStr">Edit</sys:String>
+
+    <!-- User Management -->
+    <sys:String x:Key="UsersManagementstr">System's Users Management</sys:String>
+    <sys:String x:Key="AllUsersStr">All Users</sys:String>
+    <sys:String x:Key="AddUserStr">Add User</sys:String>
+    <sys:String x:Key="RefreshStr">Refresh Data</sys:String>
+    <sys:String x:Key="AccountTypeStr">Account Type</sys:String>
+    <sys:String x:Key="LastTimeActiveStr">Last Time Active</sys:String>
+    <sys:String x:Key="ManageStr">Manage</sys:String>
+    <sys:String x:Key="FirstNameStr">First Name</sys:String>
+    <sys:String x:Key="LastNameStr">Last Name</sys:String>
+    <sys:String x:Key="IDStr">ID</sys:String>
+    <sys:String x:Key="AdminStr">Administer</sys:String>
+    <sys:String x:Key="UserAccountStr">User</sys:String>
+
+    <sys:String x:Key="NewUsernameStr">New Username</sys:String>
+    <sys:String x:Key="ChangeUsernameStr">Change Username</sys:String>
+    <sys:String x:Key="UsernameExistsStr">Username is already exists.</sys:String>
+    <sys:String x:Key="BasicInfoStr">Basic Info</sys:String>
+    <sys:String x:Key="GenderStr">Gender</sys:String>
+    <sys:String x:Key="SelectSomethingStr">Select Something</sys:String>
+    <sys:String x:Key="ContactStr">Contact Info</sys:String>
+    <sys:String x:Key="AddressStr">Address</sys:String>
+    <sys:String x:Key="CityStr">City</sys:String>
+    <sys:String x:Key="ChangePasswordStr">Change Password</sys:String>
+    <sys:String x:Key="CurrentPasswordStr">Current Password</sys:String>
+    <sys:String x:Key="NewPasswordStr">New Password</sys:String>
+    <sys:String x:Key="RetypeNewPasswordStr">Re-type New Password</sys:String>
+    <sys:String x:Key="CancelChangesStr">Cancel Changes</sys:String>
 
 </ResourceDictionary>
