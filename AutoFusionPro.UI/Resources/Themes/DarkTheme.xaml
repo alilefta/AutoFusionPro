@@ -119,7 +119,7 @@
                      Color="{StaticResource Neutral600}" />
 
     <SolidColorBrush x:Key="TabViewItem.ForegroundBrush"
-                     Color="{StaticResource Neutral400}" />
+                     Color="{StaticResource Neutral600}" />
 
     <SolidColorBrush x:Key="TabViewItem.Header.BackgroundBrush"
                      Color="{StaticResource SubtleFillColorTransparent}" />
@@ -127,19 +127,19 @@
 
     <!-- Selected -->
     <SolidColorBrush x:Key="TabViewItem.Selected.ForegroundBrush"
-                     Color="{StaticResource Primary300}" />
+                     Color="{StaticResource Primary400}" />
     <SolidColorBrush x:Key="TabViewItem.Selected.BackgroundBrush"
                      Color="{StaticResource Neutral900}" />
 
     <SolidColorBrush x:Key="TabViewItem.Selected.BorderBrush"
-                     Color="{StaticResource Primary300}" />
+                     Color="{StaticResource Primary400}" />
 
     <SolidColorBrush x:Key="TabViewItem.Header.Selected.ForegroundBrush"
                      Color="{StaticResource Primary600}" />
 
     <!-- Hover -->
     <SolidColorBrush x:Key="TabViewItem.ForegroundBrush.Hover"
-                     Color="{StaticResource Neutral300}" />
+                     Color="{StaticResource Neutral500}" />
     <SolidColorBrush x:Key="TabViewItem.BackgroundBrush.Hover"
                      Color="{StaticResource Neutral800}" />
     
@@ -200,8 +200,13 @@
                      Color="{StaticResource Error600}" />
     <SolidColorBrush x:Key="Button.Warning.BackgroundBrush"
                      Color="{StaticResource Orange400}" />
+    
     <SolidColorBrush x:Key="Button.Info.BackgroundBrush"
                      Color="{StaticResource Turquoise500}" />
+    <SolidColorBrush x:Key="Button.Info.ForegroundBrush"
+                     Color="{StaticResource Neutral200}" />
+
+
     <SolidColorBrush x:Key="Button.Light.BackgroundBrush"
                      Color="{StaticResource Neutral150}" />
     <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"

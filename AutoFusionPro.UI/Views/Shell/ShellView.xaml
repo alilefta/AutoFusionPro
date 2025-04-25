@@ -51,7 +51,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding CurrentViewName, Converter={StaticResource ViewNameToUserFriendlyConverter}}"
-                           
+                           Foreground="{DynamicResource Text.AccentBrush}"
                            VerticalAlignment="Center" 
                            FontSize="{StaticResource FontSizeSectionTitle}"
                            FontFamily="{DynamicResource DynamicFontFamilyMedium}"/>

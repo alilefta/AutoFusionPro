@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.User.Tabs.ChangeUsernameTabItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.User.Tabs"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:cds="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             mc:Ignorable="d"
+             d:DesignHeight="450" 
+             d:DesignWidth="800"
+             FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+             Foreground="{DynamicResource Text.PrimaryBrush}"
+             Background="{DynamicResource Window.BackgroundBrush}">
+    <Border>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <cds:FormCard>
+                <cds:FormCard.Header>
+                    <TextBlock Text="{DynamicResource ChangeUsernameStr}" />
+                </cds:FormCard.Header>
+
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource NewUsernameStr}" />
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <wpfUi:TextBox x:Name="UsernameTextBox"
+                                       Margin="5"
+                                       PlaceholderText="{DynamicResource NewUsernameExampleStr}"
+                                       Text="{Binding Username, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Foreground="Red"
+                                   Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   Margin="25,2,0,2"
+                                   Text="{DynamicResource UsernameExistsStr}"
+
+                                   TextWrapping="Wrap"
+                                   Visibility="{Binding IsUsernameValid, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                   MaxWidth="450"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                    </Grid>
+                </StackPanel>
+            </cds:FormCard>
+
+            <xBtn:XButton Margin="5"
+                          Style="{StaticResource RegularButtonStyle}" HorizontalAlignment="Left"
+                          ButtonType="Info"
+                          Grid.Row="1"
+                          Grid.Column="0"
+                          Command="{Binding ChangeUsernameCommand}"
+                          Content="{DynamicResource ChangeUsernameStr}"
+                          MaxWidth="150" />
+        </Grid>
+    </Border>
+</UserControl>

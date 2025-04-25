@@ -3,11 +3,11 @@
 namespace AutoFusionPro.UI.Views.User
 {
     /// <summary>
-    /// Interaction logic for NewUserAccountView.xaml
+    /// Interaction logic for UserAccountView.xaml
     /// </summary>
-    public partial class UserAccountView : UserControl
+    public partial class UserAccountViewOld : UserControl
     {
-        public UserAccountView()
+        public UserAccountViewOld()
         {
             InitializeComponent();
         }

@@ -20,17 +20,17 @@ namespace AutoFusionPro.UI.Views.User
 
         private void ViewProfile_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("View Profile clicked");
+            UserFlyout.IsOpen = !UserFlyout.IsOpen;
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Settings clicked");
+            UserFlyout.IsOpen = !UserFlyout.IsOpen;
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Log Out clicked");
+            UserFlyout.IsOpen = !UserFlyout.IsOpen;
         }
 
     }

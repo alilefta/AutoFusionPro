@@ -25,6 +25,8 @@ namespace AutoFusionPro.Application.DTOs.User
         public string? City { get; set; } = string.Empty;
         public Languages? PreferredLanguage { get; set; } = Languages.Arabic;
 
+        
+
         // Added for password management
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }

@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Cards">
 
     <!-- Shadow Effect -->
@@ -146,10 +146,11 @@
         <Setter Property="AutomationProperties.Name"
                 Value="{Binding Text, RelativeSource={RelativeSource Self}}" />
     </Style>
-    
+
     <!-- Use Cases -->
 
-    <!-- 1. Patient Information Card --><!--
+    <!-- 1. Patient Information Card -->
+    <!--
     <Border Style="{StaticResource BaseCardStyle}"
             Width="350">
         <Grid>
@@ -160,7 +161,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            --><!-- Patient Card Header --><!--
+            -->
+    <!-- Patient Card Header -->
+    <!--
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal">
                 <Ellipse Width="48"
@@ -180,13 +183,17 @@
                 </StackPanel>
             </StackPanel>
 
-            --><!-- Divider --><!--
+            -->
+    <!-- Divider -->
+    <!--
             <Rectangle Grid.Row="1"
                        Height="1"
                        Fill="#E0E0E0"
                        Margin="0,12" />
 
-            --><!-- Patient Details --><!--
+            -->
+    <!-- Patient Details -->
+    <!--
             <StackPanel Grid.Row="2">
                 <TextBlock Text="PERSONAL INFORMATION"
                            Style="{StaticResource CardLabelStyle}"
@@ -245,7 +252,9 @@
                 </StackPanel>
             </StackPanel>
 
-            --><!-- Actions --><!--
+            -->
+    <!-- Actions -->
+    <!--
             <StackPanel Grid.Row="3"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
@@ -263,7 +272,9 @@
         </Grid>
     </Border>
 
-    --><!-- 2. Appointment Card --><!--
+    -->
+    <!-- 2. Appointment Card -->
+    <!--
     <Border Style="{StaticResource BaseCardStyle}"
             Width="300">
         <Grid>
@@ -274,7 +285,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            --><!-- Status Bar --><!--
+            -->
+    <!-- Status Bar -->
+    <!--
             <Border Grid.Row="0"
                     Background="#4CAF50"
                     CornerRadius="4,4,0,0"
@@ -286,7 +299,9 @@
                            HorizontalAlignment="Center" />
             </Border>
 
-            --><!-- Date and Time --><!--
+            -->
+    <!-- Date and Time -->
+    <!--
             <StackPanel Grid.Row="1"
                         Margin="0,12,0,0">
                 <TextBlock Text="Wednesday, May 15, 2025"
@@ -299,7 +314,9 @@
                            Margin="0,4,0,0" />
             </StackPanel>
 
-            --><!-- Appointment Details --><!--
+            -->
+    <!-- Appointment Details -->
+    <!--
             <Grid Grid.Row="2"
                   Margin="0,16,0,0">
                 <Grid.ColumnDefinitions>
@@ -312,7 +329,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                --><!-- Patient --><!--
+                -->
+    <!-- Patient -->
+    <!--
                 <Border Grid.Row="0"
                         Grid.Column="0"
                         Width="32"
@@ -336,7 +355,9 @@
                                Margin="0" />
                 </StackPanel>
 
-                --><!-- Doctor --><!--
+                -->
+    <!-- Doctor -->
+    <!--
                 <Border Grid.Row="1"
                         Grid.Column="0"
                         Width="32"
@@ -360,7 +381,9 @@
                                Margin="0" />
                 </StackPanel>
 
-                --><!-- Purpose --><!--
+                -->
+    <!-- Purpose -->
+    <!--
                 <Border Grid.Row="2"
                         Grid.Column="0"
                         Width="32"
@@ -384,7 +407,9 @@
                 </StackPanel>
             </Grid>
 
-            --><!-- Actions --><!--
+            -->
+    <!-- Actions -->
+    <!--
             <StackPanel Grid.Row="3"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
@@ -406,7 +431,9 @@
         </Grid>
     </Border>
 
-    --><!-- 3. Medical Record Card --><!--
+    -->
+    <!-- 3. Medical Record Card -->
+    <!--
     <Border Style="{StaticResource BaseCardStyle}"
             Width="400">
         <Grid>
@@ -417,7 +444,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            --><!-- Header --><!--
+            -->
+    <!-- Header -->
+    <!--
             <StackPanel Grid.Row="0"
                         Orientation="Horizontal"
                         Margin="0,0,0,12">
@@ -431,7 +460,9 @@
                            FontWeight="SemiBold" />
             </StackPanel>
 
-            --><!-- Visit Info --><!--
+            -->
+    <!-- Visit Info -->
+    <!--
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -455,14 +486,18 @@
                 </Border>
             </Grid>
 
-            --><!-- Divider --><!--
+            -->
+    <!-- Divider -->
+    <!--
             <Rectangle Grid.Row="2"
                        Height="1"
                        Fill="#E0E0E0"
                        Margin="0,8,0,16"
                        VerticalAlignment="Top" />
 
-            --><!-- Record Content --><!--
+            -->
+    <!-- Record Content -->
+    <!--
             <StackPanel Grid.Row="2"
                         Margin="0,24,0,0">
                 <StackPanel Margin="0,0,0,16">
@@ -509,7 +544,9 @@
                 </StackPanel>
             </StackPanel>
 
-            --><!-- Actions --><!--
+            -->
+    <!-- Actions -->
+    <!--
             <StackPanel Grid.Row="3"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
@@ -527,7 +564,9 @@
         </Grid>
     </Border>
 
-    --><!-- 4. Dashboard Summary Card --><!--
+    -->
+    <!-- 4. Dashboard Summary Card -->
+    <!--
     <Border Style="{StaticResource BaseCardStyle}"
             Width="250"
             Height="180">
@@ -538,12 +577,16 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            --><!-- Header --><!--
+            -->
+    <!-- Header -->
+    <!--
             <TextBlock Grid.Row="0"
                        Text="Today's Appointments"
                        Style="{StaticResource CardHeaderStyle}" />
 
-            --><!-- Content --><!--
+            -->
+    <!-- Content -->
+    <!--
             <StackPanel Grid.Row="1"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
@@ -558,7 +601,9 @@
                            Margin="0,4,0,0" />
             </StackPanel>
 
-            --><!-- Footer --><!--
+            -->
+    <!-- Footer -->
+    <!--
             <Grid Grid.Row="2"
                   Margin="0,12,0,0">
                 <Grid.ColumnDefinitions>
@@ -606,7 +651,9 @@
         </Grid>
     </Border>
 
-    --><!-- 5. Action/Navigation Card --><!--
+    -->
+    <!-- 5. Action/Navigation Card -->
+    <!--
     <Border Style="{StaticResource BaseCardStyle}"
             Width="180"
             Height="120">
@@ -645,7 +692,6 @@
         <Setter Property="HeaderBackground"
                 Value="{DynamicResource Card.Header.BackgroundBrush}" />
 
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CardBase}">
@@ -670,25 +716,15 @@
                                     CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource TemplatedParent}, 
                                         Converter={StaticResource TopCornerRadiusConverter}}">
                                 <Grid Margin="15,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="{TemplateBinding HeaderForeground}"
+                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               VerticalAlignment="Center">
+                                        <ContentPresenter Grid.Column="0"
+                                                          Content="{TemplateBinding Header}"
+                                                          VerticalAlignment="Center"/>
 
-                                    <ContentPresenter Grid.Column="0"
-                                                      Content="{TemplateBinding Icon}"
-                                                      Margin="0,0,10,0"
-                                                      VerticalAlignment="Center"
-                                                      Visibility="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}, 
-                                                                 Converter={StaticResource NullToVisibilityConverter}}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Text="{TemplateBinding Header}"
-                                               FontWeight="SemiBold"
-                                               FontSize="14"
-                                               Foreground="{TemplateBinding HeaderForeground}"
-                                               FontFamily="{TemplateBinding FontFamily}"
-                                               VerticalAlignment="Center" />
+                                    </TextBlock>
                                 </Grid>
                             </Border>
 
@@ -696,7 +732,7 @@
                             <ContentPresenter Grid.Row="1"
                                               Content="{TemplateBinding Content}"
                                               Margin="15"
-                                              TextElement.Foreground="{TemplateBinding Foreground}" 
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
                                               TextElement.FontFamily="{TemplateBinding FontFamily}" />
                         </Grid>
                     </Border>
@@ -746,18 +782,18 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ContentPresenter Grid.Column="0"
-                                                      Content="{TemplateBinding Icon}"
-                                                      Margin="0,0,10,0"
-                                                      VerticalAlignment="Center"
-                                                      Visibility="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}, 
-                                                                 Converter={StaticResource NullToVisibilityConverter}}" />
 
                                     <TextBlock Grid.Column="1"
-                                               Text="{TemplateBinding Header}" Foreground="{TemplateBinding Foreground}"
-                                               FontWeight="SemiBold"
+                                               Foreground="{TemplateBinding HeaderForeground}"
+                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
                                                FontSize="14"
-                                               VerticalAlignment="Center" />
+                                               VerticalAlignment="Center">
+                                        <ContentPresenter Grid.Column="0"
+                                                          Content="{TemplateBinding Header}"
+                                                          Margin="0,0,10,0"
+                                                          VerticalAlignment="Center"/>
+                                        
+                                    </TextBlock>
 
                                     <!-- Required indicator -->
                                     <TextBlock Grid.Column="2"
@@ -765,7 +801,7 @@
                                                FontWeight="Bold"
                                                Foreground="Red"
                                                Visibility="{Binding IsRequired, RelativeSource={RelativeSource TemplatedParent}, 
-                                                          Converter={StaticResource BoolToVisibilityConverter}}"
+                                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                                                VerticalAlignment="Top"
                                                Margin="5,0,0,0" />
                                 </Grid>
@@ -773,7 +809,9 @@
 
                             <!-- Card Content -->
                             <ContentPresenter Grid.Row="1"
-                                              Content="{TemplateBinding Content}"
+                                              Content="{TemplateBinding Content}" 
+                                              TextElement.FontFamily="{TemplateBinding FontFamily}" 
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
                                               Margin="15" />
                         </Grid>
                     </Border>
@@ -784,6 +822,11 @@
 
     <!-- FieldLabel Style -->
     <Style TargetType="{x:Type local:FieldLabel}">
+        <Setter Property="IsRequired"
+                Value="False" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:FieldLabel}">
@@ -798,7 +841,7 @@
                                    FontWeight="Bold"
                                    Foreground="Red"
                                    Visibility="{Binding IsRequired, RelativeSource={RelativeSource TemplatedParent}, 
-                                              Converter={StaticResource BoolToVisibilityConverter}}"
+                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                                    VerticalAlignment="Top"
                                    Margin="2,0,0,0" />
                     </StackPanel>

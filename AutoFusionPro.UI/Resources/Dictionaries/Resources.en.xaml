@@ -51,6 +51,14 @@
     <sys:String x:Key="PasswordStr">Password</sys:String>
     <sys:String x:Key="OrRegisterANewAccountStr">Or sign up for a new account</sys:String>
 
+    <sys:String x:Key="RegisterTitleStr">Register for a new Account</sys:String>
+    <sys:String x:Key="RegisterStr">Register</sys:String>
+    <sys:String x:Key="ConfirmPasswordStr">Confirm Password</sys:String>
+    <sys:String x:Key="PhoneNumberStr">Phone Number</sys:String>
+    <sys:String x:Key="EmailStr">Email</sys:String>
+    <sys:String x:Key="OptionalStr">(Optional)</sys:String>
+    <sys:String x:Key="BackToLoginStr">Back to Login</sys:String>
+
     <sys:String x:Key="CancelOpertarionStr">Cancel</sys:String>
     <sys:String x:Key="CancelStr">Cancel</sys:String>
     <sys:String x:Key="ReturnBackStr">Return Back</sys:String>
@@ -92,5 +100,18 @@
     <sys:String x:Key="NewPasswordStr">New Password</sys:String>
     <sys:String x:Key="RetypeNewPasswordStr">Re-type New Password</sys:String>
     <sys:String x:Key="CancelChangesStr">Cancel Changes</sys:String>
+
+    <sys:String x:Key="DateOfBirthStr">Date Of Birth</sys:String>
+    <sys:String x:Key="BasicInfoHeadingTitleStr">You can add/edit your basic information that were not required through registering for an account. </sys:String>
+    <sys:String x:Key="AccountSecurityStr">Account Security</sys:String>
+    <sys:String x:Key="SecurityQuestionsStr">Security Questions (Used for reseting password in case you forget it)</sys:String>
+    <sys:String x:Key="SecurityQuestionStr">Security Question</sys:String>
+    <sys:String x:Key="SecurityAnswerStr">The Answer</sys:String>
+
+    <sys:String x:Key="NewUsernameExampleStr">e.g., TopGear</sys:String>
+    <sys:String x:Key="MaleStr">Male</sys:String>
+    <sys:String x:Key="FemaleStr">Female</sys:String>
+    <sys:String x:Key="RegistrationDateStr">Registration Date</sys:String>
+    <sys:String x:Key="HelloStr">Hello, </sys:String>
 
 </ResourceDictionary>

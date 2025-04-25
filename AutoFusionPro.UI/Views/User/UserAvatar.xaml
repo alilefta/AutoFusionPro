@@ -144,7 +144,7 @@
             <StackPanel>
                 <Button Style="{StaticResource FlyoutButtonStyle}"
                         FlowDirection="LeftToRight"
-                        Command="{Binding ShowProfileCommand}">
+                        Command="{Binding ShowProfileCommand}" Click="ViewProfile_Click">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -161,7 +161,10 @@
 
                     </Grid>
                 </Button>
-                <Button  Style="{StaticResource FlyoutButtonStyle}" Command="{Binding ShowSettingsCommand}" FlowDirection="LeftToRight">
+                <Button  Style="{StaticResource FlyoutButtonStyle}" 
+                         Command="{Binding ShowSettingsCommand}" 
+                         FlowDirection="LeftToRight" 
+                         Click="Settings_Click">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -182,7 +185,7 @@
                 <Separator BorderBrush="{DynamicResource Seprator.BorderBrush}" Margin="0,5"/>
 
                 <Button Style="{StaticResource FlyoutButtonStyle}"
-                        Command="{Binding LogoutCommand}"
+                        Command="{Binding LogoutCommand}" Click="LogOut_Click"
                         FlowDirection="LeftToRight">
                     <Grid>
                         <Grid.ColumnDefinitions>

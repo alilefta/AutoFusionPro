@@ -102,7 +102,6 @@
                                 <Grid HorizontalAlignment="Center">
                                     <TextBlock x:Name="textContent"
                                                Grid.Column="0"
-                                               Text="{TemplateBinding Content}"
                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                VerticalAlignment="Center"
                                                FontSize="{TemplateBinding FontSize}"
@@ -112,6 +111,7 @@
 				                        <ContentPresenter x:Name="contentPresenter"
                                                           Focusable="False"
                                                           HorizontalAlignment="Center"
+                                                          Content="{TemplateBinding Content }"
                                                           VerticalAlignment="Center"
                                                           RecognizesAccessKey="True"
                                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -165,7 +165,7 @@
                             <Setter Property="Background"
                                     Value="{DynamicResource Button.Info.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
+                                    Value="{DynamicResource Button.Info.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Light">

@@ -10,7 +10,7 @@ namespace AutoFusionPro.UI.Controls.Cards
     public class CardBase : ContentControl
     {
         public static readonly DependencyProperty HeaderProperty =
-            DependencyProperty.Register("Header", typeof(string), typeof(CardBase), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Header", typeof(object), typeof(CardBase), new PropertyMetadata(null));
 
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(object), typeof(CardBase), new PropertyMetadata(null));
@@ -37,9 +37,9 @@ namespace AutoFusionPro.UI.Controls.Cards
                 new FrameworkPropertyMetadata(typeof(CardBase)));
         }
 
-        public string Header
+        public object Header
         {
-            get { return (string)GetValue(HeaderProperty); }
+            get { return GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
         }
 

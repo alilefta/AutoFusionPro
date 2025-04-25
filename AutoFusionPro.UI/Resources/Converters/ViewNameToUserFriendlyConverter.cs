@@ -9,7 +9,7 @@ namespace AutoFusionPro.UI.Resources.Converters
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string viewName = string.Empty;
+            string? viewName = string.Empty;
 
             ResourceDictionary resourceDictionary = System.Windows.Application.Current.Resources;
 
@@ -20,6 +20,13 @@ namespace AutoFusionPro.UI.Resources.Converters
                     break;
                 case ApplicationPage.Settings:
                     viewName = resourceDictionary["SettingsStr"] as string ?? "الاعدادات";
+                    break;
+                case ApplicationPage.Account:
+                    viewName = resourceDictionary["MyAccountStr"] as string ?? "حسابي";
+                    break;
+                default:
+                    var name = $"{((ApplicationPage)value)}Str";
+                    viewName = resourceDictionary[$"{name}"] as string ?? name;
                     break;
 
             }

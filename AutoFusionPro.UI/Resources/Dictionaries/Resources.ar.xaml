@@ -99,6 +99,23 @@
     <sys:String x:Key="RetypeNewPasswordStr">اعد كتابة كلمة المرور الجديدة</sys:String>
     <sys:String x:Key="CancelChangesStr">تراجع عن اجراء التغييرات</sys:String>
 
+    <sys:String x:Key="DateOfBirthStr">تاريخ الميلاد</sys:String>
+    <sys:String x:Key="BasicInfoHeadingTitleStr">يمكنك تعديل او اضافة بياناتك التي لم تطلب اثناء عملية التسجيل لحساب في النظام</sys:String>
+    <sys:String x:Key="AccountSecurityStr">امن الحساب</sys:String>
+    <sys:String x:Key="SecurityQuestionsStr">اسئلة الامان (تستخدم لاعادة تعييم كلمة المرور في حال نسيتها)</sys:String>
+    <sys:String x:Key="SecurityQuestionStr">سؤال الامان</sys:String>
+    <sys:String x:Key="SecurityAnswerStr">الجواب</sys:String>
+
+    <sys:String x:Key="SecurityQuestionExampleStr">ما اسم اقرب صديق لك في الطفولة؟</sys:String>
+    <sys:String x:Key="SecurityAnswerExampleStr">مثلا: احمد ناصر</sys:String>
+    <sys:String x:Key="NewUsernameExampleStr">مثلا: TopGear</sys:String>
+    <sys:String x:Key="MaleStr">ذكر</sys:String>
+    <sys:String x:Key="FemaleStr">انثى</sys:String>
+    <sys:String x:Key="RegistrationDateStr">تاريخ التسجيل</sys:String>
+    <sys:String x:Key="HelloStr">مرحبا، </sys:String>
+
+
+
 
 
 </ResourceDictionary>
