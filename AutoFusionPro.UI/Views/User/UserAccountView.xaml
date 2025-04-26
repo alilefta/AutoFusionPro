@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="AutoFusionPro.UI.Views.User.UserAccountView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.User.Tabs"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.User"
@@ -12,53 +12,9 @@
              Foreground="{DynamicResource Text.PrimaryBrush}"
              FontFamily="{DynamicResource DynamicFontFamilyRegular}"
              d:DataContext="{d:DesignInstance Type=vm:UserAccountViewModel}"
-             d:DesignHeight="650" 
-             d:DesignWidth="800" 
+             d:DesignHeight="650"
+             d:DesignWidth="800"
              FlowDirection="{Binding CurrentWorkFlow}">
-    <UserControl.Resources>
-        <Style x:Key="RoundButtonStyle"
-               TargetType="Button">
-            <Setter Property="Width"
-                    Value="32" />
-            <Setter Property="Height"
-                    Value="32" />
-            <Setter Property="Background"
-                    Value="{DynamicResource Accent.Coral.BackgroundBrush}" />
-            <Setter Property="Foreground"
-                    Value="White" />
-            <Setter Property="BorderBrush"
-                    Value="White" />
-            <Setter Property="Margin"
-                    Value="4" />
-            <Setter Property="Padding"
-                    Value="0" />
-            <Setter Property="FontFamily"
-                    Value="{DynamicResource FluentSystemIconsFontRegular}" />
-            <Setter Property="Template">
-                <Setter.Value >
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="50" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="1"
-                                Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
-                            <Grid >
-                                <TextBlock Foreground="{TemplateBinding Foreground}" 
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center" 
-                                           FontSize="{TemplateBinding FontSize}" 
-                                           FontFamily="{TemplateBinding FontFamily}">
-                                    <ContentPresenter Content="{TemplateBinding Content}" />
-                                </TextBlock>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-                    
-        </Style>
-    </UserControl.Resources>
     <Border Padding="0,0,0,10">
         <Grid>
             <Grid.RowDefinitions>
@@ -67,10 +23,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border Margin="20,20,20,5">
+            <!--<Border Margin="40,20,20,5">
                 <TextBlock Text="{DynamicResource MyAccountStr}"
                            FontSize="{StaticResource FontSizePageTitle}" />
-            </Border>
+            </Border>-->
             
             <!-- Tab Control -->
             <TabControl Style="{DynamicResource ModernAnimatedTabControlStyle2}"
@@ -88,9 +44,8 @@
                                        FontWeight="Regular" />
                         </StackPanel>
                     </TabItem.Header>
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                        <local:BasicInfoTabItem DataContext="{Binding .}" Padding="10"/>
-                    </ScrollViewer>
+                    <local:BasicInfoTabItem DataContext="{Binding .}"
+                                            Padding="10" />
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
@@ -123,24 +78,7 @@
 
                 </TabItem>
             </TabControl>
-            <!-- Action Buttons -->
-            <StackPanel Orientation="Horizontal" Grid.Row="2"
-                        HorizontalAlignment="Right"
-                        Margin="20,10">
-                <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
-                              Command="{Binding SaveChangesCommand}"
-                              IsEnabled="{Binding HasChanges}">
-                    <TextBlock Text="{DynamicResource SaveChangesStr}" />
-                </xBtn:XButton>
-
-                <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
-                              Margin="5,0,0,0"
-                              ButtonType="Secondary"
-                              Visibility="{Binding HasChanges, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              Command="{Binding SaveChangesCommand}">
-                    <TextBlock Text="{DynamicResource CancelChangesStr}" />
-                </xBtn:XButton>
-            </StackPanel>
+           
         </Grid>
     </Border>
 </UserControl>

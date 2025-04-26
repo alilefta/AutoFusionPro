@@ -293,6 +293,44 @@ namespace AutoFusionPro.Application.Services.DataServices
             return true;
         }
 
+        public async Task UpdateSecurityQuestionAsync(UpdateSecurityQuestionDTO dto)
+        {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+            if (dto.UserId <= 0) throw new ArgumentException("Invalid User ID", nameof(dto.UserId));
+
+            var user = await _unitOfWork.Users.GetByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                _logger.LogError("User with ID {UserId} not found for updating security question.", dto.UserId);
+                throw new ApplicationException($"User with ID {dto.UserId} not found.");
+            }
+
+            _logger.LogInformation("Updating security question for User ID {UserId}.", dto.UserId);
+
+            // Check if clearing or setting
+            if (string.IsNullOrWhiteSpace(dto.Question) || string.IsNullOrWhiteSpace(dto.PlainAnswer))
+            {
+                // Clearing the security question/answer
+                user.SecurityQuestion = null;
+                user.SecurityAnswerHash = null;
+                _logger.LogInformation("Cleared security question for User ID {UserId}.", dto.UserId);
+            }
+            else
+            {
+                // Setting a new question/answer - Hash the PLAIN answer
+                var (hash, salt) = await _passwordHasher.HashPassword(dto.PlainAnswer); // Use injected service
+
+                user.SecurityQuestion = dto.Question.Trim(); // Trim whitespace
+                user.SecurityAnswerHash = hash; // Store the generated hash
+                                                // We don't need the salt separately if using BCrypt, but domain model has it? Hash includes it.
+                _logger.LogInformation("Set new security question and hashed answer for User ID {UserId}.", dto.UserId);
+            }
+
+            // EF Core tracks the changes to the 'user' entity
+            await _unitOfWork.SaveChangesAsync();
+            _logger.LogInformation("Security question update saved successfully for User ID {UserId}.", dto.UserId);
+        }
+
         #endregion
 
         #region Helpers
@@ -350,7 +388,12 @@ namespace AutoFusionPro.Application.Services.DataServices
                 LastLoginDate = user.LastLoginDate,
                 ProfilePictureUrl = user.ProfilePictureUrl ?? string.Empty,
                 PasswordHash = user.PasswordHash,
-                Salt = user.Salt
+                Salt = user.Salt,
+                DateOfBirth = user.DateOfBirth,
+                Gender = user.Gender,
+                SecurityQuestion = user.SecurityQuestion,
+                Address = user.Address,
+                City = user.City
             };
         }
 

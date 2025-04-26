@@ -88,5 +88,14 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
         Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
         Task<bool> UpdateUsernameAsync(int userId, string newUsername);
         Task<bool> UpdateProfileImageAsync(int userId, string imageFilePath);
+
+
+        /// <summary>
+        /// Updates the user's security question and hashes/stores the answer.
+        /// </summary>
+        /// <param name="dto">Data containing user ID, question, and plain text answer.</param>
+        /// <returns>Task indicating completion.</returns>
+        /// <exception cref="ApplicationException">Throws if user not found.</exception>
+        Task UpdateSecurityQuestionAsync(UpdateSecurityQuestionDTO dto);
     }
 }

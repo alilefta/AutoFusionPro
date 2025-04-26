@@ -113,6 +113,47 @@
     <sys:String x:Key="FemaleStr">انثى</sys:String>
     <sys:String x:Key="RegistrationDateStr">تاريخ التسجيل</sys:String>
     <sys:String x:Key="HelloStr">مرحبا، </sys:String>
+    <sys:String x:Key="SaveSecurityQuestionStr">حفظ سؤال الامان</sys:String>
+
+
+    <sys:String x:Key="UpdateUserFailedStr">فشلت عملية تحديث بيانات المستخدم</sys:String>
+    <sys:String x:Key="NoUserDataAvailableToSaveStr">بيانات المستخدم غير متوفرة لأجل الخزن</sys:String>
+
+    <sys:String x:Key="UserDataHasBeenUpdatedSuccessfullyStr">تم تحديث بيانات المستخدم بنجاح!</sys:String>
+    <sys:String x:Key="YesStr">نعم</sys:String>
+    <sys:String x:Key="NoStr">لا</sys:String>
+    <sys:String x:Key="DiscardChangesStr">تجاهل التغييرات</sys:String>
+    <sys:String x:Key="YouHaveUnsavedChangesAreYouSureYouWantToDiscardThemStr">لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد تجاهلها؟</sys:String>
+    <sys:String x:Key="UpdateUserDataSucceededStr">تم تحديث بيانات المستخدم بنجاح</sys:String>
+    <sys:String x:Key="UserProfilePhotoUpdatedSuccessfully">تم تحديث صورة ملف تعريف المستخدم بنجاح!</sys:String>
+    <sys:String x:Key="CurrentPasswordIsRequiredStr">كلمة المرور الحالية مطلوبة</sys:String>
+    <sys:String x:Key="IncorrectPasswordStr">كلمة المرور غير صحيحة</sys:String>
+    <sys:String x:Key="NewPasswordsDon'tMatchStr">كلمات المرور الجديدة غير متطابقة</sys:String>
+    <sys:String x:Key="CheckYourNewPasswordAndTheConfirmFields">تحقق من كلمة المرور الجديدة وحقول التأكيد</sys:String>
+    <sys:String x:Key="CurrentPasswordIsIncorrectStr">كلمة المرور الحالية غير صحيحة</sys:String>
+    <sys:String x:Key="CheckYourCurrentPasswordAndTryAgainStr">تحقق من كلمة مرورك الحالية وحاول مرة أخرى!</sys:String>
+    <sys:String x:Key="YourPasswordHasBeenChangedSuccessfullyStr">تم تغيير كلمة المرور الخاصة بك بنجاح.</sys:String>
+    <sys:String x:Key="FailedToUpdatePasswordStr">فشل تحديث كلمة المرور</sys:String>
+    <sys:String x:Key="FailedToChangePasswordBecauseOfInternalErrorStr">فشل تغيير كلمة المرور بسبب خطأ داخلي!</sys:String>
+
+    <sys:String x:Key="ChangeUsernameFailedStr">فشل تغيير اسم المستخدم</sys:String>
+    <sys:String x:Key="UsernameMustBeAtLeast3CharactersStr">يجب أن يتكون اسم المستخدم من 3 أحرف او رموز على الأقل</sys:String>
+    <sys:String x:Key="UsernameIsTakenStr">اسم المستخدم مستخدم بالفعل!</sys:String>
+    <sys:String x:Key="PleaseChooseDifferentUsernameStr">الرجاء اختيار اسم مستخدم مختلف!</sys:String>
+    <sys:String x:Key="YourUsernameHasBeenUpdatedStr">تم تحديث اسم المستخدم الخاص بك بنجاح!</sys:String>
+    <sys:String x:Key="FailedToUpdateUsernameStr">فشل تحديث اسم المستخدم</sys:String>
+    <sys:String x:Key="FailedToChangeUsernameBecauseOfInternalErrorStr">فشل تغيير اسم المستخدم بسبب خطأ داخلي!</sys:String>
+    <sys:String x:Key="ProvideAnswerForQuestionStr">الرجاء تقديم إجابة للسؤال الأمني المحدد.</sys:String>
+    <sys:String x:Key="SecurityQuestionUpdatedSuccessfullyStr">تم تحديث السؤال الأمني بنجاح!</sys:String>
+    <sys:String x:Key="FailedToUpdateSecurityQuestionStr">فشل تحديث السؤال الأمني</sys:String>
+    <sys:String x:Key="FailedToUpdateSecurityQuestionBecauseOfInternalErrorStr">فشل تحديث السؤال الأمني بسبب خطأ داخلي</sys:String>
+    <sys:String x:Key="InititalizationFailedStr">فشل التهيئة</sys:String>
+    <sys:String x:Key="NoUserIsLoggedInStr">لم يتم تسجيل دخول أي مستخدم</sys:String>
+    <sys:String x:Key="NewPasswordmustbeatleast3charactersStr">يجب ان تتكون كلمة المرور الجديدة من 3 احرف او رموز على الاقل</sys:String>
+
+
+
+
 
 
 

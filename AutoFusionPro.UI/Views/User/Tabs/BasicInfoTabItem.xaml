@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.User.Tabs"
              xmlns:cds="clr-namespace:AutoFusionPro.UI.Controls.Cards"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.User"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="750" 
@@ -75,310 +76,356 @@
     <Border>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            
+            <!-- Main Content-->
+            <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Padding="5,0,5,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
 
-            <!-- Profile Picture and Account Type-->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                    </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Vertical">
-                    <Border Padding="25,10"
-                            Margin="0,10,0,0">
-                        <StackPanel Orientation="Horizontal" >
-                            <TextBlock Text="{DynamicResource HelloStr}"
-                                       Opacity="0.9"
-                                       FontSize="{StaticResource FontSizePageTitle}"
-                                       VerticalAlignment="Center"
-                                       FontFamily="{DynamicResource DynamicFontFamilyBold}" />
-                            <TextBlock Text="{Binding User.Username}"
-                                       FontSize="{StaticResource FontSizePageTitle}"
-                                       FontFamily="{DynamicResource DynamicFontFamilyBold}"
-                                       Margin="8,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                    <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <Border Padding="25,10">
-                            <StackPanel>
-                                <TextBlock Text="{DynamicResource AccountTypeStr}"
-                                           Opacity="0.9"
-                                           FontSize="13" />
-                                <TextBlock Text="{Binding IsAdminAccount, Converter={StaticResource IsAdminToAccountTypeConverter}}"
-                                           FontSize="18"
-                                           FontFamily="{DynamicResource DynamicFontFamilyBold}"
-                                           Margin="8,8,0,0"
-                                           Foreground="{Binding IsAdminAccount, Converter={StaticResource IsAdminToColorConverter}}" />
-                            </StackPanel>
-                        </Border>
-
-                        <Border Padding="25,10">
-                            <StackPanel>
-                                <TextBlock Text="{DynamicResource RegistrationDateStr}"
-                                           Opacity="0.8"
-                                           FontSize="13" />
-                                <TextBlock Text="{Binding User.DateRegistered}"
-                                           FontSize="18"
-                                           FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                           Margin="8,8,0,0"
-                                           Foreground="{DynamicResource Text.SecondaryBrush}" />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </StackPanel>
-                
-                <!-- Profile Picture Section -->
-                <Grid Grid.Column="1" HorizontalAlignment="Right">
-                    <Grid HorizontalAlignment="Center"
-                          Margin="40,0"
-                          Width="122"
-                          Height="124">
-                        <Border Width="122"
-                                Height="124"
-                                Background="{DynamicResource Sidebar.BackgroundBrush}"
-                                CornerRadius="60"
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource Accent.Orange.BackgroundBrush}">
-                            <Grid>
-                                <Image Source="{Binding ProfileImage}"
-                                       Width="120"
-                                       Height="120"
-                                       Stretch="UniformToFill">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="60,60"
-                                                         RadiusX="60"
-                                                         RadiusY="60" />
-                                    </Image.Clip>
-                                </Image>
-                            </Grid>
-                        </Border>
-                        <Button Command="{Binding ChangeProfileImageCommand}"
-                                VerticalAlignment="Bottom"
-                                HorizontalAlignment="Left"
-                                Style="{DynamicResource RoundButtonStyle}">
-                            <wpfUi:SymbolIcon Symbol="Camera28" />
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Grid>
-            <!-- Heading info-->
-            <StackPanel Orientation="Horizontal"
-                        Margin="10,20" Grid.Row="1">
-                <wpfUi:SymbolIcon Symbol="Info28"
-                                  Opacity="0.7" />
-                <!-- Heading -->
-                <TextBlock Text="{DynamicResource BasicInfoHeadingTitleStr}"
-                           FontFamily="{DynamicResource DynamicFontFamilyLight}"
-                           Opacity="0.6" Margin="5,0,0,0"
-                           TextWrapping="Wrap" />
-            </StackPanel>
-
-            <!-- Content -->
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="20" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <!-- Basic Info -->
-                <cds:FormCard>
-                    <cds:FormCard.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="Person48" />
-                            <TextBlock Text="{DynamicResource BasicInfoStr}"
-                                       Margin="5,0,0,0" />
-                        </StackPanel>
-                    </cds:FormCard.Header>
-                    <Grid Margin="10">
+                    <!-- Profile Picture and Account Type-->
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Vertical">
+                            <Border Padding="25,10"
+                                    Margin="0,10,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{DynamicResource HelloStr}"
+                                               Opacity="0.9"
+                                               FontSize="{StaticResource FontSizePageTitle}"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{DynamicResource DynamicFontFamilyBold}" />
+                                    <TextBlock Text="{Binding User.Username}"
+                                               FontSize="{StaticResource FontSizePageTitle}"
+                                               FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                               Margin="8,0,0,0"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,15,0,0">
+                                <Border Padding="25,10">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource AccountTypeStr}"
+                                                   Opacity="0.9"
+                                                   FontSize="13" />
+                                        <TextBlock Text="{Binding IsAdminAccount, Converter={StaticResource IsAdminToAccountTypeConverter}}"
+                                                   FontSize="18"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   Margin="8,8,0,0"
+                                                   Foreground="{Binding IsAdminAccount, Converter={StaticResource IsAdminToColorConverter}}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Padding="25,10">
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource RegistrationDateStr}"
+                                                   Opacity="0.8"
+                                                   FontSize="13" />
+                                        <TextBlock Text="{Binding User.DateRegistered}"
+                                                   FontSize="18"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                                   Margin="8,8,0,0"
+                                                   Foreground="{DynamicResource Text.SecondaryBrush}" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Profile Picture Section -->
+                        <Grid Grid.Column="1"
+                              HorizontalAlignment="Right">
+                            <Grid HorizontalAlignment="Center"
+                                  Margin="40,0"
+                                  Width="122"
+                                  Height="124">
+                                <Border Width="122"
+                                        Height="124"
+                                        Background="{DynamicResource Sidebar.BackgroundBrush}"
+                                        CornerRadius="60"
+                                        BorderThickness="1"
+                                        BorderBrush="{DynamicResource Accent.Orange.BackgroundBrush}">
+                                    <Grid>
+                                        <Image Source="{Binding ProfileImage}"
+                                               Width="120"
+                                               Height="120"
+                                               Stretch="UniformToFill">
+                                            <Image.Clip>
+                                                <EllipseGeometry Center="60,60"
+                                                                 RadiusX="60"
+                                                                 RadiusY="60" />
+                                            </Image.Clip>
+                                        </Image>
+                                    </Grid>
+                                </Border>
+                                <Button Command="{Binding ChangeProfileImageCommand}"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Left"
+                                        Style="{DynamicResource RoundButtonStyle}">
+                                    <wpfUi:SymbolIcon Symbol="Camera28" />
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <!-- Heading info-->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="10,20"
+                                Grid.Row="1">
+                        <wpfUi:SymbolIcon Symbol="Info28"
+                                          Opacity="0.7" />
+                        <!-- Heading -->
+                        <TextBlock Text="{DynamicResource BasicInfoHeadingTitleStr}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyLight}"
+                                   Opacity="0.6"
+                                   Margin="5,0,0,0"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <!-- Content -->
+                    <Grid Grid.Row="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!-- First Name -->
-                        <StackPanel Margin="0,0,20,0">
-                            <TextBlock Text="{DynamicResource FirstNameStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Grid.Column="0"
-                                           Margin="0,5,0,0" 
-                                           IconPlacement="Left" 
-                                           Icon="{wpfUi:SymbolIcon Symbol=Person48, Filled=False}"
-                                           PlaceholderText="{DynamicResource TypeSomethingStr}"
-                                           FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                           Text="{Binding User.FirstName, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
+                        <!-- Basic Info -->
+                        <cds:FormCard>
+                            <cds:FormCard.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <wpfUi:SymbolIcon Symbol="Person48" />
+                                    <TextBlock Text="{DynamicResource BasicInfoStr}"
+                                               Margin="5,0,0,0" />
+                                </StackPanel>
+                            </cds:FormCard.Header>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-                        <!-- Last Name -->
-                        <StackPanel Grid.Column="1"
-                                    Margin="0,0,20,0">
-                            <TextBlock Text="{DynamicResource LastNameStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Grid.Column="1"
-                                           Margin="0,5,0,0"
-                                           IconPlacement="Left"
-                                           Icon="{wpfUi:SymbolIcon Symbol=Person48, Filled=False}"
-                                           PlaceholderText="{DynamicResource TypeSomethingStr}"
-                                           FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                           Text="{Binding User.LastName, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
+                                <!-- First Name -->
+                                <StackPanel Margin="0,0,20,0">
+                                    <TextBlock Text="{DynamicResource FirstNameStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Grid.Column="0"
+                                                   Margin="0,5,0,0"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=Person48, Filled=False}"
+                                                   PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
 
-                        <!-- Email -->
-                        <StackPanel Grid.Row="1"
-                                    Grid.Column="0"
-                                    Margin="0,10,20,0">
-                            <TextBlock Text="{DynamicResource EmailStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Margin="0,5,0,0"
-                                           PlaceholderText="example@example.com"
-                                           IconPlacement="Left"
-                                           Icon="{wpfUi:SymbolIcon Symbol=ContactCard48, Filled=False}"
-                                           Text="{Binding User.Email, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
+                                <!-- Last Name -->
+                                <StackPanel Grid.Column="1"
+                                            Margin="0,0,20,0">
+                                    <TextBlock Text="{DynamicResource LastNameStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Grid.Column="1"
+                                                   Margin="0,5,0,0"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=Person48, Filled=False}"
+                                                   PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                </StackPanel>
 
-                        <!-- Phone  -->
-                        <StackPanel Grid.Row="1"
-                                    Grid.Column="1"
-                                    Margin="0,10,20,0">
-                            <TextBlock Text="{DynamicResource PhoneNumberStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Margin="0,5,0,0"
-                                           PlaceholderText="07XX XXX XXXX"
-                                           IconPlacement="Left"
-                                           Icon="{wpfUi:SymbolIcon Symbol=ContactCard48, Filled=False}"
-                                           Text="{Binding User.PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
+                                <!-- Email -->
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="0"
+                                            Margin="0,10,20,0">
+                                    <TextBlock Text="{DynamicResource EmailStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Margin="0,5,0,0"
+                                                   PlaceholderText="example@example.com"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=ContactCard48, Filled=False}"
+                                                   Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
 
-                        <!-- Date of Birth-->
-                        <StackPanel Grid.Row="2"
-                                    Grid.Column="0"
-                                    Margin="0,10,20,0">
-                            <TextBlock Text="{DynamicResource DateOfBirthStr}" Opacity="0.9"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" />
-                            <DatePicker SelectedDate="{Binding User.DateOfBirth}"
-                                        Language="ar-SA"
-                                        Margin="0,5,0,0" />
-                        </StackPanel>
+                                <!-- Phone  -->
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0,10,20,0">
+                                    <TextBlock Text="{DynamicResource PhoneNumberStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Margin="0,5,0,0"
+                                                   PlaceholderText="07XX XXX XXXX"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=ContactCard48, Filled=False}"
+                                                   Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
 
-                        <!-- Gender -->
-                        <StackPanel Grid.Row="2"
-                                    Margin="0,10,20,0"
-                                    Grid.Column="1">
-                            <TextBlock Text="{DynamicResource GenderStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <Grid>
-                                <ComboBox x:Name="genderCombobox"
-                                          Margin="0,5,0,0"
-                                          SelectedItem="{Binding User.Gender}"
-                                          Text="{DynamicResource GenderStr}"
-                                          ItemsSource="{Binding GenderOptions}"
-                                          Panel.ZIndex="0">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ., Converter={StaticResource SelectedGenderToUserFriendlyValueConverter}}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                 IsHitTestVisible="False"
-                                                 FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                 FontSize="14"
-                                                 Padding="8,5"
-                                                 Margin="5,0,0,0"
-                                                 VerticalAlignment="Center"
-                                                 Foreground="{DynamicResource GrayBrush}"
-                                                 Panel.ZIndex="1">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility"
-                                                    Value="Hidden" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=genderCombobox,Path=SelectedItem}"
-                                                             Value="{x:Null}">
+                                <!-- Date of Birth-->
+                                <StackPanel Grid.Row="2"
+                                            Grid.Column="0"
+                                            Margin="0,10,20,0">
+                                    <TextBlock Text="{DynamicResource DateOfBirthStr}"
+                                               Opacity="0.9"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}" />
+                                    <DatePicker SelectedDate="{Binding SelectedDateOfBirth}"
+                                                Language="ar-SA"
+                                                Margin="0,5,0,0" />
+                                </StackPanel>
+
+                                <!-- Gender -->
+                                <StackPanel Grid.Row="2"
+                                            Margin="0,10,20,0"
+                                            Grid.Column="1">
+                                    <TextBlock Text="{DynamicResource GenderStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <Grid>
+                                        <ComboBox x:Name="genderCombobox"
+                                                  Margin="0,5,0,0"
+                                                  SelectedItem="{Binding SelectedGender}"
+                                                  Text="{DynamicResource GenderStr}"
+                                                  ItemsSource="{Binding GenderOptions}"
+                                                  Panel.ZIndex="0">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding ., Converter={StaticResource SelectedGenderToUserFriendlyValueConverter}}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
+                                                         IsHitTestVisible="False"
+                                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                                         FontSize="14"
+                                                         Padding="8,5"
+                                                         Margin="5,0,0,0"
+                                                         VerticalAlignment="Center"
+                                                         Foreground="{DynamicResource GrayBrush}"
+                                                         Panel.ZIndex="1">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
                                                     <Setter Property="Visibility"
-                                                            Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </wpfUi:TextBlock>
+                                                            Value="Hidden" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=genderCombobox,Path=SelectedItem}"
+                                                                     Value="{x:Null}">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </wpfUi:TextBlock>
+                                    </Grid>
+                                </StackPanel>
                             </Grid>
-                        </StackPanel>
+                        </cds:FormCard>
+
+                        <!-- Contact Info -->
+                        <cds:FormCard Grid.Row="2">
+                            <cds:FormCard.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <wpfUi:SymbolIcon Symbol="Accessibility48" />
+                                    <TextBlock Text="{DynamicResource ContactStr}"
+                                               Margin="5,0,0,0" />
+                                </StackPanel>
+                            </cds:FormCard.Header>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Address -->
+                                <Grid Margin="0,0,20,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{DynamicResource AddressStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Grid.Row="1"
+                                                   Margin="0,5,0,0"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=Location48, Filled=False}"
+                                                   PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                                   Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+
+                                <!-- City -->
+                                <Grid Grid.Column="1"
+                                      Margin="0,0,20,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{DynamicResource CityStr}"
+                                               FontSize="14"
+                                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                               Opacity="0.9" />
+                                    <wpfUi:TextBox Grid.Row="1"
+                                                   Margin="0,5,0,0"
+                                                   IconPlacement="Left"
+                                                   Icon="{wpfUi:SymbolIcon Symbol=Location48, Filled=False}"
+                                                   PlaceholderText="{DynamicResource TypeSomethingStr}"
+                                                   Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+
+
+                            </Grid>
+                        </cds:FormCard>
                     </Grid>
-                </cds:FormCard>
 
-                <!-- Contact Info -->
-                <cds:FormCard Grid.Row="2">
-                    <cds:FormCard.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="Accessibility48" />
-                            <TextBlock Text="{DynamicResource ContactStr}"
-                                       Margin="5,0,0,0" />
-                        </StackPanel>
-                    </cds:FormCard.Header>
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                </Grid>
+            </ScrollViewer>
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Margin="20,10">
+                <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                              Command="{Binding SaveChangesCommand}"
+                              IsEnabled="{Binding HasChanges}">
+                    <TextBlock Text="{DynamicResource SaveChangesStr}" />
+                </xBtn:XButton>
 
-                        <!-- Address -->
-                        <Grid Margin="0,0,20,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="{DynamicResource AddressStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Grid.Row="1"
-                                           Margin="0,5,0,0"
-                                           IconPlacement="Left"
-                                           Icon="{wpfUi:SymbolIcon Symbol=Location48, Filled=False}"
-                                           PlaceholderText="{DynamicResource TypeSomethingStr}"
-                                           Text="{Binding User.Address, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-
-                        <!-- City -->
-                        <Grid Grid.Column="1"
-                              Margin="0,0,20,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Text="{DynamicResource CityStr}"
-                                       FontSize="14"
-                                       FontFamily="{DynamicResource DynamicFontFamilyMedium}" Opacity="0.9"/>
-                            <wpfUi:TextBox Grid.Row="1"
-                                           Margin="0,5,0,0"
-                                           IconPlacement="Left"
-                                           Icon="{wpfUi:SymbolIcon Symbol=Location48, Filled=False}"
-                                           PlaceholderText="{DynamicResource TypeSomethingStr}"
-                                           Text="{Binding User.City, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-
-
-                    </Grid>
-                </cds:FormCard>
-            </Grid>
+                <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                              Margin="5,0,0,0"
+                              ButtonType="Secondary"
+                              Visibility="{Binding HasChanges, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Command="{Binding CancelCommand}">
+                    <TextBlock Text="{DynamicResource CancelChangesStr}" />
+                </xBtn:XButton>
+            </StackPanel>
         </Grid>
+
 
     </Border>
 </UserControl>

@@ -113,5 +113,43 @@
     <sys:String x:Key="FemaleStr">Female</sys:String>
     <sys:String x:Key="RegistrationDateStr">Registration Date</sys:String>
     <sys:String x:Key="HelloStr">Hello, </sys:String>
+    <sys:String x:Key="SaveSecurityQuestionStr">Save Security Question</sys:String>
+
+    <sys:String x:Key="UpdateUserFailedStr">Update User Failed</sys:String>
+    <sys:String x:Key="NoUserDataAvailableToSaveStr">No User Data Available To Save</sys:String>
+    
+    
+    <sys:String x:Key="UserDataHasBeenUpdatedSuccessfullyStr">User data has been updated successfully!</sys:String>
+    <sys:String x:Key="YesStr">Yes</sys:String>
+    <sys:String x:Key="NoStr">No</sys:String>
+    <sys:String x:Key="DiscardChangesStr">Discard Changes</sys:String>
+    <sys:String x:Key="YouHaveUnsavedChangesAreYouSureYouWantToDiscardThemStr">You have unsaved changes. Are you sure you want to discard them?</sys:String>
+    <sys:String x:Key="UpdateUserDataSucceededStr">Update User Data Succeeded</sys:String>
+    <sys:String x:Key="UserProfilePhotoUpdatedSuccessfully">User Profile Photo Has Been Updated Successfully!</sys:String>
+    <sys:String x:Key="CurrentPasswordIsRequiredStr">Current Password Is Required</sys:String>
+    <sys:String x:Key="IncorrectPasswordStr">Incorrect Password</sys:String>
+    <sys:String x:Key="NewPasswordsDon'tMatchStr">New passwords don't match</sys:String>
+    <sys:String x:Key="CheckYourNewPasswordAndTheConfirmFields">Check your new password and the confirm fields</sys:String>
+    <sys:String x:Key="CurrentPasswordIsIncorrectStr">Current password is incorrect</sys:String>
+    <sys:String x:Key="CheckYourCurrentPasswordAndTryAgainStr">Check your current password again!</sys:String>
+    <sys:String x:Key="YourPasswordHasBeenChangedSuccessfullyStr">Your password has been changed successfully.</sys:String>
+    <sys:String x:Key="FailedToUpdatePasswordStr">Failed To Update Password</sys:String>
+    <sys:String x:Key="FailedToChangePasswordBecauseOfInternalErrorStr">Failed to change password because of an internal error!</sys:String>
+
+    <sys:String x:Key="NewPasswordmustbeatleast3charactersStr">New Password must be at least 3 characters</sys:String>
+
+    <sys:String x:Key="ChangeUsernameFailedStr">Change Username Failed</sys:String>
+    <sys:String x:Key="UsernameMustBeAtLeast3CharactersStr">Username must be at least 3 characters</sys:String>
+    <sys:String x:Key="UsernameIsTakenStr">Username is already taken!</sys:String>
+    <sys:String x:Key="PleaseChooseDifferentUsernameStr">Please, choose a different username!</sys:String>
+    <sys:String x:Key="YourUsernameHasBeenUpdatedStr">Your username has been updated successfully!</sys:String>
+    <sys:String x:Key="FailedToUpdateUsernameStr">Failed To Update Username</sys:String>
+    <sys:String x:Key="FailedToChangeUsernameBecauseOfInternalErrorStr">Failed to change username because of an internal error!</sys:String>
+    <sys:String x:Key="ProvideAnswerForQuestionStr">Please provide an answer for the selected security question.</sys:String>
+    <sys:String x:Key="SecurityQuestionUpdatedSuccessfullyStr">Security question updated successfully!</sys:String>
+    <sys:String x:Key="FailedToUpdateSecurityQuestionStr">Failed to update security question</sys:String>
+    <sys:String x:Key="FailedToUpdateSecurityQuestionBecauseOfInternalErrorStr">Failed to update security question because of an internal error</sys:String>
+    <sys:String x:Key="InititalizationFailedStr">Initialization Failed</sys:String>
+    <sys:String x:Key="NoUserIsLoggedInStr">No user is logged in</sys:String>
 
 </ResourceDictionary>

@@ -2,7 +2,6 @@
 using AutoFusionPro.Core.Enums.UI;
 using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
 

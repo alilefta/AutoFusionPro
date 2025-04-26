@@ -19,13 +19,16 @@ namespace AutoFusionPro.Application.DTOs.User
         public DateTime? LastLoginDate { get; set; }
         public string? ProfilePictureUrl { get; set; }
 
-        public DateTime? DateOfBirth { get; set; } 
+        public DateTime? DateOfBirth { get; set; }
         public Gender Gender { get; set; } = Gender.Male;
         public string? Address { get; set; } = string.Empty;
         public string? City { get; set; } = string.Empty;
         public Languages? PreferredLanguage { get; set; } = Languages.Arabic;
 
-        
+
+        public string? SecurityQuestion { get; set; }
+
+
 
         // Added for password management
         public string? PasswordHash { get; set; }
@@ -81,6 +84,15 @@ namespace AutoFusionPro.Application.DTOs.User
 
     // Password change should likely be a separate, more secure operation
     );
+
+
+    // New DTO for the specific update operation
+    public record UpdateSecurityQuestionDTO(
+        int UserId,
+        string? Question,    // The selected question text (nullable if clearing)
+        string? PlainAnswer  // The PLAIN TEXT answer (nullable if clearing)
+    );
+
 
     // Optional: For password change operations
     public record ChangePasswordDTO(

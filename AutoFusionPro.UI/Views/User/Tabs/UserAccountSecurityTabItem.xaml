@@ -6,12 +6,14 @@
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.User.Tabs"
              xmlns:cds="clr-namespace:AutoFusionPro.UI.Controls.Cards"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.User"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="800"
              Foreground="{DynamicResource Text.PrimaryBrush}"
-             Background="{DynamicResource Window.BackgroundBrush}">
+             Background="{DynamicResource Window.BackgroundBrush}"
+             d:DataContext="{d:DesignInstance Type=vm:UserAccountViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -97,6 +99,10 @@
             </cds:FormCard.Header>
 
             <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="50" />
@@ -105,21 +111,62 @@
 
                 <StackPanel>
                     <TextBlock Text="{DynamicResource SecurityQuestionStr}" />
-                    <wpfUi:TextBox Grid.Column="1"
+                    <!--<wpfUi:TextBox Grid.Column="1"
                                    Margin="0,5,0,0"
                                    PlaceholderText="{DynamicResource SecurityQuestionExampleStr}"
                                    FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                   Text="{Binding User.SecurityQuestion, UpdateSourceTrigger=PropertyChanged}" />
+                                   Text="{Binding User.SecurityQuestion, UpdateSourceTrigger=PropertyChanged}" />-->
+
+                    <Grid Grid.Column="1">
+                        <ComboBox x:Name="securityQuestion"
+                                  Margin="0,5,0,0"
+                                  SelectedItem="{Binding SelectedSecurityQuestion}"
+                                  Text="{DynamicResource SecurityQuestionStr}"
+                                  ItemsSource="{Binding AvailableSecurityQuestions}"
+                                  Panel.ZIndex="0">
+                        </ComboBox>
+                        <wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
+                                         IsHitTestVisible="False"
+                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                         FontSize="14"
+                                         Padding="8,5"
+                                         Margin="5,0,0,0"
+                                         VerticalAlignment="Center"
+                                         Foreground="{DynamicResource GrayBrush}"
+                                         Panel.ZIndex="1">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility"
+                                            Value="Hidden" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=securityQuestion,Path=SelectedItem}"
+                                                     Value="{x:Null}">
+                                            <Setter Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </wpfUi:TextBlock>
+                    </Grid>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="{DynamicResource SecurityAnswerStr}" />
                     <wpfUi:TextBox Grid.Column="1"
                                    Margin="0,5,0,0"
-                                   PlaceholderText="{DynamicResource SecurityAnswerExampleStr}"
+                                   PlaceholderText="{DynamicResource TypeSomethingStr}"
                                    FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                   Text="{Binding User.SecurityAnswer, UpdateSourceTrigger=PropertyChanged}" />
+                                   Text="{Binding SecurityAnswer, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
+
+                <xBtn:XButton Margin="0,10" 
+                              Grid.Row="1" 
+                              Grid.Column="0"
+                              Style="{DynamicResource RegularButtonStyle}"
+                              ButtonType="Primary"
+                              Content="{DynamicResource SaveSecurityQuestionStr}"
+                              Command="{Binding UpdateSecurityQuestionCommand}" />
             </Grid>
         </cds:FormCard>
     </Grid>

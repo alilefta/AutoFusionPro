@@ -35,7 +35,9 @@ namespace AutoFusionPro.Domain.Models
         public DateTime DateRegistered { get; set; } = DateTime.Now;
 
         public string? SecurityQuestion { get; set; }
-        public string? SecurityAnswerHash { get; set; }
+        public string? SecurityAnswerHash { get; set; } // The salt is the same for password
+
+
 
         public bool IsTwoFactorEnabled { get; set; } = false;
         public string? TwoFactorSecret { get; set; }
