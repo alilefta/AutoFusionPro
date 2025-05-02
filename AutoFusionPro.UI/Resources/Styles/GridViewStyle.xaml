@@ -73,7 +73,7 @@
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Background"
-                Value="{StaticResource GridViewColumnHeaderBorderBackground}" />
+                Value="{DynamicResource GridColumn.Gripper.BackgroundBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
@@ -95,15 +95,20 @@
         <Setter Property="VerticalContentAlignment"
                 Value="Center" />
         <Setter Property="Background"
-                Value="{StaticResource GridViewColumnHeaderBackground}" />
+                Value="{DynamicResource GridColumn.Header.Background}" />
         <Setter Property="BorderBrush"
-                Value="{StaticResource GridViewColumnHeaderBorderBackground}" />
+                Value="{DynamicResource GridColumn.Header.Border}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource GridColumn.Header.Foreground}" />
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Padding"
                 Value="2,0,2,0" />
-        <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
+        <Setter Property="FontSize"
+                Value="14" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
@@ -121,11 +126,15 @@
                                            Visibility="Collapsed"
                                            Fill="#FFE3F7FF" />
                                 <Border Grid.RowSpan="2"
-                                        Padding="{TemplateBinding Padding}">
+                                        Padding="{TemplateBinding Padding}"
+                                        Background="{TemplateBinding Background}">
                                     <ContentPresenter Name="HeaderContent"
                                                       Margin="0,0,0,1"
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                                      TextElement.Foreground="{TemplateBinding Foreground}"
+                                                      TextElement.FontSize="{TemplateBinding FontSize}"
                                                       RecognizesAccessKey="True"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                 </Border>
@@ -139,7 +148,7 @@
                                 Margin="1,0,0,1" />
                         <Canvas>
                             <Thumb x:Name="PART_HeaderGripper"
-                                   Style="{StaticResource GridViewColumnHeaderGripper}" />
+                                   Style="{DynamicResource GridViewColumnHeaderGripper}" />
                         </Canvas>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -147,7 +156,7 @@
                                  Value="true">
                             <Setter TargetName="HeaderBorder"
                                     Property="Background"
-                                    Value="{StaticResource GridViewColumnHeaderHoverBackground}" />
+                                    Value="{DynamicResource GridColumn.Header.Hover.Background}" />
                             <Setter TargetName="HeaderHoverBorder"
                                     Property="BorderBrush"
                                     Value="#FF88CBEB" />
@@ -190,7 +199,7 @@
                         <Trigger Property="IsEnabled"
                                  Value="false">
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    Value="{DynamicResource Text.DisabledBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -244,16 +253,19 @@
     <Style x:Key="GridViewColumnHeaderStyle"
            TargetType="GridViewColumnHeader"
            BasedOn="{StaticResource BaseGridViewColumnHeader}">
-        <Setter Property="BorderBrush"
-                Value="{StaticResource GridViewColumnHeaderBorderBackground}" />
+
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Padding"
                 Value="2,4,2,2" />
         <Setter Property="FontSize"
                 Value="16" />
+        <Setter Property="Background"
+                Value="{DynamicResource GridColumn.Header.Background}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource GridColumn.Header.Border}" />
         <Setter Property="Foreground"
-                Value="{DynamicResource Text.PrimaryBrush}" />
+                Value="{DynamicResource GridColumn.Header.Foreground}" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
         <Setter Property="VerticalContentAlignment"
@@ -270,7 +282,7 @@
                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                     <Grid SnapsToDevicePixels="true">
                         <Border Name="HeaderBorder"
-                                Background="{DynamicResource GridViewColumnHeaderBackground }"
+                                Background="{TemplateBinding Background }"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="0,0,0,1"
                                 CornerRadius="3,3,0,0">
@@ -313,10 +325,10 @@
                                  Value="True">
                             <Setter TargetName="HeaderBorder"
                                     Property="Background"
-                                    Value="#FF3C8DCB" />
+                                    Value="{DynamicResource GridColumn.Header.Hover.Background}" />
                             <Setter TargetName="HeaderHoverBorder"
                                     Property="BorderBrush"
-                                    Value="#FF88CBEB" />
+                                    Value="{DynamicResource GridColumn.Header.Hover.Border}" />
                             <Setter TargetName="HeaderHoverBorder"
                                     Property="Visibility"
                                     Value="Visible" />
@@ -325,16 +337,16 @@
                                     Value="Transparent" />
                             <Setter TargetName="HeaderTextBlock"
                                     Property="Foreground"
-                                    Value="#FFFFFF" />
+                                    Value="{DynamicResource GridColumn.Header.Hover.Foreground}" />
                         </Trigger>
                         <Trigger Property="IsPressed"
                                  Value="True">
                             <Setter TargetName="HeaderBorder"
                                     Property="Background"
-                                    Value="#FF3C8DCB" />
+                                    Value="{DynamicResource GridColumn.Header.Pressed.Background}" />
                             <Setter TargetName="HeaderPressBorder"
                                     Property="BorderBrush"
-                                    Value="#FF7A9EB1" />
+                                    Value="{DynamicResource GridColumn.Header.Pressed.Border}" />
                             <Setter TargetName="HeaderPressBorder"
                                     Property="Visibility"
                                     Value="Visible" />
@@ -353,7 +365,7 @@
                         <Trigger Property="IsEnabled"
                                  Value="False">
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    Value="{DynamicResource Text.DisabledBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -418,17 +430,17 @@
         <Setter Property="FocusVisualStyle"
                 Value="{StaticResource ListViewItemFocusVisual}" />
         <Setter Property="Background"
-                Value="{DynamicResource GridItemBackgroundGradient}" />
+                Value="{DynamicResource ListView.Item.Background}" />
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="Padding"
                 Value="2,2" />
         <Setter Property="Foreground"
-                Value="{DynamicResource Text.PrimaryBrush}" />
+                Value="{DynamicResource ListView.Item.Foreground}" />
         <Setter Property="FontSize"
                 Value="14" />
         <Setter Property="BorderBrush"
-                Value="{DynamicResource Border.PrimaryBrush}" />
+                Value="{DynamicResource ListView.Item.Border}" />
         <Setter Property="Margin"
                 Value="0,2" />
         <Setter Property="VerticalContentAlignment"
@@ -469,6 +481,7 @@
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       TextElement.FontSize="{TemplateBinding FontSize}"
+                                                      TextElement.Foreground="{TemplateBinding Foreground}"
                                                       TextElement.FontFamily="{TemplateBinding FontFamily}" />
                             </Grid>
                         </Border>
@@ -522,7 +535,7 @@
                         <Trigger Property="IsEnabled"
                                  Value="false">
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                                    Value="{DynamicResource Text.PrimaryBrush}" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -537,13 +550,13 @@
             <Trigger Property="ItemsControl.AlternationIndex"
                      Value="1">
                 <Setter Property="Background"
-                        Value="{DynamicResource GrayBrush}" />
+                        Value="{DynamicResource ListView.Item.AlternateRow.1.Foreground}" />
             </Trigger>
             <!-- Second alternating row color -->
             <Trigger Property="ItemsControl.AlternationIndex"
                      Value="0">
                 <Setter Property="Background"
-                        Value="{DynamicResource Window.BackgroundBrush}" />
+                        Value="{DynamicResource ListView.Item.AlternateRow.0.Foreground}" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -152,6 +152,40 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
+        public Task<Part?> GetByPartNumberAsync(string partNumber, bool includeDetails = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Part?> GetByIdWithDetailsAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Part>> FindWithCategoryAsync(Expression<Func<Part, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Part>> SearchPartsAsync(string searchTerm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Part>> GetPartsPagedAsync(int pageNumber, int pageSize, bool includeCategory = true, Expression<Func<Part, bool>>? filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetTotalPartsCountAsync(Expression<Func<Part, bool>>? filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> PartNumberExistsAsync(string partNumber, int? excludePartId = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

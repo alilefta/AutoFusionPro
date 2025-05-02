@@ -35,6 +35,7 @@
     <converters:IsAdminToAccountTypeConverter x:Key="IsAdminToAccountTypeConverter" />
     <converters:IsAdminToColorConverter x:Key="IsAdminToColorConverter" />
     <converters:SelectedGenderToUserFriendlyValueConverter x:Key="SelectedGenderToUserFriendlyValueConverter" />
+    <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
 
 
 </ResourceDictionary>

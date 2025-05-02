@@ -1,7 +1,12 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.DTOs.Part;
+using AutoFusionPro.Application.DTOs.Vehicle;
+using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Application.Services.DataServices;
+using AutoFusionPro.Application.Validators.PartValidators;
+using AutoFusionPro.Application.Validators.VehicleValidators;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutoFusionPro.Application.DependencyInjection
@@ -23,7 +28,12 @@ namespace AutoFusionPro.Application.DependencyInjection
             services.AddSingleton<ISessionManager, SessionManager>();
             services.AddTransient<IPasswordHashingService, BCryptPasswordHashingService>(); // Often singleton is fine for stateless hashers
             services.AddSingleton<IAuthenticationService, AuthenticationService>(); // Scoped often makes sense
+
             services.AddSingleton<IUserService, UserService>(); // Scoped
+
+            services.AddScoped<IPartService, PartService>();
+
+            services.AddScoped<IVehicleService, VehicleService>();
 
             // Register repositories
             //services.AddScoped<IPatientService, PatientService>();
@@ -31,6 +41,12 @@ namespace AutoFusionPro.Application.DependencyInjection
             services.AddSingleton<INotificationService, NotificationService>();
 
             //services.AddTransient<PatientValidator>();
+
+            // Validators
+            services.AddScoped<IValidator<CreatePartDto>, CreatePartDtoValidator>();
+
+            services.AddScoped<IValidator<CreateVehicleDto>, CreateVehicleDtoValidator>();
+            services.AddScoped<IValidator<UpdateVehicleDto>, UpdateVehicleDtoValidator>();
         }
     }
 }

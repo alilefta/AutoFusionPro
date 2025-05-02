@@ -280,25 +280,24 @@
                             </ui:XSideMenuButton.Style>
                         </ui:XSideMenuButton>
 
-                        <!-- Patients Button --><!--
-                        <ui:XSideMenuButton Content="{DynamicResource PatientsStr}"
-                                            Margin="0,8,0,0"
+                        <!-- Parts Button-->
+                        <ui:XSideMenuButton Content="{DynamicResource PartsStr}"
                                             Command="{Binding NavigateCommand}"
-                                            CommandParameter="{x:Static pages:ApplicationPage.Patients}"
-                                            Symbol="Patient32"
+                                            CommandParameter="{x:Static pages:ApplicationPage.Parts}"
+                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                             IsCollapsedMode="{Binding Collapsed}"
-                                            IsSelected="{Binding IsPatientsSelected}"
-                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}">
+                                            IsSelected="{Binding IsPartsSelected}"
+                                            Symbol="WrenchScrewdriver24">
                             <ui:XSideMenuButton.Style>
-                                <Style BasedOn="{StaticResource SideMenuButtonWithContentStyle}"
-                                       TargetType="{x:Type ui:XSideMenuButton}">
+                                <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                       BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding IsLoadingContent}"
                                                            Value="True" />
                                                 <Condition Binding="{Binding LoadingPage}"
-                                                           Value="{x:Static pages:ApplicationPage.Patients}" />
+                                                           Value="{x:Static pages:ApplicationPage.Parts}" />
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
                                                 <Setter Property="IsLoading"
@@ -308,8 +307,36 @@
                                     </Style.Triggers>
                                 </Style>
                             </ui:XSideMenuButton.Style>
-                        </ui:XSideMenuButton>-->
+                        </ui:XSideMenuButton>
 
+                        <!-- Vehicle Button-->
+                        <ui:XSideMenuButton Content="Vehicles"
+                                            Command="{Binding NavigateCommand}"
+                                            CommandParameter="{x:Static pages:ApplicationPage.Vehicles}"
+                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
+                                            IsCollapsedMode="{Binding Collapsed}"
+                                            IsSelected="{Binding IsVehiclesSelected}"
+                                            Symbol="VehicleCar48">
+                            <ui:XSideMenuButton.Style>
+                                <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                       BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsLoadingContent}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding LoadingPage}"
+                                                           Value="{x:Static pages:ApplicationPage.Vehicles}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="IsLoading"
+                                                        Value="True" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ui:XSideMenuButton.Style>
+                        </ui:XSideMenuButton>
                     </StackPanel>
                 </ScrollViewer>
 

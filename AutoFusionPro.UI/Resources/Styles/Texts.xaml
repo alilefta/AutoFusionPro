@@ -4,14 +4,18 @@
     <Style TargetType="TextBlock">
         <Setter Property="Foreground"
                 Value="{DynamicResource Text.PrimaryBrush}" />
+        <Setter Property="LineHeight"
+                Value="15" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DynamicFontFamilyRegular}" />
     </Style>
 
-    <SolidColorBrush x:Key="TextBox.Static.Border"
+    <!--<SolidColorBrush x:Key="TextBox.Static.Border"
                      Color="#FFABAdB3" />
     <SolidColorBrush x:Key="TextBox.MouseOver.Border"
                      Color="#FF7EB4EA" />
     <SolidColorBrush x:Key="TextBox.Focus.Border"
-                     Color="#FF569DE5" />
+                     Color="#FF569DE5" />-->
     <Style x:Key="BaseTextStyle"
            TargetType="{x:Type TextBox}">
         <Setter Property="BorderThickness"
@@ -22,8 +26,10 @@
                 Value="Left" />
         <Setter Property="Height"
                 Value="Auto" />
-        <Setter Property="MaxHeight"
-                Value="35" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Height"
+                Value="Auto" />
         <Setter Property="MinHeight"
                 Value="32" />
         <Setter Property="FocusVisualStyle"
@@ -58,13 +64,13 @@
                                  Value="true">
                             <Setter Property="BorderBrush"
                                     TargetName="border"
-                                    Value="{StaticResource TextBox.MouseOver.Border}" />
+                                    Value="{DynamicResource TextBox.Hover.Border}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused"
                                  Value="true">
                             <Setter Property="BorderBrush"
                                     TargetName="border"
-                                    Value="{StaticResource TextBox.Focus.Border}" />
+                                    Value="{DynamicResource TextBox.Focus.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -189,12 +195,18 @@
                 Value="{DynamicResource TextBox.BackgroundBrush}" />
         <Setter Property="Foreground"
                 Value="{DynamicResource TextBox.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource TextBox.ForegroundBrush}" />
         <Setter Property="FontSize"
-                Value="16" />
+                Value="14" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
         <Setter Property="FontFamily"
                 Value="{DynamicResource DynamicFontFamilyRegular}" />
         <Setter Property="Padding"
-                Value="30 5 10 5" />
+                Value="30,5,10,5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -202,7 +214,7 @@
                         <!-- Search field background and border -->
                         <Border x:Name="border"
                                 Background="{TemplateBinding Background}"
-                                BorderBrush="{DynamicResource TextBox.BorderBrush}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="1"
                                 CornerRadius="10"
                                 SnapsToDevicePixels="True">
@@ -309,6 +321,9 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+
+
     </Style>
 
 </ResourceDictionary>

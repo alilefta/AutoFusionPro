@@ -11,17 +11,21 @@ using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Dashboard;
+using AutoFusionPro.UI.ViewModels.Parts;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
+using AutoFusionPro.UI.ViewModels.Vehicles;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
 using AutoFusionPro.UI.Views;
 using AutoFusionPro.UI.Views.Authentication;
 using AutoFusionPro.UI.Views.Dashboard;
+using AutoFusionPro.UI.Views.Parts;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.Shell;
 using AutoFusionPro.UI.Views.User;
+using AutoFusionPro.UI.Views.Vehicles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -268,6 +272,8 @@ namespace AutoFusionPro.UI
                 services.AddScoped<RegisterView>();
 
                 services.AddScoped<SettingsView>();
+                services.AddScoped<PartsView>();
+                services.AddScoped<VehiclesView>();
 
                 services.AddTransient<UserManagementView>();
                 services.AddTransient<UserAccountView>();
@@ -282,6 +288,8 @@ namespace AutoFusionPro.UI
                 services.AddScoped<ShellViewModel>();
                 services.AddScoped<SettingsViewModel>();
 
+                services.AddScoped<PartsViewModel>();
+                services.AddScoped<VehiclesViewModel>();
 
                 services.AddScoped<LoginViewModel>();
                 services.AddScoped<RegisterViewModel>();

@@ -2,8 +2,10 @@
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Infrastructure.Data.Context;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
 {
@@ -14,31 +16,39 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         private IDbContextTransaction _transaction;
         private ILogger<UnitOfWork> _logger;
 
-
-        //public IPatientRepository Patients { get; }
-        //public IAppointmentRepository Appointments { get; }
-        //public IStaffRepository Staff { get; }
+        public ICategoryRepository Categories { get;}
         public IUserRepository Users { get; }
+        public IPartRepository Parts { get; }
         public INotificationRepository Notifications { get; }
+        public IVehicleRepository Vehicles { get; }
 
         public UnitOfWork(ApplicationDbContext context, 
-            IUserRepository userRepository,
-            ILogger<UnitOfWork> logger
-,
-            INotificationRepository notifications)
+                        IUserRepository userRepository,
+                        IPartRepository partRepository,
+                        INotificationRepository notifications,
+                        ICategoryRepository categoryRepository,
+                        IVehicleRepository vehicleRepository,
+                        ILogger<UnitOfWork> logger)
         {
-            _context = context;
-            Users = userRepository;
-            _logger = logger;
-            Notifications = notifications;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+
+            Users = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            Parts = partRepository ?? throw new ArgumentNullException(nameof(partRepository));
+            Categories = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
+            Notifications = notifications ?? throw new ArgumentNullException(nameof(notifications));
+            Vehicles = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        #region Transaction Management
 
         public async Task BeginTransactionAsync()
         {
             _transaction = await _context.Database.BeginTransactionAsync();
             _logger.LogWarning("Begin Transaction");
         }
+
         public async Task CommitTransactionAsync()
         {
             //await context.Database.CommitTransactionAsync();
@@ -66,12 +76,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             }
         }
 
-        public void Dispose()
-        {
-            _transaction?.Dispose();
-            _context?.Dispose();
-        }
-
         public async Task RollbackTransactionAsync()
         {
 
@@ -86,12 +90,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
 
 
         }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
 
         private async Task RetryOnLockAsync(Func<Task> operation)
         {
@@ -132,6 +130,35 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             {
                 await _context.DisposeAsync();
             }
+        }
+
+        #endregion
+
+
+        #region DbContext Methods
+
+        public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
+        {
+            await _context.Set<TEntity>().AddAsync(entity);
+            // Optionally raise DataChanged event if needed for generic adds
+        }
+
+        public async Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            return await _context.Set<TEntity>().AnyAsync(predicate);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        #endregion
+
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            _context?.Dispose();
         }
     }
 }

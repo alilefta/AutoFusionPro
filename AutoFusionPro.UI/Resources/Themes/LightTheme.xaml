@@ -211,7 +211,7 @@
     <SolidColorBrush x:Key="Button.Info.BackgroundBrush"
                      Color="{StaticResource Turquoise500}" />
     <SolidColorBrush x:Key="Button.Light.BackgroundBrush"
-                     Color="{StaticResource Neutral150}" />
+                     Color="{StaticResource Neutral100}" />
     <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"
                      Color="{StaticResource Neutral750}" />
     <SolidColorBrush x:Key="Button.Link.BackgroundBrush"
@@ -221,7 +221,7 @@
                      Color="{StaticResource Neutral750}" />
 
     <SolidColorBrush x:Key="Button.Light.BorderBrush"
-                     Color="{StaticResource Neutral750}" />
+                     Color="{StaticResource Gray300}" />
 
 
 
@@ -315,25 +315,25 @@
 
     <!-- Search Textbox -->
     <SolidColorBrush x:Key="TextBox.BackgroundBrush"
-                     Color="{StaticResource Neutral200}" />
+                     Color="{StaticResource Neutral100}" />
     <SolidColorBrush x:Key="TextBox.BorderBrush"
-                     Color="{StaticResource Neutral500}" />
+                     Color="{StaticResource Neutral350}" />
     <SolidColorBrush x:Key="TextBox.ForegroundBrush"
-                     Color="{StaticResource Neutral600}" />
+                     Color="{StaticResource Neutral500}" />
     <SolidColorBrush x:Key="TextBox.Lens.ForegroundBrush"
-                     Color="{StaticResource Neutral600}" />
+                     Color="{StaticResource Neutral400}" />
     
     <SolidColorBrush x:Key="TextBox.Focus.BackgroundBrush"
-                     Color="{StaticResource Neutral100}" />
+                     Color="{StaticResource Neutral0}" />
     <SolidColorBrush x:Key="TextBox.Focus.BorderBrush"
-                     Color="{StaticResource Primary600}" />
+                     Color="{StaticResource Primary400}" />
     <SolidColorBrush x:Key="TextBox.Focus.ForegroundBrush"
                      Color="{StaticResource Neutral700}" />
     <SolidColorBrush x:Key="TextBox.Focus.Lens.ForegroundBrush"
-                     Color="{StaticResource Primary600}" />
+                     Color="{StaticResource Primary400}" />
 
     <SolidColorBrush x:Key="TextBox.Hover.BorderBrush"
-                     Color="{StaticResource Neutral600}" />
+                     Color="{StaticResource Neutral400}" />
 
 
     <!-- ==================== Clinical Specific ==================== -->
@@ -450,6 +450,87 @@
 
     <SolidColorBrush x:Key="Seprator.BorderBrush"
                      Color="{StaticResource Gray400}" />
+
+    
+    
+    
+
+    <!-- ==================== Grid View ==================== -->
+
+    <!-- Gripper, the border between the column headers -->
+    <SolidColorBrush x:Key="GridColumn.Gripper.BackgroundBrush"
+                     Color="{StaticResource Neutral350}" />
+
+
+    <!-- Column Header - Default -->
+    <SolidColorBrush x:Key="GridColumn.Header.Background"
+                     Color="{StaticResource Neutral100}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Border"
+                     Color="{StaticResource Neutral300}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Foreground"
+                     Color="{StaticResource Neutral700}" />
+
+    <!-- Column Header - Hover -->
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Background"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Border"
+                     Color="{StaticResource Gray300}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <!-- Column Header - Pressed -->
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Background"
+                     Color="{StaticResource Primary200}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Border"
+                     Color="{StaticResource Neutral350}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <!-- ==================== List View Items ==================== -->
+    <SolidColorBrush x:Key="ListView.Item.Background"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Border"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <SolidColorBrush x:Key="ListView.Item.AlternateRow.1.Foreground"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="ListView.Item.AlternateRow.0.Foreground"
+                     Color="{StaticResource Neutral0}" />
+
+
+    <!-- List Item - Hover -->
+    
+    <!-- List Item - Selected -->
+    
+    <!-- List Item - Pressed  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Secondary Accent -->
 

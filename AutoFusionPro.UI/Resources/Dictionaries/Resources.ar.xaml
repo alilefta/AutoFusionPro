@@ -152,6 +152,7 @@
     <sys:String x:Key="NewPasswordmustbeatleast3charactersStr">يجب ان تتكون كلمة المرور الجديدة من 3 احرف او رموز على الاقل</sys:String>
 
 
+    <sys:String x:Key="PartsStr">قطع الغيار</sys:String>
 
 
 

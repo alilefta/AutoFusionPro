@@ -37,7 +37,12 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             // Register repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPartRepository, PartRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+
+
 
             // Register UnitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();

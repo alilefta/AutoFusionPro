@@ -3,9 +3,12 @@ using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.Dashboard;
+using AutoFusionPro.UI.ViewModels.Parts;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.User;
+using AutoFusionPro.UI.ViewModels.Vehicles;
 using AutoFusionPro.UI.Views.User;
+using AutoFusionPro.UI.Views.Vehicles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -35,6 +38,9 @@ namespace AutoFusionPro.UI.Services
                 ApplicationPage.Dashboard => _serviceProvider.GetRequiredService<DashboardViewModel>(),
                 ApplicationPage.Settings => _serviceProvider.GetRequiredService<SettingsViewModel>(),
                 ApplicationPage.Account => _serviceProvider.GetRequiredService<UserAccountViewModel>(),
+                ApplicationPage.Parts => _serviceProvider.GetRequiredService<PartsViewModel>(),
+                ApplicationPage.Vehicles => _serviceProvider.GetRequiredService<VehiclesViewModel>(),
+
                 // Map other pages to their respective ViewModels
                 _ => throw new NavigationException($"No ViewModel found for page {page}. Navigation initialization parameter could be required! which is 'Null' currently, try providing parameter to 'NavigateTo(ApplicationPage page, object param)' and try again.")
             };

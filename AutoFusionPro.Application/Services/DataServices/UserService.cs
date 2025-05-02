@@ -2,6 +2,7 @@
 using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Enums.ModelEnum;
+using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Models;
 using Microsoft.Extensions.Logging;
@@ -81,11 +82,11 @@ namespace AutoFusionPro.Application.Services.DataServices
             // Check for duplicate username/email before hashing password (less work)
             if (await _unitOfWork.Users.ExistsAsync(u => u.Username == userDto.Username))
             {
-                throw new ApplicationException($"Username '{userDto.Username}' is already taken.");
+                throw new ServiceException($"Username '{userDto.Username}' is already taken.");
             }
             if (await _unitOfWork.Users.ExistsAsync(u => u.Email == userDto.Email))
             {
-                throw new ApplicationException($"Email '{userDto.Email}' is already registered.");
+                throw new ServiceException($"Email '{userDto.Email}' is already registered.");
             }
             // Add more validation as needed (e.g., password complexity)
 

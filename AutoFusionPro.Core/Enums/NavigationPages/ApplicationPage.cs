@@ -6,8 +6,16 @@ namespace AutoFusionPro.Core.Enums.NavigationPages
     {
         None = 0,
         Dashboard = 1,
-        Settings = 9,
-        Account = 10,
-        Logout = 11,
+        Settings = 2,
+        Account = 3,
+        Logout = 4,
+        Parts = 5,
+        Invetory = 6,
+        Categories = 7,
+        Reports = 8,
+        Suppliers = 9,
+        Orders = 10,
+        Vehicles = 11,
+
     }
 }

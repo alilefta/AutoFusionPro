@@ -454,8 +454,64 @@
 
     <SolidColorBrush x:Key="Seprator.BorderBrush"
                      Color="{StaticResource Gray500}" />
-    
-    
+
+
+
+    <!-- ==================== Grid View ==================== -->
+
+    <!-- Gripper, the border between the column headers -->
+    <SolidColorBrush x:Key="GridColumn.Gripper.BackgroundBrush"
+                     Color="{StaticResource Neutral350}" />
+
+
+    <!-- Column Header - Default -->
+    <SolidColorBrush x:Key="GridColumn.Header.Background"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Border"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Foreground"
+                     Color="{StaticResource Neutral300}" />
+
+    <!-- Column Header - Hover -->
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Background"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Border"
+                     Color="{StaticResource Gray300}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Hover.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <!-- Column Header - Pressed -->
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Background"
+                     Color="{StaticResource Primary200}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Border"
+                     Color="{StaticResource Neutral350}" />
+
+    <SolidColorBrush x:Key="GridColumn.Header.Pressed.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <!-- ==================== List View Items ==================== -->
+    <SolidColorBrush x:Key="ListView.Item.Background"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Border"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Foreground"
+                     Color="{StaticResource Gray700}" />
+
+    <SolidColorBrush x:Key="ListView.Item.AlternateRow.1.Foreground"
+                     Color="{StaticResource Neutral200}" />
+
+    <SolidColorBrush x:Key="ListView.Item.AlternateRow.0.Foreground"
+                     Color="{StaticResource Neutral0}" />
+
+
+
 
 
 

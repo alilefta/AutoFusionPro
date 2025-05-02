@@ -31,7 +31,7 @@
         <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Padding"
-                Value="8,8" />
+                Value="8,4" />
         <Setter Property="FontSize"
                 Value="14" />
         <Setter Property="FontFamily"
@@ -44,22 +44,23 @@
                 Value="4" />
         <Setter Property="Cursor"
                 Value="Hand" />
-        <Setter Property="Height"
-                Value="Auto" />
         <Setter Property="MinHeight"
                 Value="32" />
-        <Setter Property="MaxHeight"
-                Value="40" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
         <Setter Property="MinWidth"
-                Value="70" />
+                Value="30" />
         <Setter Property="Width"
                 Value="Auto" />
+        <Setter Property="Height"
+                Value="32" />
         <Setter Property="OverridesDefaultStyle"
                 Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:XButton}">
                     <Border x:Name="border"
+                            Height="{TemplateBinding Height}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -100,22 +101,38 @@
                             <Border Visibility="{Binding IsLoading, Converter={StaticResource BooleanToInverseVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"
                                     Padding="{TemplateBinding Padding}">
                                 <Grid HorizontalAlignment="Center">
-                                    <TextBlock x:Name="textContent"
+                                    <ContentPresenter x:Name="contentPresenter"
+                                                      Focusable="False"
+                                                      Content="{TemplateBinding Content}"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      RecognizesAccessKey="True"
+                                                      TextBlock.LineHeight="15"
+                                                      TextElement.FontSize="{TemplateBinding FontSize}"
+                                                      TextElement.Foreground="{TemplateBinding Foreground}"
+                                                      TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    <!--<TextBlock x:Name="textContent"
                                                Grid.Column="0"
                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      FontSize="{TemplateBinding FontSize}"
+                                                      Foreground="{TemplateBinding Foreground}"
+                                                      FontFamily="{TemplateBinding FontFamily}"
                                                VerticalAlignment="Center"
-                                               FontSize="{TemplateBinding FontSize}"
-                                               Foreground="{TemplateBinding Foreground}"
-                                               FontFamily="{TemplateBinding FontFamily}">
-                                     <!-- Button Content -->
+                                               TextWrapping="Wrap">
+                                     --><!-- Button Content --><!--
 				                        <ContentPresenter x:Name="contentPresenter"
                                                           Focusable="False"
-                                                          HorizontalAlignment="Center"
                                                           Content="{TemplateBinding Content }"
+                                                          HorizontalAlignment="Center"
                                                           VerticalAlignment="Center"
                                                           RecognizesAccessKey="True"
+                                                          TextBlock.LineHeight="25"
+                                                          TextElement.FontSize="{TemplateBinding FontSize}"
+                                                          TextElement.Foreground="{TemplateBinding Foreground}"
+                                                          TextElement.FontFamily="{TemplateBinding FontFamily}"
                                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </TextBlock>
+                                    </TextBlock>-->
 
                                 </Grid>
                             </Border>
@@ -177,6 +194,9 @@
                                     Value="{DynamicResource Button.Light.BorderBrush}" />
                             <Setter Property="BorderThickness"
                                     Value="1" />
+                            <Setter Property="Padding"
+                                    Value="7,4" />
+                            <!-- Modified to maintain height consistency -->
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Dark">
@@ -191,8 +211,8 @@
                                     Value="{DynamicResource TransparentBrush}" />
                             <Setter Property="Foreground"
                                     Value="{DynamicResource Button.Link.BackgroundBrush}" />
-                            <Setter TargetName="textContent" 
-                                    Property="TextDecorations"
+                            <Setter TargetName="contentPresenter"
+                                    Property="TextBlock.TextDecorations"
                                     Value="Underline" />
                         </Trigger>
 
@@ -237,10 +257,17 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
+           
         </Setter>
+        <Style.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="LineHeight"
+                        Value="15" />
+            </Style>
+        </Style.Resources>
     </Style>
 
-    <Style x:Key="SideMenuButtonWithContentStyle" 
+    <Style x:Key="SideMenuButtonWithContentStyle"
            TargetType="{x:Type local:XSideMenuButton}">
         <Setter Property="Background"
                 Value="{DynamicResource Button.Menu.BackgroundBrush}" />
@@ -342,7 +369,7 @@
                                                           x:Name="TextColumn" />
                                         <!-- Text Column -->
                                     </Grid.ColumnDefinitions>
-                                    
+
                                     <!-- Symbol (Always in second column) -->
                                     <wpfUi:SymbolIcon x:Name="PART_Symbol"
                                                       Grid.Column="0"
@@ -366,7 +393,8 @@
                                                Foreground="{TemplateBinding Foreground}"
                                                FontFamily="{TemplateBinding FontFamily}"
                                                Opacity="1" />
-                                    <!-- Using ContentPresenter for flexibility, but TextBlock is fine too --><!--
+                                    <!-- Using ContentPresenter for flexibility, but TextBlock is fine too -->
+                                    <!--
                                     <ContentPresenter x:Name="PART_ContentPresenter"
                                                       Grid.Column="1"
                                                       ContentSource="Content"
@@ -375,7 +403,8 @@
                                                       RecognizesAccessKey="True"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                       Opacity="1" />
-                                    --><!-- Opacity controlled by trigger -->
+                                    -->
+                                    <!-- Opacity controlled by trigger -->
 
 
                                 </Grid>
@@ -426,7 +455,7 @@
 
                             <Setter Property="Margin"
                                     Value="0,0,0,0" />
-                            
+
                             <Setter TargetName="textContent"
                                     Property="Visibility"
                                     Value="Collapsed" />
@@ -501,7 +530,7 @@
                             </MultiTrigger.Setters>
                         </MultiTrigger>
 
-                        
+
                         <Trigger Property="IsPressed"
                                  Value="True">
                             <Setter TargetName="border"
@@ -553,6 +582,36 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="SubMenuButtonStyle"
+           TargetType="{x:Type local:XSideMenuButton}"
+           BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+        <Setter Property="Padding"
+                Value="10,5,5,5" />
+        <Setter Property="Height"
+                Value="34" />
+        <Setter Property="MinHeight"
+                Value="34" />
+        <Setter Property="MaxHeight"
+                Value="34" />
+        <Setter Property="FontSize"
+                Value="13" />
+        <Setter Property="Margin"
+                Value="0,0,5,0" />
+        <Setter Property="Background"
+                Value="{DynamicResource Button.Menu.BackgroundBrush}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Button.Menu.ForegroundBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{DynamicResource Button.Menu.Background.SelectedBrush}" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource Button.Menu.Foreground.SelectedBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 

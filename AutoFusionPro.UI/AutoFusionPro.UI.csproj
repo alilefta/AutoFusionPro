@@ -89,6 +89,12 @@
 	<ItemGroup>
 		<Folder Include="Assets\Icons\" />
 		<Folder Include="Resources\Templates\" />
+		<Folder Include="Views\Categories\" />
+		<Folder Include="Views\Inventory\" />
+		<Folder Include="Views\Customers\" />
+		<Folder Include="Views\Suppliers\" />
+		<Folder Include="Views\Sales\" />
+		<Folder Include="Views\Reports\" />
 	</ItemGroup>
 
 	<ItemGroup>

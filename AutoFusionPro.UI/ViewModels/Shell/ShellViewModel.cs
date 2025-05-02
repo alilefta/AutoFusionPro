@@ -83,12 +83,15 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         public bool IsDashboardSelected => SelectedPage == ApplicationPage.Dashboard;
         public bool IsSettingsSelected => SelectedPage == ApplicationPage.Settings;
         public bool IsMyAccountSelected => SelectedPage == ApplicationPage.Account;
+        public bool IsPartsSelected => SelectedPage == ApplicationPage.Parts;
+        public bool IsVehiclesSelected => SelectedPage == ApplicationPage.Vehicles;
         // Add properties for Schedule, Billing, Inventory, Staff, Reports, etc.
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsDashboardSelected))]
         [NotifyPropertyChangedFor(nameof(IsSettingsSelected))]
         [NotifyPropertyChangedFor(nameof(IsMyAccountSelected))]
+        [NotifyPropertyChangedFor(nameof(IsPartsSelected))]
         public ApplicationPage _selectedPage = ApplicationPage.Dashboard;
 
         [ObservableProperty]

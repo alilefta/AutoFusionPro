@@ -6,8 +6,8 @@ namespace AutoFusionPro.Domain.Models
     {
         public string PartNumber { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Manufacturer { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
+        public string? Manufacturer { get; set; } = string.Empty;
 
         public decimal CostPrice { get; set; }
         public decimal SellingPrice { get; set; }
@@ -19,9 +19,11 @@ namespace AutoFusionPro.Domain.Models
         public int MinimumStock { get; set; }
         public string Location { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-        public bool IsOriginal { get; set; }
-        public string ImagePath { get; set; } = string.Empty;
-        public string Notes { get; set; } = string.Empty;
+        public bool IsOriginal { get; set; } = false;
+        public string? ImagePath { get; set; } = string.Empty;
+        public string? Notes { get; set; } = string.Empty;
+
+        public string? Barcode { get; set; } = string.Empty;
 
         public DateTime LastRestockDate { get; set; }
 
