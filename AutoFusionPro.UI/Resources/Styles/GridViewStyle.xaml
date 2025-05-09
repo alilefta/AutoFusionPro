@@ -1,69 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-
-    <!--<LinearGradientBrush x:Key="GridItemBackgroundGradient"
-                         EndPoint="0.5,1"
-                         StartPoint="0.5,0">
-        <GradientStop Color="#FF2A2A2A"
-                      Offset="0" />
-        --><!-- #ker gray --><!--
-        <GradientStop Color="#FF1E1E1E"
-                      Offset="1" />
-        --><!-- Even darker gray --><!--
-    </LinearGradientBrush>-->
-
-
-
-    <!-- Grid Column Header Style helpers--><!--
-    <LinearGradientBrush x:Key="GridViewColumnHeaderBorderBackground"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-        <LinearGradientBrush.GradientStops>
-            <GradientStop Color="#FFF2F2F2"
-                          Offset="0" />
-            <GradientStop Color="#FFD5D5D5"
-                          Offset="1" />
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="GridViewColumnHeaderBackground"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-        <LinearGradientBrush.GradientStops>
-            <GradientStop Color="#FFFFFFFF"
-                          Offset="0" />
-            <GradientStop Color="#FFFFFFFF"
-                          Offset="0.4091" />
-            <GradientStop Color="#FFF7F8F9"
-                          Offset="1" />
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="GridViewColumnHeaderHoverBackground"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-        <LinearGradientBrush.GradientStops>
-            <GradientStop Color="#FFBDEDFF"
-                          Offset="0" />
-            <GradientStop Color="#FFB7E7FB"
-                          Offset="1" />
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="GridViewColumnHeaderPressBackground"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-        <LinearGradientBrush.GradientStops>
-            <GradientStop Color="#FF8DD6F7"
-                          Offset="0" />
-            <GradientStop Color="#FF8AD1F5"
-                          Offset="1" />
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>-->
-
     <Style x:Key="GridViewColumnHeaderGripper"
-           TargetType="{x:Type Thumb}">
+           TargetType="{x:Type Thumb}" BasedOn="{StaticResource {x:Type Thumb}}">
         <Setter Property="Canvas.Right"
                 Value="-9" />
         <Setter Property="Width"
@@ -89,7 +28,7 @@
     </Style>
 
     <Style x:Key="BaseGridViewColumnHeader"
-           TargetType="{x:Type GridViewColumnHeader}">
+           TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
         <Setter Property="VerticalContentAlignment"
@@ -248,7 +187,7 @@
 
     <!-- GridView Column Header-->
     <Style x:Key="GridViewColumnHeaderStyle"
-           TargetType="GridViewColumnHeader"
+           TargetType="{x:Type GridViewColumnHeader}"
            BasedOn="{StaticResource BaseGridViewColumnHeader}">
 
         <Setter Property="BorderThickness"

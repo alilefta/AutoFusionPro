@@ -11,6 +11,8 @@ using System.IO;
 using System.Configuration;
 using AutoFusionPro.Core.Services;
 using AutoFusionPro.Infrastructure.Services;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleRepositories;
 
 namespace AutoFusionPro.Infrastructure.DependencyInjection
 {
@@ -40,6 +42,17 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+
+            services.AddScoped<ICompatibleVehicleRepository, CompatibleVehicleRepository>();
+            services.AddScoped<IMakeRepository, MakeRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
+            services.AddScoped<IBodyTypeRepository, BodyTypeRepository>();
+            services.AddScoped<IEngineTypeRepository, EngineTypeRepository>();
+            services.AddScoped<ITransmissionTypeRepository, TransmissionTypeRepository>();
+            services.AddScoped<ITrimLevelRepository, TrimLevelRepository>();
+
+
 
 
 

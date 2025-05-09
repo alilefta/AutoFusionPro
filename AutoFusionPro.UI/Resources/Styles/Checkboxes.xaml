@@ -21,7 +21,34 @@
         </Setter>
     </Style>
 
-    
+
+
+    <SolidColorBrush x:Key="OptionMark.Static.Background"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="OptionMark.Static.Border"
+                     Color="{StaticResource Gray300}" />
+    <SolidColorBrush x:Key="OptionMark.Static.Glyph"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Background"
+                     Color="{StaticResource Neutral500}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Border"
+                     Color="{StaticResource Gray400}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph"
+                     Color="#FF212121" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Background"
+                     Color="{StaticResource Gray500}" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Border"
+                     Color="{StaticResource Gray500}" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Glyph"
+                     Color="#FF212121" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Background"
+                     Color="#FFE6E6E6" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Border"
+                     Color="#FFBCBCBC" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Glyph"
+                     Color="#FF707070" />
+
+
     <Style x:Key="BaseCheckboxStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>

@@ -1,9 +1,11 @@
-﻿using AutoFusionPro.Application.DTOs.Part;
+﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
+using AutoFusionPro.Application.DTOs.Part;
 using AutoFusionPro.Application.DTOs.Vehicle;
 using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Application.Services.DataServices;
+using AutoFusionPro.Application.Validators.CompatibleVehicleValidator;
 using AutoFusionPro.Application.Validators.PartValidators;
 using AutoFusionPro.Application.Validators.VehicleValidators;
 using FluentValidation;
@@ -33,7 +35,9 @@ namespace AutoFusionPro.Application.DependencyInjection
 
             services.AddScoped<IPartService, PartService>();
 
-            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IVehicleService, VehicleService>(); // To be removed
+
+            services.AddScoped<ICompatibleVehicleService, CompatibleVehicleService>();
 
             // Register repositories
             //services.AddScoped<IPatientService, PatientService>();
@@ -47,6 +51,24 @@ namespace AutoFusionPro.Application.DependencyInjection
 
             services.AddScoped<IValidator<CreateVehicleDto>, CreateVehicleDtoValidator>();
             services.AddScoped<IValidator<UpdateVehicleDto>, UpdateVehicleDtoValidator>();
+
+            services.AddScoped<IValidator<CreateMakeDto>, CreateMakeDtoValidator>();
+            services.AddScoped<IValidator<UpdateMakeDto>, UpdateMakeDtoValidator>();
+
+            services.AddScoped<IValidator<CreateCompatibleVehicleDto>, CreateCompatibleVehicleDtoValidator>();
+            services.AddScoped<IValidator<UpdateCompatibleVehicleDto>, UpdateCompatibleVehicleDtoValidator>();
+
+            services.AddScoped<IValidator<CreateModelDto>, CreateModelDtoValidator>();
+            services.AddScoped<IValidator<UpdateModelDto>, UpdateModelDtoValidator>();
+
+            services.AddScoped<IValidator<CreateLookupDto>, CreateLookupDtoValidator>();
+            services.AddScoped<IValidator<UpdateLookupDto>, UpdateLookupDtoValidator>();
+
+            services.AddScoped<IValidator<CreateEngineTypeDto>, CreateEngineTypeDtoValidator>();
+            services.AddScoped<IValidator<UpdateEngineTypeDto>, UpdateEngineTypeDtoValidator>();
+
+            services.AddScoped<IValidator<CreateTrimLevelDto>, CreateTrimLevelDtoValidator>();
+            services.AddScoped<IValidator<UpdateTrimLevelDto>, UpdateTrimLevelDtoValidator>();
         }
     }
 }

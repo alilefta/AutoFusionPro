@@ -9,26 +9,23 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<PartCompatibility> builder)
         {
             builder.ToTable("PartCompatibilities");
-
             builder.HasKey(pc => pc.Id);
-            builder.Property(pc => pc.Id).ValueGeneratedOnAdd();
 
-            builder.Property(pc => pc.Notes)
-                .HasMaxLength(500);
+            builder.Property(pc => pc.Notes).HasMaxLength(500);
 
-            // Create a unique index to prevent duplicate compatibility records
-            builder.HasIndex(pc => new { pc.PartId, pc.VehicleId }).IsUnique();
+            // Unique index to prevent duplicate Part - CompatibleVehicle links
+            builder.HasIndex(pc => new { pc.PartId, pc.CompatibleVehicleId }).IsUnique();
 
             // Relationships
             builder.HasOne(pc => pc.Part)
-                .WithMany(p => p.CompatibleVehicles)
+                .WithMany(p => p.CompatibleVehicles) // Assumes Part.CompatibleVehicles is ICollection<PartCompatibility>
                 .HasForeignKey(pc => pc.PartId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade); // If a Part is deleted, its compatibility links are removed
 
-            builder.HasOne(pc => pc.Vehicle)
-                .WithMany(v => v.CompatibleParts)
-                .HasForeignKey(pc => pc.VehicleId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(pc => pc.CompatibleVehicle)
+                .WithMany(cv => cv.PartCompatibilities) // Assumes CompatibleVehicle.PartCompatibilities exists
+                .HasForeignKey(pc => pc.CompatibleVehicleId)
+                .OnDelete(DeleteBehavior.Cascade); // If a CompatibleVehicle spec is deleted, links are removed
         }
     }
 }

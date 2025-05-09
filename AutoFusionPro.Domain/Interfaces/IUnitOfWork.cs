@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Denta
 
 using AutoFusionPro.Domain.Interfaces.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using System.Linq.Expressions;
 
 namespace AutoFusionPro.Domain.Interfaces
@@ -13,6 +14,14 @@ namespace AutoFusionPro.Domain.Interfaces
         ICategoryRepository Categories {  get; } 
         IVehicleRepository Vehicles {  get; } 
         INotificationRepository Notifications {  get; } 
+
+        ICompatibleVehicleRepository CompatibleVehicles { get; }
+        IMakeRepository Makes { get; }
+        IModelRepository Models { get; }
+        IBodyTypeRepository BodyTypes { get; }
+        IEngineTypeRepository EngineTypes { get; }
+        ITransmissionTypeRepository TransmissionTypes { get; }
+        ITrimLevelRepository TrimLevels { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

@@ -84,9 +84,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
         }
 
-        public async Task AddPartCompatibilityAsync(int partId, int vehicleId, string? notes)
+        public async Task AddPartCompatibilityAsync(int partId, int compatibileVehicle, string? notes)
         {
-            if (partId <= 0 || vehicleId <= 0)
+            if (partId <= 0 || compatibileVehicle <= 0)
             {
                 _logger.LogError("Part ID or Vehicle ID is not correct");
                 throw new ServiceException("Part ID or Vehicle ID is not correct");
@@ -103,12 +103,12 @@ namespace AutoFusionPro.Application.Services.DataServices
 
             // Check Vehicle Existence
 
-            var isVehicleExists = await _unitOfWork.Vehicles.ExistsAsync(v => v.Id == vehicleId);
+            var isVehicleExists = await _unitOfWork.Vehicles.ExistsAsync(v => v.Id == compatibileVehicle);
 
             if (!isVehicleExists)
             {
-                _logger.LogError($"Vehicle with ID: {vehicleId} doesn't exists!");
-                throw new ServiceException($"Vehicle with ID: {vehicleId} doesn't exists!");
+                _logger.LogError($"Vehicle with ID: {compatibileVehicle} doesn't exists!");
+                throw new ServiceException($"Vehicle with ID: {compatibileVehicle} doesn't exists!");
             }
 
 
@@ -117,7 +117,7 @@ namespace AutoFusionPro.Application.Services.DataServices
                 var newPartVehicleCompatibility = new PartCompatibility
                 {
                     PartId = partId,
-                    VehicleId = vehicleId,
+                    CompatibleVehicleId = compatibileVehicle,
                     Notes = notes ?? string.Empty,
 
                 };
@@ -297,14 +297,14 @@ namespace AutoFusionPro.Application.Services.DataServices
                 LastRestockDate = part.LastRestockDate, // Assuming this is loaded correctly
 
                 // Correct relationship mapping
-                CompatibleVehicles = part.CompatibleVehicles?.Select(pc => new PartCompatibilityDto(
-                    pc.Id,
-                    pc.VehicleId,
-                    pc.Vehicle?.Make ?? "Unknown",
-                    pc.Vehicle?.Model ?? "Unknown",
-                    pc.Vehicle?.Year ?? 0,
-                    pc.Notes
-                )).ToList() ?? Enumerable.Empty<PartCompatibilityDto>(),
+                //CompatibleVehicles = part.CompatibleVehicles?.Select(pc => new PartCompatibilityDto(
+                //    pc.Id,
+                //    pc.CompatibleVehicleId,
+                //    pc.CompatibleVehicle?.Make ?? "Unknown",
+                //    pc.Vehicle?.Model ?? "Unknown",
+                //    pc.Vehicle?.Year ?? 0,
+                //    pc.Notes
+                //)).ToList() ?? Enumerable.Empty<PartCompatibilityDto>(),
 
                 Suppliers = part.Suppliers?.Select(sp => new PartSupplierDto(
                     sp.Id,

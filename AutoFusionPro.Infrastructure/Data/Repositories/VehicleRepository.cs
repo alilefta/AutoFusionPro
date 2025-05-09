@@ -165,20 +165,20 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
         /// <summary>
         /// Checks if any PartCompatibility records exist for a specific Vehicle ID.
         /// </summary>
-        public async Task<bool> HasCompatibilityLinksAsync(int vehicleId)
+        public async Task<bool> HasCompatibilityLinksAsync(int compatibileVehicle)
         {
-            if (vehicleId <= 0) return false;
+            if (compatibileVehicle <= 0) return false;
 
             try
             {
                 // Access the DbContext (_context field from base class)
                 return await _context.Set<PartCompatibility>()
-                                     .AnyAsync(pc => pc.VehicleId == vehicleId);
+                                     .AnyAsync(pc => pc.CompatibleVehicleId == compatibileVehicle);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error checking for compatibility links for Vehicle ID {VehicleId}", vehicleId);
-                throw new RepositoryException($"Could not check compatibility links for Vehicle ID {vehicleId}.", ex);
+                _logger.LogError(ex, "Error checking for compatibility links for Vehicle ID {VehicleId}", compatibileVehicle);
+                throw new RepositoryException($"Could not check compatibility links for Vehicle ID {compatibileVehicle}.", ex);
             }
         }
 

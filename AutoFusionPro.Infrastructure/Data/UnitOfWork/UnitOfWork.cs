@@ -1,5 +1,7 @@
 ﻿using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using AutoFusionPro.Infrastructure.Data.Context;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +24,27 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         public INotificationRepository Notifications { get; }
         public IVehicleRepository Vehicles { get; }
 
+        public ICompatibleVehicleRepository CompatibleVehicles { get; }
+        public IMakeRepository Makes { get; }
+        public IModelRepository Models { get; }
+        public IBodyTypeRepository BodyTypes { get; }
+        public IEngineTypeRepository EngineTypes { get; }
+        public ITransmissionTypeRepository TransmissionTypes { get; }
+        public ITrimLevelRepository TrimLevels { get; }
+
         public UnitOfWork(ApplicationDbContext context, 
                         IUserRepository userRepository,
                         IPartRepository partRepository,
                         INotificationRepository notifications,
                         ICategoryRepository categoryRepository,
                         IVehicleRepository vehicleRepository,
+                        ICompatibleVehicleRepository compatibleVehicleRepository,
+                        IMakeRepository makeRepository,
+                        IModelRepository modelRepository,
+                        IBodyTypeRepository bodyTypeRepository,
+                        IEngineTypeRepository engineTypeRepository,
+                        ITransmissionTypeRepository transmissionTypeRepository,
+                        ITrimLevelRepository trimLevelRepository,
                         ILogger<UnitOfWork> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -37,6 +54,14 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             Categories = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             Notifications = notifications ?? throw new ArgumentNullException(nameof(notifications));
             Vehicles = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+
+            CompatibleVehicles = compatibleVehicleRepository ?? throw new ArgumentNullException(nameof(compatibleVehicleRepository));
+            Makes = makeRepository ?? throw new ArgumentNullException(nameof(makeRepository));
+            Models = modelRepository ?? throw new ArgumentNullException(nameof(modelRepository));
+            BodyTypes = bodyTypeRepository ?? throw new ArgumentNullException(nameof(bodyTypeRepository));
+            EngineTypes = engineTypeRepository ?? throw new ArgumentNullException(nameof(engineTypeRepository));
+            TransmissionTypes = transmissionTypeRepository ?? throw new ArgumentNullException(nameof(transmissionTypeRepository));
+            TrimLevels = trimLevelRepository ?? throw new ArgumentNullException(nameof(trimLevelRepository));
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

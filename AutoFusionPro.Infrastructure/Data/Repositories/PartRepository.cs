@@ -54,10 +54,10 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Part>> GetPartsByVehicle(int vehicleId)
+        public async Task<IEnumerable<Part>> GetPartsByVehicle(int compatibileVehicle)
         {
             return await _context.Set<Part>()
-                .Where(p => p.CompatibleVehicles.Any(v => v.VehicleId == vehicleId) && p.IsActive)
+                .Where(p => p.CompatibleVehicles.Any(v => v.CompatibleVehicleId == compatibileVehicle) && p.IsActive)
                 .ToListAsync();
         }
 
