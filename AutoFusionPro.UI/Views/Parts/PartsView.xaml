@@ -266,7 +266,7 @@
                     <ProgressBar Width="100"
                                  Height="15"
                                  IsIndeterminate="{Binding IsLoading}"
-                                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StatusBarItem>
             </StatusBar>
         </Grid>

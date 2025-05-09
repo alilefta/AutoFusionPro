@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Application.DependencyInjection;
 using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions;
 using AutoFusionPro.Core.Services;
@@ -8,6 +9,7 @@ using AutoFusionPro.Infrastructure.DependencyInjection;
 using AutoFusionPro.Infrastructure.HostCreation;
 using AutoFusionPro.Infrastructure.Logging;
 using AutoFusionPro.UI.Services;
+using AutoFusionPro.UI.Services.Dialogs;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Dashboard;
@@ -17,6 +19,7 @@ using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.Vehicles;
+using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
 using AutoFusionPro.UI.Views;
 using AutoFusionPro.UI.Views.Authentication;
@@ -296,6 +299,17 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
+
+
+                // Dialogs
+                services.AddTransient<AddVehicleDialogViewModel>();
+
+
+
+                // Services
+                services.AddScoped<IDialogService, DialogService>();
+
+
 
             }
             catch (Exception ex)

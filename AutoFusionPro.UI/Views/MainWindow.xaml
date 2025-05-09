@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:AutoFusionPro.UI"
         xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
         xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels"
+        xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
         xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         Title="{Binding SystemName}"
@@ -16,6 +17,7 @@
         MinHeight="380"
         MinWidth="700"
         ResizeMode="CanResize"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
 
     <!-- Main Content Area -->
@@ -36,10 +38,18 @@
         </ContentControl>
         <!-- Loading indicator for when CurrentView is null -->
         <Grid Visibility="{Binding IsInitializing, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="Loading..."
+            <!--<TextBlock Text="Loading..."
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="24" />
+                       FontSize="24" />-->
+
+            <spinner:DonutSpinner x:Name="LoadingSpinner"
+                                  Width="80"
+                                  Height="80"
+                                  Grid.Column="1"
+                                  SpinnerColor="{StaticResource LoadingIndicator.BackgroundBrush}"
+                                  Visibility="{Binding IsLoadingContent, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Style="{StaticResource DonutSpinnerTransitionStyle}" />
         </Grid>
     </Grid>
 </Window>

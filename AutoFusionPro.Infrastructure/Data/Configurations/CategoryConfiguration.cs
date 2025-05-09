@@ -17,8 +17,8 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(c => c.NameAr)
-                .HasMaxLength(100);
+            builder.Property(c => c.ImagePath)
+                .HasMaxLength(500);
 
             builder.Property(c => c.Description)
                 .HasMaxLength(500);

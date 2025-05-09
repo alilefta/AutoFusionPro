@@ -175,7 +175,7 @@
                             <Setter Property="Background"
                                     Value="{DynamicResource Button.Warning.BackgroundBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource Button.Primary.ForegroundBrush}" />
+                                    Value="{DynamicResource Button.Warning.ForegroundBrush}" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Info">
@@ -196,7 +196,19 @@
                                     Value="1" />
                             <Setter Property="Padding"
                                     Value="7,4" />
-                            <!-- Modified to maintain height consistency -->
+                        </Trigger>
+                        <Trigger Property="ButtonType"
+                                 Value="Regular">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource Button.Regular.BackgroundBrush}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Button.Regular.ForegroundBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource Button.Regular.BorderBrush}" />
+                            <Setter Property="BorderThickness"
+                                    Value="1" />
+                            <Setter Property="Padding"
+                                    Value="7,4" />
                         </Trigger>
                         <Trigger Property="ButtonType"
                                  Value="Dark">

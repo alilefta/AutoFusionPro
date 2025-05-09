@@ -90,6 +90,7 @@
     <sys:String x:Key="BasicInfoStr">المعلومات الاساسية</sys:String>
     <sys:String x:Key="GenderStr">الجنس</sys:String>
     <sys:String x:Key="SelectSomethingStr">اختر شيئاَ</sys:String>
+    <sys:String x:Key="SelectOrWriteSomethingStr">اختر او اكتب شيئاَ</sys:String>
     <sys:String x:Key="ContactStr">معلومات التواصل</sys:String>
     <sys:String x:Key="AddressStr">العنوان</sys:String>
     <sys:String x:Key="CityStr">المدينة</sys:String>

@@ -20,18 +20,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="OptionMark.Static.Border" Color="{StaticResource Gray200}"/>
-    <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{StaticResource Neutral100}"/>
-    <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
-    <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{StaticResource Gray400}"/>
-    <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
-    <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{StaticResource Gray500}"/>
-    <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{StaticResource Gray500}"/>
-    <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
-    <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="#FFE6E6E6"/>
-    <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FFBCBCBC"/>
-    <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
+
     
     <Style x:Key="BaseCheckboxStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -94,13 +83,10 @@
 
 
     <Style x:Key="BlueCheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource BaseCheckboxStyle}">
-        <Setter Property="Background" Value="#FFFFFF"/>
-        <!-- White background -->
-        <Setter Property="BorderBrush" Value="#CCCCCC"/>
-        <!-- Light gray border -->
-        <Setter Property="BorderThickness" Value="1"/>
-        <!-- Slightly thicker border -->
-
+        <Setter Property="Background" Value="{DynamicResource CheckBox.Background}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource CheckBox.BorderBrush}"/>
+        <Setter Property="BorderThickness"
+                Value="1" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
@@ -124,7 +110,7 @@
                                 <!-- Check mark -->
                                 <Path x:Name="optionMark" 
                                   Data="M1,4 L3,6 L8,2" 
-                                  Stroke="{StaticResource OptionMark.Static.Glyph}" 
+                                  Stroke="{DynamicResource OptionMark.Static.Glyph}" 
                                   StrokeThickness="2.5" 
                                   Visibility="Collapsed" 
                                   StrokeStartLineCap="Round" 
@@ -135,8 +121,8 @@
                                   Width="12"/>
 
                                 <!-- Indeterminate mark -->
-                                <Rectangle x:Name="indeterminateMark" 
-                                       Fill="{StaticResource OptionMark.Static.Glyph}" 
+                                <Rectangle x:Name="indeterminateMark"
+                                           Fill="{DynamicResource OptionMark.Static.Glyph}" 
                                        Margin="2" 
                                        Opacity="0"
                                        Width="8" 

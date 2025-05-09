@@ -10,6 +10,7 @@
         Info,
         Light,
         Dark,
-        Link
+        Link,
+        Regular
     }
 }

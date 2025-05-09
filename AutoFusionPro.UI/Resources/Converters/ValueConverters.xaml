@@ -36,6 +36,9 @@
     <converters:IsAdminToColorConverter x:Key="IsAdminToColorConverter" />
     <converters:SelectedGenderToUserFriendlyValueConverter x:Key="SelectedGenderToUserFriendlyValueConverter" />
     <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+    <converters:TypeSomethingIfNullConverter x:Key="TypeSomethingIfNullConverter" />
+    <converters:ValidationErrorsConverter x:Key="ValidationErrorsConverter" />
+    <converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
 
 
 </ResourceDictionary>

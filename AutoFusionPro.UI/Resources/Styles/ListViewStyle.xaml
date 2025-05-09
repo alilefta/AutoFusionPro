@@ -1,36 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml">
-    <!-- Define Colors -->
-    <Color x:Key="PrimaryColor">#007ACC</Color>
-    <Color x:Key="SecondaryColor">#D9EAF7</Color>
-    <Color x:Key="BackgroundColor">#F3F3F3</Color>
-    <Color x:Key="HeaderBackgroundColor">#2D2D30</Color>
-    <Color x:Key="HeaderTextColor">#FFFFFF</Color>
-    <Color x:Key="ItemHoverColor">#E1F0FB</Color>
-    <Color x:Key="SelectedItemColor">#007ACC</Color>
-    <Color x:Key="SelectedItemTextColor">#FFFFFF</Color>
-    <Color x:Key="ItemBorderColor">#CCCCCC</Color>
-
-    <!-- Define Brushes -->
-    <SolidColorBrush x:Key="PrimaryBrush"
-                     Color="{StaticResource PrimaryColor}" />
-    <SolidColorBrush x:Key="SecondaryBrush"
-                     Color="{StaticResource SecondaryColor}" />
-    <SolidColorBrush x:Key="BackgroundBrush"
-                     Color="{StaticResource BackgroundColor}" />
-    <SolidColorBrush x:Key="HeaderBackgroundBrush"
-                     Color="{StaticResource HeaderBackgroundColor}" />
-    <SolidColorBrush x:Key="HeaderTextBrush"
-                     Color="{StaticResource HeaderTextColor}" />
-    <SolidColorBrush x:Key="ItemHoverBrush"
-                     Color="{StaticResource ItemHoverColor}" />
-    <SolidColorBrush x:Key="SelectedItemBrush"
-                     Color="{StaticResource SelectedItemColor}" />
-    <SolidColorBrush x:Key="SelectedItemTextBrush"
-                     Color="{StaticResource SelectedItemTextColor}" />
-    <SolidColorBrush x:Key="ItemBorderBrush"
-                     Color="{StaticResource ItemBorderColor}" />
 
     <!-- ListView Item Style -->
     <!--<Style TargetType="ListViewItem">
@@ -61,5 +31,15 @@
                 Value="2" />
         <Setter Property="Padding"
                 Value="0" />
+        <Setter Property="Background"
+                Value="{DynamicResource ListView.Background}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ListView.BorderBrush}" />
+        <Setter Property="ItemContainerStyle"
+                Value="{DynamicResource ListViewItemsStyle}" />
+        <Setter Property="BorderThickness"
+                Value="0.2" />
+        <Setter Property="Margin"
+                Value="10,8" />
     </Style>
 </ResourceDictionary>

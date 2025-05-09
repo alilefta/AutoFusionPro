@@ -134,7 +134,7 @@
                     Grid.RowSpan="3"
                     Width="16"
                     HorizontalAlignment="Center"
-                    Background="{DynamicResource ScrollBar.Thumb.BackgroundBrush}"
+                    Background="{DynamicResource ScrollBar.Border.BackgroundBrush}"
                     CornerRadius="6"
                     Opacity="0" />
             <RepeatButton x:Name="PART_ButtonScrollUp"
@@ -245,7 +245,7 @@
                     Grid.ColumnSpan="3"
                     Height="14"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ScrollBar.Thumb.BackgroundBrush}"
+                    Background="{DynamicResource ScrollBar.Border.BackgroundBrush}"
                     CornerRadius="6"
                     Opacity="0" />
 

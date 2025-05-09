@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.Vehicle;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Models;
@@ -20,6 +21,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         private readonly IServiceProvider _serviceProvider;
         private readonly IWpfToastNotificationService _toastNotificationService;
         private readonly ILogger<VehiclesViewModel> _logger;
+        private readonly IDialogService _dialogService;
 
 
         #region General Properties
@@ -105,7 +107,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             IWpfToastNotificationService wpfToastNotificationService,
         ILocalizationService localizationService,
         IServiceProvider serviceProvider,
-        ILogger<VehiclesViewModel> logger)
+        ILogger<VehiclesViewModel> logger, IDialogService dialogService)
         {
             _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
@@ -113,6 +115,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             _toastNotificationService = wpfToastNotificationService ?? throw new ArgumentNullException(nameof(wpfToastNotificationService));
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
             _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
@@ -160,8 +163,6 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
 
 
         #region Commands
-
-
 
         // --- LoadVehiclesAsync Implementation ---
         // Command definition (can be triggered by Refresh button, filter changes, pagination)
@@ -243,6 +244,30 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             }
         }
 
+        // Add CRUD Commands here (AddVehicle, EditVehicle, DeleteVehicle, SaveVehicle, CancelVehicle)
+        // These would interact with dialogs/popups and call corresponding _vehicleService methods
+
+        // ... Example Add command
+        [RelayCommand]
+        private void AddVehicle()
+        {
+            try
+            {
+                bool? results = _dialogService.ShowAddVehicleDialog();
+                if (results.HasValue && results.Value == true)
+                {
+                    _toastNotificationService.ShowSuccess("Vehicle Has been added successfully");
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _toastNotificationService.ShowError("Failed to add vehicle");
+                throw new ViewModelException("An exception happened in AddVehicleCommand", nameof(VehiclesViewModel), nameof(AddVehicleCommand), "Show Dialog", ex);
+            }
+        }
+
 
         [RelayCommand(CanExecute = nameof(CanGoToPreviousPage))]
         private async Task PreviousPageAsync()
@@ -265,7 +290,6 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             }
         }
         private bool CanGoToNextPage() => CurrentPage < TotalPages && !IsLoading;
-
 
         // Command to apply filters (triggered by button or property changes)
         [RelayCommand]
@@ -307,18 +331,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             }
         }
 
-        // Add CRUD Commands here (AddVehicle, EditVehicle, DeleteVehicle, SaveVehicle, CancelVehicle)
-        // These would interact with dialogs/popups and call corresponding _vehicleService methods
 
-        // ... Example Add command
-        [RelayCommand]
-        private void AddVehicle()
-        {
-            // Logic to show the Add/Edit Dialog in "Add" mode
-            // e.g., Set VehicleToEdit = new VehicleDetailDto(); IsAddEditDialogVisible = true;
-            _logger.LogInformation("Add Vehicle action initiated.");
-            _toastNotificationService.ShowError("Add Vehicle dialog not yet implemented."); // Placeholder
-        }
 
         #endregion
 

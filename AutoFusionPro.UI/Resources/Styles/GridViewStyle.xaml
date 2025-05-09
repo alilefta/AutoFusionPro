@@ -2,20 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <LinearGradientBrush x:Key="GridItemBackgroundGradient"
+    <!--<LinearGradientBrush x:Key="GridItemBackgroundGradient"
                          EndPoint="0.5,1"
                          StartPoint="0.5,0">
         <GradientStop Color="#FF2A2A2A"
                       Offset="0" />
-        <!-- Darker gray -->
+        --><!-- #ker gray --><!--
         <GradientStop Color="#FF1E1E1E"
                       Offset="1" />
-        <!-- Even darker gray -->
-    </LinearGradientBrush>
+        --><!-- Even darker gray --><!--
+    </LinearGradientBrush>-->
 
 
 
-    <!-- Grid Column Header Style helpers-->
+    <!-- Grid Column Header Style helpers--><!--
     <LinearGradientBrush x:Key="GridViewColumnHeaderBorderBackground"
                          StartPoint="0,0"
                          EndPoint="0,1">
@@ -60,7 +60,7 @@
             <GradientStop Color="#FF8AD1F5"
                           Offset="1" />
         </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
+    </LinearGradientBrush>-->
 
     <Style x:Key="GridViewColumnHeaderGripper"
            TargetType="{x:Type Thumb}">
@@ -171,7 +171,7 @@
                                  Value="true">
                             <Setter TargetName="HeaderBorder"
                                     Property="Background"
-                                    Value="{StaticResource GridViewColumnHeaderPressBackground}" />
+                                    Value="{StaticResource GridColumn.Header.Background}" />
                             <Setter TargetName="HeaderHoverBorder"
                                     Property="BorderBrush"
                                     Value="#FF95DAF9" />
@@ -245,9 +245,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <SolidColorBrush x:Key="ColumnHeaderBrush"
-                     Color="DarkGray" />
 
     <!-- GridView Column Header-->
     <Style x:Key="GridViewColumnHeaderStyle"
@@ -491,21 +488,21 @@
                         <Trigger Property="IsMouseOver"
                                  Value="true">
                             <Setter Property="Background"
-                                    Value="{DynamicResource BackgroundBrush}" />
+                                    Value="{DynamicResource ListView.Item.Hover.Background}" />
                             <Setter Property="BorderBrush"
-                                    Value="{DynamicResource Accent.Coral.BackgroundBrush}" />
+                                    Value="{DynamicResource ListView.Item.Hover.BorderBrush}" />
 
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource Text.PrimaryBrush}" />
+                                    Value="{DynamicResource ListView.Item.Hover.Foreground}" />
                         </Trigger>
                         <Trigger Property="IsSelected"
                                  Value="true">
                             <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedFill}" />
+                                    Value="{StaticResource ListView.Item.Selected.Background}" />
                             <Setter Property="BorderBrush"
-                                    Value="{DynamicResource Accent.Purple.BackgroundBrush}" />
+                                    Value="{DynamicResource ListView.Item.Selected.BorderBrush}" />
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource Accent.Purple.BackgroundBrush }" />
+                                    Value="{DynamicResource ListView.Item.Selected.Foreground }" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -515,9 +512,9 @@
                                            Value="false" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedInactiveFill}" />
+                                    Value="{DynamicResource ListView.Item.Selected.Background}" />
                             <Setter Property="BorderBrush"
-                                    Value="#FFB0B0B0" />
+                                    Value="{DynamicResource ListView.Item.Selected.BorderBrush}" />
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -527,9 +524,9 @@
                                            Value="true" />
                             </MultiTrigger.Conditions>
                             <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedHoverFill}" />
+                                    Value="{DynamicResource ListView.Item.SelectedHovered.Background}" />
                             <Setter Property="BorderBrush"
-                                    Value="#FF6AB5FF" />
+                                    Value="{DynamicResource ListView.Item.SelectedHovered.BorderBrush}" />
 
                         </MultiTrigger>
                         <Trigger Property="IsEnabled"

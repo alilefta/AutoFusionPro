@@ -198,9 +198,13 @@
 
     <SolidColorBrush x:Key="Button.Danger.BackgroundBrush"
                      Color="{StaticResource Error600}" />
+    
     <SolidColorBrush x:Key="Button.Warning.BackgroundBrush"
                      Color="{StaticResource Orange400}" />
-    
+
+    <SolidColorBrush x:Key="Button.Warning.ForegroundBrush"
+                     Color="{StaticResource Neutral100}" />
+
     <SolidColorBrush x:Key="Button.Info.BackgroundBrush"
                      Color="{StaticResource Turquoise500}" />
     <SolidColorBrush x:Key="Button.Info.ForegroundBrush"
@@ -209,10 +213,6 @@
 
     <SolidColorBrush x:Key="Button.Light.BackgroundBrush"
                      Color="{StaticResource Neutral150}" />
-    <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"
-                     Color="{StaticResource Neutral750}" />
-    <SolidColorBrush x:Key="Button.Link.BackgroundBrush"
-                     Color="{StaticResource Primary500}" />
 
     <SolidColorBrush x:Key="Button.Light.ForegroundBrush"
                      Color="{StaticResource Neutral750}" />
@@ -220,8 +220,20 @@
     <SolidColorBrush x:Key="Button.Light.BorderBrush"
                      Color="{StaticResource Neutral750}" />
 
+    <SolidColorBrush x:Key="Button.Link.BackgroundBrush"
+                     Color="{StaticResource Primary500}" />
+    
+    <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"
+                     Color="{StaticResource Neutral750}" />
 
+    <SolidColorBrush x:Key="Button.Regular.BackgroundBrush"
+                     Color="{StaticResource Neutral800}" />
 
+    <SolidColorBrush x:Key="Button.Regular.ForegroundBrush"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="Button.Regular.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
 
 
     <!-- ==================== Button: Menu (Side Menu) ==================== -->
@@ -273,11 +285,13 @@
 
     <!-- ==================== ScrollBar ==================== -->
     <SolidColorBrush x:Key="ScrollBar.Track.BackgroundBrush"
-                     Color="{StaticResource Neutral850}" />
+                     Color="{StaticResource Neutral600}" />
     <SolidColorBrush x:Key="ScrollBar.Thumb.BackgroundBrush"
                      Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="ScrollBar.Border.BackgroundBrush"
+                     Color="{StaticResource Neutral800}" />
     <SolidColorBrush x:Key="ScrollBar.Thumb.Background.HoverBrush"
-                     Color="{StaticResource Neutral600}" />
+                     Color="{StaticResource Neutral300}" />
     <SolidColorBrush x:Key="ScrollBar.Thumb.Background.PressedBrush"
                      Color="{StaticResource Neutral500}" />
 
@@ -461,58 +475,147 @@
 
     <!-- Gripper, the border between the column headers -->
     <SolidColorBrush x:Key="GridColumn.Gripper.BackgroundBrush"
-                     Color="{StaticResource Neutral350}" />
+                     Color="{StaticResource Neutral750}" />
 
 
     <!-- Column Header - Default -->
     <SolidColorBrush x:Key="GridColumn.Header.Background"
-                     Color="{StaticResource Neutral700}" />
+                     Color="{StaticResource Neutral950}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Border"
                      Color="{StaticResource Neutral700}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Foreground"
-                     Color="{StaticResource Neutral300}" />
+                     Color="{StaticResource Neutral400}" />
 
     <!-- Column Header - Hover -->
     <SolidColorBrush x:Key="GridColumn.Header.Hover.Background"
-                     Color="{StaticResource Neutral200}" />
+                     Color="{StaticResource Neutral900}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Hover.Border"
-                     Color="{StaticResource Gray300}" />
+                     Color="{StaticResource Neutral700}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Hover.Foreground"
-                     Color="{StaticResource Gray700}" />
+                     Color="{StaticResource Neutral400}" />
 
     <!-- Column Header - Pressed -->
     <SolidColorBrush x:Key="GridColumn.Header.Pressed.Background"
-                     Color="{StaticResource Primary200}" />
+                     Color="{StaticResource Neutral950}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Pressed.Border"
-                     Color="{StaticResource Neutral350}" />
+                     Color="{StaticResource Neutral800}" />
 
     <SolidColorBrush x:Key="GridColumn.Header.Pressed.Foreground"
-                     Color="{StaticResource Gray700}" />
+                     Color="{StaticResource Neutral400}" />
 
     <!-- ==================== List View Items ==================== -->
     <SolidColorBrush x:Key="ListView.Item.Background"
-                     Color="{StaticResource Neutral400}" />
+                     Color="{StaticResource Neutral700}" />
 
     <SolidColorBrush x:Key="ListView.Item.Border"
-                     Color="{StaticResource Neutral200}" />
+                     Color="{StaticResource Neutral800}" />
 
     <SolidColorBrush x:Key="ListView.Item.Foreground"
-                     Color="{StaticResource Gray700}" />
-
-    <SolidColorBrush x:Key="ListView.Item.AlternateRow.1.Foreground"
-                     Color="{StaticResource Neutral200}" />
+                     Color="{StaticResource Neutral300}" />
 
     <SolidColorBrush x:Key="ListView.Item.AlternateRow.0.Foreground"
-                     Color="{StaticResource Neutral0}" />
+                     Color="{StaticResource Neutral900}" />
+
+    <SolidColorBrush x:Key="ListView.Item.AlternateRow.1.Foreground"
+                     Color="{StaticResource Neutral800}" />
+
+
+    <!-- Item Hover -->
+    <SolidColorBrush x:Key="ListView.Item.Hover.Background"
+                     Color="{StaticResource Neutral600}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Hover.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
+    
+    <SolidColorBrush x:Key="ListView.Item.Hover.Foreground"
+                     Color="{StaticResource Neutral200}" />
+
+    <!-- Item Pressed (Selected) -->
+
+    <SolidColorBrush x:Key="ListView.Item.Selected.Background"
+                     Color="{StaticResource Green800}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Selected.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="ListView.Item.Selected.Foreground"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="ListView.Item.SelectedHovered.Background"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="ListView.Item.SelectedHovered.BorderBrush"
+                     Color="{StaticResource Neutral400}" />
+
+    <!-- General ListView -->
+    <SolidColorBrush x:Key="ListView.Background"
+                     Color="{StaticResource Neutral950}" />
+    <SolidColorBrush x:Key="ListView.BorderBrush"
+                     Color="{StaticResource Neutral700}" />
 
 
 
+    <!-- ==================== CheckBox ==================== -->
+    <SolidColorBrush x:Key="CheckBox.Background"
+                     Color="{StaticResource Neutral750}" />
+    <SolidColorBrush x:Key="CheckBox.BorderBrush"
+                     Color="{StaticResource Gray600}" />
 
+
+    <SolidColorBrush x:Key="OptionMark.Static.Background"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="OptionMark.Static.Border"
+                     Color="{StaticResource Gray300}" />
+    <SolidColorBrush x:Key="OptionMark.Static.Glyph"
+                     Color="{StaticResource Neutral100}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Background"
+                     Color="{StaticResource Neutral800}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Border"
+                     Color="{StaticResource Neutral600}" />
+    <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph"
+                     Color="#FF212121" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Background"
+                     Color="{StaticResource Gray500}" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Border"
+                     Color="{StaticResource Gray500}" />
+    <SolidColorBrush x:Key="OptionMark.Pressed.Glyph"
+                     Color="#FF212121" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Background"
+                     Color="#FFE6E6E6" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Border"
+                     Color="#FFBCBCBC" />
+    <SolidColorBrush x:Key="OptionMark.Disabled.Glyph"
+                     Color="#FF707070" />
+
+
+    <!-- ==================== Step Indicator ==================== -->
+
+    <SolidColorBrush x:Key="StepIndicator.Default.Background"
+                     Color="{StaticResource Neutral700}" />
+
+    <SolidColorBrush x:Key="StepIndicator.Default.Foreground"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="StepIndicator.Current.HeadingForeground"
+                     Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="StepIndicator.Current.Background"
+                     Color="{StaticResource Primary500}" />
+
+    <SolidColorBrush x:Key="StepIndicator.Current.Foreground"
+                     Color="{StaticResource Neutral200}" />
+
+
+    <SolidColorBrush x:Key="StepIndicator.Passed.Background"
+                     Color="{StaticResource Green700}" />
+
+    <SolidColorBrush x:Key="StepIndicator.Passed.Foreground"
+                     Color="{StaticResource Neutral200}" />
 
 
     <ResourceDictionary.MergedDictionaries>

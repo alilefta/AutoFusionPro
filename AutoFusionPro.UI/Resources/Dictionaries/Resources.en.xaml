@@ -92,6 +92,8 @@
     <sys:String x:Key="BasicInfoStr">Basic Info</sys:String>
     <sys:String x:Key="GenderStr">Gender</sys:String>
     <sys:String x:Key="SelectSomethingStr">Select Something</sys:String>
+    <sys:String x:Key="SelectOrWriteSomethingStr">Select or write something</sys:String>
+
     <sys:String x:Key="ContactStr">Contact Info</sys:String>
     <sys:String x:Key="AddressStr">Address</sys:String>
     <sys:String x:Key="CityStr">City</sys:String>

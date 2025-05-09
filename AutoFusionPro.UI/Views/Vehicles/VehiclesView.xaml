@@ -37,7 +37,9 @@
                 <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
                 <TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}"
                          Grid.Column="0"
-                         Tag="Search for Cars by Make, Year, Model" />
+                         Tag="Search for Cars by Make, Year, Model">
+                    
+                </TextBox>
 
                 <!-- Action Buttons -->
                 <StackPanel Orientation="Horizontal"
@@ -125,11 +127,7 @@
                 <ListView Grid.Row="2"
                           ItemsSource="{Binding Vehicles}"
                           SelectedItem="{Binding SelectedVehicle}"
-                          Margin="10,8"
-                          BorderThickness="0.2"
-                          BorderBrush="{DynamicResource Border.FocusBrush}"
                           d:ItemsSource="{d:SampleData ItemCount=5}"
-                          ItemContainerStyle="{DynamicResource ListViewItemsStyle}"
                           VirtualizingPanel.IsVirtualizing="True"
                           VirtualizingPanel.VirtualizationMode="Recycling">
                     <ListView.View>
@@ -139,22 +137,23 @@
                                        BasedOn="{StaticResource GridViewColumnHeaderStyle}">
                                     <!--<EventSetter Event="Click"
                                              Handler="OnColumnHeaderClick" />-->
-                                    <!--<Setter Property="Background"
+                                   <!--<Setter Property="Background"
                                         Value="{DynamicResource Window.BackgroundBrush}" />
-                                <Setter Property="BorderBrush"
-                                        Value="{DynamicResource Border.PrimaryBrush}" />-->
+                                    <Setter Property="BorderBrush"
+                                            Value="{DynamicResource Border.PrimaryBrush}" />-->
                                 </Style>
                             </GridView.ColumnHeaderContainerStyle>
 
                             <!-- Selection Check Box-->
-                            <GridViewColumn Width="40">
+                            <GridViewColumn Width="58">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                   Style="{DynamicResource BlueCheckBoxStyle}"
                                                    Checked="OnCheckBoxChecked"
                                                    Unchecked="OnCheckBoxUnchecked"
-                                                   Background="{DynamicResource Window.BackgroundBrush}" />
+                                                   FlowDirection="LeftToRight" 
+                                                   HorizontalAlignment="Center"/>
+                                        
                                     </DataTemplate>
 
                                 </GridViewColumn.CellTemplate>
@@ -165,7 +164,7 @@
                                             DisplayMemberBinding="{Binding Make}" />
                             <GridViewColumn Header="Model"
                                             Width="120"
-                                            DisplayMemberBinding="{Binding Name}" />
+                                            DisplayMemberBinding="{Binding Model}" />
                             <GridViewColumn Header="Year"
                                             Width="120"
                                             DisplayMemberBinding="{Binding Year}" />
@@ -174,13 +173,13 @@
                                             DisplayMemberBinding="{Binding Engine}" />
                             <GridViewColumn Header="Transmission"
                                             Width="120"
-                                            DisplayMemberBinding="{Binding Category.Name}" />
+                                            DisplayMemberBinding="{Binding Transmission}" />
                             <GridViewColumn Header="Trim Level"
                                             Width="120"
-                                            DisplayMemberBinding="{Binding Location}" />
+                                            DisplayMemberBinding="{Binding TrimLevel}" />
                             <GridViewColumn Header="Body Type"
                                             Width="120"
-                                            DisplayMemberBinding="{Binding Location}" />
+                                            DisplayMemberBinding="{Binding BodyType}" />
                             <GridViewColumn Header="Manage"
                                             Width="160">
                                 <GridViewColumn.CellTemplate>
@@ -188,7 +187,7 @@
                                         <StackPanel Orientation="Horizontal">
                                             <xBtn:XButton Cursor="Hand"
                                                           Style="{StaticResource RegularButtonStyle}"
-                                                          ButtonType="Light"
+                                                          ButtonType="Warning"
                                                           Command="{Binding DataContext.OpenEditItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
                                                           CommandParameter="{Binding}"
                                                           VerticalAlignment="Center">
@@ -208,7 +207,7 @@
                                                           Style="{StaticResource RegularButtonStyle}"
                                                           Command="{Binding DataContext.OpenSelectedPartCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
                                                           CommandParameter="{Binding}"
-                                                          ButtonType="Light"
+                                                          ButtonType="Regular"
                                                           VerticalAlignment="Center"
                                                           Margin="5,0,0,0">
                                                 <StackPanel Orientation="Horizontal"
@@ -291,7 +290,7 @@
                     <ProgressBar Width="100"
                                  Height="15"
                                  IsIndeterminate="{Binding IsLoading}"
-                                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </StatusBarItem>
             </StatusBar>
         </Grid>
