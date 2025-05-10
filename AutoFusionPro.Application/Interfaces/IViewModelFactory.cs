@@ -7,6 +7,6 @@ namespace AutoFusionPro.Application.Interfaces
         object ResolveViewModel(ApplicationPage page);
         object ResolveViewModelWithInitialization(ApplicationPage page, object parameter);
 
-        object GetInitializationWrapperClass();
+        //object GetInitializationWrapperClass();
     }
 }

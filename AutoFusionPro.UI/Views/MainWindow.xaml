@@ -48,7 +48,7 @@
                                   Height="80"
                                   Grid.Column="1"
                                   SpinnerColor="{StaticResource LoadingIndicator.BackgroundBrush}"
-                                  Visibility="{Binding IsLoadingContent, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Visibility="{Binding IsInitializing, Converter={StaticResource BooleanToVisibilityConverter}}"
                                   Style="{StaticResource DonutSpinnerTransitionStyle}" />
         </Grid>
     </Grid>

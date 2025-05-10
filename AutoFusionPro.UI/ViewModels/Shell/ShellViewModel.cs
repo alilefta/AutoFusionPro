@@ -24,16 +24,14 @@ namespace AutoFusionPro.UI.ViewModels.Shell
     /// Shell View Model: Represent the main content wrapper of the application, It shows the [Side Panel] and the business logic views [Dashboard, Patients, Reports, ...]. It handles the navigation of the application.
     /// The only view model that is responsible for navigation.
     /// </summary>
-    public partial class ShellViewModel : InitializableViewModel
+    public partial class ShellViewModel : InitializableViewModel<ShellViewModel>
     {
 
         #region Private Fields
 
-        private ILocalizationService _localizationService;
         private INavigationService _navigationService;
         private readonly ISessionManager _sessionManager;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ShellViewModel> _logger;
         private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
 
         [ObservableProperty]
@@ -136,12 +134,10 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             ISessionManager sessionManager, 
             IServiceProvider serviceProvider,
             IWpfToastNotificationService toastNotificationService,
-            IUserService userService)
+            IUserService userService) : base(localizationService, logger)
         {
 
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _globalSettingsService = globalSettingsService ?? throw new ArgumentNullException(nameof(globalSettingsService));
@@ -150,17 +146,15 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
             _toastNotificationService = toastNotificationService ?? throw new ArgumentNullException(nameof(toastNotificationService));
 
-
-            CurrentWorkFlow = localizationService.CurrentFlowDirection;
-            localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
             _navigationService.NavigationChanged += OnNavigationChanged;
 
-            RegisterCleanup(() => localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
             RegisterCleanup(() => _navigationService.NavigationChanged -= OnNavigationChanged);
 
             NavigateCommand = new RelayCommand(o => Navigate(o), o => true);
             NavigateBack = new RelayCommand(o => _navigationService.GoBack(), o => _navigationService.CanGoBack);
             ToggleSideMenuCollapse = new RelayCommand(o => UpdateSideMenuState(), o => true);
+
+            _logger.LogInformation("Shell view model initialized");
 
         }
 
@@ -203,10 +197,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             }
         }
 
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
 
         private void OnNavigationChanged(object? sender, ApplicationPage e)
         {
@@ -291,7 +281,9 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             var confirmLogoutDialog = new ConfirmLogoutDialog();
             confirmLogoutDialog.Owner = System.Windows.Application.Current.MainWindow;
 
-            var viewModel = new ConfirmLogoutViewModel(_localizationService);
+            var logger = _serviceProvider.GetRequiredService<ILogger<ConfirmLogoutViewModel>>();    
+
+            var viewModel = new ConfirmLogoutViewModel(_localizationService, logger);
             confirmLogoutDialog.DataContext = viewModel;
 
             bool? result = confirmLogoutDialog.ShowDialog();

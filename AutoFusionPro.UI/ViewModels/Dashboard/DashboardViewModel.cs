@@ -1,19 +1,20 @@
 ﻿using AutoFusionPro.Application.Commands;
-using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Enums.UI;
+using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Dashboard
 {
-    public class DashboardViewModel : BaseViewModel
+    public class DashboardViewModel : BaseViewModel<DashboardViewModel>
     {
         private readonly IWpfToastNotificationService _toastNotificationService;
 
         public ICommand ShowToast { get; set; }
 
-        public DashboardViewModel(IWpfToastNotificationService toastNotificationService)
+        public DashboardViewModel(IWpfToastNotificationService toastNotificationService, ILocalizationService localizationService, ILogger<DashboardViewModel> logger) : base(localizationService, logger)
         {
             _toastNotificationService = toastNotificationService ?? throw new ArgumentNullException(nameof(toastNotificationService));
             ShowToast = new RelayCommand(o => ShowToastCommand(o), o => true);

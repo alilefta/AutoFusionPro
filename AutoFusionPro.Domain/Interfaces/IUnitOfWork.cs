@@ -28,6 +28,13 @@ namespace AutoFusionPro.Domain.Interfaces
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
 
+        // New overload with CancellationToken
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+        Task BeginTransactionAsync(CancellationToken cancellationToken = default); // Add CancellationToken here too
+        Task CommitTransactionAsync(CancellationToken cancellationToken = default); // And here
+        Task RollbackTransactionAsync(CancellationToken cancellationToken = default); // And here
+
         Task AddAsync<TEntity>(TEntity entity) where TEntity : class;
         Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
 

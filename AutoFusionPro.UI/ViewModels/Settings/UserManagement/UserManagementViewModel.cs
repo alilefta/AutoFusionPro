@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Settings.UserManagement
 {
-    public partial class UserManagementViewModel : BaseViewModel
+    public partial class UserManagementViewModel : BaseViewModel<UserManagementViewModel>
     {
         #region Private Fields
 
@@ -39,19 +39,12 @@ namespace AutoFusionPro.UI.ViewModels.Settings.UserManagement
         public ICommand EditUserCommand { get; private set; }
         public ICommand RefreshDataCommand { get; private set; }
 
-        public UserManagementViewModel(IUserService userService, ILocalizationService localizationService, ILogger<UserManagementViewModel> logger)
+        public UserManagementViewModel(IUserService userService,
+            ILocalizationService 
+            localizationService,
+            ILogger<UserManagementViewModel> logger) : base(localizationService, logger)
         {
-
-
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
-
             #region Commands 
 
             AddUserCommand = new RelayCommand(action: o => ExecuteAddUserCommand(), canExecute: o => true);
@@ -277,9 +270,5 @@ namespace AutoFusionPro.UI.ViewModels.Settings.UserManagement
 
         #endregion
 
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
     }
 }

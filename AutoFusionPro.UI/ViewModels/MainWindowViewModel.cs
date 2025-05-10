@@ -13,11 +13,9 @@ using System.Windows.Controls;
 
 namespace AutoFusionPro.UI.ViewModels
 {
-    public partial class MainWindowViewModel : BaseViewModel
+    public partial class MainWindowViewModel : BaseViewModel<MainWindowViewModel>
     {
-        private ILocalizationService _localizationService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ISessionManager _sessionManager;
 
 
@@ -33,15 +31,10 @@ namespace AutoFusionPro.UI.ViewModels
         public MainWindowViewModel(IServiceProvider serviceProvider, 
             ILocalizationService localizationService, 
             ILogger<MainWindowViewModel> logger,
-            ISessionManager sessionManager)
+            ISessionManager sessionManager) : base(localizationService, logger)
         {
             _serviceProvider = serviceProvider;
-            _logger = logger;
             _sessionManager = sessionManager;
-
-            _localizationService = localizationService;
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
 
             _sessionManager.SessionExpired += OnSessionExpired;
             var homeViewModel = _serviceProvider.GetRequiredService<ShellViewModel>();
@@ -124,10 +117,6 @@ namespace AutoFusionPro.UI.ViewModels
             homeViewModel.NavigateOnLogoutEvent += OnLogoutChangeCurrentViewHandler;
         }
 
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
 
         private void OnLogoutChangeCurrentViewHandler(object? sender, EventArgs e)
         {
@@ -135,37 +124,37 @@ namespace AutoFusionPro.UI.ViewModels
             CurrentView = _serviceProvider.GetRequiredService<LoginView>();
         }
 
-        private async Task SetInitialViewForDevelopmentOnlyAsync() 
-        {
-            IsInitializing = true;
+        //private async Task SetInitialViewForDevelopmentOnlyAsync() 
+        //{
+        //    IsInitializing = true;
 
-            try
-            {
-                // Create and initialize HomeView
-                var shellView = _serviceProvider.GetRequiredService<ShellView>();
-                var shellViewModel = _serviceProvider.GetRequiredService<ShellViewModel>();
+        //    try
+        //    {
+        //        // Create and initialize HomeView
+        //        var shellView = _serviceProvider.GetRequiredService<ShellView>();
+        //        var shellViewModel = _serviceProvider.GetRequiredService<ShellViewModel>();
 
-                // Wait for HomeViewModel initialization
-                if (shellViewModel != null)
-                {
-                    await shellViewModel.InitializeAsync();
+        //        // Wait for HomeViewModel initialization
+        //        if (shellViewModel != null)
+        //        {
+        //            await shellViewModel.InitializeAsync();
 
-                    if (shellViewModel.Initialized.IsCompleted)
-                    {
-                        shellView.DataContext = shellViewModel;
-                        CurrentView = shellView;
-                    }
-                }
-                else
-                {
-                    _logger.LogError("An error occured while loading 'ShellViewModel'");
-                }
-            }
-            finally 
-            {
-                IsInitializing = false;
-            }
-        }
+        //            if (shellViewModel.Initialized.IsCompleted)
+        //            {
+        //                shellView.DataContext = shellViewModel;
+        //                CurrentView = shellView;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            _logger.LogError("An error occured while loading 'ShellViewModel'");
+        //        }
+        //    }
+        //    finally 
+        //    {
+        //        IsInitializing = false;
+        //    }
+        //}
 
         private void OnSessionExpired(object? sender, EventArgs e)
         {

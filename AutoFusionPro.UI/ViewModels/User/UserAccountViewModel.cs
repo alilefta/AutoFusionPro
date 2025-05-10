@@ -19,7 +19,7 @@ using System.Windows;
 
 namespace AutoFusionPro.UI.ViewModels.User
 {
-    public partial class UserAccountViewModel : BaseViewModel
+    public partial class UserAccountViewModel : BaseViewModel<UserAccountViewModel>
     {
         #region Fields
         private readonly IUserService _userService;
@@ -164,21 +164,14 @@ namespace AutoFusionPro.UI.ViewModels.User
             ISessionManager sessionManager,
             INavigationService navigationService, 
             ShellViewModel shellViewModel, 
-            IWpfToastNotificationService toastNotificationService)
+            IWpfToastNotificationService toastNotificationService) : base(localizationService, logger)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _shellViewModel = shellViewModel ?? throw new ArgumentNullException(nameof(shellViewModel));
             _toastNotificationService = toastNotificationService ?? throw new ArgumentNullException(nameof(toastNotificationService));
 
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-            _localizationService.FlowDirectionChanged += OnCurrentWorkFlowChanged;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentWorkFlowChanged);
 
             // Populate Available Security Questions (example)
             LoadAvailableSecurityQuestions();
@@ -834,11 +827,6 @@ namespace AutoFusionPro.UI.ViewModels.User
 
             // Recalculate FullName
             User.FullName = $"{FirstName} {LastName}";
-        }
-
-        private void OnCurrentWorkFlowChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
         }
 
         // Added to convert UserDTO to Domain User model

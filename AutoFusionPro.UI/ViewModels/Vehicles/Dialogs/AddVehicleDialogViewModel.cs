@@ -15,12 +15,10 @@ using System.Windows.Media;
 
 namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
 {
-    public partial class AddVehicleDialogViewModel : BaseViewModel, IDialogAware
+    public partial class AddVehicleDialogViewModel : BaseViewModel<AddVehicleDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog;
         private readonly IVehicleService _vehicleService;
-        private readonly ILocalizationService _localizationService;
-        private readonly ILogger<AddVehicleDialogViewModel> _logger;
 
         #region Properties
 
@@ -150,16 +148,9 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
 
         public AddVehicleDialogViewModel(IVehicleService vehicleService, 
             ILocalizationService localizationService, 
-            ILogger<AddVehicleDialogViewModel> logger)
+            ILogger<AddVehicleDialogViewModel> logger) : base(localizationService, logger)
         {
             _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
             LoadInitialData();
         }
 
@@ -449,11 +440,6 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
         #endregion
 
         #region Helpers
-
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
 
         private StepStyle GetStepStyle(WizardStep step)
         {

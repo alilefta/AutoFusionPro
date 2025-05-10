@@ -13,12 +13,10 @@ using System.Windows.Media.Imaging;
 
 namespace AutoFusionPro.UI.ViewModels.User
 {
-    public class UserAvatarViewModel: BaseViewModel
+    public class UserAvatarViewModel: BaseViewModel<UserAvatarViewModel>
     {
         //private IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ILocalizationService _localizationService;
         private readonly ISessionManager _sessionManager;
-        private readonly ILogger<UserAvatarViewModel> _logger;
         private readonly ShellViewModel _shellViewModel;
         private readonly IUserService _userService;
 
@@ -55,18 +53,13 @@ namespace AutoFusionPro.UI.ViewModels.User
             IServiceProvider  serviceProvider,
             ILogger<UserAvatarViewModel> logger, 
             ShellViewModel shellViewModel,
-            IUserService userService) 
+            IUserService userService) : base(localizationService, logger)
         {
 
             //_unitOfWorkFactory = unitOfWorkFactory;
             _sessionManager = sessionManager;
-            _logger = logger;
             _shellViewModel = shellViewModel;
             _userService = userService;
-
-            _localizationService = localizationService;
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-            _localizationService.FlowDirectionChanged += OnCurrentWorkFlowChanged;
 
             ShowProfileCommand = new RelayCommand(action: o => ShowUserProfile(), canExecute: o => true);
 
@@ -172,10 +165,5 @@ namespace AutoFusionPro.UI.ViewModels.User
             _shellViewModel.RequestShowUserProfile();
         }
 
-
-        private void OnCurrentWorkFlowChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
     }
 }

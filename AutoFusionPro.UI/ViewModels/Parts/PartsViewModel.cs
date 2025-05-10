@@ -13,12 +13,10 @@ using System.Collections.ObjectModel;
 
 namespace AutoFusionPro.UI.ViewModels.Parts
 {
-    public partial class PartsViewModel : BaseViewModel
+    public partial class PartsViewModel : BaseViewModel<PartsViewModel>
     {
         private readonly IPartService _partService;
-        private readonly ILocalizationService _localizationService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<PartsViewModel> _logger;
 
         public ObservableCollection<PartSummaryDto> Parts { get; private set; }
 
@@ -31,17 +29,10 @@ namespace AutoFusionPro.UI.ViewModels.Parts
         public PartsViewModel(IPartService partService, 
             ILocalizationService localizationService, 
             IServiceProvider serviceProvider,
-            ILogger<PartsViewModel> logger) 
+            ILogger<PartsViewModel> logger) : base(localizationService, logger)
         {
             _partService = partService ?? throw new ArgumentNullException(nameof(partService));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
 
             _ = LoadPartsData();
         }
@@ -110,15 +101,6 @@ namespace AutoFusionPro.UI.ViewModels.Parts
         {
             await LoadPartsData();
         }
-
-        #region Helpers
-
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
-
-        #endregion
 
     }
 }

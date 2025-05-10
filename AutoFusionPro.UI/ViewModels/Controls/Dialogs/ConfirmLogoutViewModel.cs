@@ -1,25 +1,13 @@
 ﻿using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace AutoFusionPro.UI.ViewModels.Controls.Dialogs
 {
-    public class ConfirmLogoutViewModel : BaseViewModel
+    public class ConfirmLogoutViewModel : BaseViewModel<ConfirmLogoutViewModel>
     {
-        private readonly ILocalizationService _localizationService;
-
-
-        public ConfirmLogoutViewModel(ILocalizationService localizationService)
+        public ConfirmLogoutViewModel(ILocalizationService localizationService, ILogger<ConfirmLogoutViewModel> logger) : base(localizationService, logger)
         {
-            _localizationService = localizationService;
-            _localizationService.FlowDirectionChanged += OnCurrentWorkFlowChanged;
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentWorkFlowChanged);
-        }
-
-        private void OnCurrentWorkFlowChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
         }
     }
 }

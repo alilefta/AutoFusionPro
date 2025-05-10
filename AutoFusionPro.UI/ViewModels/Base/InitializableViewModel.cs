@@ -1,15 +1,17 @@
 ﻿// Ignore Spelling: Initializable Denta
 
 using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.UI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace AutoFusionPro.UI.ViewModels.Base
 {
-    public abstract class InitializableViewModel : BaseViewModel, IInitializableViewModel
+    public abstract class InitializableViewModel<TViewModel> : BaseViewModel<TViewModel>, IInitializableViewModel where TViewModel : class
     {
         private TaskCompletionSource<bool> _initializationComplete;
         private bool _isInitialized;
 
-        protected InitializableViewModel()
+        protected InitializableViewModel(ILocalizationService localizationService, ILogger<TViewModel> logger) : base(localizationService, logger)
         {
             _initializationComplete = new TaskCompletionSource<bool>();
             IsInitialized = false;

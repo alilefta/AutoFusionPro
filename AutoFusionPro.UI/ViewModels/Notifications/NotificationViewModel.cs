@@ -11,12 +11,10 @@ using System.Collections.ObjectModel;
 
 namespace AutoFusionPro.UI.ViewModels.ViewNotification
 {
-    public partial class NotificationViewModel : BaseViewModel
+    public partial class NotificationViewModel : BaseViewModel<NotificationViewModel>
     {
         private readonly INotificationService _notificationService;
         private readonly ISessionManager _sessionManager;
-        private readonly ILogger<NotificationViewModel> _logger;
-        private readonly ILocalizationService _localizationService;
 
         [ObservableProperty]
         private ObservableCollection<NotificationDto> _notifications = new();
@@ -41,12 +39,10 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
         public NotificationViewModel(
             INotificationService notificationService,
             ISessionManager sessionManager,
-            ILogger<NotificationViewModel> logger, ILocalizationService localizationService)
+            ILogger<NotificationViewModel> logger, ILocalizationService localizationService) : base(localizationService, logger)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
 
             // Initialize commands
             // Initialize commands with CanExecute
@@ -58,24 +54,14 @@ namespace AutoFusionPro.UI.ViewModels.ViewNotification
 
             // Register for notification changes
             _notificationService.NotificationsChanged += OnNotificationsChanged;
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
 
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
             RegisterCleanup(() => _notificationService.NotificationsChanged -= OnNotificationsChanged);
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
 
             // Initial load
             _ = LoadNotificationsAsync();
 
             // Need to react when collection changes for DeleteAllNotificationsCommand CanExecute
             Notifications.CollectionChanged += (s, e) => DeleteAllNotificationsCommand.NotifyCanExecuteChanged();
-        }
-
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
         }
 
         private async void OnNotificationsChanged(object sender, NotificationChangedEventArgs e)

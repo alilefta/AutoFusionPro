@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.VehicleCompatibilityManagement.VehicleCompatibilityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:VehicleCompatibilityShellViewModel}"
+             d:DesignHeight="550"
+             d:DesignWidth="1200"
+             Background="{DynamicResource Window.BackgroundBrush}"
+             FlowDirection="{Binding CurrentWorkFlow}"
+             Foreground="{DynamicResource Text.PrimaryBrush}"
+             FontFamily="{DynamicResource DynamicFontFamilyRegular}">
+    <Border Padding="0,0,0,10">
+        <Grid>
+            <!-- Tab Control -->
+            <TabControl Style="{DynamicResource ModernAnimatedTabControlStyle2}">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE779;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="Makes management"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{DynamicResource AlmaraiRegular}"
+                                       FontWeight="Regular" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <local:MakesManagementTabView DataContext="{Binding .}"
+                                            Padding="10" />
+                </TabItem>
+            </TabControl>
+
+        </Grid>
+    </Border>
+</UserControl>

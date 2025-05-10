@@ -1,11 +1,37 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AutoFusionPro.UI.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Logging;
 using System.Windows;
 
 namespace AutoFusionPro.UI.ViewModels.Base
 {
-    public partial class BaseViewModel: ObservableValidator, IDisposable
+    public partial class BaseViewModel<VM>: ObservableValidator, IDisposable where VM : class
     {
         private readonly List<Action> _cleanupActions = new();
+
+
+        #region Private Fields
+
+        protected readonly ILocalizationService _localizationService;
+        protected readonly ILogger<VM> _logger;
+
+        #endregion
+
+        public BaseViewModel(ILocalizationService localizationService, ILogger<VM> logger)
+        {
+            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
+            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
+
+            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
+        }
+
+        public BaseViewModel()
+        {
+            
+        }
 
         #region Flow Direction
 
@@ -14,10 +40,12 @@ namespace AutoFusionPro.UI.ViewModels.Base
 
         #endregion
 
-        #region Data Error
+        #region Helpers
 
-        public string Error => throw new NotImplementedException();
-
+        private void OnCurrentFlowDirectionChanged()
+        {
+            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
+        }
 
         #endregion
 

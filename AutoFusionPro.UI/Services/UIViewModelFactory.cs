@@ -7,8 +7,6 @@ using AutoFusionPro.UI.ViewModels.Parts;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.Vehicles;
-using AutoFusionPro.UI.Views.User;
-using AutoFusionPro.UI.Views.Vehicles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -25,10 +23,10 @@ namespace AutoFusionPro.UI.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public object GetInitializationWrapperClass()
-        {
-            return typeof(InitializableViewModel);
-        }
+        //public object GetInitializationWrapperClass()
+        //{
+        //    return typeof(IInitializableViewModel);
+        //}
 
         // Helper methods to resolve ViewModels
         public object ResolveViewModel(ApplicationPage page)

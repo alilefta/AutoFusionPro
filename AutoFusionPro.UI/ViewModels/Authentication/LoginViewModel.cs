@@ -13,14 +13,12 @@ using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Authentication
 {
-    public partial class LoginViewModel : BaseViewModel
+    public partial class LoginViewModel : BaseViewModel<LoginViewModel>
     {
 
        // private IAuthenticationService _authenticationService;
         private readonly ISessionManager _sessionManager;
-        private readonly ILocalizationService _localizationService;
         private readonly IUserService _userService;
-        private readonly ILogger<LoginViewModel> _logger;
 
         public event EventHandler OnLoginSuccessful;
         public event EventHandler ShowRegisterView;
@@ -41,17 +39,11 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
         public LoginViewModel(ISessionManager sessionManager, 
             ILocalizationService localizationService, 
             IUserService userService,
-            ILogger<LoginViewModel> logger)
+            ILogger<LoginViewModel> logger) : base(localizationService, logger)
         {
            // _authenticationService = authenticationService;
             _sessionManager = sessionManager;
-            _localizationService = localizationService;
             _userService = userService;
-            _logger = logger;
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-
-            _localizationService.FlowDirectionChanged += OnFlowDirectionChanged;
 
             LoginCommand = new RelayCommand(action: async o => { await LoginAsync(); }, canExecute: o => CanLogin());
             RegisterCommand = new RelayCommand(action: o => { ShowRegisterView?.Invoke(this, EventArgs.Empty); ResetFields(); }, canExecute: o => true);
@@ -64,10 +56,6 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
             return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
         }
 
-        private void OnFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
 
         private async Task LoginAsync()
         {

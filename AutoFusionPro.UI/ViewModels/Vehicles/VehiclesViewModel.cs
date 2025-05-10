@@ -13,14 +13,12 @@ using System.Collections.ObjectModel;
 
 namespace AutoFusionPro.UI.ViewModels.Vehicles
 {
-    public partial class VehiclesViewModel : BaseViewModel
+    public partial class VehiclesViewModel : BaseViewModel<VehiclesViewModel>
     {
 
         private readonly IVehicleService _vehicleService;
-        private readonly ILocalizationService _localizationService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IWpfToastNotificationService _toastNotificationService;
-        private readonly ILogger<VehiclesViewModel> _logger;
         private readonly IDialogService _dialogService;
 
 
@@ -99,28 +97,20 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         [ObservableProperty]
         private int _pageSize = 20; // Or get from settings
 
-
-
-
         #endregion
+
+
         public VehiclesViewModel(IVehicleService vehicleService,
             IWpfToastNotificationService wpfToastNotificationService,
         ILocalizationService localizationService,
         IServiceProvider serviceProvider,
-        ILogger<VehiclesViewModel> logger, IDialogService dialogService)
+        ILogger<VehiclesViewModel> logger, IDialogService dialogService) : base(localizationService, logger)
         {
             _vehicleService = vehicleService ?? throw new ArgumentNullException(nameof(vehicleService));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
+
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _toastNotificationService = wpfToastNotificationService ?? throw new ArgumentNullException(nameof(wpfToastNotificationService));
-
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-            _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
-
-            RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
 
 
             // Initial load on construction or via an explicit Initialize command
@@ -336,14 +326,5 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         #endregion
 
 
-
-        #region Helpers
-
-        private void OnCurrentFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
-
-        #endregion
     }
 }

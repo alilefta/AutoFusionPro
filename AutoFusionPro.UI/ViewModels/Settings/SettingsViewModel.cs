@@ -14,11 +14,9 @@ using System.Windows.Media.Imaging;
 
 namespace AutoFusionPro.UI.ViewModels.Settings
 {
-    public partial class SettingsViewModel : BaseViewModel
+    public partial class SettingsViewModel : BaseViewModel<SettingsViewModel>
     {
-        private ILogger<SettingsViewModel> _logger;
         private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
-        private ILocalizationService _localizationService;
 
         private AppSettings _settings;
 
@@ -47,14 +45,11 @@ namespace AutoFusionPro.UI.ViewModels.Settings
 
         #endregion
 
-        public SettingsViewModel(ILocalizationService localizationService, ILogger<SettingsViewModel> logger, IGlobalSettingsService<BitmapImage> globalSettingsService)
+        public SettingsViewModel(ILocalizationService localizationService, 
+            ILogger<SettingsViewModel> logger, 
+            IGlobalSettingsService<BitmapImage> globalSettingsService) : base(localizationService, logger)
         {
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _globalSettingsService = globalSettingsService ?? throw new ArgumentNullException(nameof(globalSettingsService));
-
-            CurrentWorkFlow = localizationService.CurrentFlowDirection;
-            localizationService.FlowDirectionChanged += OnFlowDirectionChanged;
 
             _settings = SettingsManager.LoadSettings();
 
@@ -173,11 +168,6 @@ namespace AutoFusionPro.UI.ViewModels.Settings
             {
                 IsBusy = false;
             }
-        }
-
-        private void OnFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
         }
     }
 }

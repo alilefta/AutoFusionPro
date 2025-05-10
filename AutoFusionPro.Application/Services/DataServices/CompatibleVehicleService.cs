@@ -19,7 +19,7 @@ namespace AutoFusionPro.Application.Services.DataServices
         #region Fields
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<VehicleService> _logger;
+        private readonly ILogger<CompatibleVehicleService> _logger;
 
         // Add Validators if you use them for Make DTOs
         private readonly IValidator<CreateMakeDto> _createMakeValidator;
@@ -45,7 +45,7 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         public CompatibleVehicleService(
                     IUnitOfWork unitOfWork,
-                    ILogger<VehicleService> logger,
+                    ILogger<CompatibleVehicleService> logger,
 
                     IValidator<CreateMakeDto> createMakeValidator,
                     IValidator<UpdateMakeDto> updateMakeValidator,
@@ -87,19 +87,18 @@ namespace AutoFusionPro.Application.Services.DataServices
 
 
 
-        #region CompatibleVehicle CRUD
+        #region CompatibleVehicle Management
 
         public async Task<CompatibleVehicleDetailDto?> GetCompatibleVehicleByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Attempted to get CompatibleVehicle with invalid ID: {CompatibleVehicleId}", id);
-                return null;
+                return null; // Or throw ArgumentOutOfRangeException
             }
             _logger.LogInformation("Attempting to retrieve CompatibleVehicle with ID: {CompatibleVehicleId}", id);
             try
             {
-                // Use repository method that includes related details
                 var compatibleVehicle = await _unitOfWork.CompatibleVehicles.GetByIdWithDetailsAsync(id);
                 if (compatibleVehicle == null)
                 {
@@ -120,30 +119,25 @@ namespace AutoFusionPro.Application.Services.DataServices
             CompatibleVehicleFilterCriteriaDto filterCriteria, int pageNumber, int pageSize)
         {
             if (pageNumber <= 0) pageNumber = 1;
-            if (pageSize <= 0) pageSize = 10;
+            if (pageSize <= 0) pageSize = 10; // Default page size
+            if (pageSize > 100) pageSize = 100; // Max page size
 
-            _logger.LogInformation("Attempting to retrieve filtered CompatibleVehicles. Page: {Page}, Size: {Size}, Criteria: {@Criteria}",
+            _logger.LogInformation("Retrieving filtered CompatibleVehicles. Page: {Page}, Size: {Size}, Criteria: {@Criteria}",
                 pageNumber, pageSize, filterCriteria);
 
             try
             {
-                // Build a more complex filter expression for the repository if needed,
-                // or let the repository handle complex filtering internally based on DTO.
-                // For now, let's build a basic Expression<Func<CompatibleVehicle, bool>> here.
                 var predicate = BuildCompatibleVehicleFilterPredicate(filterCriteria);
 
-                // Use repository method that includes details for summary mapping
-                IEnumerable<CompatibleVehicle> compatibleVehicles = await _unitOfWork.CompatibleVehicles
+                var compatibleVehicles = await _unitOfWork.CompatibleVehicles
                     .GetFilteredWithDetailsPagedAsync(pageNumber, pageSize, predicate, filterCriteria.MakeId, filterCriteria.SearchTerm);
 
-                int totalCount = await _unitOfWork.CompatibleVehicles
+                var totalCount = await _unitOfWork.CompatibleVehicles
                     .GetTotalCountAsync(predicate, filterCriteria.MakeId, filterCriteria.SearchTerm);
 
                 var summaryDtos = compatibleVehicles.Select(MapCompatibleVehicleToSummaryDto).ToList();
                 _logger.LogInformation("Successfully retrieved {Count} CompatibleVehicles for page {Page}. Total matching: {Total}",
                     summaryDtos.Count, pageNumber, totalCount);
-
-
 
                 return new PagedResult<CompatibleVehicleSummaryDto>
                 {
@@ -151,15 +145,15 @@ namespace AutoFusionPro.Application.Services.DataServices
                     PageNumber = pageNumber,
                     PageSize = pageSize,
                     TotalCount = totalCount,
-                    //TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving filtered CompatibleVehicles.");
+                _logger.LogError(ex, "An error occurred while retrieving filtered CompatibleVehicles with criteria: {@Criteria}", filterCriteria);
                 throw new ServiceException("Could not retrieve CompatibleVehicle specifications.", ex);
             }
         }
+
 
         public async Task<CompatibleVehicleDetailDto> CreateCompatibleVehicleAsync(CreateCompatibleVehicleDto createDto)
         {
@@ -168,16 +162,14 @@ namespace AutoFusionPro.Application.Services.DataServices
             _logger.LogInformation("Attempting to create CompatibleVehicle: ModelId={ModelId}, YearStart={YearStart}, YearEnd={YearEnd}",
                 createDto.ModelId, createDto.YearStart, createDto.YearEnd);
 
-            // 1. Validate DTO (this now includes uniqueness via MustAsync in validator)
+            // 1. Validate DTO
             var validationResult = await _createCompatibleVehicleValidator.ValidateAsync(createDto);
             if (!validationResult.IsValid)
             {
                 _logger.LogWarning("Validation failed for CreateCompatibleVehicleDto: {Errors}", validationResult.ToString("~"));
                 throw new ValidationException(validationResult.Errors);
             }
-
-            // Uniqueness check for spec is now primarily in the validator.
-            // The service method CompatibleVehicleSpecExistsAsync can be used by UI/ViewModel for proactive checks.
+            // Note: Uniqueness for the spec is now primarily handled by the validator's MustAsync rule.
 
             try
             {
@@ -191,23 +183,32 @@ namespace AutoFusionPro.Application.Services.DataServices
                 await _unitOfWork.SaveChangesAsync();
                 _logger.LogInformation("CompatibleVehicle created successfully with ID: {CompatibleVehicleId}", newCompatibleVehicle.Id);
 
-                // 5. Re-fetch with details for return (important to get related entity names)
+                // 5. Re-fetch with details for return (to get all related names)
                 var createdWithDetails = await _unitOfWork.CompatibleVehicles.GetByIdWithDetailsAsync(newCompatibleVehicle.Id);
                 if (createdWithDetails == null)
                 {
-                    _logger.LogError("Failed to re-fetch CompatibleVehicle with ID {Id} after creation.", newCompatibleVehicle.Id);
-                    throw new ServiceException($"Failed to retrieve details for newly created CompatibleVehicle specification.");
+                    _logger.LogError("Critical: Failed to re-fetch CompatibleVehicle with ID {Id} immediately after creation.", newCompatibleVehicle.Id);
+                    throw new ServiceException($"Failed to retrieve details for newly created CompatibleVehicle specification ID {newCompatibleVehicle.Id}.");
                 }
                 return MapCompatibleVehicleToDetailDto(createdWithDetails);
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException dbEx) // Handles potential database constraint violations not caught by validator
             {
-                _logger.LogError(dbEx, "Database error while creating CompatibleVehicle. ModelId={ModelId}, YearStart={YearStart}.", createDto.ModelId, createDto.YearStart);
+                _logger.LogError(dbEx, "Database error while creating CompatibleVehicle. ModelId={ModelId}, YearStart={YearStart}.",
+                    createDto.ModelId, createDto.YearStart);
+                // Check for unique constraint violation if validator didn't catch all scenarios or if there's a race condition
+                if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true ||
+                    dbEx.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase)) // SQLite specific
+                {
+                    throw new ServiceException("This exact vehicle specification already exists.", dbEx);
+                }
                 throw new ServiceException("A database error occurred while creating the vehicle specification.", dbEx);
             }
+            catch (ValidationException) { throw; } // Re-throw validation exceptions
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error while creating CompatibleVehicle. ModelId={ModelId}, YearStart={YearStart}.", createDto.ModelId, createDto.YearStart);
+                _logger.LogError(ex, "Unexpected error while creating CompatibleVehicle. ModelId={ModelId}, YearStart={YearStart}.",
+                    createDto.ModelId, createDto.YearStart);
                 throw new ServiceException("An unexpected error occurred while creating the vehicle specification.", ex);
             }
         }
@@ -215,17 +216,18 @@ namespace AutoFusionPro.Application.Services.DataServices
         public async Task UpdateCompatibleVehicleAsync(UpdateCompatibleVehicleDto updateDto)
         {
             if (updateDto == null) throw new ArgumentNullException(nameof(updateDto));
-            if (updateDto.Id <= 0) throw new ArgumentException("Invalid CompatibleVehicle ID.", nameof(updateDto.Id));
+            if (updateDto.Id <= 0) throw new ArgumentException("Invalid CompatibleVehicle ID for update.", nameof(updateDto.Id));
 
             _logger.LogInformation("Attempting to update CompatibleVehicle with ID: {CompatibleVehicleId}", updateDto.Id);
 
-            // 1. Validate DTO (includes uniqueness check excluding self)
+            // 1. Validate DTO
             var validationResult = await _updateCompatibleVehicleValidator.ValidateAsync(updateDto);
             if (!validationResult.IsValid)
             {
                 _logger.LogWarning("Validation failed for UpdateCompatibleVehicleDto (ID: {Id}): {Errors}", updateDto.Id, validationResult.ToString("~"));
                 throw new ValidationException(validationResult.Errors);
             }
+            // Uniqueness check excluding self is handled by the validator.
 
             // 2. Fetch Existing Entity
             var existingCompatibleVehicle = await _unitOfWork.CompatibleVehicles.GetByIdAsync(updateDto.Id);
@@ -233,49 +235,55 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string notFoundMsg = $"CompatibleVehicle specification with ID {updateDto.Id} not found for update.";
                 _logger.LogWarning(notFoundMsg);
-                throw new ServiceException(notFoundMsg); // Or custom NotFoundException
+                throw new ServiceException(notFoundMsg); // Or a custom NotFoundException
             }
-
-            // Uniqueness check handled by validator.
 
             try
             {
                 // 3. Map DTO changes to existing Domain Entity
                 MapUpdateDtoToCompatibleVehicle(updateDto, existingCompatibleVehicle);
 
-                // 4. Save Changes (EF Core tracks changes)
+                // 4. Save Changes (EF Core tracks changes on the 'existingCompatibleVehicle' entity)
                 await _unitOfWork.SaveChangesAsync();
                 _logger.LogInformation("CompatibleVehicle with ID {CompatibleVehicleId} updated successfully.", updateDto.Id);
             }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error while updating CompatibleVehicle ID {Id}.", updateDto.Id);
+                if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true ||
+                    dbEx.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new ServiceException("This exact vehicle specification already exists for another record.", dbEx);
+                }
                 throw new ServiceException("A database error occurred while updating the vehicle specification.", dbEx);
             }
+            catch (ValidationException) { throw; } // Re-throw validation exceptions
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error while updating CompatibleVehicle ID {Id}", updateDto.Id);
-                throw new ServiceException("An unexpected error occurred while updating the vehicle specification.", ex);
+                throw new ServiceException($"An unexpected error occurred while updating vehicle specification ID {updateDto.Id}.", ex);
             }
         }
 
         public async Task DeleteCompatibleVehicleAsync(int id)
         {
-            if (id <= 0) throw new ArgumentException("Invalid CompatibleVehicle ID.", nameof(id));
+            if (id <= 0) throw new ArgumentException("Invalid CompatibleVehicle ID for deletion.", nameof(id));
             _logger.LogInformation("Attempting to delete CompatibleVehicle with ID: {CompatibleVehicleId}", id);
 
             var compatibleVehicleToDelete = await _unitOfWork.CompatibleVehicles.GetByIdAsync(id);
             if (compatibleVehicleToDelete == null)
             {
-                _logger.LogWarning("CompatibleVehicle specification with ID {Id} not found for deletion.", id);
+                _logger.LogWarning("CompatibleVehicle specification with ID {Id} not found for deletion. No action taken.", id);
+                // Decide: return gracefully or throw a not found exception
                 throw new ServiceException($"CompatibleVehicle specification with ID {id} not found.");
             }
 
-            // Dependency Check: PartCompatibility (using generic ExistsAsync on UoW or a specific repo method)
-            bool hasPartLinks = await _unitOfWork.ExistsAsync<PartCompatibility>(pc => pc.CompatibleVehicleId == id);
-            if (hasPartLinks)
+            // Dependency Check: Is this CompatibleVehicle linked in any PartCompatibility records?
+            // Assuming IUnitOfWork has a generic ExistsAsync or IPartCompatibilityRepository has such a method.
+            bool isLinkedToParts = await _unitOfWork.ExistsAsync<PartCompatibility>(pc => pc.CompatibleVehicleId == id);
+            if (isLinkedToParts)
             {
-                string dependencyError = $"Cannot delete CompatibleVehicle specification ID {id} as it's linked to parts.";
+                string dependencyError = $"Cannot delete CompatibleVehicle specification ID {id} as it is currently linked to one or more parts. Please remove those links first.";
                 _logger.LogError(dependencyError);
                 throw new ServiceException(dependencyError);
             }
@@ -286,24 +294,27 @@ namespace AutoFusionPro.Application.Services.DataServices
                 await _unitOfWork.SaveChangesAsync();
                 _logger.LogInformation("CompatibleVehicle with ID {CompatibleVehicleId} deleted successfully.", id);
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException dbEx) // Should be rare if dependency check is thorough
             {
                 _logger.LogError(dbEx, "Database error while deleting CompatibleVehicle ID {Id}.", id);
-                throw new ServiceException("A database error occurred while deleting the vehicle specification.", dbEx);
+                throw new ServiceException("A database error occurred while deleting the vehicle specification. It might still be in use.", dbEx);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error while deleting CompatibleVehicle ID {Id}", id);
-                throw new ServiceException("An unexpected error occurred while deleting the vehicle specification.", ex);
+                throw new ServiceException($"An unexpected error occurred while deleting vehicle specification ID {id}.", ex);
             }
         }
 
+        // This service method directly calls the repository.
+        // It's useful for UI/ViewModels to proactively check before attempting creation.
         public async Task<bool> CompatibleVehicleSpecExistsAsync(
             int modelId, int yearStart, int yearEnd,
             int? trimLevelId, int? transmissionTypeId, int? engineTypeId, int? bodyTypeId,
             int? excludeCompatibleVehicleId = null)
         {
-            _logger.LogDebug("Checking if CompatibleVehicle spec exists: ModelId={ModelId}, Years={YearStart}-{YearEnd}, ...", modelId, yearStart, yearEnd);
+            _logger.LogDebug("Service check if CompatibleVehicle spec exists: ModelId={ModelId}, Years={YearStart}-{YearEnd}, ExcludeId={ExcludeId} ...",
+                modelId, yearStart, yearEnd, excludeCompatibleVehicleId);
             try
             {
                 return await _unitOfWork.CompatibleVehicles.SpecificationExistsAsync(
@@ -313,11 +324,11 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error checking CompatibleVehicle specification existence.");
-                throw new ServiceException("Could not verify if vehicle specification exists.", ex);
+                _logger.LogError(ex, "Error during service check for CompatibleVehicle specification existence.");
+                // Depending on desired behavior, either re-throw or return true to prevent operation
+                throw new ServiceException("Could not verify if vehicle specification exists due to an internal error.", ex);
             }
         }
-
         #endregion
 
         #region Make Methods
@@ -400,6 +411,7 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 4. Add to Repository
                 await _unitOfWork.Makes.AddAsync(newMake);
+
 
                 // 5. Save Changes
                 await _unitOfWork.SaveChangesAsync();

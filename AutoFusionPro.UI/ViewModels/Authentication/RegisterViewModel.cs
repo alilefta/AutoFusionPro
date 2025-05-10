@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Authentication
 {
-    public partial class RegisterViewModel : BaseViewModel
+    public partial class RegisterViewModel : BaseViewModel<RegisterViewModel>
     {
         public event EventHandler OnRegisterSuccessful;
         public event EventHandler ShowLoginView;
@@ -48,8 +48,6 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
 
         // Use authentication service only if you need to add login immediately after successful registration
         //private readonly IAuthenticationService _authenticationService;
-        private readonly ILocalizationService _localizationService;
-        private ILogger<RegisterViewModel> _logger;
 
 
         #region
@@ -104,26 +102,15 @@ namespace AutoFusionPro.UI.ViewModels.Authentication
 
         public RegisterViewModel(IUserService userService, 
             ILocalizationService localizationService, 
-            ILogger<RegisterViewModel> logger)
+            ILogger<RegisterViewModel> logger) : base(localizationService, logger)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             //_authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
-            _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-
-            _localizationService.FlowDirectionChanged += OnFlowDirectionChanged;
 
             RegisterCommand = new RelayCommand(action: async o => await RegisterAsync(), canExecute: o => CanRegister());
             LoginCommand = new RelayCommand(action: o => { ShowLoginView?.Invoke(this, EventArgs.Empty); ResetFields(); }, canExecute: o => true);
         }
 
-
-        private void OnFlowDirectionChanged()
-        {
-            CurrentWorkFlow = _localizationService.CurrentFlowDirection;
-        }
 
         private async Task RegisterAsync()
         {

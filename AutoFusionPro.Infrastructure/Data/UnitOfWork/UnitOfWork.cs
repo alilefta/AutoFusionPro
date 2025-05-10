@@ -1,7 +1,6 @@
 ﻿using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
-using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using AutoFusionPro.Infrastructure.Data.Context;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -157,6 +156,91 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             }
         }
 
+
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            _logger.LogInformation("Transaction begun."); // Changed from Warning to Info
+        }
+
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_transaction == null)
+            {
+                throw new InvalidOperationException("Transaction has not been started.");
+            }
+            try
+            {
+                // Pass cancellationToken to SaveChangesAsync if it's part of the commit logic
+                // The RetryOnLockAsync should also ideally accept and pass down the token.
+                await RetryOnLockAsync(async () =>
+                {
+                    await _context.SaveChangesAsync(cancellationToken); // Pass token here
+                    await _transaction.CommitAsync(cancellationToken);  // Pass token here
+                }, cancellationToken); // Pass token to retry logic
+                _logger.LogInformation("Transaction committed."); // Changed from Warning to Info
+            }
+            finally
+            {
+                await DisposeTransactionAsync(); // No need for context disposal here usually
+                _logger.LogDebug("Transaction disposed after commit/rollback attempt.");
+            }
+        }
+
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            if (_transaction != null)
+            {
+                try
+                {
+                    await _transaction.RollbackAsync(cancellationToken); // Pass token here
+                    _logger.LogInformation("Transaction rolled back."); // Changed from Warning to Info
+                }
+                finally
+                {
+                    await DisposeTransactionAsync();
+                    _logger.LogDebug("Transaction disposed after rollback.");
+                }
+            }
+        }
+
+
+
+
+        // Update RetryOnLockAsync to accept and use CancellationToken
+        private async Task RetryOnLockAsync(Func<Task> operation, CancellationToken cancellationToken = default)
+        {
+            int retryCount = 0;
+            const int maxRetries = 3;
+            const int initialDelayMs = 100;
+
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested(); // Check for cancellation before each attempt
+                try
+                {
+                    await operation();
+                    _logger.LogDebug("Operation within RetryOnLockAsync succeeded.");
+                    return;
+                }
+                catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY && retryCount < maxRetries)
+                {
+                    retryCount++;
+                    int delay = initialDelayMs * (int)Math.Pow(2, retryCount - 1);
+                    _logger.LogWarning(ex, "SQLite BUSY error (Code: {ErrorCode}). Retrying attempt {RetryCount}/{MaxRetries} after {Delay}ms...",
+                        ex.SqliteErrorCode, retryCount, maxRetries, delay);
+                    await Task.Delay(delay, cancellationToken); // Pass token to Task.Delay
+                }
+                // Removed re-throwing general exceptions, let the specific catch handle SqliteException
+                // and let others propagate if not Sqlite BUSY.
+            }
+        }
+
+        // Remove DisposeTransactionAndContextAsync if context is managed by DI
+        // The context is typically disposed by the DI container when the scope ends.
+        // The UnitOfWork should generally only manage the lifetime of the transaction it creates.
+    
+
         #endregion
 
 
@@ -175,7 +259,17 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
 
         public async Task<int> SaveChangesAsync()
         {
+            _logger.LogDebug("SaveChangesAsync called without CancellationToken.");
+            // Call the overload with CancellationToken.None or default
             return await _context.SaveChangesAsync();
+        }
+
+        // New overload with CancellationToken
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogDebug("SaveChangesAsync called with CancellationToken.");
+            // Pass the cancellationToken to the DbContext's SaveChangesAsync
+            return await _context.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -184,6 +278,16 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         {
             _transaction?.Dispose();
             _context?.Dispose();
+        }
+
+        // Helper to dispose transaction asynchronously
+        private async ValueTask DisposeTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.DisposeAsync();
+                _transaction = null!; // Mark as disposed
+            }
         }
     }
 }
