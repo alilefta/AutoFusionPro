@@ -1,6 +1,8 @@
 ﻿using AutoFusionPro.Application.DTOs.Part;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Exceptions.ViewModel;
+using AutoFusionPro.Core.Helpers.ErrorMessages;
+using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.Parts.Dialogs;
@@ -55,7 +57,7 @@ namespace AutoFusionPro.UI.ViewModels.Parts
             catch (Exception ex)
             {
                 _logger.LogError($"An error occurred while trying to load Parts data, {ex.Message}");
-                throw new ViewModelException("An error occurred while trying to load Parts data", nameof(PartsViewModel), nameof(LoadPartsData), "Load", ex);
+                throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(PartsViewModel), nameof(LoadPartsData), MethodOperationType.LOAD_DATA, ex);
             }
             finally
             {
@@ -89,7 +91,7 @@ namespace AutoFusionPro.UI.ViewModels.Parts
             catch (Exception ex)
             {
                 _logger.LogError($"An exception happened while opening AddPartDialog, {ex.Message}");
-                throw new ViewModelException("An error occurred in AddPartDialog", nameof(PartsViewModel), nameof(ShowAddPartDialog), "Open Dialog", ex);
+                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(PartsViewModel), nameof(ShowAddPartDialog), MethodOperationType.OPEN_DIALOG, ex);
             }finally
             {
                 IsAddingPart = false;

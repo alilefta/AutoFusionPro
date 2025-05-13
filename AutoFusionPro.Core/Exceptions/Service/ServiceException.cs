@@ -1,7 +1,4 @@
-﻿using AutoFusionPro.Core.Exceptions;
-using System.Runtime.Serialization;
-
-namespace AutoFusionPro.Core.Exceptions.Service
+﻿namespace AutoFusionPro.Core.Exceptions.Service
 {
     /// <summary>
     /// Represents exceptions that occur within the Service Layer of the application.

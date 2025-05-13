@@ -20,15 +20,15 @@ namespace AutoFusionPro.Application.Validators.CompatibleVehicleValidator
                 .MustAsync(async (id, token) => await unitOfWork.Makes.ExistsAsync(m => m.Id == id))
                 .WithMessage("Selected Make does not exist.");
 
-            // Uniqueness check for Name within the Make (excluding self)
-            RuleFor(x => x)
-                .MustAsync(async (dto, token) =>
-                {
-                    if (string.IsNullOrWhiteSpace(dto.Name) || dto.MakeId <= 0) return true;
-                    return !await unitOfWork.Models.NameExistsForMakeAsync(dto.Name, dto.MakeId, dto.Id);
-                })
-                .WithMessage(dto => $"Model name '{dto.Name}' already exists for the selected Make.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Name) && x.MakeId > 0 && x.Id > 0);
+            //// Uniqueness check for Name within the Make (excluding self)
+            //RuleFor(x => x)
+            //    .MustAsync(async (dto, token) =>
+            //    {
+            //        if (string.IsNullOrWhiteSpace(dto.Name) || dto.MakeId <= 0) return true;
+            //        return !await unitOfWork.Models.NameExistsForMakeAsync(dto.Name, dto.MakeId, dto.Id);
+            //    })
+            //    .WithMessage(dto => $"Model name '{dto.Name}' already exists for the selected Make.")
+            //    .When(x => !string.IsNullOrWhiteSpace(x.Name) && x.MakeId > 0 && x.Id > 0);
         }
     }
 }

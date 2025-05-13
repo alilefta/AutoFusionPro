@@ -1,4 +1,6 @@
-﻿namespace AutoFusionPro.Core.Exceptions.ViewModel
+﻿using AutoFusionPro.Core.Helpers.Operations;
+
+namespace AutoFusionPro.Core.Exceptions.ViewModel
 {
     /// <summary>
     /// Represents exceptions that occur within the View Model Layer of the application.
@@ -61,12 +63,12 @@
         /// <param name="methodName">The name of the view model method.</param>
         /// <param name="commandType">The type of command or action being executed.</param>
         /// <param name="operationType">The type of operation (e.g., "Load", "Save", "Validate", "Navigate").</param>
-        public ViewModelException(string message, string? viewModelName, string? methodName, string? operationType, string? commandType)
+        public ViewModelException(string message, string? viewModelName, string? methodName, MethodOperationType? operationType, string? commandType)
             : base(message)
         {
             ViewModelName = viewModelName;
             MethodName = methodName;
-            OperationType = operationType;
+            OperationType = operationType.ToString();
             CommandType = commandType;
         }
 
@@ -79,12 +81,12 @@
         /// <param name="commandType">The type of command or action being executed.</param>
         /// <param name="operationType">The type of operation (e.g., "Load", "Save", "Validate", "Navigate").</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
-        public ViewModelException(string message, string? viewModelName, string? methodName, string? operationType, Exception innerException)
+        public ViewModelException(string message, string? viewModelName, string? methodName, MethodOperationType? operationType, Exception innerException)
             : base(message, innerException)
         {
             ViewModelName = viewModelName;
             MethodName = methodName;
-            OperationType = operationType;
+            OperationType = operationType.ToString();
         }
 
         /// <summary>

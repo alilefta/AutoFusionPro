@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement"
+             xmlns:vmTabs="clr-namespace:AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels"
+             xmlns:vmShell="clr-namespace:AutoFusionPro.UI.ViewModels.Base"
+             xmlns:localViews="clr-namespace:AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -16,26 +19,55 @@
              FlowDirection="{Binding CurrentWorkFlow}"
              Foreground="{DynamicResource Text.PrimaryBrush}"
              FontFamily="{DynamicResource DynamicFontFamilyRegular}">
+    <UserControl.Resources>
+        <!-- DataTemplates to tell WPF which View to use for each Tab ViewModel type -->
+        <DataTemplate DataType="{x:Type vmTabs:MakesModelsTrimsManagementViewModel}">
+            <localViews:MakesModelsTrimsTabView Padding="10" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmTabs:TransmissionTypesManagementViewModel}">
+            <!-- Assuming you have a TransmissionTypesTabView -->
+            <localViews:TransmissionTypesTabView Padding="10" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmTabs:EngineTypesManagementViewModel}">
+            <localViews:EngineTypesTabView Padding="10" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmTabs:BodyTypesManagementViewModel}">
+            <localViews:BodyTypesTabView Padding="10" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmTabs:CompatibleVehiclesViewModel}">
+            <localViews:CompatibleVehiclesTabView Padding="10" />
+        </DataTemplate>
+        <!-- Add other DataTemplates as needed -->
+    </UserControl.Resources>
     <Border Padding="0,0,0,10">
         <Grid>
             <!-- Tab Control -->
-            <TabControl Style="{DynamicResource ModernAnimatedTabControlStyle2}">
-                <TabItem>
-                    <TabItem.Header>
+            <TabControl Style="{DynamicResource ModernAnimatedTabControlStyle2}"
+                        ItemsSource="{Binding TabViewModels}"
+                        SelectedItem="{Binding SelectedTabViewModel}"
+                        SelectedIndex="{Binding SelectedTabIndex}">
+                <TabControl.ItemTemplate>
+                    <!-- Defines how the header of each tab looks -->
+                    <DataTemplate DataType="{x:Type vmShell:ITabViewModel}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE779;"
-                                       FontFamily="Segoe MDL2 Assets"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,8,0" />
-                            <TextBlock Text="Makes management"
+                            <!-- You might need to add an Icon property to ITabViewModel -->
+                            <!-- <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" /> -->
+                            <TextBlock Text="{Binding DisplayName}"
                                        VerticalAlignment="Center"
                                        FontFamily="{DynamicResource AlmaraiRegular}"
                                        FontWeight="Regular" />
                         </StackPanel>
-                    </TabItem.Header>
-                    <local:MakesManagementTabView DataContext="{Binding .}"
-                                            Padding="10" />
-                </TabItem>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+
+                <TabControl.ContentTemplate>
+                    <!-- Defines how the content of the selected tab is displayed -->
+                    <!-- WPF will automatically use the DataTemplates defined in UserControl.Resources
+                         to find the correct View for the SelectedTabViewModel -->
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding}" />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
             </TabControl>
 
         </Grid>

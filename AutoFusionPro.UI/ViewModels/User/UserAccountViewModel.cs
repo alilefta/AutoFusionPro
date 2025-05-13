@@ -6,6 +6,8 @@ using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Enums.SystemEnum;
 using AutoFusionPro.Core.Exceptions.ViewModel;
+using AutoFusionPro.Core.Helpers.ErrorMessages;
+using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
@@ -300,7 +302,7 @@ namespace AutoFusionPro.UI.ViewModels.User
                     $"An error has occurred while trying to save user changes: {ex.Message}",
                     true,
                     CurrentWorkFlow);
-                throw new ViewModelException($"An error has occurred while trying to save user changes: {ex.Message}", nameof(UserAccountViewModel), "SaveChangesAsync()", "Update", ex);
+                throw new ViewModelException(ErrorMessages.CREATE_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), "SaveChangesAsync()", MethodOperationType.UPDATE_DATA, ex);
 
             }
             finally
@@ -384,8 +386,8 @@ namespace AutoFusionPro.UI.ViewModels.User
             catch (Exception ex)
             {
                
-                _logger.LogError(ex, "Error changing profile image");
-                throw new ViewModelException($"Failed to change profile image: {ex.Message}", nameof(UserAccountViewModel), "ChangeChangeProfileImageAsync()", "Update", ex);
+                _logger.LogError("Error changing profile image, {ex}", ex.Message);
+                throw new ViewModelException(ErrorMessages.UPDATE_IMAGE_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), nameof(ChangeProfileImageAsync), MethodOperationType.UPDATE_DATA, ex);
             }finally
             {
                 message = string.Empty;
@@ -487,7 +489,7 @@ namespace AutoFusionPro.UI.ViewModels.User
                 message = _resources["FailedToChangePasswordBecauseOfInternalErrorStr"] as string ?? "Failed to change password because of an internal error!";
 
                 _toastNotificationService.Show(message, messageTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(8));
-                throw new ViewModelException($"Failed to change password: {ex.Message}", nameof(UserAccountViewModel), "ChangePasswordAsync()", "Update", ex);
+                throw new ViewModelException(ErrorMessages.UPDATE_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), nameof(ChangePasswordAsync), MethodOperationType.UPDATE_DATA, ex);
             }
             finally
             {
@@ -573,7 +575,7 @@ namespace AutoFusionPro.UI.ViewModels.User
                 message = _resources["FailedToChangeUsernameBecauseOfInternalErrorStr"] as string ?? "Failed to change username because of an internal error!";
 
                 _toastNotificationService.Show(message, messageTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(8));
-                throw new ViewModelException($"Failed to change username: {ex.Message}", nameof(UserAccountViewModel),"ChangeUsernameAsync()", "Update", ex);
+                throw new ViewModelException(ErrorMessages.UPDATE_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel),nameof(ChangeUsernameAsync), MethodOperationType.UPDATE_DATA, ex);
             }
             finally
             {
@@ -640,7 +642,7 @@ namespace AutoFusionPro.UI.ViewModels.User
 
                 _toastNotificationService.Show(message, messageTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(8));
 
-                throw new ViewModelException($"Failed to change security question: {ex.Message}", nameof(UserAccountViewModel), "UpdateSecurityQuestionAsync()", "Update", ex);
+                throw new ViewModelException(ErrorMessages.UPDATE_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), nameof(UpdateSecurityQuestionAsync), MethodOperationType.UPDATE_DATA, ex);
 
 
             }
@@ -696,14 +698,14 @@ namespace AutoFusionPro.UI.ViewModels.User
             catch (Exception ex)
             {
 
-                _logger.LogError(ex, "Error initializing UserAccountViewModel");
+                _logger.LogError("Error initializing UserAccountViewModel, {ex}", ex.Message);
 
                 messageTitle = _resources["InititalizationFailedStr"] as string ?? "Loading User Failed";
                 message = _resources["NoUserIsLoggedInStr"] as string ?? "No user is logged in!";
 
                 _toastNotificationService.Show(message, messageTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(8));
 
-                throw new ViewModelException($"Failed to load user data: {ex.Message}", nameof(UserAccountViewModel), "InitializeData()", "Load", ex);
+                throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), nameof(InitializeData), MethodOperationType.LOAD_DATA, ex);
             }
             finally
             {
@@ -750,9 +752,9 @@ namespace AutoFusionPro.UI.ViewModels.User
                 message = _resources["NoUserIsLoggedInStr"] as string ?? "No user is logged in!";
 
                 _toastNotificationService.Show(message, messageTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(8));
-                _logger.LogError(ex, "Error loading user data");
+                _logger.LogError("Error loading user data, {ex}", ex.Message);
 
-                throw new ViewModelException($"Failed to load user data: {ex.Message}", nameof(UserAccountViewModel), "LoadUserDataAsync(int userId)", "Load", ex);
+                throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(UserAccountViewModel), nameof(LoadUserDataAsync), MethodOperationType.LOAD_DATA, ex);
 
             }
             finally

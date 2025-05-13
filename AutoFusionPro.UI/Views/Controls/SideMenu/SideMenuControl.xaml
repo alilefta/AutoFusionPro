@@ -337,6 +337,35 @@
                                 </Style>
                             </ui:XSideMenuButton.Style>
                         </ui:XSideMenuButton>
+
+                        <!-- Vehicle Button-->
+                        <ui:XSideMenuButton Content="Vehicle Compatibility"
+                                            Command="{Binding NavigateCommand}"
+                                            CommandParameter="{x:Static pages:ApplicationPage.VehicleCompatibilityManagement}"
+                                            IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
+                                            IsCollapsedMode="{Binding Collapsed}"
+                                            IsSelected="{Binding IsVehicleCompatibilityManagementSelected}"
+                                            Symbol="VehicleCar48">
+                            <ui:XSideMenuButton.Style>
+                                <Style TargetType="{x:Type ui:XSideMenuButton}"
+                                       BasedOn="{StaticResource SideMenuButtonWithContentStyle}">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsLoadingContent}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding LoadingPage}"
+                                                           Value="{x:Static pages:ApplicationPage.VehicleCompatibilityManagement}" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="IsLoading"
+                                                        Value="True" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ui:XSideMenuButton.Style>
+                        </ui:XSideMenuButton>
                     </StackPanel>
                 </ScrollViewer>
 

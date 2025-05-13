@@ -3,11 +3,11 @@
 namespace AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs
 {
     /// <summary>
-    /// Interaction logic for MakesManagementTabView.xaml
+    /// Interaction logic for MakesModelsTrimsTabView.xaml
     /// </summary>
-    public partial class MakesManagementTabView : UserControl
+    public partial class MakesModelsTrimsTabView : UserControl
     {
-        public MakesManagementTabView()
+        public MakesModelsTrimsTabView()
         {
             InitializeComponent();
         }

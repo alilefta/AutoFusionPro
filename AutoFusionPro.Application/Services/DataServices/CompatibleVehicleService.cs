@@ -1,7 +1,7 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
-using AutoFusionPro.Application.DTOs.Vehicle;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Exceptions.Service;
+using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Models;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Models;
@@ -398,7 +398,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string duplicateMessage = $"Make with name '{createDto.Name}' already exists.";
                 _logger.LogWarning(duplicateMessage);
-                throw new ServiceException(duplicateMessage); // Use ServiceException or specific DuplicateException
+                throw new DuplicationException(duplicateMessage, nameof(Make), "Name", createDto.Name);
             }
 
             try
@@ -462,7 +462,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string duplicateMessage = $"Make with name '{updateDto.Name}' already exists.";
                 _logger.LogWarning(duplicateMessage);
-                throw new ServiceException(duplicateMessage);
+                throw new DuplicationException(duplicateMessage, nameof(Make), "Name", updateDto.Name);
             }
 
             try
@@ -602,6 +602,13 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ValidationException(validationResult.Errors);
             }
 
+            // 2. Check for uniqueness (could also be part of FluentValidator if NameExistsAsync is injected)
+            if (await _unitOfWork.Models.NameExistsForMakeAsync(createDto.Name, createDto.MakeId, null))
+            {
+                string duplicateMessage = $"Model with name '{createDto.Name}' already exists.";
+                _logger.LogWarning(duplicateMessage);
+                throw new DuplicationException(duplicateMessage, nameof(Model), "Name", createDto.Name);
+            }
             try
             {
                 // 2. Map DTO to Domain Entity
@@ -665,6 +672,14 @@ namespace AutoFusionPro.Application.Services.DataServices
                 string notFoundMsg = $"Model with ID {updateDto.Id} not found for update.";
                 _logger.LogWarning(notFoundMsg);
                 throw new ServiceException(notFoundMsg);
+            }
+
+            // 3. Check for uniqueness (could also be part of FluentValidator if NameExistsAsync is injected)
+            if (await _unitOfWork.Models.NameExistsForMakeAsync(updateDto.Name, updateDto.MakeId, null))
+            {
+                string duplicateMessage = $"Model with name '{updateDto.Name}' already exists.";
+                _logger.LogWarning(duplicateMessage);
+                throw new DuplicationException(duplicateMessage, nameof(Model), "Name", updateDto.Name);
             }
 
             try
@@ -1179,6 +1194,14 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ValidationException(validationResult.Errors);
             }
 
+            // 2. Check for uniqueness (could also be part of FluentValidator if NameExistsAsync is injected)
+            if (await _unitOfWork.TrimLevels.NameExistsForModelAsync(createDto.Name, createDto.ModelId, null))
+            {
+                string duplicateMessage = $"Trim with name '{createDto.Name}' already exists.";
+                _logger.LogWarning(duplicateMessage);
+                throw new DuplicationException(duplicateMessage, nameof(TrimLevel), "Name", createDto.Name);
+            }
+
             try
             {
                 // 2. Map DTO to Domain Entity
@@ -1242,6 +1265,14 @@ namespace AutoFusionPro.Application.Services.DataServices
                 string notFoundMsg = $"Trim Level with ID {updateDto.Id} not found for update.";
                 _logger.LogWarning(notFoundMsg);
                 throw new ServiceException(notFoundMsg);
+            }
+
+            // 2. Check for uniqueness (could also be part of FluentValidator if NameExistsAsync is injected)
+            if (await _unitOfWork.TrimLevels.NameExistsForModelAsync(updateDto.Name, updateDto.ModelId, null))
+            {
+                string duplicateMessage = $"Trim with name '{updateDto.Name}' already exists.";
+                _logger.LogWarning(duplicateMessage);
+                throw new DuplicationException(duplicateMessage, nameof(TrimLevel), "Name", updateDto.Name);
             }
 
             try

@@ -17,14 +17,14 @@ namespace AutoFusionPro.Application.Validators.CompatibleVehicleValidator
                 .MustAsync(async (id, token) => await unitOfWork.Models.ExistsAsync(m => m.Id == id))
                 .WithMessage("Selected Model does not exist.");
 
-            RuleFor(x => x)
-                .MustAsync(async (dto, token) =>
-                {
-                    if (string.IsNullOrWhiteSpace(dto.Name) || dto.ModelId <= 0) return true;
-                    return !await unitOfWork.TrimLevels.NameExistsForModelAsync(dto.Name, dto.ModelId);
-                })
-                .WithMessage(dto => $"Trim Level name '{dto.Name}' already exists for the selected Model.")
-                .When(x => !string.IsNullOrWhiteSpace(x.Name) && x.ModelId > 0);
+            //RuleFor(x => x)
+            //    .MustAsync(async (dto, token) =>
+            //    {
+            //        if (string.IsNullOrWhiteSpace(dto.Name) || dto.ModelId <= 0) return true;
+            //        return !await unitOfWork.TrimLevels.NameExistsForModelAsync(dto.Name, dto.ModelId);
+            //    })
+            //    .WithMessage(dto => $"Trim Level name '{dto.Name}' already exists for the selected Model.")
+            //    .When(x => !string.IsNullOrWhiteSpace(x.Name) && x.ModelId > 0);
         }
     }
 }

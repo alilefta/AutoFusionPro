@@ -3,6 +3,8 @@ using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions.ViewModel;
+using AutoFusionPro.Core.Helpers.ErrorMessages;
+using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.Core.Models;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
@@ -225,7 +227,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
                 _toastNotificationService.ShowError(ErrorMessage, "Loading Error"); // Show toast/dialog
                                                                                     // Avoid throwing ViewModelException here unless absolutely necessary for higher-level handling
 
-                throw new ViewModelException($"An exception happened while loading data", nameof(VehiclesViewModel), nameof(LoadVehiclesAsync), "Loading", ex);
+                throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(VehiclesViewModel), nameof(LoadVehiclesAsync), MethodOperationType.LOAD_DATA, ex);
 
             }
             finally
@@ -254,7 +256,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
             catch (Exception ex)
             {
                 _toastNotificationService.ShowError("Failed to add vehicle");
-                throw new ViewModelException("An exception happened in AddVehicleCommand", nameof(VehiclesViewModel), nameof(AddVehicleCommand), "Show Dialog", ex);
+                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(VehiclesViewModel), nameof(AddVehicleCommand), MethodOperationType.OPEN_DIALOG, ex);
             }
         }
 

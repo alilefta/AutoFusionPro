@@ -5,6 +5,7 @@ using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Parts;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.User;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.Views.Vehicles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ namespace AutoFusionPro.UI.Services
                     ApplicationPage.Account => _serviceProvider.GetRequiredService<UserAccountView>(),
                     ApplicationPage.Parts => _serviceProvider.GetRequiredService<PartsView>(),
                     ApplicationPage.Vehicles => _serviceProvider.GetRequiredService<VehiclesView>(),
+                    ApplicationPage.VehicleCompatibilityManagement => _serviceProvider.GetRequiredService<VehicleCompatibilityView>(),
                                       _ => throw new ArgumentOutOfRangeException(nameof(page), page, "Unsupported page type.")
                 };
                 

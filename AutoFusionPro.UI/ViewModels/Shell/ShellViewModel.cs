@@ -83,6 +83,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         public bool IsMyAccountSelected => SelectedPage == ApplicationPage.Account;
         public bool IsPartsSelected => SelectedPage == ApplicationPage.Parts;
         public bool IsVehiclesSelected => SelectedPage == ApplicationPage.Vehicles;
+        public bool IsVehicleCompatibilityManagementSelected => SelectedPage == ApplicationPage.VehicleCompatibilityManagement;
         // Add properties for Schedule, Billing, Inventory, Staff, Reports, etc.
 
         [ObservableProperty]
@@ -90,6 +91,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         [NotifyPropertyChangedFor(nameof(IsSettingsSelected))]
         [NotifyPropertyChangedFor(nameof(IsMyAccountSelected))]
         [NotifyPropertyChangedFor(nameof(IsPartsSelected))]
+        [NotifyPropertyChangedFor(nameof(IsVehicleCompatibilityManagementSelected))]
         public ApplicationPage _selectedPage = ApplicationPage.Dashboard;
 
         [ObservableProperty]
@@ -249,13 +251,13 @@ namespace AutoFusionPro.UI.ViewModels.Shell
                 await base.InitializeAsync(parameter);
 
 
-                _logger.LogInformation($"Current View ===== : {CurrentView}");
-                _logger.LogInformation($"Is Initialized ===== : {Initialized}");
+                //_logger.LogInformation($"Current View ===== : {CurrentView}");
+                //_logger.LogInformation($"Is Initialized ===== : {Initialized}");
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error initializing HomeViewModel");
+                _logger.LogError(ex, "Error initializing ShellViewModel");
                 throw;
             }
             finally

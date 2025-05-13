@@ -1,9 +1,9 @@
-﻿using AutoFusionPro.Application.Interfaces;
-using AutoFusionPro.Application.Interfaces.DataServices;
+﻿using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 
 namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels
@@ -19,6 +19,19 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private readonly IDialogService _dialogService;
 
         #endregion
+
+
+        [ObservableProperty]
+        private bool _isVisible = false;
+
+        [ObservableProperty]
+        private bool _isLoading = false;
+
+        [ObservableProperty]
+        private string _displayName = "Compatible Vehicle Types";
+
+        [ObservableProperty]
+        private string _icon = "";
 
 
         public CompatibleVehiclesViewModel(

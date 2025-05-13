@@ -2,6 +2,8 @@
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Core.Enums.UI.VehicleDialogs;
 using AutoFusionPro.Core.Exceptions.ViewModel;
+using AutoFusionPro.Core.Helpers.ErrorMessages;
+using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
@@ -383,7 +385,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
             {
                 ValidationMessage = "An error occurred while adding the vehicle.";
                 _logger.LogError($"An exception happened while adding a new vehicle, {ex.Message}");
-                throw new ViewModelException("An exception happened", nameof(AddVehicleDialogViewModel), nameof(AddVehicleCommand), "Add", ex);
+                throw new ViewModelException(ErrorMessages.CREATE_DATA_EXCEPTION_MESSAGE, nameof(AddVehicleDialogViewModel), nameof(AddVehicleCommand), MethodOperationType.ADD_DATA, ex);
             }
             finally
             {

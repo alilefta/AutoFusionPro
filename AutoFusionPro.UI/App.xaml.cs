@@ -18,6 +18,9 @@ using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels;
 using AutoFusionPro.UI.ViewModels.Vehicles;
 using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
@@ -28,6 +31,7 @@ using AutoFusionPro.UI.Views.Parts;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.Shell;
 using AutoFusionPro.UI.Views.User;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.Views.Vehicles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -281,6 +285,8 @@ namespace AutoFusionPro.UI
                 services.AddTransient<UserManagementView>();
                 services.AddTransient<UserAccountView>();
 
+                services.AddScoped<VehicleCompatibilityView>();
+
 
                 // ViewModels
                 services.AddSingleton<MainWindowViewModel>();
@@ -299,6 +305,19 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
+
+                // Vehicle Compatibility View Models
+                services.AddScoped<VehicleCompatibilityShellViewModel>();
+
+                services.AddTransient<MakesModelsTrimsManagementViewModel>();
+                services.AddTransient<EngineTypesManagementViewModel>();
+                services.AddTransient<BodyTypesManagementViewModel>();
+                services.AddTransient<CompatibleVehiclesViewModel>();
+                services.AddTransient<TransmissionTypesManagementViewModel>();
+
+                services.AddTransient<AddMakeDialogViewModel>();
+                services.AddTransient<AddModelDialogViewModel>();
+                services.AddTransient<AddTrimLevelDialogViewModel>();
 
 
                 // Dialogs
