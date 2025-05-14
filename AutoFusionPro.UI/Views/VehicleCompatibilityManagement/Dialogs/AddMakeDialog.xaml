@@ -19,7 +19,7 @@
         Background="{DynamicResource Card.Header.BackgroundBrush}"
         Foreground="{DynamicResource Text.PrimaryBrush}"
         Title="AddVehicleDialog"
-        Height="200"
+        Height="220"
         Width="400"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -128,13 +128,13 @@
             <!-- Content -->
             <Grid Grid.Row="1" Margin="8">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
                 <!-- Form Field -->
-                <StackPanel Margin="10,6">
-                    <TextBlock Text="Make's Name" FontFamily="{DynamicResource DynamicFontFamilyBold}"/>
+                <StackPanel Margin="10,6" VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource MakeNameStr}" FontFamily="{DynamicResource DynamicFontFamilyBold}"/>
                     <wpfUi:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
                                    Margin="0,8,0,0"
                                    PlaceholderText="E.g., Nissan, Toyota..."/>
@@ -144,14 +144,14 @@
                 <!-- Button-->
                 <xBtn:XButton Style="{DynamicResource RegularButtonStyle}" Grid.Row="1" VerticalAlignment="Bottom"
                               Margin="0,15,0,0"
-                              ButtonType="Success"
+                              ButtonType="Info"
                               Command="{Binding AddMakeCommand}"
                               IsLoading="{Binding IsAdding}">
                     <StackPanel Orientation="Horizontal">
                         <wpfUi:SymbolIcon Symbol="VehicleCarProfileLtr24"
                                           FontSize="18"
                                           Margin="0,0,8,0" />
-                        <TextBlock Text="Add New Make"
+                        <TextBlock Text="{DynamicResource AddMakeStr}"
                                    FontSize="14"
                                    FontFamily="{DynamicResource DynamicFontFamilyMedium}"
                                    VerticalAlignment="Center" />

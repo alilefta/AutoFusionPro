@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs
 {
-    public partial class AddTrimLevelDialogViewModel : InitializableViewModel<AddTrimLevelDialogViewModel>
+    public partial class AddTrimLevelDialogViewModel : InitializableViewModel<AddTrimLevelDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog = null!;
 
@@ -54,16 +54,16 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs
 
             _logger.LogInformation("AddTrimLevelDialogViewModel initialized with parameter {param}", ModelId);
 
-
-            await base.InitializeAsync(parameter);
-
             var model = await _compatibleVehicleService.GetModelByIdAsync(ModelId);
-            if(model == null)
+            if (model == null)
             {
                 _logger.LogError("The model was null, for AddTrimLevelDialogViewModel");
                 return;
             }
             Model = model;
+
+            await base.InitializeAsync(parameter);
+
         }
 
         private bool CanAddModel()

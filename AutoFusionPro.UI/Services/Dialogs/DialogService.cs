@@ -1,8 +1,12 @@
-﻿using AutoFusionPro.Application.Interfaces.Dialogs;
+﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
+using AutoFusionPro.Application.Interfaces.Dialogs;
+using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using AutoFusionPro.UI.Extensions;
 using AutoFusionPro.UI.Services.Animations;
+using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs;
 using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
+using AutoFusionPro.UI.Views.General.Dialogs;
 using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs;
 using AutoFusionPro.UI.Views.Vehicles.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,12 +87,24 @@ namespace AutoFusionPro.UI.Services.Dialogs
 
     public class DialogService : IDialogService
     {
+        #region Provider
+
         private readonly IServiceProvider _serviceProvider;
+
+        #endregion
+
+        #region Constructor
 
         public DialogService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
+
+        #endregion
+
+        #region Compatible Vehicles
+
+        #region Add Dialogs
 
         public bool? ShowAddMakeDialog()
         {
@@ -194,8 +210,221 @@ namespace AutoFusionPro.UI.Services.Dialogs
 
         public async Task<bool?> ShowAddTrimLevelDialog(int modelId)
         {
-            throw new NotImplementedException();
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            double originalOpacity = mainWindow.DimBackground();
+
+            try
+            {
+                // Create the dialog
+                var dialog = new AddTrimLevelDialog
+                {
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+
+                // Get the ViewModel
+                var viewModel = _serviceProvider.GetRequiredService<AddTrimLevelDialogViewModel>();
+
+                await viewModel.InitializeAsync(modelId);
+
+
+                // Create the dialog adapter and set it on the ViewModel
+                var dialogAdapter = new AnimatedDialogWindowAdapter(
+                    dialog,
+                    AnimationHelpers.AnimationType.FadeIn,  // Show animation
+                    AnimationHelpers.AnimationType.FadeOut          // Close animation
+                );
+
+                // Set the adapter on the ViewModel
+                (viewModel as IDialogAware)?.SetDialogWindow(dialogAdapter);
+
+                // Set DataContext
+                dialog.DataContext = viewModel;
+
+                // Handle dialog closed event to restore main window opacity
+                EventHandler closedHandler = null;
+                closedHandler = (sender, args) =>
+                {
+                    mainWindow.RestoreBackground(originalOpacity);
+                    dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
+                };
+                dialog.Closed += closedHandler;
+
+                // Show the dialog with animation
+                return dialog.ShowDialogWithAnimation(AnimationHelpers.AnimationType.FadeIn);
+            }
+            catch (Exception ex)
+            {
+                // If exception occurs, restore opacity immediately
+                mainWindow.Opacity = originalOpacity;
+                throw;
+            }
         }
+
+        #endregion
+
+        #region Edit Dialogs
+
+        public async Task<bool?> ShowEditMakeDialog(MakeDto makeDto)
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            double originalOpacity = mainWindow.DimBackground();
+
+            try
+            {
+                // Create the dialog
+                var dialog = new EditMakeDialog
+                {
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+
+                // Get the ViewModel
+                var viewModel = _serviceProvider.GetRequiredService<EditMakeDialogViewModel>();
+
+                await viewModel.InitializeAsync(makeDto);
+
+
+                // Create the dialog adapter and set it on the ViewModel
+                var dialogAdapter = new AnimatedDialogWindowAdapter(
+                    dialog,
+                    AnimationHelpers.AnimationType.FadeIn,  // Show animation
+                    AnimationHelpers.AnimationType.FadeOut          // Close animation
+                );
+
+                // Set the adapter on the ViewModel
+                (viewModel as IDialogAware)?.SetDialogWindow(dialogAdapter);
+
+                // Set DataContext
+                dialog.DataContext = viewModel;
+
+                // Handle dialog closed event to restore main window opacity
+                EventHandler closedHandler = null;
+                closedHandler = (sender, args) =>
+                {
+                    mainWindow.RestoreBackground(originalOpacity);
+                    dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
+                };
+                dialog.Closed += closedHandler;
+
+                // Show the dialog with animation
+                return dialog.ShowDialogWithAnimation(AnimationHelpers.AnimationType.FadeIn);
+            }
+            catch (Exception ex)
+            {
+                // If exception occurs, restore opacity immediately
+                mainWindow.Opacity = originalOpacity;
+                throw;
+            }
+        }
+
+        public async Task<bool?> ShowEditModelDialog(ModelDto modelDto)
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            double originalOpacity = mainWindow.DimBackground();
+
+            try
+            {
+                // Create the dialog
+                var dialog = new EditModelDialog
+                {
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+
+                // Get the ViewModel
+                var viewModel = _serviceProvider.GetRequiredService<EditModelDialogViewModel>();
+
+                await viewModel.InitializeAsync(modelDto);
+
+
+                // Create the dialog adapter and set it on the ViewModel
+                var dialogAdapter = new AnimatedDialogWindowAdapter(
+                    dialog,
+                    AnimationHelpers.AnimationType.FadeIn,  // Show animation
+                    AnimationHelpers.AnimationType.FadeOut          // Close animation
+                );
+
+                // Set the adapter on the ViewModel
+                (viewModel as IDialogAware)?.SetDialogWindow(dialogAdapter);
+
+                // Set DataContext
+                dialog.DataContext = viewModel;
+
+                // Handle dialog closed event to restore main window opacity
+                EventHandler closedHandler = null;
+                closedHandler = (sender, args) =>
+                {
+                    mainWindow.RestoreBackground(originalOpacity);
+                    dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
+                };
+                dialog.Closed += closedHandler;
+
+                // Show the dialog with animation
+                return dialog.ShowDialogWithAnimation(AnimationHelpers.AnimationType.FadeIn);
+            }
+            catch (Exception ex)
+            {
+                // If exception occurs, restore opacity immediately
+                mainWindow.Opacity = originalOpacity;
+                throw;
+            }
+        }
+
+        public async Task<bool?> ShowEditTrimLevelDialog(TrimLevelDto trimLevelDto)
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            double originalOpacity = mainWindow.DimBackground();
+
+            try
+            {
+                // Create the dialog
+                var dialog = new EditTrimLevelDialog
+                {
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+
+                // Get the ViewModel
+                var viewModel = _serviceProvider.GetRequiredService<EditTrimLevelDialogViewModel>();
+
+                await viewModel.InitializeAsync(trimLevelDto);
+
+
+                // Create the dialog adapter and set it on the ViewModel
+                var dialogAdapter = new AnimatedDialogWindowAdapter(
+                    dialog,
+                    AnimationHelpers.AnimationType.FadeIn,  // Show animation
+                    AnimationHelpers.AnimationType.FadeOut          // Close animation
+                );
+
+                // Set the adapter on the ViewModel
+                (viewModel as IDialogAware)?.SetDialogWindow(dialogAdapter);
+
+                // Set DataContext
+                dialog.DataContext = viewModel;
+
+                // Handle dialog closed event to restore main window opacity
+                EventHandler closedHandler = null;
+                closedHandler = (sender, args) =>
+                {
+                    mainWindow.RestoreBackground(originalOpacity);
+                    dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
+                };
+                dialog.Closed += closedHandler;
+
+                // Show the dialog with animation
+                return dialog.ShowDialogWithAnimation(AnimationHelpers.AnimationType.FadeIn);
+            }
+            catch (Exception ex)
+            {
+                // If exception occurs, restore opacity immediately
+                mainWindow.Opacity = originalOpacity;
+                throw;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Vehicle Dialogs
 
         public bool? ShowAddVehicleDialog()
         {
@@ -245,5 +474,62 @@ namespace AutoFusionPro.UI.Services.Dialogs
                 throw;
             }
         }
+
+        #endregion
+
+        #region General Dialogs
+
+        public bool? ShowConfirmDeleteItemsDialog(int count)
+        {
+            var mainWindow = System.Windows.Application.Current.MainWindow;
+            double originalOpacity = mainWindow.DimBackground();
+
+            try
+            {
+                // Create the dialog
+                var dialog = new ConfirmDeleteItemsDialog
+                {
+                    Owner = System.Windows.Application.Current.MainWindow,
+                };
+
+                // Get the ViewModel
+                var viewModel = _serviceProvider.GetRequiredService<ConfirmDeleteItemsDialogViewModel>();
+
+                // Create the dialog adapter and set it on the ViewModel
+                var dialogAdapter = new AnimatedDialogWindowAdapter(
+                    dialog,
+                    AnimationHelpers.AnimationType.FadeIn,  // Show animation
+                    AnimationHelpers.AnimationType.FadeOut          // Close animation
+                );
+
+                // Set the adapter on the ViewModel
+                (viewModel as IDialogAware)?.SetDialogWindow(dialogAdapter);
+
+                // Set DataContext
+                dialog.DataContext = viewModel;
+
+                // Handle dialog closed event to restore main window opacity
+                EventHandler closedHandler = null;
+                closedHandler = (sender, args) =>
+                {
+                    mainWindow.RestoreBackground(originalOpacity);
+                    dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
+                };
+                dialog.Closed += closedHandler;
+
+                // Show the dialog with animation
+                return dialog.ShowDialogWithAnimation(AnimationHelpers.AnimationType.FadeIn);
+            }
+            catch (Exception ex)
+            {
+                // If exception occurs, restore opacity immediately
+                mainWindow.Opacity = originalOpacity;
+                throw;
+            }
+        }
+
+        #endregion
+
+
     }
 }

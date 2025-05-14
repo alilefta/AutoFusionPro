@@ -25,10 +25,6 @@ namespace AutoFusionPro.Application.Services.DataServices
         private readonly IValidator<CreateMakeDto> _createMakeValidator;
         private readonly IValidator<UpdateMakeDto> _updateMakeValidator;
 
-        // Other validators for CompatibleVehicle DTOs
-        private readonly IValidator<CreateCompatibleVehicleDto> _createCompatibleVehicleValidator;
-        private readonly IValidator<UpdateCompatibleVehicleDto> _updateCompatibleVehicleValidator;
-
         private readonly IValidator<CreateModelDto> _createModelValidator;
         private readonly IValidator<UpdateModelDto> _updateModelValidator;
 
@@ -40,6 +36,9 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         private readonly IValidator<CreateTrimLevelDto> _createTrimLevelValidator;
         private readonly IValidator<UpdateTrimLevelDto> _updateTrimLevelValidator;
+
+        private readonly IValidator<CreateCompatibleVehicleDto> _createCompatibleVehicleValidator;
+        private readonly IValidator<UpdateCompatibleVehicleDto> _updateCompatibleVehicleValidator;
 
         #endregion
 
@@ -74,7 +73,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             _updateCompatibleVehicleValidator = updateCompatibleVehicleValidator ?? throw new ArgumentNullException(nameof(updateCompatibleVehicleValidator));
 
             _createModelValidator = createModelValidator ?? throw new ArgumentNullException(nameof(createModelValidator));
-            _updateMakeValidator = updateMakeValidator ?? throw new ArgumentNullException(nameof(updateMakeValidator));
+            _updateModelValidator = updateModelValidator ?? throw new ArgumentNullException(nameof(updateModelValidator));
 
             _createLookupValidator = createLookupValidator ?? throw new ArgumentNullException(nameof(createLookupValidator));
             _updateLookupValidator = updateLookupValidator ?? throw new ArgumentNullException(nameof(updateLookupValidator));
@@ -508,9 +507,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             bool hasModels = await _unitOfWork.Models.ExistsAsync(m => m.MakeId == id); // Example
             if (hasModels)
             {
-                string dependencyError = $"Cannot delete Make '{makeToDelete.Name}' (ID: {id}) because it has associated vehicle models. Delete or reassign models first.";
+                string dependencyError = $"Cannot delete Make";
                 _logger.LogError(dependencyError);
-                throw new ServiceException(dependencyError);
+                throw new DeletionBlockedException(dependencyError, nameof(Make), makeToDelete.Id.ToString(), new List<string> { nameof(Model)});
             }
 
             try
@@ -716,22 +715,34 @@ namespace AutoFusionPro.Application.Services.DataServices
                 return; // Or throw ServiceException
             }
 
-            // Dependency Checks
-            bool hasTrims = await _unitOfWork.Models.HasAssociatedTrimLevelsAsync(id);
+            var dependentEntities = new List<string>();
+
+            // Dependency Check 1: TrimLevels
+            bool hasTrims = await _unitOfWork.Models.HasAssociatedTrimLevelsAsync(id); // Assumes this method exists on IModelRepository
             if (hasTrims)
             {
-                string depError = $"Cannot delete Model '{modelToDelete.Name}' (ID: {id}) as it has associated Trim Levels.";
-                _logger.LogError(depError);
-                throw new ServiceException(depError);
+                dependentEntities.Add(nameof(TrimLevel));
             }
 
-            bool hasCompatibleVehicles = await _unitOfWork.Models.HasAssociatedCompatibleVehiclesAsync(id);
+            // Dependency Check 2: CompatibleVehicles
+            bool hasCompatibleVehicles = await _unitOfWork.Models.HasAssociatedCompatibleVehiclesAsync(id); // Assumes this method exists
             if (hasCompatibleVehicles)
             {
-                string depError = $"Cannot delete Model '{modelToDelete.Name}' (ID: {id}) as it's used in Compatible Vehicle specifications.";
-                _logger.LogError(depError);
-                throw new ServiceException(depError);
+                dependentEntities.Add(nameof(CompatibleVehicle));
             }
+
+            if (dependentEntities.Any())
+            {
+                string errorMessage = $"Cannot delete Model '{modelToDelete.Name}' (ID: {id}) as it has associations.";
+                _logger.LogError(errorMessage + $" Dependent types: {string.Join(", ", dependentEntities)}");
+                throw new DeletionBlockedException(
+                    errorMessage,
+                    nameof(Model),
+                    modelToDelete.Id.ToString(),
+                    dependentEntities
+                );
+            }
+
 
             try
             {
@@ -924,7 +935,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string depError = $"Cannot delete Transmission Type '{transmissionTypeToDelete.Name}' (ID: {id}) as it is used in Compatible Vehicle specifications.";
                 _logger.LogError(depError);
-                throw new ServiceException(depError);
+                throw new DeletionBlockedException(depError, nameof(TransmissionType), transmissionTypeToDelete.Id.ToString(), new List<string> { nameof(CompatibleVehicle) });
             }
 
             try
@@ -1107,7 +1118,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string depError = $"Cannot delete Engine Type '{engineTypeToDelete.Name}' (ID: {id}) as it is used in Compatible Vehicle specifications.";
                 _logger.LogError(depError);
-                throw new ServiceException(depError);
+                throw new DeletionBlockedException(depError, nameof(EngineType), engineTypeToDelete.Id.ToString(), new List<string> { nameof(CompatibleVehicle) });
             }
 
             try
@@ -1315,7 +1326,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string depError = $"Cannot delete Trim Level '{trimLevelToDelete.Name}' (ID: {id}) as it is used in Compatible Vehicle specifications.";
                 _logger.LogError(depError);
-                throw new ServiceException(depError);
+                throw new DeletionBlockedException(depError, nameof(TrimLevel), trimLevelToDelete.Id.ToString(), new List<string> { nameof(CompatibleVehicle) });
             }
 
             try
@@ -1511,7 +1522,7 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 string depError = $"Cannot delete Body Type '{bodyTypeToDelete.Name}' (ID: {id}) as it is used in Compatible Vehicle specifications.";
                 _logger.LogError(depError);
-                throw new ServiceException(depError);
+                throw new DeletionBlockedException(depError, nameof(BodyType), bodyTypeToDelete.Id.ToString(), new List<string> { nameof(CompatibleVehicle) });
             }
 
             try

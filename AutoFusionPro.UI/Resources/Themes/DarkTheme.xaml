@@ -618,6 +618,11 @@
                      Color="{StaticResource Neutral200}" />
 
 
+
+    <SolidColorBrush x:Key="SplitterBrush"
+                     Color="{StaticResource Neutral700}" />
+
+
     <ResourceDictionary.MergedDictionaries>
         <wpfUi:ThemesDictionary Theme="Dark" />
         <wpfUi:ControlsDictionary />

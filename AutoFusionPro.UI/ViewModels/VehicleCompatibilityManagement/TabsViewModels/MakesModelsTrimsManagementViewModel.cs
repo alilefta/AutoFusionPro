@@ -2,6 +2,7 @@
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
+using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
@@ -71,8 +72,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         public bool HasSelectedMake => SelectedMake != null;
         public bool HasSelectedModel => SelectedModel != null;
 
-        //public ICommand EditMakeCommand { get; set; }
-
 
         public MakesModelsTrimsManagementViewModel(
             IWpfToastNotificationService wpfToastNotificationService,
@@ -85,13 +84,22 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
-            //EditMakeCommand = new AutoFusionPro.Application.Commands.RelayCommand(o => )
+            // Initialize collections
+            _makesCollection = new ObservableCollection<MakeDto>();
+            _modelsCollection = new ObservableCollection<ModelDto>();
+            _trimLevelsCollection = new ObservableCollection<TrimLevelDto>();
 
-            _ = LoadMakesDataAsync();
+            _ = InitializeAsync();
         }
 
 
         #region Loading Data
+
+        private async Task InitializeAsync()
+        {
+            await LoadMakesDataAsync();
+        }
+
 
         private async Task LoadMakesDataAsync()
         {
@@ -99,14 +107,28 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             {
                 IsLoadingMakes = true;
 
+                MakesCollection.Clear(); // Clear before loading new data
+
                 var makes = await _compatibleVehicleService.GetAllMakesAsync();
-                if (makes.Any())
+                if (makes != null) // Check for null before Any()
                 {
-                    MakesCollection = new ObservableCollection<MakeDto>(makes);
+                    foreach (var make in makes.OrderBy(m => m.Name)) // Ensure ordered
+                    {
+                        MakesCollection.Add(make);
+                    }
+                    _logger.LogInformation("Loaded {Count} makes.", MakesCollection.Count);
+                }
+                else
+                {
+                    _logger.LogWarning("GetAllMakesAsync returned null.");
                 }
             }
             catch (Exception ex)
             {
+                // No longer throwing ViewModelException, handle here
+                _logger.LogError(ex, ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE);
+                _wpfToastNotificationService.ShowError("Failed to load Makes. Please try again.", "Loading Error");
+        
                 throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(LoadMakesDataAsync), MethodOperationType.LOAD_DATA, ex);
 
             }
@@ -118,20 +140,32 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         private async Task LoadModelsForMakeAsync(int makeId)
         {
+            if (makeId <= 0) return;
+
             try
             {
                 IsLoadingModels = true;
+                ModelsCollection.Clear(); // Clear before loading
 
                 var models = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
-                if (models.Any())
+                if (models != null)
                 {
-                    ModelsCollection = new ObservableCollection<ModelDto>(models);
+                    foreach (var model in models.OrderBy(m => m.Name))
+                    {
+                        ModelsCollection.Add(model);
+                    }
+                    _logger.LogInformation("Loaded {Count} models for Make ID {MakeId}.", ModelsCollection.Count, makeId);
+                }
+                else
+                {
+                    _logger.LogWarning("GetModelsByMakeIdAsync returned null for Make ID {MakeId}.", makeId);
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "{ErrorMessage} for Make ID {MakeId}", ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, makeId);
+                _wpfToastNotificationService.ShowError($"Failed to load Models for {SelectedMake?.Name}. Please try again.", "Loading Error");
                 throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(LoadModelsForMakeAsync), MethodOperationType.LOAD_DATA, ex);
-
             }
             finally
             {
@@ -141,18 +175,31 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         private async Task LoadTrimsForModelAsync(int modelId)
         {
+            if (modelId <= 0) return;
+
             try
             {
                 IsLoadingTrims = true;
+                TrimLevelsCollection.Clear(); // Clear before loading
 
                 var trimLevels = await _compatibleVehicleService.GetTrimLevelsByModelIdAsync(modelId);
-                if (trimLevels.Any())
+                if (trimLevels != null)
                 {
-                    TrimLevelsCollection = new ObservableCollection<TrimLevelDto>(trimLevels);
+                    foreach (var trim in trimLevels.OrderBy(t => t.Name))
+                    {
+                        TrimLevelsCollection.Add(trim);
+                    }
+                    _logger.LogInformation("Loaded {Count} trim levels for Model ID {ModelId}.", TrimLevelsCollection.Count, modelId);
+                }
+                else
+                {
+                    _logger.LogWarning("GetTrimLevelsByModelIdAsync returned null for Model ID {ModelId}.", modelId);
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "{ErrorMessage} for Model ID {ModelId}", ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, modelId);
+                _wpfToastNotificationService.ShowError($"Failed to load Trim Levels for {SelectedModel?.Name}. Please try again.", "Loading Error");
                 throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(LoadTrimsForModelAsync), MethodOperationType.LOAD_DATA, ex);
 
             }
@@ -167,14 +214,50 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         #region Selection Change 
 
-        partial void OnSelectedMakeChanged(MakeDto value)
+        partial void OnSelectedMakeChanged(MakeDto? oldValue, MakeDto newValue) // Use generated overload with oldValue and newValue
         {
-            _ = LoadModelsForMakeAsync(value.Id);
+            _logger.LogInformation("SelectedMake changed from '{OldMakeName}' to '{NewMakeName}' (ID: {NewMakeId})",
+                oldValue?.Name, newValue?.Name, newValue?.Id);
+
+            // Clear dependent collections
+            ModelsCollection?.Clear(); // Use null-conditional operator
+            TrimLevelsCollection?.Clear();
+            SelectedModel = null; // This will trigger OnSelectedModelChanged, which also clears trims
+
+            if (newValue != null)
+            {
+                _ = LoadModelsForMakeAsync(newValue.Id);
+            }
+            else
+            {
+                // Optionally, update UI state if no make is selected
+                // e.g., disable model/trim sections or show a "Please select a make" message
+            }
+            // Notify CanExecute for commands that depend on SelectedMake
+            ShowAddModelDialogCommand.NotifyCanExecuteChanged();
+            // Add other relevant commands here
         }
 
-        partial void OnSelectedModelChanged(ModelDto value)
+        partial void OnSelectedModelChanged(ModelDto? oldValue, ModelDto newValue) // Use generated overload
         {
-            _ = LoadTrimsForModelAsync(value.Id);
+            _logger.LogInformation("SelectedModel changed from '{OldModelName}' to '{NewModelName}' (ID: {NewModelId})",
+                oldValue?.Name, newValue?.Name, newValue?.Id);
+
+            // Clear dependent collection
+            TrimLevelsCollection?.Clear();
+            SelectedTrimLevel = null;
+
+            if (newValue != null)
+            {
+                _ = LoadTrimsForModelAsync(newValue.Id);
+            }
+            else
+            {
+                // Optionally, update UI state if no model is selected
+            }
+            // Notify CanExecute for commands that depend on SelectedModel
+            ShowAddTrimLevelDialogCommand.NotifyCanExecuteChanged();
+            // Add other relevant commands here
         }
 
         #endregion
@@ -290,82 +373,245 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             if (makeToEdit == null) return;
             try
             {
-                //var make = makeToEdit as MakeDto;
+                var results = await _dialogService.ShowEditMakeDialog(makeToEdit);
 
-                //var editDialog = _dialogService.ShowAddMakeDialog();
+                if (results.HasValue && results.Value == true)
+                {
+                    await LoadMakesDataAsync();
+
+                    var updatedMake = MakesCollection.First(make => make.Id == makeToEdit.Id);
+
+                    _wpfToastNotificationService.ShowSuccess($"Make {makeToEdit.Name} changed to {updatedMake.Name} successfully!");
+
+                    _logger.LogInformation($"Make {makeToEdit.Name} changed to {updatedMake.Name} successfully!");
+                }
+
+            }
+            catch (Exception ex) { 
+            
+            }
+        }
+
+        [RelayCommand]
+        public async Task ShowEditModelDialogAsync(ModelDto modelDto)
+        {
+            if (modelDto == null) return;
+
+            try
+            {
+                var results = await _dialogService.ShowEditModelDialog(modelDto);
+
+                if (results.HasValue && results.Value == true)
+                {
+                    await LoadModelsForMakeAsync(modelDto.MakeId);
+
+                    var updatedModel = MakesCollection.First(make => make.Id == modelDto.Id);
+
+                    _wpfToastNotificationService.ShowSuccess($"Make {modelDto.Name} changed to {updatedModel.Name} successfully!");
+
+                    _logger.LogInformation($"Make {modelDto.Name} changed to {updatedModel.Name} successfully!");
+                }
 
             }
             catch (Exception ex) { }
         }
 
         [RelayCommand]
-        public async Task ShowEditModelAsync(object param)
+        public async Task ShowEditTrimLevelDialogAsync(TrimLevelDto trimToBeUpdated)
         {
-            if (param == null) return;
+            if (trimToBeUpdated == null) return;
             try
             {
-                var make = param as MakeDto;
+                var results = await _dialogService.ShowEditTrimLevelDialog(trimToBeUpdated);
 
-                //var editDialog = _dialogService.ShowAddMakeDialog();
+                if (results.HasValue && results.Value == true)
+                {
+                    await LoadTrimsForModelAsync(trimToBeUpdated.ModelId);
+
+                    var updatedTrim = TrimLevelsCollection.First(trim => trim.Id == trimToBeUpdated.Id);
+
+                    _wpfToastNotificationService.ShowSuccess($"Make {trimToBeUpdated.Name} changed to {updatedTrim.Name} successfully!");
+
+                    _logger.LogInformation($"Make {trimToBeUpdated.Name} changed to {updatedTrim.Name} successfully!");
+                }
 
             }
             catch (Exception ex) { }
         }
 
         [RelayCommand]
-        public async Task ShowEditTrimLevelDialogAsync(object param)
+        public async Task ShowDeleteMakeDialogAsync(MakeDto makeToBeDeleted)
         {
-            if (param == null) return;
-            try
-            {
-                var make = param as MakeDto;
+            if(makeToBeDeleted  == null) return;
 
-                //var editDialog = _dialogService.ShowAddMakeDialog();
+            var results = _dialogService.ShowConfirmDeleteItemsDialog(1);
 
+            if (results.HasValue && results.Value == true) {
+
+                try
+                {
+                    await _compatibleVehicleService.DeleteMakeAsync(makeToBeDeleted.Id);
+
+                    await LoadMakesDataAsync();
+
+                    _wpfToastNotificationService.ShowSuccess($"Make has been deleted successfully!");
+
+                    _logger.LogInformation("Make with ID={ID} has been deleted successfully!", makeToBeDeleted.Id);
+
+                }
+                catch (DeletionBlockedException dx)
+                {
+                    _logger.LogError(dx, "{ErrorMessage}. Entity: {EntityName}, Key: {EntityKey}, Dependents: {Dependents}",
+                        ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, dx.EntityName, dx.EntityKey, string.Join(", ", dx.DependentEntityTypes ?? Enumerable.Empty<string>()));
+
+                    // Construct a more user-friendly message
+                    string entityDisplayName = dx.EntityName ?? "the item"; // Fallback
+                    string dependentItemsText = "other items"; // Default
+                    if (dx.DependentEntityTypes != null && dx.DependentEntityTypes.Any())
+                    {
+                        // Make dependent types more readable (e.g., "Trim Levels", "Vehicle Specifications")
+                        dependentItemsText = string.Join(" and ", dx.DependentEntityTypes.Select(FormatDependentTypeName));
+                    }
+
+                    _wpfToastNotificationService.ShowError(
+                        $"Cannot delete {entityDisplayName} '{makeToBeDeleted.Name}' because it is associated with {dependentItemsText}. Please remove these associations first.",
+                        "Deletion Blocked",
+                        TimeSpan.FromSeconds(10) // Longer duration for important messages
+                    );
+                    return; // Important: Exit the method after handling this specific error.
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting a Make Item");
+                    _wpfToastNotificationService.ShowError($"An error has occurred while deleting the make {makeToBeDeleted.Name}");
+                    throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(ShowDeleteMakeDialogAsync), MethodOperationType.DELETE_DATA, ex);
+
+
+                }
             }
-            catch (Exception ex) { }
+        }
+
+
+        [RelayCommand]
+        public async Task ShowDeleteModelDialogAsync(ModelDto modelToBeDeleted)
+        {
+            if (modelToBeDeleted == null) return;
+
+            var results = _dialogService.ShowConfirmDeleteItemsDialog(1);
+
+            if (results.HasValue && results.Value == true)
+            {
+
+                try
+                {
+                    await _compatibleVehicleService.DeleteModelAsync(modelToBeDeleted.Id);
+
+                    await LoadModelsForMakeAsync(modelToBeDeleted.MakeId);
+
+                    _wpfToastNotificationService.ShowSuccess($"Model has been deleted successfully!");
+
+                    _logger.LogInformation("Model with ID={ID} has been deleted successfully!", modelToBeDeleted.Id);
+
+                }
+                catch (DeletionBlockedException dx)
+                {
+                    _logger.LogError(dx, "{ErrorMessage}. Entity: {EntityName}, Key: {EntityKey}, Dependents: {Dependents}",
+                        ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, dx.EntityName, dx.EntityKey, string.Join(", ", dx.DependentEntityTypes ?? Enumerable.Empty<string>()));
+
+                    // Construct a more user-friendly message
+                    string entityDisplayName = dx.EntityName ?? "the item"; // Fallback
+                    string dependentItemsText = "other items"; // Default
+                    if (dx.DependentEntityTypes != null && dx.DependentEntityTypes.Any())
+                    {
+                        // Make dependent types more readable (e.g., "Trim Levels", "Vehicle Specifications")
+                        dependentItemsText = string.Join(" and ", dx.DependentEntityTypes.Select(FormatDependentTypeName));
+                    }
+
+                    _wpfToastNotificationService.ShowError(
+                        $"Cannot delete {entityDisplayName} '{modelToBeDeleted.Name}' because it is associated with {dependentItemsText}. Please remove these associations first.",
+                        "Deletion Blocked",
+                        TimeSpan.FromSeconds(10) // Longer duration for important messages
+                    );
+                    return; // Important: Exit the method after handling this specific error.
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting a Model Item");
+                    _wpfToastNotificationService.ShowError($"An error has occurred while deleting the model {modelToBeDeleted.Name}");
+                    throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(ShowDeleteModelDialogAsync), MethodOperationType.DELETE_DATA, ex);
+
+
+                }
+            }
         }
 
         [RelayCommand]
-        public async Task ShowDeleteMakeDialogAsync(object param)
+        public async Task ShowDeleteTrimLevelDialogAsync(TrimLevelDto trimToBeDeleted)
         {
-            if (param == null) return;
-            try
+            if (trimToBeDeleted == null) return;
+
+            var results = _dialogService.ShowConfirmDeleteItemsDialog(1);
+
+            if (results.HasValue && results.Value == true)
             {
-                var make = param as MakeDto;
 
-                //var editDialog = _dialogService.ShowAddMakeDialog();
+                try
+                {
+                    await _compatibleVehicleService.DeleteTrimLevelAsync(trimToBeDeleted.Id);
 
+                    await LoadTrimsForModelAsync(trimToBeDeleted.ModelId);
+
+                    _wpfToastNotificationService.ShowSuccess($"Trim Level has been deleted successfully!");
+
+                    _logger.LogInformation("Trim Level with ID={ID} has been deleted successfully!", trimToBeDeleted.Id);
+
+                }
+                catch (DeletionBlockedException dx)
+                {
+                    _logger.LogError(dx, "{ErrorMessage}. Entity: {EntityName}, Key: {EntityKey}, Dependents: {Dependents}",
+                        ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, dx.EntityName, dx.EntityKey, string.Join(", ", dx.DependentEntityTypes ?? Enumerable.Empty<string>()));
+
+                    // Construct a more user-friendly message
+                    string entityDisplayName = dx.EntityName ?? "the item"; // Fallback
+                    string dependentItemsText = "other items"; // Default
+                    if (dx.DependentEntityTypes != null && dx.DependentEntityTypes.Any())
+                    {
+                        // Make dependent types more readable (e.g., "Trim Levels", "Vehicle Specifications")
+                        dependentItemsText = string.Join(" and ", dx.DependentEntityTypes.Select(FormatDependentTypeName));
+                    }
+
+                    _wpfToastNotificationService.ShowError(
+                        $"Cannot delete {entityDisplayName} '{trimToBeDeleted.Name}' because it is associated with {dependentItemsText}. Please remove these associations first.",
+                        "Deletion Blocked",
+                        TimeSpan.FromSeconds(10) // Longer duration for important messages
+                    );
+                    return; // Important: Exit the method after handling this specific error.
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting a Trim Level Item");
+                    _wpfToastNotificationService.ShowError($"An error has occurred while deleting the trim level {trimToBeDeleted.Name}");
+                    throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(MakesModelsTrimsManagementViewModel), nameof(ShowDeleteTrimLevelDialogAsync), MethodOperationType.DELETE_DATA, ex);
+
+
+                }
             }
-            catch (Exception ex) { }
         }
 
-        [RelayCommand]
-        public void ShowDeleteModelDialogAsync(object param)
+
+
+        #endregion
+
+        #region Helpers
+
+        private string FormatDependentTypeName(string entityType)
         {
-            if (param == null) return;
-            try
-            {
-                var make = param as MakeDto;
-
-                //var editDialog = _dialogService.ShowAddMakeDialog();
-
-            }
-            catch (Exception ex) { }
-        }
-
-        [RelayCommand]
-        public void ShowDeleteTrimLevelDialogAsync(object param)
-        {
-            if (param == null) return;
-            try
-            {
-                var make = param as MakeDto;
-
-                //var editDialog = _dialogService.ShowAddMakeDialog();
-
-            }
-            catch (Exception ex) { }
+            // Simple pluralization and spacing, can be more sophisticated with localization
+            if (entityType.EndsWith("y"))
+                return entityType.Substring(0, entityType.Length - 1) + "ies";
+            if (entityType.EndsWith("s"))
+                return entityType + "es"; // Or handle specific cases
+            return entityType + "s";
         }
 
         #endregion

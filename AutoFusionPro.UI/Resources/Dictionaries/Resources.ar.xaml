@@ -154,7 +154,37 @@
 
 
     <sys:String x:Key="PartsStr">قطع الغيار</sys:String>
+    
+    <sys:String x:Key="NewModelForStr">اضافة موديل للشركة المصنعة </sys:String>
+    <sys:String x:Key="AddNewModelStr">اضافة موديل او خط انتاج جديد</sys:String>
+    <sys:String x:Key="AddModelStr">اضافة الموديل</sys:String>
+    <sys:String x:Key="ModelNameStr">اسم الموديل</sys:String>
+    
+    <sys:String x:Key="EditModelStr">تعديل الموديل</sys:String>
+    <sys:String x:Key="EditModelForStr">تعديل الموديل للشركة المصنعة</sys:String>
 
+    <sys:String x:Key="NewTrimLevelForStr">اضافة طراز للموديل </sys:String>
+    <sys:String x:Key="AddNewTrimLevelStr">اضافة طراز جديد</sys:String>
+    <sys:String x:Key="AddTrimLevelStr">اضافة الطراز</sys:String>
+    <sys:String x:Key="TrimLevelNameStr">اسم الطراز او الاصدار</sys:String>
+
+    <sys:String x:Key="EditTrimLevelStr">تعديل الطراز</sys:String>
+    <sys:String x:Key="EditTrimLevelForStr">تعديل الطراز للموديل </sys:String>
+
+    <sys:String x:Key="NewMakeStr">اضافة شركة مصنعة</sys:String>
+    <sys:String x:Key="AddNewMakeStr">اضافة شركة جديدة</sys:String>
+    <sys:String x:Key="AddMakeStr">اضافة الشركة</sys:String>
+    <sys:String x:Key="MakeNameStr">اسم الشركة المصنعة </sys:String>
+
+    <sys:String x:Key="EditMakeTitleStr">تعديل اسم الشركة المصنعة </sys:String>
+    <sys:String x:Key="EditMakeStr">تعديل اسم الشركة </sys:String>
+
+
+    <sys:String x:Key="ConfirmDeleteStr">تأكيد الحذف</sys:String>
+    <sys:String x:Key="VehicleCompatibilityManagementStr">ادارة الدعم</sys:String>
+    <sys:String x:Key="CancelProcessStr">الغاء العملية</sys:String>
+    <sys:String x:Key="CountOfElementsAreSelectedStr">من العناصر تم تحديدها</sys:String>
+    <sys:String x:Key="AreYouSureYouWantToRemoveTheSelectedItemsStr">هل انت متأكد من حذفك للعناصر المختارة؟ العملية نهائية ولايمكن التراجع عنها في حالة الموافقة.</sys:String>
 
 
 

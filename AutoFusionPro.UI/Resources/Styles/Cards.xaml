@@ -716,15 +716,13 @@
                                     CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource TemplatedParent}, 
                                         Converter={StaticResource TopCornerRadiusConverter}}">
                                 <Grid Margin="15,10">
-                                    <TextBlock Foreground="{TemplateBinding HeaderForeground}"
-                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                               FontSize="{TemplateBinding FontSize}"
-                                               VerticalAlignment="Center">
-                                        <ContentPresenter Grid.Column="0"
+                                    <ContentPresenter Grid.Column="0"
                                                           Content="{TemplateBinding Header}"
+                                                          TextElement.Foreground="{TemplateBinding HeaderForeground}"
+                                                          TextElement.FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                          TextElement.FontSize="{TemplateBinding FontSize}"
                                                           VerticalAlignment="Center"/>
 
-                                    </TextBlock>
                                 </Grid>
                             </Border>
 

@@ -13,6 +13,7 @@ using AutoFusionPro.UI.Services.Dialogs;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Dashboard;
+using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
@@ -319,9 +320,16 @@ namespace AutoFusionPro.UI
                 services.AddTransient<AddModelDialogViewModel>();
                 services.AddTransient<AddTrimLevelDialogViewModel>();
 
+                services.AddTransient<EditMakeDialogViewModel>();
+                services.AddTransient<EditModelDialogViewModel>();
+                services.AddTransient<EditTrimLevelDialogViewModel>();
+
 
                 // Dialogs
                 services.AddTransient<AddVehicleDialogViewModel>();
+
+                // General
+                services.AddTransient<ConfirmDeleteItemsDialogViewModel>();
 
 
 

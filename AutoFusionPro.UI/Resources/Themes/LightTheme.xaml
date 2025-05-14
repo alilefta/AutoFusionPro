@@ -274,16 +274,31 @@
     <!-- ==================== Card (Custom Card) ==================== -->
     <SolidColorBrush x:Key="Card.BackgroundBrush"
                      Color="{StaticResource Neutral0}" />
+    
     <SolidColorBrush x:Key="Card.BorderBrush"
                      Color="{StaticResource Neutral350}" />
+    
     <SolidColorBrush x:Key="Card.Header.BackgroundBrush"
                      Color="{StaticResource Neutral100}" />
+    
     <SolidColorBrush x:Key="Card.Header.ForegroundBrush"
                      Color="{StaticResource Neutral900}" />
+    
     <SolidColorBrush x:Key="Card.Body.BackgroundBrush"
                      Color="{StaticResource Neutral0}" />
+    
     <SolidColorBrush x:Key="Card.Body.ForegroundBrush"
                      Color="{StaticResource Neutral750}" />
+    
+
+
+    <SolidColorBrush x:Key="Card.Placeholder.Foreground"
+                     Color="{StaticResource Neutral400}" />
+    <SolidColorBrush x:Key="Card.Placeholder.BorderBrush"
+                     Color="{StaticResource Neutral300}" />
+
+
+
 
     <!-- ==================== ScrollBar ==================== -->
     <SolidColorBrush x:Key="ScrollBar.Track.BackgroundBrush"
@@ -619,7 +634,8 @@
 
 
 
-
+    <SolidColorBrush x:Key="SplitterBrush"
+                     Color="{StaticResource Neutral300}" />
 
 
 

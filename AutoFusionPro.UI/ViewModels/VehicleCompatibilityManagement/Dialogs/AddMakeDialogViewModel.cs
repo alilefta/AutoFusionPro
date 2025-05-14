@@ -1,7 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
-using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
@@ -18,7 +17,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs
     {
 
         private IDialogWindow _dialog = null!;
-
 
         [ObservableProperty]
         private bool _isAdding = false;

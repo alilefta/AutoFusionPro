@@ -72,7 +72,7 @@
                               Opacity="0.2" />
         </Border.Effect>
 
-        <Grid>
+        <Grid MaxWidth="500">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -82,7 +82,7 @@
             <!-- Icon -->
             <ui:SymbolIcon Grid.Column="0" 
                            Foreground="{Binding Foreground, ElementName=Root}" 
-                           Margin="0,0,12,0" 
+                           Margin="0,4,12,0" 
                            VerticalAlignment="Top"
                            HorizontalAlignment="Center"
                            FontSize="20"
