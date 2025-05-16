@@ -12,7 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
+using System.Windows;
 
 namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels
 {
@@ -34,6 +34,23 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         [ObservableProperty] private bool _isAddingMake = false;
         [ObservableProperty] private bool _isAddingModel = false;
         [ObservableProperty] private bool _isAddingTrim = false;
+
+        [ObservableProperty]
+        private bool _isInititalized = false;
+
+
+
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ModelsColumnWidth))]
+        private bool _hasAnyMake = false;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TrimsColumnWidth))]
+        private bool _hasAnyModel = false;
+
+        public GridLength ModelsColumnWidth => HasAnyMake && HasSelectedMake ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
+        public GridLength TrimsColumnWidth => HasAnyModel && HasSelectedModel ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
 
         [ObservableProperty]
         private string _displayName = "Vehicle Structure";
@@ -60,10 +77,13 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(HasSelectedMake))]
+        [NotifyPropertyChangedFor(nameof(ModelsColumnWidth))]
         private MakeDto _selectedMake;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(HasSelectedModel))]
+        [NotifyPropertyChangedFor(nameof(TrimsColumnWidth))]
+
         private ModelDto _selectedModel;
 
         [ObservableProperty]
@@ -89,22 +109,26 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             _modelsCollection = new ObservableCollection<ModelDto>();
             _trimLevelsCollection = new ObservableCollection<TrimLevelDto>();
 
-            _ = InitializeAsync();
         }
 
 
         #region Loading Data
 
-        private async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            await LoadMakesDataAsync();
+            if (!IsInititalized)
+            {
+                await LoadMakesDataAsync();
+                IsInititalized = true;
+            }
         }
-
 
         private async Task LoadMakesDataAsync()
         {
             try
             {
+                HasAnyMake = false;
+
                 IsLoadingMakes = true;
 
                 MakesCollection.Clear(); // Clear before loading new data
@@ -117,6 +141,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                         MakesCollection.Add(make);
                     }
                     _logger.LogInformation("Loaded {Count} makes.", MakesCollection.Count);
+
+                    HasAnyMake = MakesCollection.Any();
+
                 }
                 else
                 {
@@ -145,6 +172,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             try
             {
                 IsLoadingModels = true;
+
+                HasAnyModel = false;
+
                 ModelsCollection.Clear(); // Clear before loading
 
                 var models = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
@@ -154,6 +184,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                     {
                         ModelsCollection.Add(model);
                     }
+
+                    HasAnyModel = ModelsCollection.Any();
+
                     _logger.LogInformation("Loaded {Count} models for Make ID {MakeId}.", ModelsCollection.Count, makeId);
                 }
                 else
@@ -230,12 +263,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             }
             else
             {
-                // Optionally, update UI state if no make is selected
-                // e.g., disable model/trim sections or show a "Please select a make" message
+
+                HasAnyMake = MakesCollection.Any(); // Re-evaluate if needed, though if makes are cleared, it's false.
+                HasAnyModel = false; // Explicitly set if Models are cleared due to no Make selected
+                                     // ModelsColumnWidth will update because HasAnyMake changed
+                                     // TrimsColumnWidth will update because HasAnyModel changed
+
             }
             // Notify CanExecute for commands that depend on SelectedMake
             ShowAddModelDialogCommand.NotifyCanExecuteChanged();
-            // Add other relevant commands here
+            // Ensure Edit/Delete Make commands are also updated if their CanExecute depends on selection.
+            ShowEditMakeDialogCommand.NotifyCanExecuteChanged(); // Assuming these are the correct command names
+            ShowDeleteMakeDialogCommand.NotifyCanExecuteChanged();
         }
 
         partial void OnSelectedModelChanged(ModelDto? oldValue, ModelDto newValue) // Use generated overload
@@ -256,8 +295,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                 // Optionally, update UI state if no model is selected
             }
             // Notify CanExecute for commands that depend on SelectedModel
-            ShowAddTrimLevelDialogCommand.NotifyCanExecuteChanged();
-            // Add other relevant commands here
+            ShowAddModelDialogCommand.NotifyCanExecuteChanged();
+            // Ensure Edit/Delete Make commands are also updated if their CanExecute depends on selection.
+            ShowEditMakeDialogCommand.NotifyCanExecuteChanged(); // Assuming these are the correct command names
+            ShowDeleteMakeDialogCommand.NotifyCanExecuteChanged();
         }
 
         #endregion

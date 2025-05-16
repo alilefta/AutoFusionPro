@@ -28,6 +28,11 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         #region Loading Data
 
+        public Task InitializeAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Commands

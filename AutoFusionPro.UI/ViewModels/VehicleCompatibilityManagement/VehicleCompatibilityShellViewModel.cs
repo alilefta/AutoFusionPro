@@ -55,10 +55,21 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement
 
             SelectedTabViewModel = TabViewModels.FirstOrDefault(); // Select the first tab initially
 
-           
+            if(SelectedTabViewModel != null)
+                SelectedTabViewModel.InitializeAsync();
         }
 
         #endregion
+
+        partial void OnSelectedTabViewModelChanged(ITabViewModel value)
+        {
+            if (value != null)
+            {
+
+                value.InitializeAsync();
+
+            }
+        }
 
     }
 }

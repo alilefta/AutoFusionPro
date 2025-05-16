@@ -1,4 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
+using System.Windows;
+using System.Windows.Documents;
 
 namespace AutoFusionPro.Application.Interfaces.Dialogs
 {
@@ -69,4 +71,15 @@ namespace AutoFusionPro.Application.Interfaces.Dialogs
         /// <returns></returns>
         bool? ShowConfirmDeleteItemsDialog(int count);
     }
+
+
+
+    //For future scalability if you end up with 20+ dialog types, you could consider a more generic approach on IDialogService:
+    //public interface IDialogService
+    //{
+    //    Task<TResult?> ShowDialogAsync<TDialogViewModel, TView, TResult>(Action<TDialogViewModel>? configureViewModel = null)
+    //        where TDialogViewModel : class, IDialogViewModel<TResult> // IDialogViewModel returns TResult
+    //        where TView : Window, new(); // Or some base dialog window type
+    //                                     // ...
+    //}
 }

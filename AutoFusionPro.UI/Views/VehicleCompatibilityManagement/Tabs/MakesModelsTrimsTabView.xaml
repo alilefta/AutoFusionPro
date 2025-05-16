@@ -41,11 +41,9 @@
                         <ColumnDefinition Width="*"
                                           MinWidth="200" />
                         <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*"
-                                          MinWidth="200" />
+                        <ColumnDefinition Width="{Binding ModelsColumnWidth}" />
                         <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*"
-                                          MinWidth="200" />
+                        <ColumnDefinition Width="{Binding TrimsColumnWidth}" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Makes -->
@@ -169,6 +167,7 @@
                     <GridSplitter Grid.Column="1"
                                   Width="4"
                                   HorizontalAlignment="Center"
+                                  Visibility="{Binding ModelsColumnWidth, Converter={StaticResource GridLengthToVisibilityConverter}}"
                                   Background="{DynamicResource Window.BackgroundBrush}" />
 
                     <!-- Models -->
@@ -327,6 +326,7 @@
                     <GridSplitter Grid.Column="3"
                                   Width="4"
                                   HorizontalAlignment="Center"
+                                  Visibility="{Binding TrimsColumnWidth, Converter={StaticResource GridLengthToVisibilityConverter}}"
                                   Background="{DynamicResource Window.BackgroundBrush}"/>
 
 

@@ -339,7 +339,7 @@
                         </ui:XSideMenuButton>
 
                         <!-- Vehicle Button-->
-                        <ui:XSideMenuButton Content="Vehicle Compatibility"
+                        <ui:XSideMenuButton Content="{DynamicResource VehicleCompatibilityManagementStr}"
                                             Command="{Binding NavigateCommand}"
                                             CommandParameter="{x:Static pages:ApplicationPage.VehicleCompatibilityManagement}"
                                             IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"

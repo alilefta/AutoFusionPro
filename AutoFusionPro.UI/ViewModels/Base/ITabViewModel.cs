@@ -7,5 +7,7 @@
 
         public string DisplayName { get; set; }
         public string Icon { get; set; }
+
+        public Task InitializeAsync();
     }
 }
