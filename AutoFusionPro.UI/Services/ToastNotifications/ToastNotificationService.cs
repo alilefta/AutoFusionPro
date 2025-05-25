@@ -1,4 +1,4 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.UI;
 using AutoFusionPro.UI.Controls.Notifications.ToastNotifications;
 using Microsoft.Extensions.Logging;

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Settings"
              xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.Settings"
              xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DesignWidth="800"
@@ -93,13 +94,19 @@
             </TabControl>
             <StackPanel Grid.Row="2"
                         Orientation="Horizontal" Margin="10,20">
-                <wpfUi:Button Command="{Binding SaveSettingsCommand}"
-                              Content="{DynamicResource SaveChangesStr}"
-                              Appearance="Primary" />
-                <wpfUi:Button Command="{Binding RestoreDefaultsCommand}"
-                              Content="{DynamicResource RestoreDefaultStr}"
-                              Margin="10,0,0,0"
-                              Appearance="Primary" />
+                <xBtn:XButton Command="{Binding SaveSettingsCommand}"
+                              Style="{DynamicResource RegularButtonStyle}"
+                              ButtonType="Info">
+                    <TextBlock Text="{DynamicResource SaveChangesStr}"
+                               FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                </xBtn:XButton>
+                <xBtn:XButton  Command="{Binding RestoreDefaultsCommand}"
+                               Style="{DynamicResource RegularButtonStyle}"
+                               Margin="10,0,0,0"
+                               ButtonType="Primary">
+                    <TextBlock Text="{DynamicResource RestoreDefaultStr}"
+                               FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                </xBtn:XButton>
             </StackPanel>
         </Grid>
     </Border>

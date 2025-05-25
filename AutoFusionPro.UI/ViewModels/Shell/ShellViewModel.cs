@@ -1,9 +1,10 @@
 ﻿using AutoFusionPro.Application.Commands;
-using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.Navigation;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
+using AutoFusionPro.Application.Interfaces.Settings;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Enums.NavigationPages;
-using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Controls.Dialogs;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
@@ -32,7 +33,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         private INavigationService _navigationService;
         private readonly ISessionManager _sessionManager;
         private readonly IServiceProvider _serviceProvider;
-        private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
+        private readonly IGlobalSettingsService _globalSettingsService;
 
         [ObservableProperty]
         private NotificationViewModel _notificationViewModel;
@@ -131,7 +132,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
         public ShellViewModel(ILogger<ShellViewModel> logger,
             ILocalizationService localizationService,
-            IGlobalSettingsService<BitmapImage> globalSettingsService,
+            IGlobalSettingsService globalSettingsService,
             INavigationService navigationService, 
             ISessionManager sessionManager, 
             IServiceProvider serviceProvider,
@@ -156,8 +157,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
             NavigateBack = new RelayCommand(o => _navigationService.GoBack(), o => _navigationService.CanGoBack);
             ToggleSideMenuCollapse = new RelayCommand(o => UpdateSideMenuState(), o => true);
 
-            _logger.LogInformation("Shell view model initialized");
-
         }
 
         private void SetupViewModels()
@@ -169,8 +168,6 @@ namespace AutoFusionPro.UI.ViewModels.Shell
 
 
             var notificationViewModel = _serviceProvider.GetRequiredService<NotificationViewModel>();
-            //var toastNotificationService = _serviceProvider.GetRequiredService<ToastNotificationService>();
-
             NotificationViewModel = notificationViewModel ?? throw new ArgumentNullException(nameof(notificationViewModel));
         }
 

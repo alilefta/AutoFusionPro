@@ -1,6 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs;
 using AutoFusionPro.Application.Events;
-using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Enums.UI;
 using AutoFusionPro.Domain.Interfaces;

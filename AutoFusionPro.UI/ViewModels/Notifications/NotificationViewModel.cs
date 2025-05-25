@@ -1,6 +1,7 @@
 ﻿using AutoFusionPro.Application.DTOs;
 using AutoFusionPro.Application.Events;
-using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
+using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;

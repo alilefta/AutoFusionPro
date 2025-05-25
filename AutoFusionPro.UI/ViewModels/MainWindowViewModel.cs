@@ -1,4 +1,4 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.SessionManagement;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Authentication;

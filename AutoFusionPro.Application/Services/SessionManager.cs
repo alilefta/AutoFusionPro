@@ -1,5 +1,5 @@
 ﻿using AutoFusionPro.Application.DTOs.User;
-using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Models;

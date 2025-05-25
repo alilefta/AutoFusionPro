@@ -1,6 +1,5 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace AutoFusionPro.Application.Interfaces.Dialogs
 {
@@ -70,6 +69,17 @@ namespace AutoFusionPro.Application.Interfaces.Dialogs
         /// <param name="count">Number of items to be deleted, just for UI show</param>
         /// <returns></returns>
         bool? ShowConfirmDeleteItemsDialog(int count);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TDialogViewModel"></typeparam>
+        /// <typeparam name="TView"></typeparam>
+        /// <typeparam name="TParam"></typeparam>
+        /// <param name="configureViewModel"></param>
+        /// <returns></returns>
+        Task<bool?> ShowDialogAsync<TDialogViewModel, TView>(object? param = null) where TDialogViewModel : class where TView : Window, new();
     }
 
 

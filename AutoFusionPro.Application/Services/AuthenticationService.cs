@@ -1,5 +1,6 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.Authentication;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
 using AutoFusionPro.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;

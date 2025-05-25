@@ -1,8 +1,11 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.DTOs.Part;
 using AutoFusionPro.Application.DTOs.Vehicle;
-using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.Authentication;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.Navigation;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
+using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Application.Services.DataServices;
 using AutoFusionPro.Application.Validators.CompatibleVehicleValidator;

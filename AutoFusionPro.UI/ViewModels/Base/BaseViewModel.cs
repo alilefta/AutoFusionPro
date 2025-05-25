@@ -9,6 +9,11 @@ namespace AutoFusionPro.UI.ViewModels.Base
     {
         private readonly List<Action> _cleanupActions = new();
 
+        /// <summary>
+        /// Child View models register this even if they use Dictionaries for language strings
+        /// </summary>
+        public event EventHandler LanguageDictionariesChanged = null!;
+
 
         #region Private Fields
 
@@ -45,7 +50,10 @@ namespace AutoFusionPro.UI.ViewModels.Base
         private void OnCurrentFlowDirectionChanged()
         {
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
+
+            LanguageDictionariesChanged.Invoke(this, EventArgs.Empty);
         }
+
 
         #endregion
 

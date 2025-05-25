@@ -1,4 +1,4 @@
-﻿using AutoFusionPro.Core.Services;
+﻿using AutoFusionPro.Application.Interfaces.UI;
 using System.Windows;
 
 namespace AutoFusionPro.UI.Services

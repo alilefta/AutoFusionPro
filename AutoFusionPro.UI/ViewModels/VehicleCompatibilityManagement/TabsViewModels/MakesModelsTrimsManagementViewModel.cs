@@ -53,7 +53,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         public GridLength TrimsColumnWidth => HasAnyModel && HasSelectedModel ? new GridLength(1, GridUnitType.Star) : new GridLength(0, GridUnitType.Pixel);
 
         [ObservableProperty]
-        private string _displayName = "Vehicle Structure";
+        private string _displayName = System.Windows.Application.Current.Resources["VehicleStructureStr"] as string ?? "Vehicle Structure";
 
         [ObservableProperty]
         private string _icon = "";
@@ -109,6 +109,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             _modelsCollection = new ObservableCollection<ModelDto>();
             _trimLevelsCollection = new ObservableCollection<TrimLevelDto>();
 
+            LanguageDictionariesChanged += OnLanguageChanged;
+
+            RegisterCleanup(() => LanguageDictionariesChanged -= OnLanguageChanged);
+
         }
 
 
@@ -136,7 +140,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                 var makes = await _compatibleVehicleService.GetAllMakesAsync();
                 if (makes != null) // Check for null before Any()
                 {
-                    foreach (var make in makes.OrderBy(m => m.Name)) // Ensure ordered
+                    foreach (var make in makes.OrderBy(m => m.Id)) // Ensure ordered
                     {
                         MakesCollection.Add(make);
                     }
@@ -180,7 +184,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                 var models = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
                 if (models != null)
                 {
-                    foreach (var model in models.OrderBy(m => m.Name))
+                    foreach (var model in models.OrderBy(m => m.Id))
                     {
                         ModelsCollection.Add(model);
                     }
@@ -653,6 +657,11 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             if (entityType.EndsWith("s"))
                 return entityType + "es"; // Or handle specific cases
             return entityType + "s";
+        }
+
+        private void OnLanguageChanged(object? sender, EventArgs e)
+        {
+            DisplayName = System.Windows.Application.Current.Resources["VehicleStructureStr"] as string ?? "Vehicle Structure";
         }
 
         #endregion

@@ -26,7 +26,7 @@
 
 
             <!-- Heading -->
-            <TextBlock Text="Manage Vehicle Makes, Models, and Trim Levels"
+            <TextBlock Text="{DynamicResource ManageMakesModelsTrimsStr}"
                        Grid.Row="0"
                        FontSize="{StaticResource FontSizeLarge}"
                        Margin="0,8"
@@ -60,16 +60,24 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Vehicle Makes"
-                                               FontSize="{StaticResource FontSizeMedium }"
-                                               Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                               FontFamily="{DynamicResource DynamicFontFamilyBold}" />
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource AvailableMakesStr}"
+                                                   FontSize="{StaticResource FontSizeMedium }"
+                                                   Opacity="0.8"
+                                                   Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}" />
+                                            <TextBlock Text="{Binding MakesCollection.Count}"
+                                                       FontSize="{StaticResource FontSizeMedium }"
+                                                       Opacity="0.9"
+                                                       Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyLight}" />
+                                    </StackPanel>
                                     <xButton:XButton Grid.Column="2"
                                                      Style="{DynamicResource RegularButtonStyle}"
                                                      Command="{Binding ShowAddMakeDialogCommand}"
                                                      IsLoading="{Binding IsAddingMake}"
                                                      ButtonType="Primary"
-                                                     ToolTip="Add a new vehicle make">
+                                                     ToolTip="{DynamicResource AddNewMakeStr}">
                                         <StackPanel>
                                             <wpfUi:SymbolIcon Symbol="Add48" />
                                         </StackPanel>
@@ -87,23 +95,33 @@
                                 <wpfUi:ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type dtoType:MakeDto}">
                                         <Border Padding="5"
-                                                Margin="5,2">
+                                                Margin="0,2,5,2">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Name}"
-                                                           TextWrapping="Wrap"
-                                                           FontSize="{StaticResource FontSizeMedium}"
-                                                           FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                                                <!-- Image and Name -->
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                                           Width="50"
+                                                           Height="50"
+                                                           Stretch="Uniform"
+                                                           VerticalAlignment="Center" />
+                                                    <TextBlock Text="{Binding Name}"
+                                                               Margin="10,0,0,0"
+                                                               TextWrapping="Wrap"
+                                                               FontSize="{StaticResource FontSizeMedium}"
+                                                               VerticalAlignment="Center"
+                                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                                                </StackPanel>
 
                                                 <StackPanel Orientation="Horizontal"
                                                             Grid.Column="1">
                                                     <xButton:XButton Style="{DynamicResource RegularButtonStyle}"
                                                                      Command="{Binding DataContext.ShowEditMakeDialogCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                                      CommandParameter="{Binding}"
-                                                                     ToolTip="Edit this make"
+                                                                     ToolTip="{DynamicResource EditThisItemStr}"
                                                                      ButtonType="Regular">
                                                         <wpfUi:SymbolIcon Symbol="Edit48" />
                                                     </xButton:XButton>
@@ -111,7 +129,8 @@
                                                                      Margin="5,0,0,0"
                                                                      Command="{Binding DataContext.ShowDeleteMakeDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                      CommandParameter="{Binding}"
-                                                                     ToolTip="Delete this make"
+                                                                     ToolTip="{DynamicResource DeleteThisItemStr}"
+                                                                     Opacity="0.9"
                                                                      ButtonType="Danger">
                                                         <wpfUi:SymbolIcon Symbol="Delete48" />
                                                     </xButton:XButton>
@@ -125,13 +144,14 @@
                                     <ControlTemplate TargetType="ListView">
                                         <Border Background="{TemplateBinding Background}">
                                             <Grid>
-                                                <ScrollViewer>
+                                                <ScrollViewer Padding="4,0"
+                                                              Margin="-9,0">
                                                     <ItemsPresenter />
                                                 </ScrollViewer>
                                                 <StackPanel  HorizontalAlignment="Center"
                                                              VerticalAlignment="Center"
                                                              Visibility="{Binding HasItems, RelativeSource={RelativeSource AncestorType=ListView}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                                                    <TextBlock Text="No Makes Exist!."
+                                                    <TextBlock Text="{DynamicResource NoMakesExistStr}"
                                                                TextWrapping="Wrap"
                                                                HorizontalAlignment="Center"
                                                                VerticalAlignment="Center"
@@ -145,7 +165,7 @@
                                                                      ButtonType="Primary">
                                                         <StackPanel Orientation="Horizontal">
                                                             <wpfUi:SymbolIcon Symbol="Add48" />
-                                                            <TextBlock Text="Add New Make"
+                                                            <TextBlock Text="{DynamicResource AddNewMakeStr}"
                                                                        Margin="5,0,0,0" />
                                                         </StackPanel>
                                                     </xButton:XButton>
@@ -186,7 +206,7 @@
                                 </StackPanel>
                                 <!-- Placeholder -->
                             </cards:InfoCard.Header>
-                            <TextBlock Text="Please, Select a model from the Models list"
+                            <TextBlock Text="{DynamicResource PleaseSelectMakeFromMakesListStr}"
                                        VerticalAlignment="Center"
                                        Opacity="0.9"
                                        TextWrapping="Wrap"
@@ -208,21 +228,32 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel VerticalAlignment="Top">
-                                            <TextBlock Text="Models for Selected Make"
-                                                       Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                                       FontFamily="{DynamicResource DynamicFontFamilyBold}"
-                                                       FontSize="{StaticResource FontSizeMedium }"
-                                                       TextWrapping="Wrap" />
+                                        <StackPanel>
+                                            <StackPanel VerticalAlignment="Top"
+                                                        Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource ModelsForSelectedMakeStr}"
+                                                           Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                           FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                           FontSize="{StaticResource FontSizeMedium }"
+                                                           Opacity="0.8"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="Wrap" />
 
-                                            <TextBlock Text="{Binding SelectedMake.Name, StringFormat='Selected Make: {0}'}"
-                                                       TextWrapping="Wrap"
+                                                <TextBlock Text="{Binding SelectedMake.Name}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                           FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                           FontSize="{StaticResource FontSizeMedium}"
+                                                           Margin="5,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{Binding HasSelectedMake, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                                            </StackPanel>
+                                            <!-- Count -->
+                                            <TextBlock Text="{Binding ModelsCollection.Count}"
+                                                       FontSize="{StaticResource FontSizeMedium }"
+                                                       Opacity="0.9"
                                                        Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                                       FontFamily="{DynamicResource DynamicFontFamilyBold}"
-                                                       FontSize="{StaticResource FontSizeSmall}"
-                                                       Margin="0,5,0,0"
-                                                       Opacity="0.7"
-                                                       Visibility="{Binding HasSelectedMake, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                                                       FontFamily="{DynamicResource DynamicFontFamilyLight}" />
                                         </StackPanel>
 
                                         <xButton:XButton Grid.Column="2"
@@ -253,16 +284,27 @@
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="{Binding Name}"
-                                                               TextWrapping="Wrap"
-                                                               FontSize="{StaticResource FontSizeMedium}"
-                                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                                                    <!-- Image and Name -->
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                                               Width="50"
+                                                               Height="50"
+                                                               Stretch="Uniform"
+                                                               VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   Margin="10,0,0,0"
+                                                                   TextWrapping="Wrap"
+                                                                   FontSize="{StaticResource FontSizeMedium}"
+                                                                   VerticalAlignment="Center"
+                                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                                                    </StackPanel>
 
                                                     <StackPanel Orientation="Horizontal"
                                                                 Grid.Column="1">
                                                         <xButton:XButton Style="{DynamicResource RegularButtonStyle}"
                                                                          Command="{Binding DataContext.ShowEditModelDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                          CommandParameter="{Binding}"
+                                                                         ToolTip="{DynamicResource EditThisItemStr}"
                                                                          ButtonType="Regular">
                                                             <wpfUi:SymbolIcon Symbol="Edit48" />
                                                         </xButton:XButton>
@@ -270,6 +312,8 @@
                                                                          Command="{Binding DataContext.ShowDeleteModelDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                          CommandParameter="{Binding}"
                                                                          ButtonType="Danger"
+                                                                         ToolTip="{DynamicResource DeleteThisItemStr}"
+                                                                         Opacity="0.9"
                                                                          Margin="5,0,0,0">
                                                             <wpfUi:SymbolIcon Symbol="Delete48" />
                                                         </xButton:XButton>
@@ -283,13 +327,14 @@
                                         <ControlTemplate TargetType="ListView">
                                             <Border Background="{TemplateBinding Background}">
                                                 <Grid>
-                                                    <ScrollViewer>
+                                                    <ScrollViewer Padding="4,0"
+                                                                  Margin="-9,0">
                                                         <ItemsPresenter />
                                                     </ScrollViewer>
                                                     <StackPanel  HorizontalAlignment="Center"
                                                                  VerticalAlignment="Center"
                                                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource AncestorType=ListView}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                                                        <TextBlock Text="No Models Exist for this Make!."
+                                                        <TextBlock Text="{DynamicResource NoModelsExistStr}"
                                                                    TextWrapping="Wrap"
                                                                    HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"
@@ -303,7 +348,7 @@
                                                                          ButtonType="Primary">
                                                             <StackPanel Orientation="Horizontal">
                                                                 <wpfUi:SymbolIcon Symbol="Add48" />
-                                                                <TextBlock Text="Add New Model"
+                                                                <TextBlock Text="{DynamicResource AddNewModelStr}"
                                                                            Margin="5,0,0,0" />
                                                             </StackPanel>
                                                         </xButton:XButton>
@@ -345,7 +390,7 @@
                                 </StackPanel>
                                 <!-- Placeholder -->
                             </cards:InfoCard.Header>
-                            <TextBlock Text="Please, Select a model from the Models list"
+                            <TextBlock Text="{DynamicResource PleaseSelectModelFromModelsListStr}"
                                        VerticalAlignment="Center"
                                        Opacity="0.9"
                                        TextWrapping="Wrap"
@@ -365,20 +410,31 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel VerticalAlignment="Top">
-                                            <TextBlock Text="Trim Levels for Selected Model"
-                                                       TextWrapping="Wrap"
-                                                       FontSize="{StaticResource FontSizeMedium}"
+                                        <StackPanel>
+                                            <StackPanel VerticalAlignment="Top"
+                                                        Orientation="Horizontal">
+                                                <TextBlock Text="{DynamicResource TrimsForSelectedModelStr}"
+                                                           TextWrapping="Wrap"
+                                                           FontSize="{StaticResource FontSizeMedium}"
+                                                           Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                           FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                           Opacity="0.8"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding SelectedModel.Name}"
+                                                           Margin="5,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="Wrap"
+                                                           FontSize="{StaticResource FontSizeMedium}"
+                                                           Foreground="{DynamicResource Card.Header.ForegroundBrush}"
+                                                           FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                           Visibility="{Binding HasSelectedModel, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                                            </StackPanel>
+                                            <!-- Count -->
+                                            <TextBlock Text="{Binding TrimLevelsCollection.Count}"
+                                                       FontSize="{StaticResource FontSizeMedium }"
+                                                       Opacity="0.9"
                                                        Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                                       FontFamily="{DynamicResource DynamicFontFamilyBold}" />
-                                            <TextBlock Text="{Binding SelectedModel.Name, StringFormat='Selected Model: {0}'}"
-                                                       TextWrapping="Wrap"
-                                                       FontSize="{StaticResource FontSizeSmall}"
-                                                       Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                                       FontFamily="{DynamicResource DynamicFontFamilyBold}"
-                                                       Margin="0,5,0,0"
-                                                       Opacity="0.7"
-                                                       Visibility="{Binding HasSelectedModel, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                                                       FontFamily="{DynamicResource DynamicFontFamilyLight}" />
                                         </StackPanel>
                                         <xButton:XButton Grid.Column="2"
                                                          VerticalAlignment="Top"
@@ -418,6 +474,7 @@
                                                         <xButton:XButton Style="{DynamicResource RegularButtonStyle}"
                                                                          Command="{Binding DataContext.ShowEditTrimLevelDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                          CommandParameter="{Binding}"
+                                                                         ToolTip="{DynamicResource EditThisItemStr}"
                                                                          ButtonType="Regular">
                                                             <wpfUi:SymbolIcon Symbol="Edit48" />
                                                         </xButton:XButton>
@@ -425,6 +482,7 @@
                                                                          Margin="5,0,0,0"
                                                                          Command="{Binding DataContext.ShowDeleteTrimLevelDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                                          CommandParameter="{Binding}"
+                                                                         ToolTip="{DynamicResource DeleteThisItemStr}"
                                                                          ButtonType="Danger">
                                                             <wpfUi:SymbolIcon Symbol="Delete48" />
                                                         </xButton:XButton>
@@ -444,7 +502,7 @@
                                                     <StackPanel  HorizontalAlignment="Center"
                                                                  VerticalAlignment="Center"
                                                                  Visibility="{Binding HasItems, RelativeSource={RelativeSource AncestorType=ListView}, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
-                                                        <TextBlock Text="No Trim Levels Exist for this Model!."
+                                                        <TextBlock Text="{DynamicResource NoTrimLevelExistStr}"
                                                                    TextWrapping="Wrap"
                                                                    HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"
@@ -458,7 +516,7 @@
                                                                          ButtonType="Primary">
                                                             <StackPanel Orientation="Horizontal">
                                                                 <wpfUi:SymbolIcon Symbol="Add48" />
-                                                                <TextBlock Text="Add New Trim"
+                                                                <TextBlock Text="{DynamicResource AddNewTrimLevelStr}"
                                                                            Margin="5,0,0,0" />
                                                             </StackPanel>
                                                         </xButton:XButton>

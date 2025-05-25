@@ -78,7 +78,7 @@ namespace AutoFusionPro.UI.Services
             {
                 Language = Languages.Arabic,
                 IsDarkThemeEnabled = false,
-                SystemName = "DentaFusion Pro",
+                SystemName = "AutoFusion Pro",
                 LogoPath = "",
             };
         }

@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.Storage;
 using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Models;
@@ -9,6 +10,7 @@ using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Linq.Expressions;
 
 namespace AutoFusionPro.Application.Services.DataServices
@@ -20,6 +22,7 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CompatibleVehicleService> _logger;
+        private readonly IImageFileService _imageFileService;
 
         // Add Validators if you use them for Make DTOs
         private readonly IValidator<CreateMakeDto> _createMakeValidator;
@@ -45,6 +48,7 @@ namespace AutoFusionPro.Application.Services.DataServices
         public CompatibleVehicleService(
                     IUnitOfWork unitOfWork,
                     ILogger<CompatibleVehicleService> logger,
+                    IImageFileService imageFileService,
 
                     IValidator<CreateMakeDto> createMakeValidator,
                     IValidator<UpdateMakeDto> updateMakeValidator,
@@ -65,6 +69,7 @@ namespace AutoFusionPro.Application.Services.DataServices
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _imageFileService = imageFileService ?? throw new ArgumentNullException(nameof(imageFileService));
 
             _createMakeValidator = createMakeValidator ?? throw new ArgumentNullException(nameof(createMakeValidator));
             _updateMakeValidator = updateMakeValidator ?? throw new ArgumentNullException(nameof(updateMakeValidator));
@@ -337,9 +342,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             _logger.LogInformation("Attempting to retrieve all makes.");
             try
             {
-                var makes = await _unitOfWork.Makes.GetAllAsync(); // Assumes GetAllAsync orders or you order here
-                var makeDtos = makes.Select(m => new MakeDto(m.Id, m.Name))
-                                    .OrderBy(m => m.Name) // Order here for consistency
+                var makes = await _unitOfWork.Makes.GetAllAsync();
+                var makeDtos = makes.Select(m => new MakeDto(m.Id, m.Name, m.ImagePath))
+                                    .OrderBy(m => m.Id)
                                     .ToList();
                 _logger.LogInformation("Successfully retrieved {Count} makes.", makeDtos.Count);
                 return makeDtos;
@@ -350,7 +355,6 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ServiceException("Could not retrieve makes.", ex);
             }
         }
-
 
         public async Task<MakeDto?> GetMakeByIdAsync(int id)
         {
@@ -369,7 +373,7 @@ namespace AutoFusionPro.Application.Services.DataServices
                     return null;
                 }
                 _logger.LogInformation("Successfully retrieved make with ID {MakeId}: {MakeName}", id, make.Name);
-                return new MakeDto(make.Id, make.Name);
+                return new MakeDto(make.Id, make.Name, make.ImagePath);
             }
             catch (Exception ex)
             {
@@ -380,7 +384,7 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         public async Task<MakeDto> CreateMakeAsync(CreateMakeDto createDto)
         {
-            if (createDto == null) throw new ArgumentNullException(nameof(createDto));
+            ArgumentNullException.ThrowIfNull(createDto);
 
             _logger.LogInformation("Attempting to create make with Name: {MakeName}", createDto.Name);
 
@@ -400,12 +404,24 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new DuplicationException(duplicateMessage, nameof(Make), "Name", createDto.Name);
             }
 
+
+            string? persistentImagePath = null;
+
             try
             {
+
+                if (!string.IsNullOrWhiteSpace(createDto.ImagePath))
+                {
+                    _logger.LogInformation("Image source path provided: '{SourcePath}'. Saving image for new make.", createDto.ImagePath);
+                    persistentImagePath = await _imageFileService.SaveImageAsync(createDto.ImagePath, "Makes");
+                    _logger.LogInformation("Image saved. Persistent path: '{PersistentPath}' for new make.", persistentImagePath);
+                }
+
                 // 3. Map DTO to Domain Entity
                 var newMake = new Make
                 {
-                    Name = createDto.Name.Trim() // Trim whitespace
+                    Name = createDto.Name.Trim(), // Trim whitespace,
+                    ImagePath = persistentImagePath
                 };
 
                 // 4. Add to Repository
@@ -414,14 +430,28 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 5. Save Changes
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Make created successfully with ID {MakeId} and Name {MakeName}", newMake.Id, newMake.Name);
+                _logger.LogInformation("Make created successfully with ID {MakeId}, Name {MakeName}, ImagePath: {ImagePath}",
+                            newMake.Id, newMake.Name, newMake.ImagePath ?? "<null>");
 
                 // 6. Map back to DTO for return
-                return new MakeDto(newMake.Id, newMake.Name);
+                return new MakeDto(newMake.Id, newMake.Name, newMake.ImagePath);
+            }
+            catch (IOException ioEx)
+            {
+                _logger.LogError(ioEx, "File IO error occurred while saving image for new make {MakeName}.", createDto.Name);
+                throw new ServiceException("An error occurred saving the image file. The make was not created.", ioEx);
             }
             catch (DbUpdateException dbEx) // Catch potential DB constraint issues
             {
                 _logger.LogError(dbEx, "Database error occurred while creating make: {MakeName}. Check InnerException for details.", createDto.Name);
+
+                // Rollback image save
+                if (!string.IsNullOrWhiteSpace(persistentImagePath))
+                {
+                    _logger.LogWarning("Attempting to clean up orphaned image file: {ImagePath}", persistentImagePath);
+                    await _imageFileService.DeleteImageAsync(persistentImagePath); // Attempt cleanup
+                }
+
                 throw new ServiceException("A database error occurred while creating the make.", dbEx);
             }
             catch (Exception ex)
@@ -433,12 +463,12 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         public async Task UpdateMakeAsync(UpdateMakeDto updateDto)
         {
-            if (updateDto == null) throw new ArgumentNullException(nameof(updateDto));
+            ArgumentNullException.ThrowIfNull(updateDto);
             if (updateDto.Id <= 0) throw new ArgumentException("Invalid Make ID for update.", nameof(updateDto.Id));
 
-            _logger.LogInformation("Attempting to update make with ID: {MakeId}, New Name: {NewMakeName}", updateDto.Id, updateDto.Name);
+            _logger.LogInformation("Attempting to update make with ID: {MakeId}, New Name: {NewMakeName}, New ImagePath: {NewImagePath}",
+                updateDto.Id, updateDto.Name, updateDto.ImagePath);
 
-            // 1. Validate DTO
             var validationResult = await _updateMakeValidator.ValidateAsync(updateDto);
             if (!validationResult.IsValid)
             {
@@ -446,37 +476,78 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ValidationException(validationResult.Errors);
             }
 
-            // 2. Fetch Existing Entity
             var existingMake = await _unitOfWork.Makes.GetByIdAsync(updateDto.Id);
             if (existingMake == null)
             {
                 string notFoundMsg = $"Make with ID {updateDto.Id} not found for update.";
                 _logger.LogWarning(notFoundMsg);
-                throw new ServiceException(notFoundMsg); // Or custom NotFoundException
+                throw new ServiceException(notFoundMsg);
             }
 
-            // 3. Check for uniqueness if name changed
             if (!existingMake.Name.Equals(updateDto.Name.Trim(), StringComparison.OrdinalIgnoreCase) &&
                 await _unitOfWork.Makes.NameExistsAsync(updateDto.Name, updateDto.Id))
             {
                 string duplicateMessage = $"Make with name '{updateDto.Name}' already exists.";
                 _logger.LogWarning(duplicateMessage);
-                throw new DuplicationException(duplicateMessage, nameof(Make), "Name", updateDto.Name);
+                throw new ServiceException(duplicateMessage);
             }
+
+            string? oldPersistentImagePath = existingMake.ImagePath;
+            string? newPersistentImagePath = existingMake.ImagePath; // Assume no change initially
 
             try
             {
-                // 4. Map changes from DTO to Existing Domain Entity
-                existingMake.Name = updateDto.Name.Trim();
-                // EF Core tracks changes on existingMake, so no explicit Update call on repository needed if using standard pattern
+                if (updateDto.ImagePath != oldPersistentImagePath) // Only proceed if the proposed path state is different
+                {
+                    if (!string.IsNullOrWhiteSpace(updateDto.ImagePath))
+                    {
+                        // Case 1: User provided a new source image path to set/change the image.
+                        _logger.LogInformation("New image source path provided: '{SourcePath}'. Saving new image for Make ID {MakeId}.", updateDto.ImagePath, updateDto.Id);
+                        newPersistentImagePath = await _imageFileService.SaveImageAsync(updateDto.ImagePath, "Makes");
+                        _logger.LogInformation("New image saved. Persistent path: '{PersistentPath}' for Make ID {MakeId}.", newPersistentImagePath, updateDto.Id);
+                    }
+                    else // updateDto.ImagePath is null or whitespace
+                    {
+                        // Case 2: User wants to remove the existing image.
+                        _logger.LogInformation("Request to remove image for Make ID {MakeId}. Old path was: '{OldPath}'", updateDto.Id, oldPersistentImagePath ?? "<none>");
+                        newPersistentImagePath = null;
+                    }
+                }
+                // If updateDto.ImagePath is the same as oldImagePath, newFinalImagePath remains oldImagePath, no file ops needed yet.
 
-                // 5. Save Changes
+
+                existingMake.Name = updateDto.Name.Trim();
+                existingMake.ImagePath = newPersistentImagePath;
+
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Make with ID {MakeId} updated successfully to Name: {NewMakeName}", updateDto.Id, existingMake.Name);
+                _logger.LogInformation("Make with ID {MakeId} database record updated successfully.", updateDto.Id);
+
+                // --- Clean Up Old Image File (if applicable) ---
+                // Delete the old physical image file IF:
+                // 1. There was an old image (oldPersistentImagePath was not null/whitespace).
+                // 2. AND The new persistent image path is different from the old one (this includes the case where the new path is null).
+                if (!string.IsNullOrWhiteSpace(oldPersistentImagePath) && oldPersistentImagePath != newPersistentImagePath)
+                {
+                    _logger.LogInformation("Attempting to delete old image '{OldImagePath}' for Make ID {MakeId}.", oldPersistentImagePath, updateDto.Id);
+                    await _imageFileService.DeleteImageAsync(oldPersistentImagePath);
+                    _logger.LogInformation("Old image '{OldImagePath}' for Make ID {MakeId} deleted successfully.", oldPersistentImagePath, updateDto.Id);
+                }
+
+
+                _logger.LogInformation("Make with ID {MakeId} update process completed successfully.", updateDto.Id);
+            }
+            catch (IOException ioEx)
+            {
+                _logger.LogError(ioEx, "File IO error during image management for Make ID {MakeId}.", updateDto.Id);
+                throw new ServiceException("An error occurred managing the image file. The make details might have been saved, but the image could not be updated.", ioEx);
             }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error occurred while updating make ID {MakeId}.", updateDto.Id);
+                if (!string.IsNullOrEmpty(newPersistentImagePath))
+                {
+                  await _imageFileService.DeleteImageAsync(newPersistentImagePath);
+                }
                 throw new ServiceException("A database error occurred while updating the make.", dbEx);
             }
             catch (Exception ex)
@@ -519,7 +590,19 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 4. Save Changes
                 await _unitOfWork.SaveChangesAsync();
+
+                // Delete Image if exists
+                if (!string.IsNullOrEmpty(makeToDelete.ImagePath))
+                {
+                    await _imageFileService.DeleteImageAsync(makeToDelete.ImagePath);
+                }
+
                 _logger.LogInformation("Make with ID {MakeId} and Name {MakeName} deleted successfully.", id, makeToDelete.Name);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting make's image with Path {modelToDelete.ImagePath}", makeToDelete.ImagePath);
+                throw new ServiceException($"An error occurred while deleting make's image with Path {makeToDelete.ImagePath}.", ex);
             }
             catch (DbUpdateException dbEx) // Catch FK issues if dependency check was incomplete
             {
@@ -608,13 +691,26 @@ namespace AutoFusionPro.Application.Services.DataServices
                 _logger.LogWarning(duplicateMessage);
                 throw new DuplicationException(duplicateMessage, nameof(Model), "Name", createDto.Name);
             }
+
+            string? persistentImagePath = null;
+
+
             try
             {
+
+                if (!string.IsNullOrWhiteSpace(createDto.ImagePath))
+                {
+                    _logger.LogInformation("Image source path provided: '{SourcePath}'. Saving image for new model.", createDto.ImagePath);
+                    persistentImagePath = await _imageFileService.SaveImageAsync(createDto.ImagePath, "Makes");
+                    _logger.LogInformation("Image saved. Persistent path: '{PersistentPath}' for new model.", persistentImagePath);
+                }
+
                 // 2. Map DTO to Domain Entity
                 var newModel = new Model
                 {
                     Name = createDto.Name.Trim(),
-                    MakeId = createDto.MakeId
+                    MakeId = createDto.MakeId,
+                    ImagePath = persistentImagePath
                 };
 
                 // 3. Add to Repository
@@ -622,8 +718,8 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 4. Save Changes
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Model created successfully with ID {ModelId}, Name {ModelName}, for MakeId {MakeId}",
-                    newModel.Id, newModel.Name, newModel.MakeId);
+                _logger.LogInformation("Model created successfully with ID {ModelId}, Name {ModelName}, ImagePath: {ImagePath}",
+                            newModel.Id, newModel.Name, newModel.ImagePath ?? "<null>");
 
                 // 5. Re-fetch with Make for complete DTO (or map carefully)
                 var createdModelWithMake = await _unitOfWork.Models.GetByIdWithMakeAsync(newModel.Id);
@@ -634,10 +730,23 @@ namespace AutoFusionPro.Application.Services.DataServices
                 }
                 return MapModelToDto(createdModelWithMake);
             }
+            catch (IOException ioEx)
+            {
+                _logger.LogError(ioEx, "File IO error occurred while saving image for new make {MakeName}.", createDto.Name);
+                throw new ServiceException("An error occurred saving the image file. The make was not created.", ioEx);
+            }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error while creating model: Name={ModelName}, MakeId={MakeId}. Check InnerException.",
                     createDto.Name, createDto.MakeId);
+
+                // Rollback image save
+                if (!string.IsNullOrWhiteSpace(persistentImagePath))
+                {
+                    _logger.LogWarning("Attempting to clean up orphaned image file: {ImagePath}", persistentImagePath);
+                    await _imageFileService.DeleteImageAsync(persistentImagePath); // Attempt cleanup
+                }
+
                 throw new ServiceException("A database error occurred while creating the model.", dbEx);
             }
             catch (Exception ex)
@@ -674,26 +783,73 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
 
             // 3. Check for uniqueness (could also be part of FluentValidator if NameExistsAsync is injected)
-            if (await _unitOfWork.Models.NameExistsForMakeAsync(updateDto.Name, updateDto.MakeId, null))
+            if (!existingModel.Name.Equals(updateDto.Name.Trim(), StringComparison.OrdinalIgnoreCase) && await _unitOfWork.Models.NameExistsForMakeAsync(updateDto.Name, updateDto.MakeId, null))
             {
                 string duplicateMessage = $"Model with name '{updateDto.Name}' already exists.";
                 _logger.LogWarning(duplicateMessage);
                 throw new DuplicationException(duplicateMessage, nameof(Model), "Name", updateDto.Name);
             }
 
+
+            string? oldPersistentImagePath = existingModel.ImagePath;
+            string? newPersistentImagePath = existingModel.ImagePath; // Assume no change initially
+
             try
             {
+
+                if (updateDto.ImagePath != oldPersistentImagePath) // Only proceed if the proposed path state is different
+                {
+                    if (!string.IsNullOrWhiteSpace(updateDto.ImagePath))
+                    {
+                        // Case 1: User provided a new source image path to set/change the image.
+                        _logger.LogInformation("New image source path provided: '{SourcePath}'. Saving new image for Make ID {MakeId}.", updateDto.ImagePath, updateDto.Id);
+                        newPersistentImagePath = await _imageFileService.SaveImageAsync(updateDto.ImagePath, "Makes");
+                        _logger.LogInformation("New image saved. Persistent path: '{PersistentPath}' for Make ID {MakeId}.", newPersistentImagePath, updateDto.Id);
+                    }
+                    else // updateDto.ImagePath is null or whitespace
+                    {
+                        // Case 2: User wants to remove the existing image.
+                        _logger.LogInformation("Request to remove image for Make ID {MakeId}. Old path was: '{OldPath}'", updateDto.Id, oldPersistentImagePath ?? "<none>");
+                        newPersistentImagePath = null;
+                    }
+                }
+                // If updateDto.ImagePath is the same as oldImagePath, newFinalImagePath remains oldImagePath, no file ops needed yet.
+
+
                 // 3. Map changes from DTO to Existing Domain Entity
                 existingModel.Name = updateDto.Name.Trim();
                 existingModel.MakeId = updateDto.MakeId; // Update MakeId if changed
+                existingModel.ImagePath = newPersistentImagePath; // Update MakeId if changed
 
                 // 4. Save Changes
                 await _unitOfWork.SaveChangesAsync();
+
+                // --- Clean Up Old Image File (if applicable) ---
+                // Delete the old physical image file IF:
+                // 1. There was an old image (oldPersistentImagePath was not null/whitespace).
+                // 2. AND The new persistent image path is different from the old one (this includes the case where the new path is null).
+                if (!string.IsNullOrWhiteSpace(oldPersistentImagePath) && oldPersistentImagePath != newPersistentImagePath)
+                {
+                    _logger.LogInformation("Attempting to delete old image '{OldImagePath}' for Model ID {ModelId}.", oldPersistentImagePath, updateDto.Id);
+                    await _imageFileService.DeleteImageAsync(oldPersistentImagePath);
+                    _logger.LogInformation("Old image '{OldImagePath}' for Model ID {ModelId} deleted successfully.", oldPersistentImagePath, updateDto.Id);
+                }
+
+
                 _logger.LogInformation("Model with ID {ModelId} updated successfully.", updateDto.Id);
+            }
+            catch (IOException ioEx)
+            {
+                _logger.LogError(ioEx, "File IO error during image management for Model ID {ModelId}.", updateDto.Id);
+                throw new ServiceException("An error occurred managing the image file. The model details might have been saved, but the image could not be updated.", ioEx);
             }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error while updating model ID {ModelId}.", updateDto.Id);
+                if (!string.IsNullOrEmpty(newPersistentImagePath))
+                {
+                    await _imageFileService.DeleteImageAsync(newPersistentImagePath);
+                }
                 throw new ServiceException("A database error occurred while updating the model.", dbEx);
             }
             catch (Exception ex)
@@ -748,7 +904,17 @@ namespace AutoFusionPro.Application.Services.DataServices
             {
                 _unitOfWork.Models.Delete(modelToDelete);
                 await _unitOfWork.SaveChangesAsync();
+
+                if (!string.IsNullOrEmpty(modelToDelete.ImagePath))
+                {
+                    await _imageFileService.DeleteImageAsync(modelToDelete.ImagePath);
+                }
                 _logger.LogInformation("Model with ID {ModelId} and Name {ModelName} deleted successfully.", id, modelToDelete.Name);
+            }
+            catch (IOException ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting model's image with Path {modelToDelete.ImagePath}", modelToDelete.ImagePath);
+                throw new ServiceException($"An error occurred while deleting model's image with Path {modelToDelete.ImagePath}.", ex);
             }
             catch (DbUpdateException dbEx)
             {
@@ -1670,7 +1836,9 @@ namespace AutoFusionPro.Application.Services.DataServices
                 model.Id,
                 model.Name,
                 model.MakeId,
-                model.Make?.Name ?? "N/A" // Safely access Make.Name
+                model.Make?.Name ?? "N/A",
+                model.ImagePath
+         
             );
         }
 

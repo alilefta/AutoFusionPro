@@ -53,9 +53,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             //_ = InitializeViewModelAsync();
         }
 
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            throw new NotImplementedException();
+            await Task.Delay(200);
         }
 
     }

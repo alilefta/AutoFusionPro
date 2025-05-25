@@ -2,15 +2,12 @@
 using AutoFusionPro.Application.DTOs.User;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Enums.ModelEnum;
-using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows;
 using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Authentication

@@ -122,17 +122,17 @@ namespace AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs
 
     #region Make DTOs
 
-    public record MakeDto(int Id, string Name);
-    public record CreateMakeDto(string Name); // Validation: Name required, unique
-    public record UpdateMakeDto(int Id, string Name); // Validation: Name required, unique (excluding self)
+    public record MakeDto(int Id, string Name, string? ImagePath);
+    public record CreateMakeDto(string Name, string? ImagePath); // Validation: Name required, unique
+    public record UpdateMakeDto(int Id, string Name, string? ImagePath); // Validation: Name required, unique (excluding self)
 
     #endregion
 
     #region Model DTOs
 
-    public record ModelDto(int Id, string Name, int MakeId, string MakeName); // MakeName for display context
-    public record CreateModelDto(string Name, int MakeId); // Validation: Name & MakeId required, Name unique within Make
-    public record UpdateModelDto(int Id, string Name, int MakeId); // Validation: Name & MakeId required, Name unique within Make (excluding self)
+    public record ModelDto(int Id, string Name, int MakeId, string MakeName, string? ImagePath); // MakeName for display context
+    public record CreateModelDto(string Name, int MakeId, string? ImagePath); // Validation: Name & MakeId required, Name unique within Make
+    public record UpdateModelDto(int Id, string Name, int MakeId, string? ImagePath); // Validation: Name & MakeId required, Name unique within Make (excluding self)
 
     #endregion
 

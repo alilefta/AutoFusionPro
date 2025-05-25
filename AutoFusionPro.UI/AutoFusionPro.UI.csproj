@@ -78,16 +78,29 @@
 		<None Remove="Assets\Images\OscarIconWhite.png" />
 		<None Remove="Assets\Images\OscarLogo.png" />
 		<None Remove="Assets\Images\placeholderImage.png" />
+		<None Remove="Assets\Images\placeholder_image.png" />
 		<None Remove="Assets\Photos\Avatars\Avatar1.jpg" />
 		<None Remove="Assets\Photos\Avatars\Avatar2.jpg" />
 		<None Remove="Assets\Photos\Avatars\Avatar3.jpg" />
 		<None Remove="Assets\Photos\Avatars\Avatar4.jpg" />
 		<None Remove="Assets\Photos\Avatars\Avatar5.jpeg" />
 		<None Remove="Assets\Photos\Avatars\Avatar6.png" />
+		<None Remove="Assets\VehicleStructure\Makes\Hyundai.png" />
+		<None Remove="Assets\VehicleStructure\Makes\Kia.jpg" />
+		<None Remove="Assets\VehicleStructure\Makes\Nissan.jpg" />
+		<None Remove="Assets\VehicleStructure\Makes\Toyota.png" />
+		<None Remove="Assets\VehicleStructure\Models\Altima.png" />
+		<None Remove="Assets\VehicleStructure\Models\Kicks.jpg" />
+		<None Remove="Assets\VehicleStructure\Models\Maxima.png" />
+		<None Remove="Assets\VehicleStructure\Models\qashqqai.png" />
+		<None Remove="Assets\VehicleStructure\Models\Rogue.png" />
+		<None Remove="Assets\VehicleStructure\Models\Sentra.png" />
+		<None Remove="Assets\VehicleStructure\Models\Sunny.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Assets\Icons\" />
+		<Folder Include="Assets\Photos\PartsIcons\" />
 		<Folder Include="Resources\Templates\" />
 		<Folder Include="Views\Inventory\" />
 		<Folder Include="Views\Customers\" />
@@ -275,11 +288,23 @@
 		<Resource Include="Assets\Images\OscarIconWhite.png" />
 		<Resource Include="Assets\Images\OscarLogo.png" />
 		<Resource Include="Assets\Images\placeholderImage.png" />
+		<Resource Include="Assets\Images\placeholder_image.png" />
 		<Resource Include="Assets\Photos\Avatars\Avatar1.jpg" />
 		<Resource Include="Assets\Photos\Avatars\Avatar2.jpg" />
 		<Resource Include="Assets\Photos\Avatars\Avatar3.jpg" />
 		<Resource Include="Assets\Photos\Avatars\Avatar4.jpg" />
 		<Resource Include="Assets\Photos\Avatars\Avatar5.jpeg" />
 		<Resource Include="Assets\Photos\Avatars\Avatar6.png" />
+		<Resource Include="Assets\VehicleStructure\Makes\Hyundai.png" />
+		<Resource Include="Assets\VehicleStructure\Makes\Kia.jpg" />
+		<Resource Include="Assets\VehicleStructure\Makes\Nissan.jpg" />
+		<Resource Include="Assets\VehicleStructure\Makes\Toyota.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Altima.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Kicks.jpg" />
+		<Resource Include="Assets\VehicleStructure\Models\Maxima.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Qashqqai.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Rogue.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Sentra.png" />
+		<Resource Include="Assets\VehicleStructure\Models\Sunny.jpg" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.UI.ViewModels.Base;
 
 namespace AutoFusionPro.UI.Services

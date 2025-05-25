@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\AutoFusionPro.Application\AutoFusionPro.Application.csproj" />
 		<ProjectReference Include="..\AutoFusionPro.Core\AutoFusionPro.Core.csproj" />
 		<ProjectReference Include="..\AutoFusionPro.Domain\AutoFusionPro.Domain.csproj" />
 	</ItemGroup>

@@ -209,7 +209,7 @@
     <SolidColorBrush x:Key="Button.Warning.BackgroundBrush"
                      Color="{StaticResource Orange400}" />
     <SolidColorBrush x:Key="Button.Info.BackgroundBrush"
-                     Color="{StaticResource Turquoise500}" />
+                     Color="{StaticResource Turquoise700}" />
     <SolidColorBrush x:Key="Button.Light.BackgroundBrush"
                      Color="{StaticResource Neutral100}" />
     <SolidColorBrush x:Key="Button.Dark.BackgroundBrush"

@@ -1,7 +1,7 @@
 ﻿using AutoFusionPro.Application.Commands;
+using AutoFusionPro.Application.Interfaces.Settings;
 using AutoFusionPro.Core.Configuration;
 using AutoFusionPro.Core.Enums.SystemEnum;
-using AutoFusionPro.Core.Services;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
@@ -16,7 +16,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
 {
     public partial class SettingsViewModel : BaseViewModel<SettingsViewModel>
     {
-        private readonly IGlobalSettingsService<BitmapImage> _globalSettingsService;
+        private readonly IGlobalSettingsService _globalSettingsService;
 
         private AppSettings _settings;
 
@@ -47,7 +47,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
 
         public SettingsViewModel(ILocalizationService localizationService, 
             ILogger<SettingsViewModel> logger, 
-            IGlobalSettingsService<BitmapImage> globalSettingsService) : base(localizationService, logger)
+            IGlobalSettingsService globalSettingsService) : base(localizationService, logger)
         {
             _globalSettingsService = globalSettingsService ?? throw new ArgumentNullException(nameof(globalSettingsService));
 
@@ -96,7 +96,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
                 _settings = SettingsManager.LoadSettings();
                 IsDarkThemeEnabled = false;
                 Language = _settings.Language;
-                SystemName = _settings.SystemName ?? "Oscar Lab";
+                SystemName = _settings.SystemName ?? "AutoFusion Pro";
                 SystemLogo = new BitmapImage(new Uri("pack://application:,,,/AutoFusionPro.UI;component/Assets/Images/OscarLogo.png"));
 
                 _localizationService.ApplyLanguage(Language);

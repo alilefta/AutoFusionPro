@@ -1,4 +1,4 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using AutoFusionPro.UI.Views.Dashboard;

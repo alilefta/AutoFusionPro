@@ -1,18 +1,17 @@
-﻿using AutoFusionPro.Domain.Interfaces.Repository;
+﻿using AutoFusionPro.Application.Interfaces.Storage;
 using AutoFusionPro.Domain.Interfaces;
+using AutoFusionPro.Domain.Interfaces.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories;
-using AutoFusionPro.Infrastructure.Data.UnitOfWork;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using System.Reflection;
-using System.IO;
-using System.Configuration;
-using AutoFusionPro.Core.Services;
-using AutoFusionPro.Infrastructure.Services;
-using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleRepositories;
+using AutoFusionPro.Infrastructure.Data.UnitOfWork;
+using AutoFusionPro.Infrastructure.Services.Storage;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
+using System.IO;
+using System.Reflection;
 
 namespace AutoFusionPro.Infrastructure.DependencyInjection
 {
@@ -36,7 +35,7 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             // Register DbContext
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 
-            // Register repositories
+            // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -51,6 +50,9 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<IEngineTypeRepository, EngineTypeRepository>();
             services.AddScoped<ITransmissionTypeRepository, TransmissionTypeRepository>();
             services.AddScoped<ITrimLevelRepository, TrimLevelRepository>();
+
+            // Services
+            services.AddScoped<IImageFileService, LocalImageFileService>();
 
 
 

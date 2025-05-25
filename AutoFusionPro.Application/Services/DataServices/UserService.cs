@@ -1,5 +1,5 @@
 ﻿using AutoFusionPro.Application.DTOs.User;
-using AutoFusionPro.Application.Interfaces;
+using AutoFusionPro.Application.Interfaces.Authentication;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Enums.ModelEnum;
 using AutoFusionPro.Core.Exceptions.Service;

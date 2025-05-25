@@ -1,4 +1,5 @@
-﻿using AutoFusionPro.Application.Interfaces;
+﻿using AutoFusionPro.Application.Interfaces.Navigation;
+using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using Microsoft.Extensions.Logging;

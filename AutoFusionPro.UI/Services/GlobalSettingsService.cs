@@ -1,12 +1,12 @@
-﻿using AutoFusionPro.Core.Configuration;
-using AutoFusionPro.Core.Services;
+﻿using AutoFusionPro.Application.Interfaces.Settings;
+using AutoFusionPro.Core.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Windows.Media.Imaging;
 
 namespace AutoFusionPro.UI.Services
 {
 
-    public class GlobalSettingsService : IGlobalSettingsService<BitmapImage>
+    public class GlobalSettingsService : IGlobalSettingsService
     {
         private readonly ILogger<GlobalSettingsService> _logger;
         private AppSettings _currentSettings;

@@ -1,14 +1,11 @@
 ﻿using AutoFusionPro.Application.Commands;
-using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.DataServices;
-using AutoFusionPro.Application.Services;
-using AutoFusionPro.Core.Services;
+using AutoFusionPro.Application.Interfaces.SessionManagement;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
-using System.Windows;
 using System.Windows.Input;
 
 namespace AutoFusionPro.UI.ViewModels.Authentication

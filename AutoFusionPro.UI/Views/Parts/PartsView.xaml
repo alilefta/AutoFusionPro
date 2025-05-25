@@ -256,11 +256,11 @@
 
             <StatusBar Grid.Row="4">
                 <StatusBarItem>
-                    <TextBlock Text="{Binding Items.Count, FallbackValue='Total Items: 20', ElementName=PartsDataGrid, StringFormat='Total Items: {0}'}" />
+                    <TextBlock Text="{Binding Items.Count, FallbackValue=0, ElementName=PartsDataGrid, StringFormat='Total Items: {0}'}" />
                 </StatusBarItem>
                 <Separator />
                 <StatusBarItem>
-                    <TextBlock Text="{Binding TotalValue, FallbackValue='Total Inventory Value: 20', StringFormat='Total Inventory Value: {0:C2}'}" />
+                    <TextBlock Text="{Binding TotalValue, FallbackValue=0, StringFormat='Total Inventory Value: {0:C2}'}" />
                 </StatusBarItem> 
                 <StatusBarItem HorizontalAlignment="Right">
                     <ProgressBar Width="100"

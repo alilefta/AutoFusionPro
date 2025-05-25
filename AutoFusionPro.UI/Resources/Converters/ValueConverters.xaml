@@ -40,6 +40,7 @@
     <converters:ValidationErrorsConverter x:Key="ValidationErrorsConverter" />
     <converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
     <converters:GridLengthToVisibilityConverter x:Key="GridLengthToVisibilityConverter" />
+    <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
 
 
 </ResourceDictionary>

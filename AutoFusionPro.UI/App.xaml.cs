@@ -1,9 +1,9 @@
 ﻿using AutoFusionPro.Application.DependencyInjection;
-using AutoFusionPro.Application.Interfaces;
 using AutoFusionPro.Application.Interfaces.Dialogs;
+using AutoFusionPro.Application.Interfaces.Settings;
+using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions;
-using AutoFusionPro.Core.Services;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.DependencyInjection;
 using AutoFusionPro.Infrastructure.HostCreation;
@@ -21,6 +21,10 @@ using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.BodyTypes;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.EngineTypes;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Transmissions;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels;
 using AutoFusionPro.UI.ViewModels.Vehicles;
 using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
@@ -57,7 +61,8 @@ namespace AutoFusionPro.UI
 
         private readonly IHost _host = null!;
         private bool _isDesignTimeOrEfTools;
-
+        private static Serilog.ILogger _logger;
+ 
         #endregion
 
         #region Constructor
@@ -68,6 +73,7 @@ namespace AutoFusionPro.UI
             // Configure logging
             var loggingService = new LoggingService();
             Log.Logger = loggingService.GetLoggerConfiguration().CreateLogger();
+            _logger = Log.Logger;
 
             // Design Time Initialization
             if (IsDesignTimeEnvironment())
@@ -83,7 +89,6 @@ namespace AutoFusionPro.UI
             try
             {
 
-
                 this.DispatcherUnhandledException += (s, e) =>
                 {
                     if (e.Exception is XamlParseException xamlEx)
@@ -92,7 +97,7 @@ namespace AutoFusionPro.UI
                     }
                 };
 
-                Log.Information("Starting host");
+                _logger.Information("Starting host");
 
                 var builder = Host.CreateApplicationBuilder();
                 builder.Logging.ClearProviders();
@@ -107,7 +112,7 @@ namespace AutoFusionPro.UI
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                _logger.Fatal(ex, "Host terminated unexpectedly");
             }
         }
 
@@ -261,7 +266,7 @@ namespace AutoFusionPro.UI
 
                 // Services
                 services.AddSingleton<ILocalizationService, LocalizationService>();
-                services.AddSingleton<IGlobalSettingsService<BitmapImage>, GlobalSettingsService>();
+                services.AddSingleton<IGlobalSettingsService, GlobalSettingsService>();
 
                 services.AddTransient<IViewFactory, UIViewFactory>();
                 services.AddTransient<IViewModelFactory, UIViewModelFactory>();
@@ -324,6 +329,15 @@ namespace AutoFusionPro.UI
                 services.AddTransient<EditModelDialogViewModel>();
                 services.AddTransient<EditTrimLevelDialogViewModel>();
 
+                services.AddTransient<AddTransmissionTypeDialogViewModel>();
+                services.AddTransient<EditTransmissionTypeDialogViewModel>();
+
+                services.AddTransient<AddEngineTypeDialogViewModel>();
+                services.AddTransient<EditEngineTypeDialogViewModel>();
+
+                services.AddTransient<AddBodyTypeDialogViewModel>();
+                services.AddTransient<EditBodyTypeDialogViewModel>();
+
 
                 // Dialogs
                 services.AddTransient<AddVehicleDialogViewModel>();
@@ -341,6 +355,7 @@ namespace AutoFusionPro.UI
             }
             catch (Exception ex)
             {
+                _logger.Fatal("An error occured while registering services, {EX}", ex.Message);
                 throw new AutoFusionProException("An error occurred while registering services inside 'App.xaml.cs'", ex);
             }
         }

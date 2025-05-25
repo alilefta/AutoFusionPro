@@ -1,4 +1,5 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
+using AutoFusionPro.Application.Interfaces.Storage;
 using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
@@ -19,6 +20,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         private Mock<IMakeRepository> _makeRepositoryMock;
         private Mock<IModelRepository> _modelRepositoryMock; // Needed for DeleteMakeAsync dependency check
         private Mock<ILogger<Services.DataServices.CompatibleVehicleService>> _loggerMock;
+        private Mock<IImageFileService> _imageFileServiceMock;
         private Mock<IValidator<CreateMakeDto>> _createMakeValidatorMock;
         private Mock<IValidator<UpdateMakeDto>> _updateMakeValidatorMock;
 
@@ -32,6 +34,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
             _makeRepositoryMock = new Mock<IMakeRepository>();
             _modelRepositoryMock = new Mock<IModelRepository>();
             _loggerMock = new Mock<ILogger<Services.DataServices.CompatibleVehicleService>>();
+            _imageFileServiceMock = new Mock<IImageFileService>();
             _createMakeValidatorMock = new Mock<IValidator<CreateMakeDto>>();
             _updateMakeValidatorMock = new Mock<IValidator<UpdateMakeDto>>();
 
@@ -48,6 +51,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
             _service = new Services.DataServices.CompatibleVehicleService(
                 _unitOfWorkMock.Object,
                 _loggerMock.Object,
+                _imageFileServiceMock.Object,
                 _createMakeValidatorMock.Object,
                 _updateMakeValidatorMock.Object,
 
@@ -88,8 +92,8 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
             Assert.AreEqual(2, result.Count());
             // Using FluentAssertions for more readable asserts:
             result.Should().NotBeNull().And.HaveCount(2);
-            result.Should().ContainEquivalentOf(new MakeDto(1, "Toyota"));
-            result.Should().ContainEquivalentOf(new MakeDto(2, "Honda"));
+            result.Should().ContainEquivalentOf(new MakeDto(1, "Toyota", string.Empty));
+            result.Should().ContainEquivalentOf(new MakeDto(2, "Honda", string.Empty));
 
             // Verify that the repository method was called exactly once
             _makeRepositoryMock.Verify(repo => repo.GetAllAsync(), Times.Once);
@@ -114,7 +118,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         public async Task CreateMakeAsync_WithValidAndUniqueName_ShouldCreateAndReturnMakeDto()
         {
             // Arrange
-            var createDto = new CreateMakeDto("Nissan");
+            var createDto = new CreateMakeDto("Nissan", string.Empty);
             // Entity that will be "added" and then "saved"
             var makeEntityToBeAdded = new Make { Name = createDto.Name }; // ID will be 0 initially
             // Entity that we simulate being returned/having an ID after save
@@ -230,7 +234,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         public async Task CreateMakeAsync_WithValidAndUniqueName_ShouldCreateAndReturnMakeDto_WithSimulatedId()
         {
             // Arrange
-            var createDto = new CreateMakeDto("Nissan");
+            var createDto = new CreateMakeDto("Nissan", string.Empty);
             Make? capturedMake = null; // To capture the entity passed to AddAsync
 
             // 1. Validator returns valid
@@ -283,7 +287,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         public async Task CreateMakeAsync_WithInvalidDto_ShouldThrowValidationException()
         {
             // Arrange
-            var createDto = new CreateMakeDto(""); // Invalid name
+            var createDto = new CreateMakeDto("", string.Empty); // Invalid name
             var validationFailures = new List<ValidationFailure> { new ValidationFailure("Name", "Name is required.") };
             _createMakeValidatorMock
                 .Setup(v => v.ValidateAsync(createDto, It.IsAny<CancellationToken>()))
@@ -306,7 +310,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         public async Task CreateMakeAsync_WhenNameAlreadyExists_ShouldThrowServiceException()
         {
             // Arrange
-            var createDto = new CreateMakeDto("Toyota");
+            var createDto = new CreateMakeDto("Toyota", string.Empty);
             _createMakeValidatorMock
                 .Setup(v => v.ValidateAsync(createDto, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ValidationResult()); // DTO is valid

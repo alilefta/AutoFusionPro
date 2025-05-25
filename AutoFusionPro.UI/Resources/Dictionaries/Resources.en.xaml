@@ -154,4 +154,107 @@
     <sys:String x:Key="InititalizationFailedStr">Initialization Failed</sys:String>
     <sys:String x:Key="NoUserIsLoggedInStr">No user is logged in</sys:String>
 
+
+    <!-- Vehicle Compatibility -->
+    <sys:String x:Key="PartsStr">Vehicle Parts</sys:String>
+
+    <sys:String x:Key="NewModelForStr">Add New Model</sys:String>
+    <sys:String x:Key="AddNewModelStr">Add New Model</sys:String>
+    <sys:String x:Key="AddModelStr">Add Model</sys:String>
+    <sys:String x:Key="ModelNameStr">Model's Name</sys:String>
+
+    <sys:String x:Key="EditModelStr">Edit Model</sys:String>
+    <sys:String x:Key="EditModelForStr">Edit model for a make</sys:String>
+
+    <sys:String x:Key="NewTrimLevelForStr">Add New Trim Level For Model</sys:String>
+    <sys:String x:Key="AddNewTrimLevelStr">Add New Trim Level</sys:String>
+    <sys:String x:Key="AddTrimLevelStr">Add Trim Level</sys:String>
+    <sys:String x:Key="TrimLevelNameStr">Trim's Name</sys:String>
+
+    <sys:String x:Key="EditTrimLevelStr">Edit Trim Level</sys:String>
+    <sys:String x:Key="EditTrimLevelForStr">Edit Trim Level</sys:String>
+
+    <sys:String x:Key="NewMakeStr">New Make</sys:String>
+    <sys:String x:Key="AddNewMakeStr">Add New Make</sys:String>
+    <sys:String x:Key="AddMakeStr">Add Make</sys:String>
+    <sys:String x:Key="MakeNameStr">Make's Name</sys:String>
+
+    <sys:String x:Key="EditMakeTitleStr">Edit Make's Title</sys:String>
+    <sys:String x:Key="EditMakeStr">Edit Make</sys:String>
+
+
+    <sys:String x:Key="ConfirmDeleteStr">Confirm Delete</sys:String>
+    <sys:String x:Key="VehicleCompatibilityManagementStr">Vehicle Compatibility Management</sys:String>
+    <sys:String x:Key="CancelProcessStr">Cancel Operation</sys:String>
+    <sys:String x:Key="CountOfElementsAreSelectedStr">Element(s) are selected</sys:String>
+    <sys:String x:Key="AreYouSureYouWantToRemoveTheSelectedItemsStr">Are you sure you want to delete? Once approval, you cannot undo the operation.</sys:String>
+
+    
+    <sys:String x:Key="NewTransmissionTypeStr">New Transmission Type</sys:String>
+    <sys:String x:Key="AddNewTransmissionTypeStr">Add New Transmission Type</sys:String>
+    <sys:String x:Key="AddTransmissionTypeStr">Add Transmission Type</sys:String>
+    <sys:String x:Key="TransmissionTypeNameStr">Transmission Type's Name</sys:String>
+    <sys:String x:Key="AvailableTransmissionTypesStr">Available Transmission Types</sys:String>
+    <sys:String x:Key="AvailableMakesStr">Available Makes</sys:String>
+    <sys:String x:Key="AvailableModelsStr">Available Makes</sys:String>
+    <sys:String x:Key="NoTransmissionTypesExistStr">No Transmission Types Exist!</sys:String>
+    <sys:String x:Key="NoMakesExistStr">No Makes Exist!</sys:String>
+    <sys:String x:Key="NoModelsExistStr">No Models Exist!</sys:String>
+    <sys:String x:Key="NoTrimLevelExistStr">No Trim Levels Exist!</sys:String>
+    
+    <sys:String x:Key="ManageMakesModelsTrimsStr">Manage the different types of Car Makes, their Models, and Trim Levels</sys:String>
+    
+    <sys:String x:Key="LoadLogoStr">Load Logo Image</sys:String>
+    <sys:String x:Key="LoadImageStr">Load Image</sys:String>
+    <sys:String x:Key="RemoveImageStr">Remove the Image</sys:String>
+    
+    <sys:String x:Key="MakeLogoStr">Make's Logo</sys:String>
+    <sys:String x:Key="ModelPhotoStr">Model's Photo</sys:String>
+
+    <sys:String x:Key="EditTransmissionTypeStr">Edit Transmission Type</sys:String>
+
+    <sys:String x:Key="EditThisItemStr">Edit This Item</sys:String>
+    <sys:String x:Key="DeleteThisItemStr">Delete This Item</sys:String>
+
+    <sys:String x:Key="EngineTypeManagementStr">Manage The Different Types of Car Engines</sys:String>
+    <sys:String x:Key="EngineTypesStr">Engine Types</sys:String>
+    <sys:String x:Key="AvailableEngineTypesStr">Available Engine Types</sys:String>
+    <sys:String x:Key="AddNewEngineTypeStr">Add New Type of Engine</sys:String>
+    <sys:String x:Key="AddNewEngineStr">Add New Engine</sys:String>
+    <sys:String x:Key="AddEngineStr">Add Engine</sys:String>
+    <sys:String x:Key="NoEngineTypesExistStr">No Engine Types Exist!.</sys:String>
+
+
+    <sys:String x:Key="BodyTypeManagementStr">Manage The Different Types of Car Bodies</sys:String>
+    <sys:String x:Key="BodyTypesStr">Body Types</sys:String>
+
+    <sys:String x:Key="AvailableBodyTypesStr">Available Body Types</sys:String>
+    <sys:String x:Key="AddNewBodyTypeStr">Add New Type of Car Body</sys:String>
+    <sys:String x:Key="AddNewBodyStr">Add New Body</sys:String>
+    <sys:String x:Key="NoBodyTypesExistStr">No Body Types Exist!.</sys:String>
+    
+    <sys:String x:Key="PleaseSelectMakeFromMakesListStr">Please, Select a Make from the Makes List!</sys:String>
+    <sys:String x:Key="PleaseSelectModelFromModelsListStr">Please, Select a Model from the Models List!</sys:String>
+    <sys:String x:Key="ModelsForSelectedMakeStr">Models for </sys:String>
+    <sys:String x:Key="TrimsForSelectedModelStr">Trim Levels for </sys:String>
+    <sys:String x:Key="TransmissionTypesStr">Transmission Types</sys:String>
+    <sys:String x:Key="VehicleStructureStr">Vehicle Structure</sys:String>
+    <sys:String x:Key="ManageTransmissionTypesStr">Manage The Different Types of Transmissions</sys:String>
+    
+    <sys:String x:Key="EngineTypeNameStr">Engine's Name</sys:String>
+    <sys:String x:Key="EngineTypeExamplePlaceholderStr">E.g., 2.5L 4 cylinder, a Turbo 2.0L 4 cylinder...</sys:String>
+    
+    <sys:String x:Key="MakesExamplePlaceholderStr">E.g., Nissan, Jeep, Tesla...</sys:String>
+    <sys:String x:Key="ModelsExamplePlaceholderStr">E.g., Altima, Camery, F-150 Raptor...</sys:String>
+    <sys:String x:Key="TrimsExamplePlaceholderStr">E.g., S, SV, Rock Creek, SL, Platinum...</sys:String>
+    
+    <sys:String x:Key="BodyTypeExamplePlaceholderStr">E.g., SUV, Sport, Sedan...</sys:String>
+    <sys:String x:Key="BodyTypeNameStr">Body Name</sys:String>
+    <sys:String x:Key="AddBodyStr">Add Body</sys:String>
+    <sys:String x:Key="EditBodyTypeStr">Edit Body Type</sys:String>
+    <sys:String x:Key="EditBodyStr">Edit Body</sys:String>
+    <sys:String x:Key="EditEngineStr">Edit Engine</sys:String>
+    <sys:String x:Key="EditEngineTypeStr">Edit Engine Type</sys:String>
+
+
 </ResourceDictionary>
