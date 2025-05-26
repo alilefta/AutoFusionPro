@@ -22,6 +22,7 @@ using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.BodyTypes;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.EngineTypes;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Transmissions;
@@ -336,7 +337,11 @@ namespace AutoFusionPro.UI
                 services.AddTransient<EditEngineTypeDialogViewModel>();
 
                 services.AddTransient<AddBodyTypeDialogViewModel>();
-                services.AddTransient<EditBodyTypeDialogViewModel>();
+                services.AddTransient<EditBodyTypeDialogViewModel>();                
+                
+                
+                services.AddTransient<AddCompatibleVehicleDialogViewModel>();
+                services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
 
                 // Dialogs

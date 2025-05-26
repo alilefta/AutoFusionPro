@@ -295,8 +295,6 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
             AddVehicleCommand.NotifyCanExecuteChanged(); // Finish button visibility depends on step
         }
 
-
-
         [RelayCommand]
         private void GoToPreviousStep()
         {

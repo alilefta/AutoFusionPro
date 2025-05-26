@@ -72,10 +72,20 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         public async Task InitializeAsync()
         {
-            if (!IsInititalized)
+            try
             {
-                await LoadTransmissionTypesAsync();
-                IsInititalized = true;
+                IsLoading = true;
+                if (!IsInititalized)
+                {
+                    await LoadTransmissionTypesAsync();
+                    IsInititalized = true;
+                }
+
+
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -83,8 +93,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         {
             try
             {
-                IsLoading = true;
-
                 TransmissionTypesCollection.Clear();
 
                 var transmissionTypes = await _compatibleVehicleService.GetAllTransmissionTypesAsync();
@@ -110,10 +118,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 throw new ViewModelException(ErrorMessages.LOADING_DATA_EXCEPTION_MESSAGE, nameof(TransmissionTypesManagementViewModel), nameof(LoadTransmissionTypesAsync), MethodOperationType.LOAD_DATA, ex);
 
-            }
-            finally
-            {
-                IsLoading = false;
             }
         }
 

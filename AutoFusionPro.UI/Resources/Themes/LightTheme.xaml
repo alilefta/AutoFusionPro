@@ -615,6 +615,9 @@
 
     <SolidColorBrush x:Key="StepIndicator.Default.Foreground"
                      Color="{StaticResource Neutral300}" />
+    
+    <SolidColorBrush x:Key="StepIndicator.Default.Heading"
+                     Color="{StaticResource Neutral400}" />
 
     <SolidColorBrush x:Key="StepIndicator.Current.HeadingForeground"
                      Color="{StaticResource Neutral600}" />

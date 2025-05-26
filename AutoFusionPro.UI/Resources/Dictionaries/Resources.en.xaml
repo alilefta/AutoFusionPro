@@ -255,6 +255,38 @@
     <sys:String x:Key="EditBodyStr">Edit Body</sys:String>
     <sys:String x:Key="EditEngineStr">Edit Engine</sys:String>
     <sys:String x:Key="EditEngineTypeStr">Edit Engine Type</sys:String>
+    <sys:String x:Key="SearchForCompatibleVehiclesStr">Search for Cars by Make, Year, Model</sys:String>
+    <sys:String x:Key="AddNewCarCompatibilityStr">Add Compatible Car</sys:String>
+    <sys:String x:Key="FiltersStr">Filters</sys:String>
+    <sys:String x:Key="MoreStr">More</sys:String>
+    
+    <sys:String x:Key="CompatibleVehicleStr">Compatible Vehicles</sys:String>
+    <sys:String x:Key="AddCompatibleVehicleStr">Add Compatible Vehicle</sys:String>
+    <sys:String x:Key="EditCompatibleVehicleStr">Edit Compatible Vehicle</sys:String>
+    <sys:String x:Key="EditVehicleStr">Edit Vehicle</sys:String>
+    <sys:String x:Key="MakeStr">Make</sys:String>
+    <sys:String x:Key="ModelStr">Model</sys:String>
+    <sys:String x:Key="TrimLevelStr">Trim Level</sys:String>
+    <sys:String x:Key="TransmissionTypeStr">Transmission Type</sys:String>
+    <sys:String x:Key="BodyTypeStr">Body Type</sys:String>
+    <sys:String x:Key="EngineStr">Engine Type</sys:String>
+    <sys:String x:Key="YearStr">Year</sys:String>
+    <sys:String x:Key="BackStr">Back</sys:String>
+    <sys:String x:Key="NextStr">Next</sys:String>
+    <sys:String x:Key="AddVehicleStr">Add Vehicle</sys:String>
+    <sys:String x:Key="StartYearStr">Start Year</sys:String>
+    <sys:String x:Key="EndYearStr">End Year</sys:String>
+    <sys:String x:Key="BasicVehicleInfoStr">Basic Vehicle Information</sys:String>
+    <sys:String x:Key="TechnicialDetailsStr">Technical Vehicle Details</sys:String>
+    
+    <sys:String x:Key="ItemUpdatedSuccessfullyStr">Item Updated Successfully!</sys:String>
+    <sys:String x:Key="ItemDeletedSuccessfullyStr">Item Has Been Deleted Successfully!</sys:String>
+    <sys:String x:Key="UpdateOperationFailedStr">Updated Operation Failed</sys:String>
+    <sys:String x:Key="ItemAddedSuccessfullyStr">New Item Added Successfully!</sys:String>
+    <sys:String x:Key="CreationOperationFailedStr">Creation Operation Has Failed!</sys:String>
+    <sys:String x:Key="DeleteOperationFailedStr">Cannot Delete the Item!</sys:String>
+    <sys:String x:Key="BecauseTheFollowingItemsDependOnItStr">Because the following Items Depends on it:</sys:String>
+
 
 
 </ResourceDictionary>

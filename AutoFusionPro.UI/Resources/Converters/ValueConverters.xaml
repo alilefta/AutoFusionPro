@@ -41,6 +41,8 @@
     <converters:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
     <converters:GridLengthToVisibilityConverter x:Key="GridLengthToVisibilityConverter" />
     <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
+    <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+    <converters:EmptyStringToForegroundConverter x:Key="EmptyStringToForegroundConverter" />
 
 
 </ResourceDictionary>
