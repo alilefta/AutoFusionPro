@@ -22,8 +22,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
     /// </summary>
     public partial class EditTrimLevelDialogViewModel : InitializableViewModel<EditTrimLevelDialogViewModel>, IDialogAware
     {
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
+        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
         private IDialogWindow _dialog = null!;
+        #endregion
 
+        #region Props
         [ObservableProperty]
         private bool _isEditing = false;
 
@@ -33,16 +43,19 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         [ObservableProperty]
         private TrimLevelDto? _trimToEdit;
+        #endregion
 
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        #region Constructor
 
         public EditTrimLevelDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditTrimLevelDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }
+        #endregion
 
+        #region Initializer
         /// <summary>
-        /// Provided by <see cref="InitializableViewModel{TViewModel}"/>.
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> to initialize <see cref="EditTrimLevelDialogViewModel"/>
         /// </summary>
         /// <param name="parameter"><see cref="TrimLevelDto"/></param>
         /// <returns><see cref="Void"/></returns>
@@ -66,7 +79,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
             await base.InitializeAsync(parameter);
         }
+        #endregion
 
+        #region Commands
 
         private bool CanEditMake()
         {
@@ -86,7 +101,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             {
 
 
-                if (TrimToEdit == null)
+                if (TrimToEdit == null || TrimToEdit.Id == 0)
                 {
                     _logger.LogError("The Trim Level to be updated is Null!");
 
@@ -134,6 +149,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         {
             SetResultAndClose(false);
         }
+        #endregion
+
+        #region Dialog Specific Methods
 
         /// <summary>
         /// Provided by <see cref="IDialogAware"/> to set the window for Setting Dialog Results and Closing purposes <see cref="SetResultAndClose(bool)"/>
@@ -166,5 +184,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             }
 
         }
+
+        #endregion
     }
 }

@@ -6,10 +6,14 @@ using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
+using AutoFusionPro.Core.Models;
+using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Filters;
 using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.Filters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -29,7 +33,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         #endregion
 
         [ObservableProperty]
-        private bool _isAdding = false;
+        private bool _isAdding = false;       
+        
+        [ObservableProperty]
+        private bool _isShowingFilters = false;
 
         [ObservableProperty]
         private bool _isInititalized = false;
@@ -52,7 +59,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         [ObservableProperty]
         private CompatibleVehicleSummaryDto _selectedCompatibleVehicle = null;
 
+        [ObservableProperty]
+        private CompatibleVehicleFilterCriteriaDto _currentlyAppliedFilters;
 
+        #region Constructor
         public CompatibleVehiclesViewModel(
             ICompatibleVehicleService compatibleVehicleService,
             IWpfToastNotificationService wpfToastNotificationService,
@@ -71,7 +81,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
             RegisterCleanup(() => LanguageDictionariesChanged -= OnLanguageChanged);
         }
+        #endregion
 
+        #region Initializer
         public async Task InitializeAsync()
         {
             try
@@ -89,10 +101,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                 IsLoading = false;
             }
         }
-
+        #endregion
         #region Loading
 
-        private async Task LoadCompatibleVehiclesAsync()
+        private async Task LoadCompatibleVehiclesAsync(CompatibleVehicleFilterCriteriaDto? filters = null)
         {
             try
             {
@@ -100,10 +112,20 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 CompatibleVehiclesCollection.Clear();
 
-                var filterCriteria = new CompatibleVehicleFilterCriteriaDto();
+                PagedResult<CompatibleVehicleSummaryDto> pagedResults;
 
+                if (filters == null)
+                {
+                    var filterCriteria = new CompatibleVehicleFilterCriteriaDto();
 
-                var pagedResults = await _compatibleVehicleService.GetFilteredCompatibleVehiclesAsync(filterCriteria, 0, 10);
+                    pagedResults = await _compatibleVehicleService.GetFilteredCompatibleVehiclesAsync(filterCriteria, 0, 10);
+
+                }
+                else
+                {
+                    pagedResults = await _compatibleVehicleService.GetFilteredCompatibleVehiclesAsync(filters, 1, 10);
+
+                }
 
                 var compatibleVehicles = pagedResults.Items;
 
@@ -256,6 +278,43 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
 
                 }
+            }
+        }
+
+        [RelayCommand]
+        public async Task ShowFilterOptionsDialogAsync()
+        {
+            try
+            {
+                IsShowingFilters = true;
+
+                var newFilterCritieria = await _dialogService.ShowDialogWithResultsAsync<VehicleCompatibilityFilterOptionsDialogViewModel, VehicleCompatibilityFilterOptionsDialog, CompatibleVehicleFilterCriteriaDto>(CurrentlyAppliedFilters);
+
+                if (newFilterCritieria is not null)
+                {
+                    _logger.LogInformation("A new compatible vehicle has been added!");
+
+                    CurrentlyAppliedFilters = newFilterCritieria;
+
+                    await LoadCompatibleVehiclesAsync(newFilterCritieria);
+
+                    await MessageBoxHelper.ShowMessageWithoutTitleAsync("Searched for Items", false, CurrentWorkFlow);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE}, with opening {nameof(VehicleCompatibilityFilterOptionsDialog)}");
+                //var msg = System.Windows.Application.Current.Resources["CreationOperationFailedStr"] as string ?? "Creation Operation Has Failed!";
+                //_wpfToastNotificationService.ShowError(msg);
+
+                // DEV ENV ONLY
+                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(CompatibleVehiclesViewModel), nameof(ShowFilterOptionsDialogAsync), MethodOperationType.OPEN_DIALOG, ex);
+            }
+            finally
+            {
+                IsShowingFilters = false;
             }
         }
 

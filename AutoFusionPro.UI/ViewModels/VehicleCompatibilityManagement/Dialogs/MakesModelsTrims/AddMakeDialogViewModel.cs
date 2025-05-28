@@ -1,34 +1,44 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
-using AutoFusionPro.Application.Interfaces.Storage;
 using AutoFusionPro.Core.Exceptions.Validation;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 
 namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims
 {
+    /// <summary>
+    /// Used to make a new <see cref="MakeDto"/>
+    /// </summary>
     public partial class AddMakeDialogViewModel : BaseViewModel<AddMakeDialogViewModel>, IDialogAware
     {
 
-        private IDialogWindow _dialog = null!;
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
         private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
+        private IDialogWindow _dialog = null!;
+        #endregion
+
+        #region Props
+
         [ObservableProperty]
         private bool _isAdding = false;
-
-        #region Model Props
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(AddMakeCommand))]
         private string _name = string.Empty;
-
-        #region Image Handling
 
         [ObservableProperty]
         private string? _imagePath;
@@ -41,7 +51,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         #endregion
 
-        #endregion
+        #region Constructor
 
         public AddMakeDialogViewModel(
             ICompatibleVehicleService compatibleVehicleService, 
@@ -51,6 +61,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }
 
+        #endregion
+
+        #region Commands
         private bool CanAddMake()
         {
             return !string.IsNullOrEmpty(Name);
@@ -98,32 +111,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             SetResultAndClose(false);
         }
 
+        #endregion
 
-        public void SetDialogWindow(IDialogWindow dialog)
-        {
-            if(dialog == null)
-            {
-                _logger.LogError("The Dialog window was null on {VM}", nameof(AddMakeDialogViewModel));
-                return;
-            }
-
-            _dialog = dialog;
-        }
-
-        private void SetResultAndClose(bool res)
-        {
-            if (_dialog != null)
-            {
-                // Set the result first
-                _dialog.DialogResult = res;
-
-                // Then close with animation
-                _dialog.Close();
-            }
-
-        }
-
-        #region Image Commands
+        #region Image Handling Commands
 
         [RelayCommand]
         private async Task LoadImage(object parameter)
@@ -165,5 +155,42 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         }
 
         #endregion
+
+        #region Dialog Specific Methods
+
+        /// <summary>
+        /// Provided By <see cref="IDialogAware"/> with value <see cref="AddMakeDialog"/>.
+        /// </summary>
+        /// <param name="dialog"><see cref="AddMakeDialog"/></param>
+        public void SetDialogWindow(IDialogWindow dialog)
+        {
+            if(dialog == null)
+            {
+                _logger.LogError("The Dialog window was null on {VM}", nameof(AddMakeDialog));
+                return;
+            }
+
+            _dialog = dialog;
+        }
+
+        /// <summary>
+        /// Helper Method to set DialogResults to either True/False to helper Caller ViewModel to Update UI based on results.
+        /// </summary>
+        /// <param name="res"><see cref="bool?"/></param>
+        private void SetResultAndClose(bool res)
+        {
+            if (_dialog != null)
+            {
+                // Set the result first
+                _dialog.DialogResult = res;
+
+                // Then close with animation
+                _dialog.Close();
+            }
+
+        }
+
+        #endregion
+
     }
 }

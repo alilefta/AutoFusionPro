@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;assembly=AutoFusionPro.Application"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:CompatibleVehiclesViewModel}"
@@ -48,7 +49,8 @@
 
                     <xBtn:XButton ButtonType="Light"
                                   IsLoading="False"
-                                  Style="{StaticResource RegularButtonStyle}">
+                                  Style="{StaticResource RegularButtonStyle}"
+                                  Command="{Binding ShowFilterOptionsDialogCommand}">
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
                                               FontSize="12" />
@@ -78,7 +80,7 @@
             <!-- Active Filters Bar-->
             <Grid Grid.Row="1"
                   Margin="5,10">
-                <ItemsControl ItemsSource="{Binding Filters}">
+                <ItemsControl ItemsSource="{Binding CurrentlyAppliedFilters}" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <!-- Use WrapPanel so filters wrap nicely -->
@@ -86,8 +88,8 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="{DynamicResource Border.SecondaryBrush}"
+                        <DataTemplate DataType="{x:Type dtos:CompatibleVehicleFilterCriteriaDto}">
+                            <Border Background="{DynamicResource Accent.Amethyst.BackgroundBrush}"
                                     CornerRadius="4"
                                     Padding="6,3"
                                     Margin="3,3">
@@ -97,7 +99,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding Name}"
+                                    <TextBlock Text="{Binding BodyTypeId}"
                                                TextWrapping="Wrap"
                                                FontFamily="{DynamicResource DynamicFontFamilyRegular}"
                                                FontSize="12" />

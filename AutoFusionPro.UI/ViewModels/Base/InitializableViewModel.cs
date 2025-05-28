@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: Initializable Denta
-
-using AutoFusionPro.Application.Interfaces.UI;
+﻿using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.UI.Services;
 using Microsoft.Extensions.Logging;
 

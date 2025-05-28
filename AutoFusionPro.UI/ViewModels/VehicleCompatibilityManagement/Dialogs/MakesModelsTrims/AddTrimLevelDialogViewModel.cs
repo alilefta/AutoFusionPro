@@ -7,6 +7,7 @@ using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -15,21 +16,24 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 {
     public partial class AddTrimLevelDialogViewModel : InitializableViewModel<AddTrimLevelDialogViewModel>, IDialogAware
     {
+        #region Fields
         private IDialogWindow _dialog = null!;
+        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        #endregion
 
-        [ObservableProperty] private int _modelId;
+        #region Props
 
         [ObservableProperty] private bool _isAdding = false;
 
         [ObservableProperty] private ModelDto? _model = null;
 
-
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(AddTrimCommand))]
         private string _name = string.Empty;
 
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        #endregion
+
+        #region Constructor
 
         public AddTrimLevelDialogViewModel(
             ICompatibleVehicleService compatibleVehicleService, 
@@ -39,6 +43,15 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }
 
+        #endregion
+
+        #region Initializer
+
+        /// <summary>
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> To initialize <see cref="AddTrimLevelDialogViewModel"/>
+        /// </summary>
+        /// <param name="parameter"><see cref="ModelDto"/></param>
+        /// <returns><see cref="Void"/></returns>
         public override async Task InitializeAsync(object? parameter)
         {
 
@@ -49,22 +62,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
             if (parameter == null) return;
 
-            var modelId = (int)parameter;
-            ModelId = modelId;
-
-            _logger.LogInformation("AddTrimLevelDialogViewModel initialized with parameter {param}", ModelId);
-
-            var model = await _compatibleVehicleService.GetModelByIdAsync(ModelId);
-            if (model == null)
-            {
-                _logger.LogError("The model was null, for AddTrimLevelDialogViewModel");
-                return;
-            }
+            var model = (ModelDto)parameter;
             Model = model;
+
+            _logger.LogInformation("AddTrimLevelDialogViewModel initialized with parameter {param}", Model.Id);
 
             await base.InitializeAsync(parameter);
 
         }
+
+        #endregion
+
+        #region Commands
 
         private bool CanAddModel()
         {
@@ -79,7 +88,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             {
                 IsAdding = true;
 
-                if (ModelId == 0)
+                if (Model == null || Model.Id == 0)
                 {
                     _logger.LogError("Failed while adding a new trim level, the make ID was null");
 
@@ -88,7 +97,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
                     return;
                 }
 
-                var createDto = new CreateTrimLevelDto(Name, ModelId);
+                var createDto = new CreateTrimLevelDto(Name, Model.Id);
 
                 var newTrim = await _compatibleVehicleService.CreateTrimLevelAsync(createDto);
 
@@ -123,12 +132,15 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             SetResultAndClose(false);
         }
 
+        #endregion
+
+        #region Dialog Specific Methods
 
         public void SetDialogWindow(IDialogWindow dialog)
         {
             if (dialog == null)
             {
-                _logger.LogError("The Dialog window was null on the AddTrimLevelDialogViewModel");
+                _logger.LogError("The Dialog window was null on the {Dialog}", nameof(AddTrimLevelDialog));
                 return;
             }
 
@@ -147,5 +159,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             }
 
         }
+
+        #endregion
     }
 }

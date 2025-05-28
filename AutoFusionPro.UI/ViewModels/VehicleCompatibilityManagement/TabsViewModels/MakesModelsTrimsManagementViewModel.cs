@@ -8,6 +8,8 @@ using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -319,7 +321,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
 
                 // open dialog
-                var results = _dialogService.ShowAddMakeDialog();
+                var results = await _dialogService.ShowDialogAsync<AddMakeDialogViewModel, AddMakeDialog>(null);
 
                 if (results.HasValue && results.Value == true)
                 {
@@ -355,7 +357,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                     return;
                 }
 
-                var results = await _dialogService.ShowAddModelDialog(SelectedMake.Id);
+                var results = await _dialogService.ShowDialogAsync<AddModelDialogViewModel, AddModelDialog>(SelectedMake);
                 if(results.HasValue && results.Value == true)
                 {
                     await LoadModelsForMakeAsync(SelectedMake.Id);
@@ -390,7 +392,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                     return;
                 }
 
-                var results = await _dialogService.ShowAddTrimLevelDialog(SelectedModel.Id);
+                var results = await _dialogService.ShowDialogAsync<AddTrimLevelDialogViewModel, AddTrimLevelDialog>(SelectedModel);
                 if (results.HasValue && results.Value == true)
                 {
                     await LoadTrimsForModelAsync(SelectedModel.Id);
@@ -418,7 +420,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             if (makeToEdit == null) return;
             try
             {
-                var results = await _dialogService.ShowEditMakeDialog(makeToEdit);
+                var results = await _dialogService.ShowDialogAsync<EditMakeDialogViewModel, EditMakeDialog>(makeToEdit);
 
                 if (results.HasValue && results.Value == true)
                 {
@@ -444,7 +446,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
             try
             {
-                var results = await _dialogService.ShowEditModelDialog(modelDto);
+                var results = await _dialogService.ShowDialogAsync<EditModelDialogViewModel, EditModelDialog>(modelDto);
 
                 if (results.HasValue && results.Value == true)
                 {
@@ -467,7 +469,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             if (trimToBeUpdated == null) return;
             try
             {
-                var results = await _dialogService.ShowEditTrimLevelDialog(trimToBeUpdated);
+                var results = await _dialogService.ShowDialogAsync<EditTrimLevelDialogViewModel, EditTrimLevelDialog>(trimToBeUpdated);
 
                 if (results.HasValue && results.Value == true)
                 {

@@ -22,9 +22,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
     public partial class AddCompatibleVehicleDialogViewModel : BaseViewModel<AddCompatibleVehicleDialogViewModel>, IDialogAware
     {
 
-        private IDialogWindow _dialog = null!;
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
         private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
+        private IDialogWindow _dialog = null!;
+        #endregion
 
+        #region Props
         [ObservableProperty]
         private bool _isAdding = false;
 
@@ -45,14 +54,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
 
         [ObservableProperty]
         private bool _isLoadingBodies = false;
-
-        //#region Model Props
-
-        //[ObservableProperty]
-        //[NotifyCanExecuteChangedFor(nameof(AddCompatibleVehicleCommand))]
-        //private string _name = string.Empty;
-
-        //#endregion
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(AddCompatibleVehicleCommand))]
@@ -93,6 +94,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
         [NotifyCanExecuteChangedFor(nameof(AddCompatibleVehicleCommand))]
         [NotifyCanExecuteChangedFor(nameof(GoToNextStepCommand))]
         private int _selectedEndYear;
+        #endregion
 
         #region Collections
 
@@ -148,7 +150,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
 
         #endregion
 
-
+        #region Constructor
 
         public AddCompatibleVehicleDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddCompatibleVehicleDialogViewModel> logger) : base(localizationService, logger)
         {
@@ -172,6 +174,8 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
             _ = LoadInitialDataAsync();
 
         }
+
+        #endregion
 
         #region Initialization & Data Loading
 
@@ -426,7 +430,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
 
         #endregion
 
-
         #region Observable Props Customization (Makes, Models, Trims)
 
         // When SelectedMake changes, load models for it
@@ -461,7 +464,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
         }
 
         #endregion
-
 
         #region Commands
 
@@ -598,10 +600,14 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Com
 
         #endregion
 
+        #region Helpers
+
         private void OnLanguageChanged(object? sender, EventArgs e)
         {
             NextButtonIcon = _localizationService.CurrentLangString != "ar-SA" ? SymbolRegular.ArrowRight48 : SymbolRegular.ArrowLeft48;
         }
+
+        #endregion
 
     }
 }

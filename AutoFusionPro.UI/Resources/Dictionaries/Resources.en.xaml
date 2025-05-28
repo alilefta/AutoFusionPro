@@ -286,6 +286,17 @@
     <sys:String x:Key="CreationOperationFailedStr">Creation Operation Has Failed!</sys:String>
     <sys:String x:Key="DeleteOperationFailedStr">Cannot Delete the Item!</sys:String>
     <sys:String x:Key="BecauseTheFollowingItemsDependOnItStr">Because the following Items Depends on it:</sys:String>
+    <sys:String x:Key="ChnageFilterOptionsStr">Change Filter Options</sys:String>
+    <sys:String x:Key="FilterContentStr">Filter Content</sys:String>
+    <sys:String x:Key="ApplyFiltersStr">Apply Filters</sys:String>
+    <sys:String x:Key="ClearAllFiltersStr">Clear All Filters</sys:String>
+    <sys:String x:Key="FilterByMakeModelTrimStr">Filter By Make, Model, and Trim Level</sys:String>
+    <sys:String x:Key="FilterByTransmissionTypesStr">Filter By Transmission Type</sys:String>
+    <sys:String x:Key="FilterByBodyTypesStr">Filter By Body Type</sys:String>
+    <sys:String x:Key="FilterByEngineTypesStr">Filter By Engine Type</sys:String>
+    <sys:String x:Key="FilterByYearStr">Filter By Year</sys:String>
+    <sys:String x:Key="AllStr">All</sys:String>
+    <sys:String x:Key="YearExampleStr">Eg., 2025</sys:String>
 
 
 

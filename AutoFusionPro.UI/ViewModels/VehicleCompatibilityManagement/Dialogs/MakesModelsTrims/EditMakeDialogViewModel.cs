@@ -22,8 +22,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
     /// </summary>
     public partial class EditMakeDialogViewModel : InitializableViewModel<EditMakeDialogViewModel>, IDialogAware
     {
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
         private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
         private IDialogWindow _dialog = null!;
+        #endregion
+
+        #region Props
 
         [ObservableProperty]
         private bool _isEditing = false;
@@ -43,7 +53,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         [ObservableProperty]
         private MakeDto? _makeToEdit;
 
+        #endregion
 
+        #region Constructor
         public EditMakeDialogViewModel(
             ICompatibleVehicleService compatibleVehicleService, 
             ILocalizationService localizationService, 
@@ -53,9 +65,12 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
 
         }
+        #endregion
+
+        #region Initializer
 
         /// <summary>
-        /// Provided by <see cref="InitializableViewModel{TViewModel}"/>.
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> to initialize <see cref="EditMakeDialogViewModel"/>
         /// </summary>
         /// <param name="parameter"><see cref="MakeDto"/></param>
         /// <returns><see cref="Void"/></returns>
@@ -83,7 +98,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             await base.InitializeAsync(parameter);
         }
 
+        #endregion
 
+        #region Commands
         private bool CanEditMake()
         {
             return !string.IsNullOrEmpty(Name);
@@ -100,8 +117,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         {
             try
             {
-
-                if (MakeToEdit == null)
+                if (MakeToEdit == null || MakeToEdit.Id == 0)
                 {
                     _logger.LogError("The make to be updated is Null!");
 
@@ -150,6 +166,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         {
             SetResultAndClose(false);
         }
+        #endregion
+
+        #region Image Handling Commands
 
         [RelayCommand]
         private async Task LoadImage(object parameter)
@@ -190,6 +209,10 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             ImagePath = null;
         }
 
+        #endregion
+
+        #region Dialog Specific Methods
+
         /// <summary>
         /// Provided by <see cref="IDialogAware"/> to set the window for Setting Dialog Results and Closing purposes <see cref="SetResultAndClose(bool)"/>
         /// </summary>
@@ -222,6 +245,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         }
 
+        #endregion
 
     }
 }

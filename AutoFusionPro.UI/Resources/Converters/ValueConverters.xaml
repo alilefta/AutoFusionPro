@@ -43,6 +43,7 @@
     <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
     <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     <converters:EmptyStringToForegroundConverter x:Key="EmptyStringToForegroundConverter" />
+    <converters:EmptyStringToFilterOptionAllConverter x:Key="EmptyStringToFilterOptionAllConverter" />
 
 
 </ResourceDictionary>

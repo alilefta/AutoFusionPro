@@ -7,6 +7,7 @@ using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -15,14 +16,21 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 {
     public partial class AddModelDialogViewModel : InitializableViewModel<AddMakeDialogViewModel>, IDialogAware
     {
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
         private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
         private IDialogWindow _dialog = null!;
+        #endregion
+
+        #region General & Model Props
 
         [ObservableProperty]
-        private int _makeId;
-
-        [ObservableProperty]
-        private MakeDto? _make = null;
+        private MakeDto _make = null!;
 
         [ObservableProperty]
         private bool _isAdding = false;
@@ -31,7 +39,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         [NotifyCanExecuteChangedFor(nameof(AddModelCommand))]
         private string _name = string.Empty;
 
-        #region Image Handling
+        #endregion
+
+        #region Image Handling Props
 
         [ObservableProperty]
         private string? _imagePath;
@@ -44,12 +54,23 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         #endregion
 
+        #region Constructor
+
         public AddModelDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddMakeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
 
         }
 
+        #endregion
+
+        #region Initializer
+
+        /// <summary>
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> To Initialize <see cref="AddModelDialogViewModel"/>
+        /// </summary>
+        /// <param name="parameter"><see cref="MakeDto"/></param>
+        /// <returns><see cref="Void"/></returns>
         public override async Task InitializeAsync(object? parameter)
         {
 
@@ -60,22 +81,17 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
             if (parameter == null) return;
 
-            var makeId = (int)parameter;
-            MakeId = makeId;
+            var make = (MakeDto)parameter;
+            Make = make;
 
-            _logger.LogInformation("AddModelDialogViewModel initialized with parameter {param}", MakeId);
+            _logger.LogInformation("AddModelDialogViewModel initialized with parameter {param}", Make.Id);
 
             await base.InitializeAsync(parameter);
-
-            var makeEntity = await _compatibleVehicleService.GetMakeByIdAsync(makeId);
-
-            if (makeEntity == null)
-            {
-                _logger.LogError("The make was null, for AddModelDialogViewModel");
-                return;
-            }
-            Make = makeEntity;
         }
+
+        #endregion
+
+        #region Commands
 
         private bool CanAddModel()
         {
@@ -90,16 +106,16 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             {
                 IsAdding = true;
 
-                if(MakeId == 0)
+                if(Make == null || Make.Id == 0)
                 {
-                    _logger.LogError("Failed while adding a new model, the make ID was null");
+                    _logger.LogError("Failed while adding a new model, the make was null");
 
                     await MessageBoxHelper.ShowMessageWithoutTitleAsync("Make ID was not found", true, CurrentWorkFlow);
                     SetResultAndClose(false);
                     return;
                 }
 
-                var createModelDto = new CreateModelDto(Name, MakeId, ImagePath);
+                var createModelDto = new CreateModelDto(Name, Make.Id, ImagePath);
 
                 var newItem = await _compatibleVehicleService.CreateModelAsync(createModelDto);
 
@@ -135,11 +151,15 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         }
 
 
+        #endregion
+
+        #region Dialog Specific Methods
+
         public void SetDialogWindow(IDialogWindow dialog)
         {
             if (dialog == null)
             {
-                _logger.LogError("The Dialog window was null on the AddModelDialogViewModel");
+                _logger.LogError("The Dialog window was null on the {Dialog}", nameof(AddModelDialog));
                 return;
             }
 
@@ -158,6 +178,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             }
 
         }
+        #endregion
 
         #region Image Commands
 

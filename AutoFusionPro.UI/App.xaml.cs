@@ -20,10 +20,10 @@ using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
-using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.BodyTypes;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.EngineTypes;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Transmissions;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels;
@@ -49,7 +49,6 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
-using System.Windows.Media.Imaging;
 
 namespace AutoFusionPro.UI
 {
@@ -343,6 +342,10 @@ namespace AutoFusionPro.UI
                 services.AddTransient<AddCompatibleVehicleDialogViewModel>();
                 services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
+                services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
+
+
+
 
                 // Dialogs
                 services.AddTransient<AddVehicleDialogViewModel>();
@@ -360,7 +363,7 @@ namespace AutoFusionPro.UI
             }
             catch (Exception ex)
             {
-                _logger.Fatal("An error occured while registering services, {EX}", ex.Message);
+                _logger.Fatal("An error occurred while registering services, {EX}", ex.Message);
                 throw new AutoFusionProException("An error occurred while registering services inside 'App.xaml.cs'", ex);
             }
         }

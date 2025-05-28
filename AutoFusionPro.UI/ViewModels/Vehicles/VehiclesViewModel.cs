@@ -8,6 +8,8 @@ using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.Core.Models;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
+using AutoFusionPro.UI.Views.Vehicles.Dialogs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -241,11 +243,11 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
 
         // ... Example Add command
         [RelayCommand]
-        private void AddVehicle()
+        private async Task AddVehicle()
         {
             try
             {
-                bool? results = _dialogService.ShowAddVehicleDialog();
+                bool? results = await _dialogService.ShowDialogAsync<AddVehicleDialogViewModel,AddVehicleDialog>(null);
                 if (results.HasValue && results.Value == true)
                 {
                     _toastNotificationService.ShowSuccess("Vehicle Has been added successfully");

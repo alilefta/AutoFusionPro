@@ -22,9 +22,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
     /// </summary>
     public partial class EditModelDialogViewModel : InitializableViewModel<EditModelDialogViewModel>, IDialogAware
     {
-        private IDialogWindow _dialog = null!;
+        #region Fields
+        /// <summary>
+        /// Value Provided by DI container to manage Models.
+        /// </summary>
         private readonly ICompatibleVehicleService _compatibleVehicleService;
+        /// <summary>
+        /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
+        /// </summary>
+        private IDialogWindow _dialog = null!;
+        #endregion
 
+        #region Props
 
         [ObservableProperty]
         private bool _isEditing = false;
@@ -35,9 +44,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         [ObservableProperty]
         private ModelDto? _modelToEdit;
-
-
-        #region Image Handling
 
         [ObservableProperty]
         private string? _imagePath;
@@ -50,12 +56,16 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         #endregion
 
+        #region Constructor
 
         public EditModelDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditModelDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }
 
+        #endregion
+
+        #region Initializer
         /// <summary>
         /// Provided by <see cref="InitializableViewModel{TViewModel}"/>.
         /// </summary>
@@ -85,13 +95,13 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
             await base.InitializeAsync(parameter);
         }
+        #endregion
 
-
+        #region Commands
         private bool CanEditModel()
         {
             return !string.IsNullOrEmpty(Name);
         }
-
 
         /// <summary>
         /// Edit <see cref="UpdateModelDto"/>
@@ -103,7 +113,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         {
             try
             {
-                if (ModelToEdit == null)
+                if (ModelToEdit == null || ModelToEdit.Id == 0)
                 {
                     _logger.LogError("The model to be updated is Null!");
 
@@ -151,9 +161,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         {
             SetResultAndClose(false);
         }
+        #endregion
 
-
-        #region Image Commands
+        #region Image handling Commands
 
         [RelayCommand]
         private async Task LoadImage(object parameter)
@@ -196,6 +206,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         #endregion
 
+        #region Dialog Specific Methods
         /// <summary>
         /// Provided by <see cref="IDialogAware"/> to set the window for Setting Dialog Results and Closing purposes <see cref="SetResultAndClose(bool)"/>
         /// </summary>
@@ -227,5 +238,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
             }
 
         }
+
+        #endregion
     }
 }

@@ -75,7 +75,7 @@
                                       Foreground="{DynamicResource Text.PrimaryBrush}"
                                       FontSize="18"
                                       Margin="0,0,8,0" />
-                    <TextBlock Text="Add New Make"
+                    <TextBlock Text="{DynamicResource AddNewMakeStr}"
                                FontSize="14"
                                FontFamily="{DynamicResource DynamicFontFamilyMedium}"
                                Foreground="{DynamicResource Text.PrimaryBrush}"
