@@ -59,7 +59,7 @@
                     </xBtn:XButton>
 
                     <xBtn:XButton ButtonType="Primary"
-                                  IsLoading="{Binding IsAddingPart}"
+                                  IsLoading="{Binding IsLoading}"
                                   Margin="8,0,0,0"
                                   Command="{Binding AddVehicleCommand}"
                                   Style="{StaticResource RegularButtonStyle}">

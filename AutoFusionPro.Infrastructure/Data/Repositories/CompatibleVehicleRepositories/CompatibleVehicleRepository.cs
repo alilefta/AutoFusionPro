@@ -215,5 +215,60 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleReposi
                 throw new RepositoryException("Could not retrieve total count of vehicle specifications.", ex);
             }
         }
+
+        public async Task<IEnumerable<CompatibleVehicle>> GetAllFilteredWithDetailsAsync(
+       Expression<Func<CompatibleVehicle, bool>>? filter = null,
+       int? makeIdFilter = null,
+       string? searchTerm = null)
+        {
+            try
+            {
+                IQueryable<CompatibleVehicle> query = _dbSet
+                    .Include(cv => cv.Model)
+                        .ThenInclude(m => m.Make)
+                    .Include(cv => cv.TrimLevel)
+                    .Include(cv => cv.TransmissionType)
+                    .Include(cv => cv.EngineType)
+                    .Include(cv => cv.BodyType);
+
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+                if (makeIdFilter.HasValue && makeIdFilter.Value > 0)
+                {
+                    query = query.Where(cv => cv.Model.MakeId == makeIdFilter.Value);
+                }
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    string termLower = searchTerm.Trim().ToLowerInvariant();
+                    query = query.Where(cv =>
+                        (cv.Model.Make.Name != null && cv.Model.Make.Name.ToLower().Contains(termLower)) ||
+                        (cv.Model.Name != null && cv.Model.Name.ToLower().Contains(termLower)) ||
+                        (cv.VIN != null && cv.VIN.ToLower().Contains(termLower)) ||
+                        (cv.YearStart.ToString().Contains(termLower)) ||
+                        (cv.YearEnd.ToString().Contains(termLower)) ||
+                        (cv.TrimLevel != null && cv.TrimLevel.Name != null && cv.TrimLevel.Name.ToLower().Contains(termLower)) ||
+                        (cv.EngineType != null && cv.EngineType.Name != null && cv.EngineType.Name.ToLower().Contains(termLower)) ||
+                        (cv.BodyType != null && cv.BodyType.Name != null && cv.BodyType.Name.ToLower().Contains(termLower)) ||
+                        (cv.TransmissionType != null && cv.TransmissionType.Name != null && cv.TransmissionType.Name.ToLower().Contains(termLower))
+                    );
+                }
+
+                // Apply ordering
+                query = query.OrderBy(cv => cv.Model.Make.Name)
+                             .ThenBy(cv => cv.Model.Name)
+                             .ThenByDescending(cv => cv.YearEnd)
+                             .ThenByDescending(cv => cv.YearStart)
+                             .ThenBy(cv => cv.Id);
+
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all filtered CompatibleVehicles with details.");
+                throw new RepositoryException("Could not retrieve all filtered vehicle specifications.", ex);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@
         Foreground="{DynamicResource Text.PrimaryBrush}"
         Title="{DynamicResource ChnageFilterOptionsStr}"
         Height="580"
-        Width="500"
+        Width="530"
         WindowStyle="None"
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance Type=vm:VehicleCompatibilityFilterOptionsDialogViewModel}"
@@ -140,14 +140,14 @@
 
             <!-- Content -->
             <Grid Grid.Row="1"
-                  Margin="8">
+                  Margin="8,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Form Fields -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,8">
                     <StackPanel>
                         <wpfUi:CardExpander>
                             <wpfUi:CardExpander.Header>
@@ -165,139 +165,88 @@
                                              Fill="{DynamicResource Border.ErrorBrush}" />
                                 </Grid>
                             </wpfUi:CardExpander.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <!-- Make -->
-                                <StackPanel>
-                                    <TextBlock Text="{DynamicResource MakeStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />
-                                    <Grid>
-                                        <ComboBox ItemsSource="{Binding MakesCollection}"
-                                                  x:Name="makesCombo"
-                                                  SelectedItem="{Binding SelectedMake}"
-                                                  Panel.ZIndex="0">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type dtos:MakeDto}">
-                                                    <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                         IsHitTestVisible="False"
-                                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                         FontSize="14"
-                                                         Padding="8,5"
-                                                         Margin="5,0,0,0"
-                                                         VerticalAlignment="Center"
-                                                         Foreground="{DynamicResource GrayBrush}"
-                                                         Panel.ZIndex="1">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility"
-                                                            Value="Hidden" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=makesCombo,Path=SelectedItem}"
-                                                                     Value="{x:Null}">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Visible" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </wpfUi:TextBlock>-->
-                                    </Grid>
-                                </StackPanel>
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Make -->
+                                    <StackPanel>
+                                        <TextBlock Text="{DynamicResource MakeStr}"
+                                                   Margin="0,0,0,8"
+                                                   Style="{DynamicResource FieldLabel}" />
+                                        <Grid>
+                                            <ComboBox ItemsSource="{Binding MakesCollection}"
+                                                      IsEnabled="{Binding IsLoadingMakes, Converter={StaticResource InverseBooleanConverter}}"
+                                                      x:Name="makesCombo"
+                                                      SelectedItem="{Binding SelectedMake}"
+                                                      Panel.ZIndex="0">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type dtos:MakeDto}">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+                                    </StackPanel>
 
-                                <!-- Model -->
-                                <StackPanel Margin="15,0,0,0"
-                                            Grid.Column="1">
-                                    <TextBlock Text="{DynamicResource ModelStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />
-                                    <Grid>
-                                        <ComboBox ItemsSource="{Binding ModelsCollection}"
-                                                  x:Name="modelsCombo"
-                                                  SelectedItem="{Binding SelectedModel}">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type dtos:ModelDto}">
-                                                    <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                         IsHitTestVisible="False"
-                                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                         FontSize="14"
-                                                         Padding="8,5"
-                                                         Margin="5,0,0,0"
-                                                         VerticalAlignment="Center"
-                                                         Foreground="{DynamicResource GrayBrush}"
-                                                         Panel.ZIndex="1">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility"
-                                                            Value="Hidden" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=modelsCombo,Path=SelectedItem}"
-                                                                     Value="{x:Null}">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Visible" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </wpfUi:TextBlock>-->
-                                    </Grid>
-                                </StackPanel>
+                                    <!-- Model -->
+                                    <StackPanel Margin="15,0,0,0"
+                                                Grid.Column="1">
+                                        <TextBlock Text="{DynamicResource ModelStr}"
+                                                   Margin="0,0,0,8"
+                                                   Style="{DynamicResource FieldLabel}" />
+                                        <Grid>
+                                            <ComboBox ItemsSource="{Binding ModelsCollection}"
+                                                      x:Name="modelsCombo"
+                                                      SelectedItem="{Binding SelectedModel}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type dtos:ModelDto}">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+                                    </StackPanel>
 
-                                <!-- Trim Level -->
-                                <StackPanel Margin="15,0,0,0"
-                                            Grid.Column="2">
-                                    <TextBlock Text="{DynamicResource TrimLevelStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />
-                                    <Grid>
-                                        <ComboBox ItemsSource="{Binding TrimLevelsCollection}"
-                                                  x:Name="trimLevelsCombo"
-                                                  SelectedItem="{Binding SelectedTrimLevel, UpdateSourceTrigger=PropertyChanged}"
-                                                  Panel.ZIndex="0">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type dtos:TrimLevelDto}">
-                                                    <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                         IsHitTestVisible="False"
-                                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                         FontSize="14"
-                                                         Padding="8,5"
-                                                         Margin="5,0,0,0"
-                                                         VerticalAlignment="Center"
-                                                         Foreground="{DynamicResource GrayBrush}"
-                                                         Panel.ZIndex="1">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility"
-                                                            Value="Hidden" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=trimLevelsCombo,Path=SelectedItem}"
-                                                                     Value="{x:Null}">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Visible" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </wpfUi:TextBlock>-->
-                                    </Grid>
-                                </StackPanel>
-                            </Grid>
+                                    <!-- Trim Level -->
+                                    <StackPanel Margin="15,0,0,0"
+                                                Grid.Column="2">
+                                        <TextBlock Text="{DynamicResource TrimLevelStr}"
+                                                   Margin="0,0,0,8"
+                                                   Style="{DynamicResource FieldLabel}" />
+                                        <Grid>
+                                            <ComboBox ItemsSource="{Binding TrimLevelsCollection}"
+                                                      x:Name="trimLevelsCombo"
+                                                      SelectedItem="{Binding SelectedTrimLevel, UpdateSourceTrigger=PropertyChanged}"
+                                                      Panel.ZIndex="0">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type dtos:TrimLevelDto}">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+
+
+                                <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                              Command="{Binding ClearSelectedMakeCommand}"
+                                              Visibility="{Binding IsMakeModelTrimFilterActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                              ButtonType="Danger"
+                                              Width="80"
+                                              HorizontalAlignment="Left"
+                                              Margin="0,20,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{DynamicResource ClearStr}"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </xBtn:XButton>
+                            </StackPanel>
                         </wpfUi:CardExpander>
 
                         <wpfUi:CardExpander Margin="0,5,0,0">
@@ -317,44 +266,35 @@
                                 </Grid>
                             </wpfUi:CardExpander.Header>
                             <!-- Transmission -->
-                            <StackPanel Grid.Column="2" Margin="10,0">
-                                <!--<TextBlock Text="{DynamicResource TransmissionTypeStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />-->
+                            <StackPanel Margin="10,0">
                                 <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
                                     <ComboBox ItemsSource="{Binding TransmissionTypesCollection}"
                                               x:Name="transmissionCombo"
                                               SelectedItem="{Binding SelectedTransmission, UpdateSourceTrigger=PropertyChanged}"
                                               Panel.ZIndex="0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate DataType="{x:Type dtos:TransmissionTypeDto}">
-                                                <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
+                                                <TextBlock Text="{Binding Name}" />
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                     IsHitTestVisible="False"
-                                                     FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                     FontSize="14"
-                                                     Padding="8,5"
-                                                     Margin="5,0,0,0"
-                                                     VerticalAlignment="Center"
-                                                     Foreground="{DynamicResource GrayBrush}"
-                                                     Panel.ZIndex="1">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility"
-                                                        Value="Hidden" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=transmissionCombo,Path=SelectedItem}"
-                                                                 Value="{x:Null}">
-                                                        <Setter Property="Visibility"
-                                                                Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </wpfUi:TextBlock>-->
+
+                                    <xBtn:XButton Grid.Column="1"
+                                                  Style="{DynamicResource RegularButtonStyle}"
+                                                  Command="{Binding ClearSelectedTransmissionTypeCommand}"
+                                                  Visibility="{Binding IsTransmissionTypeSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ButtonType="Danger"
+                                                  Margin="10,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource ClearStr}"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                       VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
                                 </Grid>
                             </StackPanel>
                         </wpfUi:CardExpander>
@@ -377,44 +317,34 @@
                             </wpfUi:CardExpander.Header>
                             <!-- Engine -->
                             <StackPanel Margin="10,0">
-                                <!--<TextBlock Text="{DynamicResource EngineStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />-->
                                 <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
                                     <ComboBox  ItemsSource="{Binding EngineTypesCollection}"
                                                x:Name="engineCombo"
                                                SelectedItem="{Binding SelectedEngineType}"
                                                Panel.ZIndex="0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate DataType="{x:Type dtos:EngineTypeDto}">
-                                                <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
+                                                <TextBlock Text="{Binding Name}" />
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
 
-                                    <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                     IsHitTestVisible="False"
-                                                     FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                     FontSize="14"
-                                                     Padding="8,5"
-                                                     Margin="5,0,0,0"
-                                                     VerticalAlignment="Center"
-                                                     Foreground="{DynamicResource GrayBrush}"
-                                                     Panel.ZIndex="1">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility"
-                                                        Value="Hidden" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=engineCombo,Path=SelectedItem}"
-                                                                 Value="{x:Null}">
-                                                        <Setter Property="Visibility"
-                                                                Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </wpfUi:TextBlock>-->
+                                    <xBtn:XButton Grid.Column="1"
+                                                  Style="{DynamicResource RegularButtonStyle}"
+                                                  Command="{Binding ClearSelectedEngineTypeCommand}"
+                                                  Visibility="{Binding IsEngineTypeSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ButtonType="Danger"
+                                                  Margin="10,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource ClearStr}"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                       VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
                                 </Grid>
                             </StackPanel>
                         </wpfUi:CardExpander>
@@ -437,44 +367,38 @@
                             </wpfUi:CardExpander.Header>
                             <!-- Body Type -->
                             <StackPanel Margin="10,0">
-                                <!--<TextBlock Text="{DynamicResource BodyTypeStr}"
-                                               Margin="0,0,0,8"
-                                               Style="{DynamicResource FieldLabel}" />-->
                                 <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
                                     <ComboBox ItemsSource="{Binding BodyTypesCollection}"
                                               x:Name="bodyTypesCombo"
                                               SelectedItem="{Binding SelectedBodyType, UpdateSourceTrigger=PropertyChanged}"
                                               Panel.ZIndex="0">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate DataType="{x:Type dtos:BodyTypeDto}">
-                                                <TextBlock Text="{Binding Name, Converter={StaticResource EmptyStringToFilterOptionAllConverter}}" />
+                                                <TextBlock Text="{Binding Name}" />
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    <!--<wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
-                                                     IsHitTestVisible="False"
-                                                     FontFamily="{DynamicResource DynamicFontFamilyMedium}"
-                                                     FontSize="14"
-                                                     Padding="8,5"
-                                                     Margin="5,0,0,0"
-                                                     VerticalAlignment="Center"
-                                                     Foreground="{DynamicResource GrayBrush}"
-                                                     Panel.ZIndex="1">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility"
-                                                        Value="Hidden" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=bodyTypesCombo,Path=SelectedItem}"
-                                                                 Value="{x:Null}">
-                                                        <Setter Property="Visibility"
-                                                                Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </wpfUi:TextBlock>-->
+
+                                    <xBtn:XButton Grid.Column="1"
+                                                  Style="{DynamicResource RegularButtonStyle}"
+                                                  Command="{Binding ClearSelectedBodyTypeCommand}"
+                                                  Visibility="{Binding IsBodyTypeSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ButtonType="Danger"
+                                                  Margin="10,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource ClearStr}"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                       VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
                                 </Grid>
+
+
                             </StackPanel>
                         </wpfUi:CardExpander>
 
@@ -495,15 +419,43 @@
                                 </Grid>
                             </wpfUi:CardExpander.Header>
                             <StackPanel  Margin="10,0">
-                                <!--<forms:CustomCombobox ItemsSource="{Binding YearsCollection}"
-                                                      SelectedItem="{Binding SelectedExactYear, UpdateSourceTrigger=PropertyChanged}" />-->
-                                <wpfUi:TextBox Text="{Binding SelectedExactYear, UpdateSourceTrigger=PropertyChanged}"
-                                               PlaceholderText="{DynamicResource YearExampleStr}" Icon="{wpfUi:SymbolIcon Symbol=CalendarAdd28, Filled=False}"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ComboBox ItemsSource="{Binding YearsCollection}"
+                                              x:Name="yearsCombobox"
+                                              SelectedItem="{Binding SelectedExactYear}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type dtos:YearFilterItem}">
+                                                <TextBlock Text="{Binding DisplayName}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+
+                                    <xBtn:XButton Grid.Column="1" 
+                                                  Style="{DynamicResource RegularButtonStyle}" 
+                                                  Command="{Binding ClearSelectedYearCommand}"
+                                                  Visibility="{Binding IsExactYearSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  ButtonType="Danger" 
+                                                  Margin="10,0,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource ClearStr}"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                       VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
+                                </Grid>
+                               
                             </StackPanel>
                         </wpfUi:CardExpander>
                     </StackPanel>
                 </ScrollViewer>
-
+                
+                <!-- Buttons -->
                 <StackPanel Orientation="Horizontal"
                             Margin="0,15,0,0"
                             Grid.Row="1">
@@ -511,24 +463,25 @@
                     <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                   ButtonType="Info"
                                   Command="{Binding ApplyFiltersCommand}"
-                                  IsLoading="{Binding IsApplyingFilters}">
+                                  IsLoading="{Binding IsSearching}">
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="Filter24"
-                                              FontSize="18"
-                                              Margin="0,0,8,0" />
-                            <TextBlock Text="{DynamicResource ApplyFiltersStr}"
+                                              FontSize="18"/>
+                            <TextBlock Text="{DynamicResource ApplyStr}"
                                        FontSize="14"
+                                       Margin="5,0,0,0"
                                        FontFamily="{DynamicResource DynamicFontFamilyMedium}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
                     </xBtn:XButton>
 
                     <!-- Reset and Close-->
-                    <xBtn:XButton Style="{DynamicResource RegularButtonStyle}" Margin="5,0,0,0"
+                    <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                  Visibility="{Binding AnyFilterSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Margin="5,0,0,0"
                                   Grid.Row="1"
                                   ButtonType="Secondary"
-                                  Command="{Binding ResetAndClearFiltersCommand}"
-                                  IsLoading="{Binding IsApplyingFilters}">
+                                  Command="{Binding ResetAndClearFiltersCommand}">
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="Filter24"
                                               FontSize="18"

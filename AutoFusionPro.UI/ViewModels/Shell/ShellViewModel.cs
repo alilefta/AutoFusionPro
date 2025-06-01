@@ -85,6 +85,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         public bool IsPartsSelected => SelectedPage == ApplicationPage.Parts;
         public bool IsVehiclesSelected => SelectedPage == ApplicationPage.Vehicles;
         public bool IsVehicleCompatibilityManagementSelected => SelectedPage == ApplicationPage.VehicleCompatibilityManagement;
+        public bool IsCategoriesSelected => SelectedPage == ApplicationPage.Categories;
         // Add properties for Schedule, Billing, Inventory, Staff, Reports, etc.
 
         [ObservableProperty]
@@ -93,6 +94,7 @@ namespace AutoFusionPro.UI.ViewModels.Shell
         [NotifyPropertyChangedFor(nameof(IsMyAccountSelected))]
         [NotifyPropertyChangedFor(nameof(IsPartsSelected))]
         [NotifyPropertyChangedFor(nameof(IsVehicleCompatibilityManagementSelected))]
+        [NotifyPropertyChangedFor(nameof(IsCategoriesSelected))]
         public ApplicationPage _selectedPage = ApplicationPage.Dashboard;
 
         [ObservableProperty]

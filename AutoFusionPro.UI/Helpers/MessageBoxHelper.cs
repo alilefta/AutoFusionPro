@@ -43,7 +43,7 @@ namespace AutoFusionPro.UI.Helpers
                             new RichTextBox
                             {
                                 FontSize = 14,
-                                Padding= new Thickness(0, 10, 0, 20),
+                                Padding= new Thickness(10, 10, 10, 10),
                                 IsReadOnly = true,
                                 BorderThickness = new Thickness(0),
                                 Background = background,
@@ -90,7 +90,7 @@ namespace AutoFusionPro.UI.Helpers
                     Child = new RichTextBox
                     {
                         FontSize = 14,
-                        Padding = new Thickness(0, 10, 0, 20),
+                        Padding = new Thickness(10, 10, 10, 10),
                         IsReadOnly = true,
                         BorderThickness = new Thickness(0),
                         Background = background,

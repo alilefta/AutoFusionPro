@@ -29,6 +29,9 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
                 .HasForeignKey(c => c.ParentCategoryId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(c => new { c.ParentCategoryId, c.Name }).IsUnique();
+
         }
     }
 }

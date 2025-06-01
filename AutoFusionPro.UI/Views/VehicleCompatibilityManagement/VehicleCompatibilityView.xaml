@@ -22,20 +22,20 @@
     <UserControl.Resources>
         <!-- DataTemplates to tell WPF which View to use for each Tab ViewModel type -->
         <DataTemplate DataType="{x:Type vmTabs:MakesModelsTrimsManagementViewModel}">
-            <localViews:MakesModelsTrimsTabView Padding="10" />
+            <localViews:MakesModelsTrimsTabView Padding="10,10,10,0"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmTabs:TransmissionTypesManagementViewModel}">
             <!-- Assuming you have a TransmissionTypesTabView -->
-            <localViews:TransmissionTypesTabView Padding="10" />
+            <localViews:TransmissionTypesTabView Padding="10,10,10,0" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmTabs:EngineTypesManagementViewModel}">
-            <localViews:EngineTypesTabView Padding="10" />
+            <localViews:EngineTypesTabView Padding="10,10,10,0"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmTabs:BodyTypesManagementViewModel}">
-            <localViews:BodyTypesTabView Padding="10" />
+            <localViews:BodyTypesTabView Padding="10,10,10,0" />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vmTabs:CompatibleVehiclesViewModel}">
-            <localViews:CompatibleVehiclesTabView Padding="10" />
+            <localViews:CompatibleVehiclesTabView Padding="10,10,10,0" />
         </DataTemplate>
         <!-- Add other DataTemplates as needed -->
     </UserControl.Resources>

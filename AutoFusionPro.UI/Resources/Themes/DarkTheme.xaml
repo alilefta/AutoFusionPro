@@ -186,7 +186,7 @@
 
     <!-- ==================== Button: Secondary, Info, Danger, Light  ==================== -->
     <SolidColorBrush x:Key="Button.Secondary.BackgroundBrush"
-                     Color="{StaticResource Neutral500}" />
+                     Color="{StaticResource Neutral600}" />
     
     <SolidColorBrush x:Key="Button.Success.BackgroundBrush"
                      Color="{StaticResource Teal700}" />
@@ -318,14 +318,25 @@
     <SolidColorBrush x:Key="TextBox.Focus.BackgroundBrush"
                      Color="{StaticResource Neutral900}" />
     <SolidColorBrush x:Key="TextBox.Focus.BorderBrush"
-                     Color="{StaticResource Primary700}" />
+                     Color="{StaticResource Primary400}" />
     <SolidColorBrush x:Key="TextBox.Focus.ForegroundBrush"
                      Color="{StaticResource Neutral300}" />
+    <SolidColorBrush x:Key="TextBox.Focus.Placeholder.ForegroundBrush"
+                     Color="{StaticResource Neutral600}" />
+    
     <SolidColorBrush x:Key="TextBox.Focus.Lens.ForegroundBrush"
-                     Color="{StaticResource Primary700}" />
+                     Color="{StaticResource Primary500}" />
 
     <SolidColorBrush x:Key="TextBox.Hover.BorderBrush"
                      Color="{StaticResource Neutral600}" />
+    
+
+    <SolidColorBrush x:Key="TextBox.ClearButton.ForegroundBrush"
+                     Color="{StaticResource Red600}" />
+    <SolidColorBrush x:Key="TextBox.ClearButton.Hover.ForegroundBrush"
+                     Color="{StaticResource Red700}" />
+    <SolidColorBrush x:Key="TextBox.ClearButton.Pressed.ForegroundBrush"
+                     Color="{StaticResource Red800}" />
 
 
     <!-- ==================== DataGrid ==================== -->
@@ -621,6 +632,64 @@
 
     <SolidColorBrush x:Key="SplitterBrush"
                      Color="{StaticResource Neutral700}" />
+
+    <!-- ================================== Data Drid ============================== -->
+    <!-- DataGrid Colors -->
+    <SolidColorBrush x:Key="DataGrid.BackgroundBrush"
+                     Color="{DynamicResource Neutral975}" />
+    <!-- #1F2937-->
+    <SolidColorBrush x:Key="DataGrid.ForegroundBrush"
+                     Color="#F9FAFB" />
+    <SolidColorBrush x:Key="DataGrid.BorderBrush"
+                     Color="#374151" />
+    <SolidColorBrush x:Key="DataGrid.GridLinesBrush"
+                     Color="#374151" />
+
+    <!-- DataGrid Row Colors -->
+    <SolidColorBrush x:Key="DataGrid.Row.BackgroundBrush"
+                     Color="{DynamicResource Neutral975}" />
+    <SolidColorBrush x:Key="DataGrid.Row.ForegroundBrush"
+                     Color="#F9FAFB" />
+    <SolidColorBrush x:Key="DataGrid.AlternatingRow.BackgroundBrush"
+                     Color="{DynamicResource Neutral900}" />
+    <SolidColorBrush x:Key="DataGrid.Row.Hover.BackgroundBrush"
+                     Color="{DynamicResource Gray800}" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.BackgroundBrush"
+                     Color="{DynamicResource Primary600}" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.ForegroundBrush"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DataGrid.Row.SelectedHover.BackgroundBrush"
+                     Color="{DynamicResource Primary700}" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.Empty.ForegroundBrush"
+                     Color="{DynamicResource Neutral300}" />
+
+    <!-- DataGrid Column Header Colors -->
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.BackgroundBrush"
+                     Color="#111827" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.ForegroundBrush"
+                     Color="#D1D5DB" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.BorderBrush"
+                     Color="#374151" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.Hover.BackgroundBrush"
+                     Color="#1F2937" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.Pressed.BackgroundBrush"
+                     Color="#374151" />
+
+    <!-- DataGrid Cell Colors -->
+    <SolidColorBrush x:Key="DataGrid.Cell.Focus.BorderBrush"
+                     Color="#60A5FA" />
+    <SolidColorBrush x:Key="DataGrid.Cell.Selected.ForegroundBrush"
+                     Color="#FFFFFF" />
+
+    <!-- ScrollBar Colors -->
+    <SolidColorBrush x:Key="ScrollBar.BackgroundBrush"
+                     Color="#111827" />
+    <!--<SolidColorBrush x:Key="ScrollBar.Thumb.BackgroundBrush"
+                     Color="#4B5563" />-->
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Hover.BackgroundBrush"
+                     Color="#6B7280" />
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Pressed.BackgroundBrush"
+                     Color="#9CA3AF" />
 
 
     <ResourceDictionary.MergedDictionaries>

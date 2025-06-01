@@ -2,6 +2,7 @@
 using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using AutoFusionPro.UI.ViewModels.Base;
+using AutoFusionPro.UI.ViewModels.Categories;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.Parts;
 using AutoFusionPro.UI.ViewModels.Settings;
@@ -40,6 +41,7 @@ namespace AutoFusionPro.UI.Services
                 ApplicationPage.Parts => _serviceProvider.GetRequiredService<PartsViewModel>(),
                 ApplicationPage.Vehicles => _serviceProvider.GetRequiredService<VehiclesViewModel>(),
                 ApplicationPage.VehicleCompatibilityManagement => _serviceProvider.GetRequiredService<VehicleCompatibilityShellViewModel>(),
+                ApplicationPage.Categories => _serviceProvider.GetRequiredService<CategoriesViewModel>(),
 
                 // Map other pages to their respective ViewModels
                 _ => throw new NavigationException($"No ViewModel found for page {page}. Navigation initialization parameter could be required! which is 'Null' currently, try providing parameter to 'NavigateTo(ApplicationPage page, object param)' and try again.")

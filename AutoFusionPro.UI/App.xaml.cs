@@ -12,6 +12,8 @@ using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.Services.Dialogs;
 using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
+using AutoFusionPro.UI.ViewModels.Categories;
+using AutoFusionPro.UI.ViewModels.Categories.Dialogs;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts;
@@ -32,6 +34,7 @@ using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
 using AutoFusionPro.UI.ViewModels.ViewNotification;
 using AutoFusionPro.UI.Views;
 using AutoFusionPro.UI.Views.Authentication;
+using AutoFusionPro.UI.Views.Categories;
 using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Parts;
 using AutoFusionPro.UI.Views.Settings;
@@ -291,7 +294,10 @@ namespace AutoFusionPro.UI
                 services.AddTransient<UserManagementView>();
                 services.AddTransient<UserAccountView>();
 
-                services.AddScoped<VehicleCompatibilityView>();
+                services.AddTransient<VehicleCompatibilityView>();
+
+                services.AddScoped<CategoriesView>();
+
 
 
                 // ViewModels
@@ -309,11 +315,13 @@ namespace AutoFusionPro.UI
                 services.AddScoped<LoginViewModel>();
                 services.AddScoped<RegisterViewModel>();
 
+                services.AddScoped<CategoriesViewModel>();
+
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
 
                 // Vehicle Compatibility View Models
-                services.AddScoped<VehicleCompatibilityShellViewModel>();
+                services.AddTransient<VehicleCompatibilityShellViewModel>();
 
                 services.AddTransient<MakesModelsTrimsManagementViewModel>();
                 services.AddTransient<EngineTypesManagementViewModel>();
@@ -343,6 +351,9 @@ namespace AutoFusionPro.UI
                 services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
                 services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
+
+                services.AddTransient<AddRootCategoryDialogViewModel>();
+
 
 
 

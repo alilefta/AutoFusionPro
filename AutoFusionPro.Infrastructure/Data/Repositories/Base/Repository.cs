@@ -3,13 +3,17 @@ using AutoFusionPro.Core.Exceptions.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.Base;
 using AutoFusionPro.Domain.Models.Base;
 using AutoFusionPro.Infrastructure.Data.Context;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 {
+    /// <summary>
+    /// Base Repository Wrapper
+    /// </summary>
+    /// <typeparam name="T">Domain Model Type</typeparam>
+    /// <typeparam name="Repo">Child repository</typeparam>
     public class Repository<T, Repo> : IBaseRepository<T> where T : class where Repo : class
     {
         protected readonly ApplicationDbContext _context;

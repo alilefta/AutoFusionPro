@@ -21,6 +21,12 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
                     int? trimLevelId, int? transmissionTypeId, int? engineTypeId, int? bodyTypeId,
                     int? excludeCompatibleVehicleId = null);
 
+        /// <summary>
+        /// Gets ALL CompatibleVehicle configurations matching the filter criteria. NO PAGINATION.
+        /// </summary>
+        Task<IEnumerable<CompatibleVehicleSummaryDto>> GetAllFilteredCompatibleVehiclesAsync(
+            CompatibleVehicleFilterCriteriaDto filterCriteria);
+
         // --- Make Management ---
         Task<IEnumerable<MakeDto>> GetAllMakesAsync();
         Task<MakeDto?> GetMakeByIdAsync(int id);

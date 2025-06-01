@@ -24,7 +24,6 @@ namespace AutoFusionPro.Application.Services.DataServices
         private readonly ILogger<CompatibleVehicleService> _logger;
         private readonly IImageFileService _imageFileService;
 
-        // Add Validators if you use them for Make DTOs
         private readonly IValidator<CreateMakeDto> _createMakeValidator;
         private readonly IValidator<UpdateMakeDto> _updateMakeValidator;
 
@@ -333,6 +332,32 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ServiceException("Could not verify if vehicle specification exists due to an internal error.", ex);
             }
         }
+
+
+        public async Task<IEnumerable<CompatibleVehicleSummaryDto>> GetAllFilteredCompatibleVehiclesAsync(
+       CompatibleVehicleFilterCriteriaDto filterCriteria)
+        {
+            _logger.LogInformation("Retrieving ALL filtered CompatibleVehicles. Criteria: {@Criteria}", filterCriteria);
+            try
+            {
+                var predicate = BuildCompatibleVehicleFilterPredicate(filterCriteria); // Use existing helper
+
+                var compatibleVehicles = await _unitOfWork.CompatibleVehicles
+                    .GetAllFilteredWithDetailsAsync(predicate, filterCriteria.MakeId, filterCriteria.SearchTerm);
+
+                var summaryDtos = compatibleVehicles.Select(MapCompatibleVehicleToSummaryDto).ToList();
+                _logger.LogInformation("Successfully retrieved {Count} total CompatibleVehicles matching criteria.", summaryDtos.Count);
+
+                return summaryDtos;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving all filtered CompatibleVehicles with criteria: {@Criteria}", filterCriteria);
+                throw new ServiceException("Could not retrieve all CompatibleVehicle specifications.", ex);
+            }
+        }
+
+
         #endregion
 
         #region Make Methods

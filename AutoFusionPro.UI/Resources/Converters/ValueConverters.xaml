@@ -44,6 +44,7 @@
     <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     <converters:EmptyStringToForegroundConverter x:Key="EmptyStringToForegroundConverter" />
     <converters:EmptyStringToFilterOptionAllConverter x:Key="EmptyStringToFilterOptionAllConverter" />
+    <converters:TextWithSelectionForegroundConverter x:Key="TextWithSelectionForegroundConverter" />
 
 
 </ResourceDictionary>

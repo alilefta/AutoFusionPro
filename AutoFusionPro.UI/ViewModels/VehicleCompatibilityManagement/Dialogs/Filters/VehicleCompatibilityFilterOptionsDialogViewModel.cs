@@ -55,37 +55,44 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsMakeModelTrimFilterActive))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private MakeDto? _selectedMake;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsMakeModelTrimFilterActive))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private ModelDto? _selectedModel;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsMakeModelTrimFilterActive))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private TrimLevelDto? _selectedTrimLevel;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsTransmissionTypeSelected))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private TransmissionTypeDto? _selectedTransmission;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsEngineTypeSelected))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private EngineTypeDto? _selectedEngineType;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsBodyTypeSelected))]
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
         private BodyTypeDto? _selectedBodyType;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(ApplyFiltersCommand))]
         [NotifyPropertyChangedFor(nameof(IsExactYearSelected))]
-        private int _selectedExactYear = 0;
+        [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
+        private YearFilterItem? _selectedExactYear;
 
         [ObservableProperty]
         private ObservableCollection<MakeDto> _makesCollection;
@@ -106,15 +113,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         private ObservableCollection<EngineTypeDto> _engineTypesCollection;
 
         [ObservableProperty]
-        private ObservableCollection<int> _yearsCollection;
+        private ObservableCollection<YearFilterItem> _yearsCollection;
 
-        private CompatibleVehicleFilterCriteriaDto? _resultFilters; // Store the filters to be returned
+
+        private CompatibleVehicleFilterCriteriaDto? _resultFilters;
 
         public bool IsMakeModelTrimFilterActive => (SelectedMake != null && SelectedMake.Id > 0) || (SelectedModel != null && SelectedModel.Id > 0) || (SelectedTrimLevel != null && SelectedTrimLevel.Id > 0);
         public bool IsTransmissionTypeSelected => SelectedTransmission != null && SelectedTransmission.Id > 0;
         public bool IsEngineTypeSelected => SelectedEngineType != null && SelectedEngineType.Id > 0;
         public bool IsBodyTypeSelected => SelectedBodyType != null && SelectedBodyType.Id > 0;
-        public bool IsExactYearSelected => SelectedExactYear != 0;
+        public bool IsExactYearSelected => SelectedExactYear != null && SelectedExactYear.Year != null;
+
+        public bool AnyFilterSelected => IsMakeModelTrimFilterActive || IsTransmissionTypeSelected || IsEngineTypeSelected || IsBodyTypeSelected || IsExactYearSelected;
 
         #endregion
 
@@ -129,7 +139,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             TransmissionTypesCollection = new ObservableCollection<TransmissionTypeDto>();
             BodyTypesCollection = new ObservableCollection<BodyTypeDto>();
             EngineTypesCollection = new ObservableCollection<EngineTypeDto>();
-            YearsCollection = new ObservableCollection<int>();
+            YearsCollection = new ObservableCollection<YearFilterItem>();
         }
         #endregion
 
@@ -148,48 +158,77 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             await LoadTransmissionTypesAsync();
             await LoadBodyTypesAsync();
 
+            PopulateYearsCollection();
+
+            // Populate fields if Parameter (CompatibleVehicleFilterCriteriaDto) already have filters.
             if (parameter is CompatibleVehicleFilterCriteriaDto currentFilters)
             {
-                if (currentFilters.MakeId != null && currentFilters.MakeId.HasValue)
+                if (currentFilters.MakeId != null && currentFilters.MakeId.HasValue && currentFilters.MakeId.Value > 0)
+                    SelectedMake = MakesCollection.FirstOrDefault(m => m.Id == currentFilters.MakeId.Value);
+                else
+                    SelectedMake = MakesCollection.FirstOrDefault(m => m.Id == 0);
+                
+
+                if (SelectedMake != null && SelectedMake.Id > 0 && currentFilters.ModelId != null && currentFilters.ModelId.HasValue && currentFilters.ModelId.Value > 0)
                 {
-                    SelectedMake = MakesCollection.FirstOrDefault(m => m.Id == currentFilters.MakeId);
+                    SelectedModel = ModelsCollection.FirstOrDefault(m => m.Id == currentFilters.ModelId.Value);
+                }
+                else
+                {
+                    SelectedModel = ModelsCollection.FirstOrDefault(m => m.Id == 0);
                 }
 
-
-                if (currentFilters.ModelId != null && currentFilters.ModelId.HasValue)
+                if (SelectedMake != null &&
+                    SelectedMake.Id > 0 &&
+                    SelectedModel != null &&
+                    SelectedModel.Id > 0 &&
+                    currentFilters.TrimLevelId != null &&
+                    currentFilters.TrimLevelId.HasValue &&
+                    currentFilters.TrimLevelId.Value > 0)
                 {
-                    SelectedModel = ModelsCollection.FirstOrDefault(m => m.Id == currentFilters.ModelId);
+                    SelectedTrimLevel = TrimLevelsCollection.FirstOrDefault(m => m.Id == currentFilters.TrimLevelId.Value);
                 }
-
-                if (currentFilters.TrimLevelId != null && currentFilters.TrimLevelId.HasValue)
+                else
                 {
-                    SelectedTrimLevel = TrimLevelsCollection.FirstOrDefault(m => m.Id == currentFilters.TrimLevelId);
+                    SelectedTrimLevel = TrimLevelsCollection.FirstOrDefault(m => m.Id == 0);
                 }
 
                 if (currentFilters.EngineTypeId != null && currentFilters.EngineTypeId.HasValue)
                 {
-                    SelectedEngineType = EngineTypesCollection.FirstOrDefault(m => m.Id == currentFilters.EngineTypeId);
+                    SelectedEngineType = EngineTypesCollection.FirstOrDefault(m => m.Id == currentFilters.EngineTypeId.Value);
+                }
+                else
+                {
+                    SelectedEngineType = EngineTypesCollection.FirstOrDefault(m => m.Id == 0);
                 }
 
                 if (currentFilters.BodyTypeId != null && currentFilters.BodyTypeId.HasValue)
                 {
-                    SelectedBodyType = BodyTypesCollection.FirstOrDefault(m => m.Id == currentFilters.BodyTypeId);
+                    SelectedBodyType = BodyTypesCollection.FirstOrDefault(m => m.Id == currentFilters.BodyTypeId.Value);
+                }
+                else
+                {
+                    SelectedBodyType = BodyTypesCollection.FirstOrDefault(m => m.Id == 0);
                 }
 
                 if (currentFilters.TransmissionTypeId != null && currentFilters.TransmissionTypeId.HasValue)
                 {
-                    SelectedTransmission = TransmissionTypesCollection.FirstOrDefault(t => t.Id == currentFilters.TransmissionTypeId);
+                    SelectedTransmission = TransmissionTypesCollection.FirstOrDefault(t => t.Id == currentFilters.TransmissionTypeId.Value);
                 }
-            }
+                else
+                {
+                    SelectedTransmission = TransmissionTypesCollection.FirstOrDefault(t => t.Id == 0);
+                }
 
-
-
-            // Setup years
-            YearsCollection.Clear();
-            int currentYear = DateTime.Now.Year;
-            for (int i = currentYear + 1; i >= currentYear - 30; i--)
-            {
-                YearsCollection.Add(i);
+                if (currentFilters.ExactYear != null)
+                {
+                    SelectedExactYear = YearsCollection.FirstOrDefault(y => y.Year == currentFilters.ExactYear.Value)
+                                        ?? YearsCollection.FirstOrDefault(y => y.Year == null); // "All Years" item
+                }
+                else
+                {
+                    SelectedExactYear = YearsCollection.FirstOrDefault(y => y.Year == null); // Default to "All Years"
+                }
             }
 
             await base.InitializeAsync(parameter); // Call base to set IsInitialized and complete TaskCompletionSource
@@ -208,19 +247,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         {
             try
             {
+                IsLoadingMakes = true;
+
                 var makesData = await _compatibleVehicleService.GetAllMakesAsync();
                 MakesCollection.Clear();
 
-                MakesCollection.Add(new MakeDto(0, string.Empty, string.Empty));
+                var allMakesStr = System.Windows.Application.Current.Resources["AllMakesStr"] as string ?? "All Makes";
+                MakesCollection.Add(new MakeDto(0, allMakesStr, null));
 
                 foreach (var make in makesData.OrderBy(x => x.Id))
                 {
                     MakesCollection.Add(make);
                 }
-
-                SelectedMake = MakesCollection.FirstOrDefault();
-                // Optionally set a default selection if desired, but not required
-                // SelectedMake = MakesCollection.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -247,21 +285,25 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         {
             try
             {
-                IsLoadingModels = true;
-
-                var modelsData = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
                 ModelsCollection.Clear();
 
-                ModelsCollection.Add(new ModelDto(0, string.Empty, 0, string.Empty, null));
+                IsLoadingModels = true;
 
 
-                foreach (var model in modelsData.OrderBy(x => x.Id))
+                var allModelsStr = System.Windows.Application.Current.Resources["AllModelsStr"] as string ?? "All Models";
+                ModelsCollection.Add(new ModelDto(0, allModelsStr, 0, string.Empty, null));
+
+                if (makeId != 0)
                 {
-                    ModelsCollection.Add(model);
+                    var modelsData = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
+
+                    foreach (var model in modelsData.OrderBy(x => x.Id))
+                    {
+                        ModelsCollection.Add(model);
+                    }
                 }
 
-                // Optionally set a default selection if desired, but not required
-                SelectedModel = ModelsCollection.FirstOrDefault();
+                SelectedModel = ModelsCollection.FirstOrDefault(m => m.Id == 0);
             }
             catch (Exception ex)
             {
@@ -291,19 +333,24 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             {
                 IsLoadingTrims = true;
 
-                var trimsData = await _compatibleVehicleService.GetTrimLevelsByModelIdAsync(modelId);
                 TrimLevelsCollection.Clear();
 
-                TrimLevelsCollection.Add(new TrimLevelDto(0, string.Empty, 0, string.Empty));
+                var allTrimsStr = System.Windows.Application.Current.Resources["AllTrimLevelsStr"] as string ?? "All Trim Levels";
 
+                TrimLevelsCollection.Add(new TrimLevelDto(0, allTrimsStr, 0, string.Empty));
 
-                foreach (var trim in trimsData.OrderBy(x => x.Id))
+                if (modelId != 0)
                 {
-                    TrimLevelsCollection.Add(trim);
+                    var trimsData = await _compatibleVehicleService.GetTrimLevelsByModelIdAsync(modelId);
+
+                    foreach (var trim in trimsData.OrderBy(x => x.Id))
+                    {
+                        TrimLevelsCollection.Add(trim);
+                    }
                 }
 
-                // Optionally set a default selection if desired, but not required
-                SelectedTrimLevel = TrimLevelsCollection.FirstOrDefault();
+                SelectedTrimLevel = TrimLevelsCollection.FirstOrDefault(t => t.Id == 0); ;
+
             }
             catch (Exception ex)
             {
@@ -317,7 +364,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             }
             finally
             {
-                IsLoadingTrims = true;
+                IsLoadingTrims = false;
 
             }
         }
@@ -332,18 +379,18 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             try
             {
                 IsLoadingTransmissions = true;
+
                 var transmissionTypeDtos = await _compatibleVehicleService.GetAllTransmissionTypesAsync();
                 TransmissionTypesCollection.Clear();
-                TransmissionTypesCollection.Add(new TransmissionTypeDto(0, string.Empty));
 
+                var allTransTypes = System.Windows.Application.Current.Resources["AllTransmissionTypesStr"] as string ?? "All Transmission Types";
+
+                TransmissionTypesCollection.Add(new TransmissionTypeDto(0, allTransTypes));
 
                 foreach (var tty in transmissionTypeDtos.OrderBy(x => x.Id))
                 {
                     TransmissionTypesCollection.Add(tty);
                 }
-
-                // Optionally set a default selection if desired, but not required
-                SelectedTransmission = TransmissionTypesCollection.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -375,16 +422,15 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
                 var engineTypeDtos = await _compatibleVehicleService.GetAllEngineTypesAsync();
                 EngineTypesCollection.Clear();
 
-                EngineTypesCollection.Add(new EngineTypeDto(0, string.Empty, null));
+                var allEngineTypesStr = System.Windows.Application.Current.Resources["AllEngineTypesStr"] as string ?? "All Engine Types";
+
+                EngineTypesCollection.Add(new EngineTypeDto(0, allEngineTypesStr, null));
 
 
                 foreach (var engine in engineTypeDtos.OrderBy(x => x.Id))
                 {
                     EngineTypesCollection.Add(engine);
                 }
-
-                // Optionally set a default selection if desired, but not required
-                SelectedEngineType = EngineTypesCollection.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -416,16 +462,16 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
                 var bodyTypeDtos = await _compatibleVehicleService.GetAllBodyTypesAsync();
                 BodyTypesCollection.Clear();
 
-                BodyTypesCollection.Add(new BodyTypeDto(0, string.Empty));
+
+                var allBodyTypesStr = System.Windows.Application.Current.Resources["AllBodyTypesStr"] as string ?? "All Body Types";
+
+                BodyTypesCollection.Add(new BodyTypeDto(0, allBodyTypesStr));
 
 
                 foreach (var body in bodyTypeDtos.OrderBy(x => x.Id))
                 {
                     BodyTypesCollection.Add(body);
                 }
-
-                // Optionally set a default selection if desired, but not required
-                SelectedBodyType = BodyTypesCollection.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -447,17 +493,33 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Populate Years collection with <see cref="YearFilterItem"/> with range for 30 years
+        /// </summary>
+        private void PopulateYearsCollection()
+        {
+            // Setup years
+            YearsCollection.Clear();
+            var allStr = System.Windows.Application.Current.Resources["AllStr"] as string ?? "All";
 
+            YearsCollection.Add(new YearFilterItem(null, allStr));
+
+            int currentYear = DateTime.Now.Year;
+            for (int i = currentYear + 1; i >= currentYear - 30; i--)
+            {
+                YearsCollection.Add(
+                    new YearFilterItem(i, i.ToString())
+                );
+            }
+        }
+
+        #endregion
 
         #region Observable Props Customization (Makes, Models, Trims)
 
         // When SelectedMake changes, load models for it
         partial void OnSelectedMakeChanged(MakeDto? value)
         {
-            ModelsCollection.Clear();
-            SelectedModel = null;
-
             if (value != null)
             {
                 // Load models for the selected make
@@ -471,9 +533,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         // When SelectedMake changes, load models for it
         partial void OnSelectedModelChanged(ModelDto? value)
         {
-            TrimLevelsCollection.Clear();
-            SelectedTrimLevel = null;
-
             if (value != null)
             {
                 // Load models for the selected make
@@ -491,29 +550,36 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         [RelayCommand]
         private void ApplyFilters()
         {
-            // Construct the DTO from current selections in the dialog
-            _resultFilters = new CompatibleVehicleFilterCriteriaDto(
-                MakeId: SelectedMake != null && SelectedMake.Id > 0 ? SelectedMake.Id : 0,
-                ModelId: SelectedModel != null && SelectedModel.Id > 0 ? SelectedModel.Id : 0,
-                ExactYear: SelectedExactYear,
-                TrimLevelId: SelectedTrimLevel != null && SelectedTrimLevel.Id > 0 ? SelectedTrimLevel.Id : 0,
-                TransmissionTypeId: SelectedTransmission != null && SelectedTransmission.Id > 0 ? SelectedTransmission.Id : 0,
-                EngineTypeId: SelectedEngineType != null && SelectedEngineType.Id > 0 ? SelectedEngineType.Id : 0,
-                BodyTypeId: SelectedBodyType != null && SelectedBodyType.Id > 0 ? SelectedBodyType.Id : 0
-            );
-            SetResultAndClose(true); // Signal success
+            try
+            {
+                IsSearching = true;
+                // Construct the DTO from current selections in the dialog
+                _resultFilters = new CompatibleVehicleFilterCriteriaDto(
+                    MakeId: SelectedMake != null && SelectedMake.Id > 0 ? SelectedMake.Id : null,
+                    ModelId: SelectedModel != null && SelectedModel.Id > 0 ? SelectedModel.Id : null,
+                    ExactYear: SelectedExactYear?.Year,
+                    TrimLevelId: SelectedTrimLevel != null && SelectedTrimLevel.Id > 0 ? SelectedTrimLevel.Id : null,
+                    TransmissionTypeId: SelectedTransmission != null && SelectedTransmission.Id > 0 ? SelectedTransmission.Id : null,
+                    EngineTypeId: SelectedEngineType != null && SelectedEngineType.Id > 0 ? SelectedEngineType.Id : null,
+                    BodyTypeId: SelectedBodyType != null && SelectedBodyType.Id > 0 ? SelectedBodyType.Id : null
+                );
+                SetResultAndClose(true); // Signal success
+            }
+            finally
+            {
+                IsSearching = false; 
+            }
+
         }
 
         [RelayCommand]
-        private void ResetAndClearFilters() // Renamed from just ResetFilters to be clear
+        private void ResetAndClearFilters()
         {
-            SelectedMake = new MakeDto(0, string.Empty, null); // Cascading selection changes will clear Models, Trims
-            SelectedExactYear = 0;
-            SelectedTransmission = new TransmissionTypeDto(0, string.Empty);
-            SelectedEngineType = new EngineTypeDto(0, string.Empty, null);
-            SelectedBodyType = new BodyTypeDto(0, string.Empty); ;
-            // Do NOT close the dialog on reset. Let the user "Apply" the cleared filters or "Cancel".
-            // If you want Apply to happen on reset, then construct an empty DTO for _resultFilters.
+            SelectedMake = MakesCollection.FirstOrDefault(m => m.Id == 0);
+            SelectedExactYear = YearsCollection.FirstOrDefault(y => y.Year == null);
+            SelectedTransmission = TransmissionTypesCollection.FirstOrDefault(t => t.Id == 0);
+            SelectedEngineType = EngineTypesCollection.FirstOrDefault(t => t.Id == 0);
+            SelectedBodyType = BodyTypesCollection.FirstOrDefault(t => t.Id == 0);
         }
 
         [RelayCommand]
@@ -521,6 +587,40 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         {
             SetResultAndClose(false);
         }
+
+        [RelayCommand]
+        private void ClearSelectedMake()
+        {
+            SelectedMake = MakesCollection.FirstOrDefault(m => m.Id == 0);
+
+        }
+
+        [RelayCommand]
+        private void ClearSelectedYear()
+        {
+            SelectedExactYear = YearsCollection.FirstOrDefault(y => y.Year == null);
+
+        }
+
+        [RelayCommand]
+        private void ClearSelectedTransmissionType()
+        {
+            SelectedTransmission = TransmissionTypesCollection.FirstOrDefault(t => t.Id == 0);
+        }
+
+        [RelayCommand]
+        private void ClearSelectedBodyType()
+        {
+            SelectedBodyType = BodyTypesCollection.FirstOrDefault(t => t.Id == 0);
+        }
+
+
+        [RelayCommand]
+        private void ClearSelectedEngineType()
+        {
+            SelectedEngineType = EngineTypesCollection.FirstOrDefault(t => t.Id == 0);
+        }
+
 
         #endregion
 
@@ -562,4 +662,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
 
         #endregion
     }
+
+
+
 }

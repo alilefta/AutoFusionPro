@@ -12,7 +12,7 @@ namespace AutoFusionPro.UI.ViewModels.Base
         /// <summary>
         /// Child View models register this even if they use Dictionaries for language strings
         /// </summary>
-        public event EventHandler LanguageDictionariesChanged = null!;
+        public event EventHandler? LanguageDictionariesChanged;
 
 
         #region Private Fields
@@ -51,7 +51,7 @@ namespace AutoFusionPro.UI.ViewModels.Base
         {
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
 
-            LanguageDictionariesChanged.Invoke(this, EventArgs.Empty);
+            LanguageDictionariesChanged?.Invoke(this, EventArgs.Empty);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
+﻿using AutoFusionPro.Application.DTOs.Category;
+using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.DTOs.Part;
 using AutoFusionPro.Application.DTOs.Vehicle;
 using AutoFusionPro.Application.Interfaces.Authentication;
@@ -8,6 +9,7 @@ using AutoFusionPro.Application.Interfaces.SessionManagement;
 using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Application.Services.DataServices;
+using AutoFusionPro.Application.Validators.Category;
 using AutoFusionPro.Application.Validators.CompatibleVehicleValidator;
 using AutoFusionPro.Application.Validators.PartValidators;
 using AutoFusionPro.Application.Validators.VehicleValidators;
@@ -42,6 +44,8 @@ namespace AutoFusionPro.Application.DependencyInjection
 
             services.AddScoped<ICompatibleVehicleService, CompatibleVehicleService>();
 
+            services.AddScoped<ICategoryService, CategoryService>();
+
             // Register repositories
             //services.AddScoped<IPatientService, PatientService>();
             //services.AddScoped<IAppointmentService, AppointmentService>();
@@ -72,6 +76,9 @@ namespace AutoFusionPro.Application.DependencyInjection
 
             services.AddScoped<IValidator<CreateTrimLevelDto>, CreateTrimLevelDtoValidator>();
             services.AddScoped<IValidator<UpdateTrimLevelDto>, UpdateTrimLevelDtoValidator>();
+
+            services.AddScoped<IValidator<CreateCategoryDto>, CreateCategoryDtoValidator>();
+            services.AddScoped<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
         }
     }
 }

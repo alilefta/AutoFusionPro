@@ -71,6 +71,17 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
             string? searchTerm = null
         );
 
+
+        /// <summary>
+        /// Gets ALL CompatibleVehicle configurations matching the filter,
+        /// including details for display (Make Name, Model Name, etc.). NO PAGINATION.
+        /// </summary>
+        Task<IEnumerable<CompatibleVehicle>> GetAllFilteredWithDetailsAsync(
+            Expression<Func<CompatibleVehicle, bool>>? filter = null,
+            int? makeIdFilter = null,
+            string? searchTerm = null
+        );
+
         // Potentially a method to get CompatibleVehicles that can be linked to a specific PartId
         // (This would involve checking existing PartCompatibility links) - complex, might be service layer logic instead.
     }

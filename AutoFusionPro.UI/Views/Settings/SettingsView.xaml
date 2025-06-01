@@ -38,7 +38,7 @@
                                        FontWeight="Regular"/>
                         </StackPanel>
                     </TabItem.Header>
-                    <local:GeneralSettingsTabItem />
+                    <local:GeneralSettingsTabItem Padding="10,20,10,10"/>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>

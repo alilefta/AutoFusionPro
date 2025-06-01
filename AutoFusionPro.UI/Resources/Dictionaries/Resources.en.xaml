@@ -267,9 +267,13 @@
     <sys:String x:Key="MakeStr">Make</sys:String>
     <sys:String x:Key="ModelStr">Model</sys:String>
     <sys:String x:Key="TrimLevelStr">Trim Level</sys:String>
+    <sys:String x:Key="TrimStr">Trim</sys:String>
     <sys:String x:Key="TransmissionTypeStr">Transmission Type</sys:String>
+    <sys:String x:Key="TransmissionStr">Transmission</sys:String>
     <sys:String x:Key="BodyTypeStr">Body Type</sys:String>
-    <sys:String x:Key="EngineStr">Engine Type</sys:String>
+    <sys:String x:Key="BodyStr">Body</sys:String>
+    <sys:String x:Key="EngineTypeStr">Engine Type</sys:String>
+    <sys:String x:Key="EngineStr">Engine</sys:String>
     <sys:String x:Key="YearStr">Year</sys:String>
     <sys:String x:Key="BackStr">Back</sys:String>
     <sys:String x:Key="NextStr">Next</sys:String>
@@ -282,7 +286,7 @@
     <sys:String x:Key="ItemUpdatedSuccessfullyStr">Item Updated Successfully!</sys:String>
     <sys:String x:Key="ItemDeletedSuccessfullyStr">Item Has Been Deleted Successfully!</sys:String>
     <sys:String x:Key="UpdateOperationFailedStr">Updated Operation Failed</sys:String>
-    <sys:String x:Key="ItemAddedSuccessfullyStr">New Item Added Successfully!</sys:String>
+    <sys:String x:Key="ItemAddedSuccessfullyStr">Item Has Been Added Successfully!</sys:String>
     <sys:String x:Key="CreationOperationFailedStr">Creation Operation Has Failed!</sys:String>
     <sys:String x:Key="DeleteOperationFailedStr">Cannot Delete the Item!</sys:String>
     <sys:String x:Key="BecauseTheFollowingItemsDependOnItStr">Because the following Items Depends on it:</sys:String>
@@ -297,6 +301,47 @@
     <sys:String x:Key="FilterByYearStr">Filter By Year</sys:String>
     <sys:String x:Key="AllStr">All</sys:String>
     <sys:String x:Key="YearExampleStr">Eg., 2025</sys:String>
+    <sys:String x:Key="AllMakesStr">All Makes</sys:String>
+    <sys:String x:Key="AllModelsStr">All Models</sys:String>
+    <sys:String x:Key="AllTransmissionTypesStr">All Transmission Types</sys:String>
+    <sys:String x:Key="AllBodyTypesStr">All Body Types</sys:String>
+    <sys:String x:Key="AllEngineTypesStr">All Engine Types</sys:String>
+    <sys:String x:Key="AllTrimLevelsStr">All Trim Levels</sys:String>
+    <sys:String x:Key="AllYearsStr">All Years</sys:String>
+    <sys:String x:Key="ClearFilterStr">Clear Filter</sys:String>
+    <sys:String x:Key="ClearStr">Clear</sys:String>
+    <sys:String x:Key="ApplyStr">Apply</sys:String>
+    <sys:String x:Key="TotalItemsStr">Total Items</sys:String>
+    <sys:String x:Key="RemoveThisFilterStr">Remove This Filter</sys:String>
+    <sys:String x:Key="ActiveFiltersStr">Active Filters:</sys:String>
+
+    <sys:String x:Key="AddRootCategoryStr">Add Root Category</sys:String>
+    <sys:String x:Key="NewRootCategoryStr">New Root Category</sys:String>
+    <sys:String x:Key="AddCategoryStr">Add Category</sys:String>
+    <sys:String x:Key="CategoryNameStr">Category's Name</sys:String>
+    <sys:String x:Key="CategoryNameExampleStr">E.g., Electrical Body, Mechanical Body or Mechanics...</sys:String>
+    <sys:String x:Key="DescriptionStr">Description</sys:String>
+    <sys:String x:Key="IsActiveStr">Is Active</sys:String>
+    <sys:String x:Key="CategoryImageStr">Category's Image</sys:String>
+    <sys:String x:Key="RootCategoryNameToolTipStr">Enter a unique name for this main category (e.g., 'Engine Parts', 'Electrical Components', 'Body Panels'). This will be a top-level category.</sys:String>
+    <sys:String x:Key="SubCategoryNameToolTipStr">Enter a unique name for this subcategory under '{SelectedParentCategory.Name}' (e.g., if parent is 'Engine Parts', a subcategory could be 'Filters' or 'Spark Plugs').</sys:String>
+    <sys:String x:Key="SubCategoryGenericNameToolTipStr">Enter a unique name for this category. If a parent category is selected, this name should be unique within that parent.</sys:String>
+    <sys:String x:Key="DescriptionToolTipStr">Provide an optional, brief description of what this category includes. This can help users understand the types of parts found here (e.g., 'All filters including oil, air, and fuel filters').</sys:String>
+    <sys:String x:Key="IsActiveToolTipStr">Check this box to make the category visible and usable throughout the system. Uncheck it to hide or disable the category without deleting it (useful for phasing out old categories).</sys:String>
+
+    <sys:String x:Key="ValidationErrorStr">Validation Error</sys:String>
+    <sys:String x:Key="PleaseCorrectTheFollowingErrorsStr">Please correct the following errors:</sys:String>
+    <sys:String x:Key="DuplicateEntryStr">Duplicate Entry</sys:String>
+    <sys:String x:Key="FileOperationErrorStr">File Operation Error</sys:String>
+    <sys:String x:Key="ErrorSavingImageStr">An error occurred while saving the category image. Please try again or select a different image.</sys:String>
+    <sys:String x:Key="DatabaseErrorStr">Database Error</sys:String>
+    <sys:String x:Key="ErrorSavingCategoryToDBStr">A database error occurred while saving the category. Please try again.</sys:String>
+    <sys:String x:Key="OperationFailedStr">Operation Failed</sys:String>
+    <sys:String x:Key="UnexpectedErrorStr">Unexpected Error</sys:String>
+    <sys:String x:Key="UnexpectedErrorOccurredStr">An unexpected error occurred. Please try again or contact support.</sys:String>
+    <sys:String x:Key="CategoriesStr">Categories</sys:String>
+    <sys:String x:Key="ShowGridViewStr">Show Grid</sys:String>
+    <sys:String x:Key="ShowListViewStr">Show List</sys:String>
 
 
 

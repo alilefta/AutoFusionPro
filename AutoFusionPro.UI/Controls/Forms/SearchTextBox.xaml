@@ -1,0 +1,216 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Controls.Forms.SearchTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Search TextBox -->
+        <TextBox x:Name="InnerSearchTextBox"
+                 Grid.Column="0"
+                 Text="{Binding SearchQuery, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Tag="{Binding PlaceholderText, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                 FontSize="14"
+                 VerticalContentAlignment="Center"
+                 Padding="30,5,10,5">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}"
+                       BasedOn="{StaticResource SearchFieldWithClearButtonStyle}">
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource TextBox.ForegroundBrush}" />
+                    <Setter Property="Background"
+                            Value="{DynamicResource TextBox.BackgroundBrush}" />
+                    <Setter Property="BorderBrush"
+                            Value="{DynamicResource TextBox.BorderBrush}" />
+                    <Setter Property="FontFamily"
+                            Value="{DynamicResource DynamicFontFamilyRegular}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <Grid>
+                                    <!-- Search field background and border -->
+                                    <Border x:Name="border"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="10"
+                                            SnapsToDevicePixels="True">
+                                        <!-- ContentHost for the text -->
+                                        <ScrollViewer x:Name="PART_ContentHost"
+                                                      Focusable="false"
+                                                      HorizontalScrollBarVisibility="Hidden"
+                                                      VerticalScrollBarVisibility="Hidden"
+                                                      TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                                      TextElement.FontSize="{TemplateBinding FontSize}"
+                                                      TextElement.Foreground="{TemplateBinding Foreground}"
+                                                      Foreground="{TemplateBinding Foreground}"
+                                                      VerticalContentAlignment="Center"
+                                                      Padding="30,2,30,2"
+                                                      VerticalAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Search icon -->
+                                    <Border x:Name="iconBorder"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Margin="10,0,0,0">
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   x:Name="LensIcon"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{StaticResource FontAwesome}"
+                                                   Text="{StaticResource FontAwesomeSearchIcon}"
+                                                   Foreground="{DynamicResource TextBox.Lens.ForegroundBrush}" />
+                                    </Border>
+
+                                    <!-- Placeholder text -->
+                                    <TextBlock IsHitTestVisible="False"
+                                               x:Name="Placeholder"
+                                               Text="{TemplateBinding Tag}"
+                                               FontFamily="{TemplateBinding FontFamily}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Foreground="{DynamicResource TextBox.ForegroundBrush}"
+                                               FontSize="14"
+                                               Margin="35,0,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility"
+                                                        Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                 Value="">
+                                                        <Setter Property="Visibility"
+                                                                Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+
+                                <!-- Triggers for different states -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled"
+                                             Value="false">
+                                        <Setter Property="Opacity"
+                                                TargetName="border"
+                                                Value="0.56" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="true">
+                                        <Setter Property="BorderBrush"
+                                                TargetName="border"
+                                                Value="{DynamicResource TextBox.Hover.BorderBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsFocused"
+                                             Value="true">
+                                        <Setter Property="BorderBrush"
+                                                TargetName="border"
+                                                Value="{DynamicResource TextBox.Focus.BorderBrush}" />
+                                        <Setter Property="Background"
+                                                TargetName="border"
+                                                Value="{DynamicResource TextBox.Focus.BackgroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                TargetName="LensIcon"
+                                                Value="{DynamicResource TextBox.Focus.Lens.ForegroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource TextBox.Focus.ForegroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                TargetName="Placeholder"
+                                                Value="{DynamicResource TextBox.Focus.Placeholder.ForegroundBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsKeyboardFocused"
+                                             Value="true">
+                                        <Setter Property="BorderBrush"
+                                                TargetName="border"
+                                                Value="{DynamicResource TextBox.Focus.BorderBrush}" />
+                                        <Setter Property="Foreground"
+                                                TargetName="LensIcon"
+                                                Value="{DynamicResource TextBox.Focus.Lens.ForegroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource TextBox.Focus.ForegroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource TextBox.Focus.ForegroundBrush}" />
+                                        <Setter Property="TextElement.Foreground"
+                                                Value="{DynamicResource TextBox.Focus.ForegroundBrush}" />
+                                        <Setter Property="Foreground"
+                                                TargetName="Placeholder"
+                                                Value="{DynamicResource TextBox.Focus.Placeholder.ForegroundBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+            </TextBox.Style>
+        </TextBox>
+
+        <!-- Clear Button -->
+        <Button x:Name="ClearButton"
+                Grid.Column="1"
+                Command="{Binding ButtonCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                IsEnabled="{Binding IsClearButtonEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Visibility="{Binding ButtonVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                BorderThickness="0"
+                Padding="8"
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                ToolTip="Clear search">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Cursor"
+                            Value="Hand" />
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource TextBox.ClearButton.ForegroundBrush}" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="4"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                      TextElement.Foreground="{TemplateBinding Foreground}"
+                                                      VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource TextBox.ClearButton.Hover.ForegroundBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed"
+                                             Value="True">
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource TextBox.ClearButton.Pressed.ForegroundBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled"
+                                             Value="False">
+                                        <Setter Property="Opacity"
+                                                Value="0.5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+
+            <wpfUi:SymbolIcon Symbol="Dismiss48"
+                              FontSize="16" />
+        </Button>
+    </Grid>
+</UserControl>

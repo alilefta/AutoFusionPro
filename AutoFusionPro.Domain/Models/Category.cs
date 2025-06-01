@@ -9,6 +9,8 @@ namespace AutoFusionPro.Domain.Models
         public string? Description { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = string.Empty;
 
+        public bool IsActive { get; set; } = true; // Allowance of Disabling without deletion.
+
         // Optional: Hierarchical structure
         public int? ParentCategoryId { get; set; }
         public virtual Category ParentCategory { get; set; }

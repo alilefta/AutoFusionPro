@@ -357,11 +357,21 @@
                      Color="{StaticResource Primary400}" />
     <SolidColorBrush x:Key="TextBox.Focus.ForegroundBrush"
                      Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="TextBox.Focus.Placeholder.ForegroundBrush"
+                     Color="{StaticResource Neutral400}" />
     <SolidColorBrush x:Key="TextBox.Focus.Lens.ForegroundBrush"
                      Color="{StaticResource Primary400}" />
 
     <SolidColorBrush x:Key="TextBox.Hover.BorderBrush"
                      Color="{StaticResource Neutral400}" />
+
+    <SolidColorBrush x:Key="TextBox.ClearButton.ForegroundBrush"
+                     Color="{StaticResource Red400}" />
+    <SolidColorBrush x:Key="TextBox.ClearButton.Hover.ForegroundBrush"
+                     Color="{StaticResource Red500}" />
+    <SolidColorBrush x:Key="TextBox.ClearButton.Pressed.ForegroundBrush"
+                     Color="{StaticResource Red600}" />
+
 
 
     <!-- ==================== Clinical Specific ==================== -->
@@ -641,11 +651,71 @@
                      Color="{StaticResource Neutral300}" />
 
 
+    <SolidColorBrush x:Key="ActiveFilter.BackgroundBrush"
+                     Color="{StaticResource Gray200}" />
+    <SolidColorBrush x:Key="ActiveFilter.ForegroundBrush"
+                     Color="{StaticResource Neutral700}" />
+    <SolidColorBrush x:Key="ActiveFilter.BorderBrush"
+                     Color="{StaticResource Gray400}" />
 
 
+    
+    <!-- ================================== Data Drid ============================== -->
+    <!-- DataGrid Colors -->
+    <SolidColorBrush x:Key="DataGrid.BackgroundBrush"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DataGrid.ForegroundBrush"
+                     Color="#1F2937" />
+    <SolidColorBrush x:Key="DataGrid.BorderBrush"
+                     Color="#E5E7EB" />
+    <SolidColorBrush x:Key="DataGrid.GridLinesBrush"
+                     Color="#F3F4F6" />
 
+    <!-- DataGrid Row Colors -->
+    <SolidColorBrush x:Key="DataGrid.Row.BackgroundBrush"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DataGrid.Row.ForegroundBrush"
+                     Color="#1F2937" />
+    <SolidColorBrush x:Key="DataGrid.AlternatingRow.BackgroundBrush"
+                     Color="#F9FAFB" />
+    <SolidColorBrush x:Key="DataGrid.Row.Hover.BackgroundBrush"
+                     Color="#F3F4F6" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.BackgroundBrush"
+                     Color="#3B82F6" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.ForegroundBrush"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DataGrid.Row.SelectedHover.BackgroundBrush"
+                     Color="#2563EB" />
+    <SolidColorBrush x:Key="DataGrid.Row.Selected.Empty.ForegroundBrush"
+                     Color="{DynamicResource Neutral300}" />
 
+    <!-- DataGrid Column Header Colors -->
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.BackgroundBrush"
+                     Color="#F9FAFB" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.ForegroundBrush"
+                     Color="#374151" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.BorderBrush"
+                     Color="#E5E7EB" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.Hover.BackgroundBrush"
+                     Color="#F3F4F6" />
+    <SolidColorBrush x:Key="DataGrid.ColumnHeader.Pressed.BackgroundBrush"
+                     Color="#E5E7EB" />
 
+    <!-- DataGrid Cell Colors -->
+    <SolidColorBrush x:Key="DataGrid.Cell.Focus.BorderBrush"
+                     Color="#3B82F6" />
+    <SolidColorBrush x:Key="DataGrid.Cell.Selected.ForegroundBrush"
+                     Color="#FFFFFF" />
+
+    <!-- ScrollBar Colors -->
+    <SolidColorBrush x:Key="ScrollBar.BackgroundBrush"
+                     Color="#F9FAFB" />
+    <!--<SolidColorBrush x:Key="ScrollBar.Thumb.BackgroundBrush"
+                     Color="#D1D5DB" />-->
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Hover.BackgroundBrush"
+                     Color="#9CA3AF" />
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Pressed.BackgroundBrush"
+                     Color="#6B7280" />
 
 
 

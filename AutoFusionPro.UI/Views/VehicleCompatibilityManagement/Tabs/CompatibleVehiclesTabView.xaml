@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Vehicles"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;assembly=AutoFusionPro.Application"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -17,235 +18,397 @@
              FlowDirection="{Binding CurrentWorkFlow}"
              Foreground="{DynamicResource Text.PrimaryBrush}"
              FontFamily="{DynamicResource DynamicFontFamilyRegular}">
-    <Border Padding="8,10">
+    <Border>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Search, Filters and Action Buttons -->
-            <Grid Margin="8,0,8,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="200" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <!-- Content -->
+            <Grid Margin="8,10,8,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
-                <TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}"
-                         Grid.Column="0"
-                         Tag="{DynamicResource SearchForCompatibleVehiclesStr}">
+                <!-- Search, Filters and Action Buttons -->
+                <Grid Margin="8,0,8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                </TextBox>
+                    <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
+                    <forms:SearchTextBox SearchQuery="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="{DynamicResource SearchForCompatibleVehiclesStr}"
+                                         ButtonCommand="{Binding ClearSearchAndReloadCommand}"
+                                         IsClearButtonEnabled="{Binding HasTextSearchQuery}"
+                                         ButtonVisibility="{Binding HasTextSearchQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Height="40" />
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="2"
+                                Margin="50,0,0,0">
 
-                <!-- Action Buttons -->
-                <StackPanel Orientation="Horizontal"
-                            Grid.Column="2"
-                            Margin="8,0,0,0">
+                        <xBtn:XButton ButtonType="Regular"
+                                      Style="{DynamicResource RegularButtonStyle}"
+                                      IsLoading="{Binding IsShowingFilters}"
+                                      Command="{Binding ShowFilterOptionsDialogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{DynamicResource FiltersStr}"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"
+                                           />
+                                <wpfUi:SymbolIcon Symbol="Filter24"
+                                                  Margin="5,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="16" />
 
-                    <xBtn:XButton ButtonType="Light"
-                                  IsLoading="False"
-                                  Style="{StaticResource RegularButtonStyle}"
-                                  Command="{Binding ShowFilterOptionsDialogCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
-                                              FontSize="12" />
-                            <TextBlock Text="{DynamicResource FiltersStr}"
-                                       FontSize="12"
-                                       Margin="5,0,0,0" />
-                        </StackPanel>
-                    </xBtn:XButton>
+                                <!-- Filters Selected Indicator-->
+                                <Ellipse Width="10"
+                                         Height="10"
+                                         Margin="15,0,0,0"
+                                         Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Fill="{DynamicResource Border.ErrorBrush}" />
+                            </StackPanel>
+                        </xBtn:XButton>
 
-                    <xBtn:XButton ButtonType="Primary"
-                                  IsLoading="{Binding IsAdding}"
-                                  Margin="8,0,0,0"
-                                  Command="{Binding ShowAddCompatibleVehicleDialogCommand}"
-                                  Style="{StaticResource RegularButtonStyle}">
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="Add48"
-                                              FontSize="12" />
-                            <TextBlock Text="{DynamicResource AddNewCarCompatibilityStr}"
-                                       FontSize="12"
-                                       Margin="5,0,0,0" />
-                        </StackPanel>
-                    </xBtn:XButton>
-                </StackPanel>
+                        <xBtn:XButton ButtonType="Primary"
+                                      IsLoading="{Binding IsAdding}"
+                                      Margin="8,0,0,0"
+                                      Command="{Binding ShowAddCompatibleVehicleDialogCommand}"
+                                      Style="{DynamicResource RegularButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{DynamicResource AddNewCarCompatibilityStr}"
+                                           VerticalAlignment="Center"
+                                           FontSize="13"/>
+                                <wpfUi:SymbolIcon Symbol="Add48"
+                                                  Margin="5,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="13" />
 
-            </Grid>
+                            </StackPanel>
+                        </xBtn:XButton>
+                    </StackPanel>
 
-            <!-- Active Filters Bar-->
-            <Grid Grid.Row="1"
-                  Margin="5,10">
-                <ItemsControl ItemsSource="{Binding CurrentlyAppliedFilters}" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <!-- Use WrapPanel so filters wrap nicely -->
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type dtos:CompatibleVehicleFilterCriteriaDto}">
-                            <Border Background="{DynamicResource Accent.Amethyst.BackgroundBrush}"
-                                    CornerRadius="4"
-                                    Padding="6,3"
-                                    Margin="3,3">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                </Grid>
 
-                                    <TextBlock Text="{Binding BodyTypeId}"
-                                               TextWrapping="Wrap"
-                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                               FontSize="12" />
-                                    <Button Grid.Column="1"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Padding="2"
-                                            Cursor="Hand"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                            CommandParameter="{Binding}"
-                                            ToolTip="Remove Filter">
-                                        <wpfUi:SymbolIcon Symbol="Dismiss48"
-                                                          Margin="5,0,0,0"
-                                                          FontSize="10" />
-                                    </Button>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
+                <!-- Active Filters Bar-->
+                <Border Grid.Row="1"
+                        Margin="8,10,8,5"
+                        Padding="8,5"
+                        MinHeight="30"
+                        Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource ActiveFiltersStr}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"
+                                   FontWeight="SemiBold" />
+                        <ItemsControl ItemsSource="{Binding ActiveFiltersDisplayCollection}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dtos:ActiveFilterDisplayItem}">
+                                    <Border Background="{DynamicResource ActiveFilter.BackgroundBrush}"
+                                            CornerRadius="10"
+                                            Padding="9,4"
+                                            BorderBrush="{DynamicResource ActiveFilter.BorderBrush}"
+                                            BorderThickness="0.6"
+                                            Margin="3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" 
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}" 
+                                                       Foreground="{DynamicResource ActiveFilter.ForegroundBrush}">
+                                                    <Run Text="{Binding FilterType}"
+                                                         FontWeight="SemiBold" />: <Run Text="{Binding FilterValueDisplay}" />
+                                            </TextBlock>
+                                            <Button Grid.Column="1"
+                                                    Padding="2"
+                                                    Width="16"
+                                                    Height="16"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    HorizontalContentAlignment="Center"
+                                                    Cursor="Hand"
+                                                    Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="{DynamicResource RemoveThisFilterStr}">
+                                                <wpfUi:SymbolIcon Symbol="Dismiss16"
+                                                                  FontSize="10"
+                                                                  Foreground="{DynamicResource ActiveFilter.ForegroundBrush}"
+                                                                  FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
+                                                                  Margin="0"
+                                                                  VerticalAlignment="Center" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
 
-            <!-- Data Grid -->
-            <Grid Grid.Row="2">
-                <ListView Grid.Row="2"
-                          ItemsSource="{Binding CompatibleVehiclesCollection}"
-                          SelectedItem="{Binding SelectedCompatibleVehicle}"
-                          d:ItemsSource="{d:SampleData ItemCount=5}"
-                          VirtualizingPanel.IsVirtualizing="True"
-                          VirtualizingPanel.VirtualizationMode="Recycling">
-                    <ListView.View>
-                        <GridView>
-                            <GridView.ColumnHeaderContainerStyle>
-                                <Style TargetType="GridViewColumnHeader"
-                                       BasedOn="{StaticResource GridViewColumnHeaderStyle}">
-                                    <!--<EventSetter Event="Click"
-                                             Handler="OnColumnHeaderClick" />-->
-                                    <!--<Setter Property="Background"
-                                        Value="{DynamicResource Window.BackgroundBrush}" />
-                                    <Setter Property="BorderBrush"
-                                            Value="{DynamicResource Border.PrimaryBrush}" />-->
-                                </Style>
-                            </GridView.ColumnHeaderContainerStyle>
+                <!-- Data Grid -->
+                <Grid Grid.Row="2"
+                      Margin="0,10,0,0">
+                    <!--<ListView Grid.Row="2" x:Name="CompatibleVehicleListView"
+                              ItemsSource="{Binding CompatibleVehiclesCollection}"
+                              SelectedItem="{Binding SelectedCompatibleVehicle}"
+                              d:ItemsSource="{d:SampleData ItemCount=5}"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling">
+                        <ListView.View>
+                            <GridView>
+                                <GridView.ColumnHeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader"
+                                           BasedOn="{StaticResource GridViewColumnHeaderStyle}">
+                                        <EventSetter Event="Click"
+                                                     Handler="OnColumnHeaderClick" />
+                                    </Style>
+                                </GridView.ColumnHeaderContainerStyle>
 
-                            <!-- Selection Check Box-->
-                            <!--<GridViewColumn Width="58">
-                                <GridViewColumn.CellTemplate>
+                                <GridViewColumn Header="{DynamicResource MakeStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="MakeName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MakeName}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource ModelStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="ModelName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ModelName}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource StartYearStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="YearStart">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding YearStart}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource EndYearStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="YearEnd">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding YearEnd}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource EngineStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="EngineTypeName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding EngineTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
+                                                       Foreground="{Binding EngineTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource TransmissionTypeStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="TransmissionTypeName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TransmissionTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
+                                                       Foreground="{Binding TransmissionTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource TrimLevelNameStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="TrimLevelName"> 
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TrimLevelName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
+                                                       Foreground="{Binding TrimLevelName, Converter={StaticResource EmptyStringToForegroundConverter}}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource BodyTypeStr}"
+                                                Width="120"
+                                                local:CompatibleVehiclesTabView.SortMemberPath="BodyTypeName">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding BodyTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
+                                                       Foreground="{Binding BodyTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
+                                                       HorizontalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="{DynamicResource ManageStr}"
+                                                Width="160"
+                                                local:CompatibleVehiclesTabView.IsSortable="False">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Center">
+                                                <xBtn:XButton Cursor="Hand"
+                                                              Style="{StaticResource RegularButtonStyle}"
+                                                              ButtonType="Warning"
+                                                              Command="{Binding DataContext.ShowEditCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                              CommandParameter="{Binding}"
+                                                              Opacity="0.8"
+                                                              VerticalAlignment="Center">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                VerticalAlignment="Center">
+                                                        <wpfUi:SymbolIcon Symbol="Edit48"
+                                                                          VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </xBtn:XButton>
+
+                                                <xBtn:XButton Cursor="Hand"
+                                                              Style="{StaticResource RegularButtonStyle}"
+                                                              Command="{Binding DataContext.ShowDeleteCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                              CommandParameter="{Binding}"
+                                                              ButtonType="Danger"
+                                                              VerticalAlignment="Center"
+                                                              Opacity="0.8"
+                                                              Margin="5,0,0,0">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                VerticalAlignment="Center">
+                                                        <wpfUi:SymbolIcon Symbol="Delete48"
+                                                                          VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </xBtn:XButton>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>-->
+
+                    <wpfUi:DataGrid ItemsSource="{Binding CompatibleVehiclesCollection}"
+                                    Grid.Row="2"
+                                    Margin="0,8,0,0"
+                                    SelectedItem="{Binding SelectedCompatibleVehicle}"
+                                    Style="{DynamicResource ModernDataGridStyle}"
+                                    AutoGenerateColumns="False"
+                                    CanUserAddRows="False"
+                                    IsReadOnly="True"
+                                    CanUserDeleteRows="False"
+                                    CanUserReorderColumns="True"
+                                    CanUserResizeColumns="True"
+                                    CanUserSortColumns="True"
+                                    SelectionMode="Single"
+                                    GridLinesVisibility="Horizontal"
+                                    AlternationCount="2"
+                                    AlternatingRowBackground="{DynamicResource DataGrid.AlternatingRow.BackgroundBrush}"
+                                    HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="{DynamicResource MakeStr}"
+                                                Binding="{Binding MakeName}"
+                                                Width="120" />
+                            <DataGridTextColumn Header="{DynamicResource ModelStr}"
+                                                Binding="{Binding ModelName}"
+                                                Width="120" />
+                            <DataGridTemplateColumn Header="{DynamicResource TrimLevelStr}"
+                                                Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                   Checked="OnCheckBoxChecked"
-                                                   Unchecked="OnCheckBoxUnchecked"
-                                                   FlowDirection="LeftToRight"
-                                                   HorizontalAlignment="Center" />
-
+                                        <TextBlock Text="{Binding TrimLevelName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="TrimLevelName" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </DataTemplate>
-
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>-->
-
-                            <GridViewColumn Header="{DynamicResource MakeStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="{DynamicResource StartYearStr}"
+                                                Binding="{Binding YearStart}"
+                                                Width="120" />
+                            <DataGridTextColumn Header="{DynamicResource EndYearStr}"
+                                                Binding="{Binding YearEnd}"
+                                                Width="120" />
+                            <DataGridTemplateColumn Header="{DynamicResource TransmissionStr}"
+                                                    Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding MakeName}"
-                                                   HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding TransmissionTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="TransmissionTypeName" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource ModelStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="{DynamicResource EngineTypeStr}"
+                                                    Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ModelName}"
-                                                   HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding EngineTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="EngineTypeName" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource StartYearStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="{DynamicResource BodyStr}"
+                                                    Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding YearStart}"
-                                                   HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding BodyTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="BodyTypeName" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource EndYearStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="{DynamicResource ManageStr}" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding YearEnd}"
-                                                   HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource EngineStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding EngineTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
-                                                   Foreground="{Binding EngineTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
-                                                   HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource TransmissionTypeStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding TransmissionTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
-                                                   Foreground="{Binding TransmissionTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
-                                                   HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource TrimLevelNameStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding TrimLevelName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
-                                                   Foreground="{Binding TrimLevelName, Converter={StaticResource EmptyStringToForegroundConverter}}"
-                                                   HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource BodyTypeStr}"
-                                            Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding BodyTypeName, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}"
-                                                   Foreground="{Binding BodyTypeName, Converter={StaticResource EmptyStringToForegroundConverter}}"
-                                                   HorizontalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource ManageStr}"
-                                            Width="160">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center">
                                             <xBtn:XButton Cursor="Hand"
-                                                          Style="{StaticResource RegularButtonStyle}"
+                                                          Style="{DynamicResource RegularButtonStyle}"
                                                           ButtonType="Warning"
-                                                          Command="{Binding DataContext.ShowEditCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                          Command="{Binding DataContext.ShowEditCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                           CommandParameter="{Binding}"
                                                           Opacity="0.8"
                                                           VerticalAlignment="Center">
@@ -257,8 +420,8 @@
                                             </xBtn:XButton>
 
                                             <xBtn:XButton Cursor="Hand"
-                                                          Style="{StaticResource RegularButtonStyle}"
-                                                          Command="{Binding DataContext.ShowDeleteCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                          Style="{DynamicResource RegularButtonStyle}"
+                                                          Command="{Binding DataContext.ShowDeleteCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                           CommandParameter="{Binding}"
                                                           ButtonType="Danger"
                                                           VerticalAlignment="Center"
@@ -272,71 +435,32 @@
                                             </xBtn:XButton>
                                         </StackPanel>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </wpfUi:DataGrid>
 
-                </ListView>
-
-                <spinner:DonutSpinner Width="200"
-                                      Height="200"
-                                      Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                    <spinner:DonutSpinner Width="200"
+                                          Height="200"
+                                          Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+                </Grid>
             </Grid>
 
-            <!-- Pagination Button -->
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="3"
-                        Margin="10,0">
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <TextBlock Text="Showing:" />
-                    <TextBlock Text="1-20"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="of"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="1200"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="Items"
-                               Margin="3,0,0,0" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"
-                            Margin="40,0">
-                    <Button Command="{Binding PreviousPageCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="ArrowLeft32"
-                                              VerticalAlignment="Center" />
-                            <TextBlock Text="Previous Page"
-                                       Margin="5,0,0,0"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Margin="5,0,0,0"
-                            Command="{Binding NextPageCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Next Page "
-                                       Margin="5,0,0,0"
-                                       VerticalAlignment="Center" />
-                            <wpfUi:SymbolIcon Symbol="ArrowRight48"
-                                              VerticalAlignment="Center" />
-
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-
-            </StackPanel>
-
             <!-- Status Bar -->
-            <StatusBar Grid.Row="4">
+            <StatusBar Grid.Row="1">
                 <StatusBarItem>
-                    <TextBlock Text="{Binding CompatibleVehiclesCollection.Count, StringFormat='Total Items: {0}'}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource TotalItemsStr}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding CompatibleVehiclesCollection.Count}"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                    </StackPanel>
                 </StatusBarItem>
                 <Separator />
-                <StatusBarItem>
-                    <TextBlock Text="{Binding TotalValue, FallbackValue='Total Inventory Value: 20', StringFormat='Total Inventory Value: {0:C2}'}" />
-                </StatusBarItem>
-                <StatusBarItem HorizontalAlignment="Right">
+                <StatusBarItem >
                     <ProgressBar Width="100"
                                  Height="15"
                                  IsIndeterminate="{Binding IsLoading}"
@@ -344,5 +468,6 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
+
     </Border>
 </UserControl>
