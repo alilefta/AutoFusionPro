@@ -48,15 +48,20 @@ namespace AutoFusionPro.UI.Services
             };
         }
 
-        public object ResolveViewModelWithInitialization(ApplicationPage page, object parameter)
+        public async Task<object> ResolveViewModelWithInitialization(ApplicationPage page, object parameter)
         {
             return page switch
             {
-                //ApplicationPage.Patients =>
-                //    ResolveInitializableViewModel<PatientsViewModel>(parameter).Result,
+                ApplicationPage.CategoryDetails =>
+                   await ResolveInitializableViewModel<CategoryDetailViewModel>(parameter),
+
+
                 //ApplicationPage.AppointmentDetails =>
                 //    _viewModelLocator.Resolve<AppointmentDetailsViewModel>(parameter),
                 // Map other initializable ViewModels
+
+
+                // Default Case
                 _ => ResolveViewModel(page)
             };
         }
@@ -74,6 +79,7 @@ namespace AutoFusionPro.UI.Services
 
             // If initialization fails, you might want to handle this more robustly
             await viewModel.InitializeAsync(parameter);
+            await viewModel.Initialized;
             return viewModel;
         }
     }

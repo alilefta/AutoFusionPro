@@ -363,7 +363,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                     _wpfToastNotificationService.ShowSuccess(msg);
 
-                    _logger.LogInformation("Transmission Type with ID={ID} has been deleted successfully!", compatibleVehicleToDelete.Id);
+                    _logger.LogInformation("Compatible Vehicle with ID={ID} has been deleted successfully!", compatibleVehicleToDelete.Id);
 
                 }
                 catch (DeletionBlockedException dx)

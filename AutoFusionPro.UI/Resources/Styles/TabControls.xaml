@@ -460,8 +460,8 @@
                                  Value="True">
                             <Setter Property="Foreground"
                                     Value="{DynamicResource TabViewItem.Selected.ForegroundBrush}" />
-                            <!--<Setter Property="Background"
-                                    Value="{DynamicResource TabViewItem.Selected.BackgroundBrush}" />-->
+                            <Setter Property="Background"
+                                    Value="{DynamicResource TabViewItem.Selected.BackgroundBrush}" />
                             <Setter Property="Panel.ZIndex"
                                     Value="100" />
                             <Setter TargetName="SelectedBorder"
@@ -475,8 +475,8 @@
                                 <Condition Property="IsSelected"
                                            Value="False" />
                             </MultiTrigger.Conditions>
-                            <!--<Setter Property="Background"
-                                    Value="{DynamicResource TabViewItem.BackgroundBrush.Hover}" />-->
+                            <Setter Property="Background"
+                                    Value="{DynamicResource TabViewItem.Selected.BackgroundBrush}" />
                             <Setter Property="Foreground"
                                     Value="{DynamicResource TabViewItem.ForegroundBrush.Hover}" />
                             <Setter TargetName="SelectedBorder"
@@ -504,7 +504,7 @@
            TargetType="{x:Type TabControl}"
            BasedOn="{StaticResource ModernTabControlStyle}">
         <Setter Property="Background"
-                Value="{DynamicResource TransparentBrush}" />
+                Value="{DynamicResource TabView.BackgroundBrush}" />
         <Setter Property="BorderBrush"
                 Value="{DynamicResource TabView.BorderBrush}" />
         <Setter Property="BorderThickness"
@@ -540,7 +540,7 @@
                         <!-- Content Area -->
                         <Border Grid.Row="1"
                                 x:Name="ContentPanel"
-                                Background="{TemplateBinding Background}"
+                                Background="{DynamicResource TransparentBrush}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="0"
                                 KeyboardNavigation.TabIndex="2"

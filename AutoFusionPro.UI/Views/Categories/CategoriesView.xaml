@@ -49,7 +49,7 @@
                                          IsClearButtonEnabled="{Binding HasTextSearchQuery}"
                                          ButtonVisibility="{Binding HasTextSearchQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
                                          Height="40" />
-                    
+
                     <!-- Action Buttons -->
                     <StackPanel Orientation="Horizontal"
                                 Grid.Column="2"
@@ -64,7 +64,7 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding DataContext.IsCardViewActive, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                <DataTrigger Binding="{Binding DataContext.IsCardViewActive, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                              Value="False">
                                                     <Setter Property="Text"
                                                             Value="{DynamicResource ShowGridViewStr}" />
@@ -85,10 +85,33 @@
                             </StackPanel>
                         </xBtn:XButton>
 
+                        <xBtn:XButton ButtonType="Regular"
+                                      Margin="8,0,0,0"
+                                      Style="{DynamicResource RegularButtonStyle}"
+                                      IsLoading="{Binding IsShowingFilters}"
+                                      Command="{Binding ShowFilterOptionsDialogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{DynamicResource FiltersStr}"
+                                           VerticalAlignment="Center"
+                                           FontSize="13" />
+                                <wpfUi:SymbolIcon Symbol="Filter24"
+                                                  Margin="5,0,0,0"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="16" />
+
+                                <!-- Filters Selected Indicator-->
+                                <Ellipse Width="10"
+                                         Height="10"
+                                         Margin="15,0,0,0"
+                                         Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Fill="{DynamicResource Border.ErrorBrush}" />
+                            </StackPanel>
+                        </xBtn:XButton>
+
                         <xBtn:XButton ButtonType="Primary"
                                       IsLoading="{Binding IsAdding}"
                                       Margin="8,0,0,0"
-                                      Command="{Binding ShowAddCategoryCommand}"
+                                      Command="{Binding ShowAddCategoryDialogCommand}"
                                       Style="{DynamicResource RegularButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{DynamicResource AddCategoryStr}"
@@ -104,12 +127,15 @@
                     </StackPanel>
 
                 </Grid>
-                
+
+
+
                 <!-- Data Grid -->
                 <Grid Grid.Row="2"
                       Margin="0,10,0,0">
-             
-                    <wpfUi:DataGrid ItemsSource="{Binding CategoriesCollection}" Visibility="{Binding IsCardViewActive, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+
+                    <wpfUi:DataGrid ItemsSource="{Binding CategoriesCollection}"
+                                    Visibility="{Binding IsCardViewActive, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                     Grid.Row="2"
                                     Margin="0,8,0,0"
                                     SelectedItem="{Binding SelectedCategory}"
@@ -155,12 +181,31 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Center">
+
+                                            <!-- Details Button -->
+                                            <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                                          ButtonType="Regular"
+                                                          Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          CommandParameter="{Binding}"
+                                                          ToolTip="{DynamicResource OpenCategoryDetailsStr}"
+                                                          Cursor="Hand">
+                                                <xBtn:XButton.Effect>
+                                                    <DropShadowEffect Color="Black"
+                                                                      Direction="270"
+                                                                      ShadowDepth="2"
+                                                                      BlurRadius="8"
+                                                                      Opacity="0.2" />
+                                                </xBtn:XButton.Effect>
+                                                <wpfUi:SymbolIcon Symbol="AppsListDetail24"
+                                                                  FontSize="16" />
+                                            </xBtn:XButton>
                                             <xBtn:XButton Cursor="Hand"
                                                           Style="{DynamicResource RegularButtonStyle}"
                                                           ButtonType="Warning"
-                                                          Command="{Binding DataContext.ShowEditCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                           CommandParameter="{Binding}"
                                                           Opacity="0.8"
+                                                          Margin="5,0,0,0"
                                                           VerticalAlignment="Center">
                                                 <StackPanel Orientation="Horizontal"
                                                             VerticalAlignment="Center">
@@ -171,7 +216,7 @@
 
                                             <xBtn:XButton Cursor="Hand"
                                                           Style="{DynamicResource RegularButtonStyle}"
-                                                          Command="{Binding DataContext.ShowDeleteCompatibleVehicleDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                           CommandParameter="{Binding}"
                                                           ButtonType="Danger"
                                                           VerticalAlignment="Center"
@@ -200,93 +245,363 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type dtos:CategoryDto}">
                                 <Border x:Name="CardBorder"
-                                        Width="220"
-                                        Height="220"
-                                        Margin="10"
-                                    Background="{DynamicResource Card.BackgroundBrush}"
-                    BorderBrush="{DynamicResource Card.BorderBrush}"
-                    BorderThickness="1" CornerRadius="8" Effect="{StaticResource ShadowEffect}">
-                                    <!--<i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseLeftButtonUp">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.ViewCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                                   CommandParameter="{Binding}" />
-                                        </i:EventTrigger>
-                                        --><!-- Hover effects for shadow or action button visibility --><!--
-                                    </i:Interaction.Triggers>-->
-                                    <Grid>
+                                        Width="280"
+                                        Height="320"
+                                        Margin="15,10"
+                                        Background="{DynamicResource Card.BackgroundBrush}"
+                                        BorderBrush="{DynamicResource Card.BorderBrush}"
+                                        BorderThickness="0"
+                                        CornerRadius="16"
+                                        Cursor="Hand"
+                                        SnapsToDevicePixels="True">
+
+                                    <!-- Modern Card Shadow Effect -->
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="Black"
+                                                          Direction="270"
+                                                          ShadowDepth="8"
+                                                          BlurRadius="20"
+                                                          Opacity="0.15" />
+                                    </Border.Effect>
+
+                                    <!-- Hover Animation Triggers -->
+                                    <Border.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                     Storyboard.TargetProperty="ScaleX"
+                                                                     To="1.05"
+                                                                     Duration="0:0:0.2">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                     To="1.05"
+                                                                     Duration="0:0:0.2">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="1"
+                                                                     Duration="0:0:0.3" />
+                                                    <ThicknessAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                        Storyboard.TargetProperty="Margin"
+                                                                        To="0,0,12,12"
+                                                                        Duration="0:0:0.3">
+                                                        <ThicknessAnimation.EasingFunction>
+                                                            <BackEase EasingMode="EaseOut" />
+                                                        </ThicknessAnimation.EasingFunction>
+                                                    </ThicknessAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                     Storyboard.TargetProperty="ScaleX"
+                                                                     To="1"
+                                                                     Duration="0:0:0.2">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                     To="1"
+                                                                     Duration="0:0:0.2">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="0"
+                                                                     Duration="0:0:0.2" />
+                                                    <ThicknessAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                        Storyboard.TargetProperty="Margin"
+                                                                        To="0,0,12,32"
+                                                                        Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+
+                                    <Border.RenderTransform>
+                                        <ScaleTransform x:Name="ScaleTransform"
+                                                        ScaleX="1"
+                                                        ScaleY="1"
+                                                        CenterX="140"
+                                                        CenterY="160" />
+                                    </Border.RenderTransform>
+
+                                    <Grid ClipToBounds="True">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="180" />
                                             <!-- Image Area -->
-                                            <RowDefinition Height="Auto"
-                                                           MinHeight="60" />
-                                            <!-- Info Area (Name, PartCount, Actions) -->
+                                            <RowDefinition Height="*" />
+                                            <!-- Content Area -->
                                         </Grid.RowDefinitions>
 
-                                        <!-- Category Image -->
-                                        <Border Grid.Row="0"
-                                                CornerRadius="7,7,0,0"
-                                                ClipToBounds="True">
-                                            <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
-                                                   Stretch="UniformToFill" />
-                                        </Border>
+                                        <!-- Image Section with Gradient Overlay -->
+                                        <Grid Grid.Row="0">
+                                            <Border CornerRadius="16,16,0,0"
+                                                    ClipToBounds="True"
+                                                    Background="{DynamicResource Card.Header.BackgroundBrush}">
 
-                                        <!-- Info Overlay/Footer -->
+                                                <!-- Image with Rounded Corners -->
+                                                <Grid>
+                                                    <Grid.Clip>
+                                                        <RectangleGeometry Rect="0,0,280,200"
+                                                                           RadiusX="16"
+                                                                           RadiusY="12" />
+                                                    </Grid.Clip>
+
+                                                    <!-- Background Image -->
+                                                    <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                                           Stretch="Fill"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center">
+                                                        <Image.Clip>
+                                                            <RectangleGeometry Rect="0,0,280,200"
+                                                                               RadiusX="16"
+                                                                               RadiusY="12" />
+                                                        </Image.Clip>
+                                                        <!-- Fallback when no image -->
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding ImagePath}"
+                                                                                 Value="{x:Null}">
+                                                                        <Setter Property="Visibility"
+                                                                                Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding ImagePath}"
+                                                                                 Value="">
+                                                                        <Setter Property="Visibility"
+                                                                                Value="Collapsed" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+
+                                                    <!-- Fallback Icon for categories without images -->
+                                                    <Grid Visibility="{Binding ImagePath, Converter={StaticResource NullOrEmptyToVisibilityConverter}}">
+                                                        <Rectangle Fill="{DynamicResource Card.Header.BackgroundBrush}"
+                                                                   Opacity="0.1"
+                                                                   RadiusX="16"
+                                                                   RadiusY="16" />
+                                                        <wpfUi:SymbolIcon Symbol="AppFolder48"
+                                                                          FontSize="48"
+                                                                          Foreground="{DynamicResource Text.SecondaryBrush}"
+                                                                          Opacity="0.6"
+                                                                          HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center" />
+                                                    </Grid>
+
+                                                    <!-- Gradient Overlay with Rounded Corners -->
+                                                    <Rectangle RadiusX="0"
+                                                               RadiusY="16">
+                                                        <Rectangle.Fill>
+                                                            <LinearGradientBrush StartPoint="0,0.7"
+                                                                                 EndPoint="0,1">
+                                                                <GradientStop Color="Transparent"
+                                                                              Offset="0" />
+                                                                <GradientStop Color="#66000000"
+                                                                              Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Rectangle.Fill>
+                                                    </Rectangle>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Top-right indicators -->
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Margin="12,12,12,0">
+
+                                                <!-- Active Status Indicator -->
+                                                <Border Background="{Binding IsActive, Converter={StaticResource BooleanToStatusColorConverter}}"
+                                                        CornerRadius="12"
+                                                        Padding="8,4"
+                                                        Margin="0,0,6,0">
+                                                    <TextBlock Text="{Binding IsActive, Converter={StaticResource BooleanToStatusTextConverter}}"
+                                                               FontSize="10"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="White" />
+                                                </Border>
+
+                                                <!-- Subcategories Indicator -->
+                                                <Border Background="#FF4CAF50"
+                                                        CornerRadius="12"
+                                                        Padding="6,4"
+                                                        Visibility="{Binding HasChildren, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <wpfUi:SymbolIcon Symbol="FolderOpenVertical16"
+                                                                          FontSize="10"
+                                                                          Foreground="White"
+                                                                          Margin="0,0,2,0" />
+                                                        <TextBlock Text="SUB"
+                                                                   FontSize="9"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="White" />
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <!-- Content Section -->
                                         <Border Grid.Row="1"
                                                 Background="{DynamicResource Card.BackgroundBrush}"
-                                            Padding="10">
-                                            <StackPanel>
-                                                <!-- Category Name -->
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="SemiBold"
-                                                           FontSize="16"
-                                                           Foreground="{DynamicResource Card.Header.ForegroundBrush}"
-                                                           TextWrapping="WrapWithOverflow"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           MaxHeight="40" />
-                                                <!-- Limit to 2 lines approx -->
+                                                CornerRadius="0,0,16,16"
+                                                Padding="16,12,16,16">
 
-                                                <!-- Part Count -->
-                                                <TextBlock Margin="0,4,0,0"
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Title -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Description -->
+                                                    <RowDefinition Height="*" />
+                                                    <!-- Stats -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Parent Category -->
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Category Name -->
+                                                <TextBlock Grid.Row="0"
+                                                           Text="{Binding Name}"
+                                                           FontWeight="Bold"
+                                                           FontSize="16"
+                                                           Foreground="{DynamicResource Text.PrimaryBrush}"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxHeight="44"
+                                                           LineHeight="22" />
+
+                                                <!-- Description -->
+                                                <TextBlock Grid.Row="1"
+                                                           Text="{Binding Description}"
                                                            FontSize="12"
-                                                           Foreground="{DynamicResource Card.Body.ForegroundBrush}"
+                                                           Foreground="{DynamicResource Text.SecondaryBrush}"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxHeight="32"
+                                                           LineHeight="16"
+                                                           Margin="0,6,0,0"
                                                            Opacity="0.8">
-                                <Run Text="{Binding PartCount}" />
-                                <Run Text="Parts" /> <!-- Or localize "Parts" -->
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Description}"
+                                                                             Value="{x:Null}">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Collapsed" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Description}"
+                                                                             Value="">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <!-- Optional: Has Subcategories Indicator -->
-                                                <wpfUi:SymbolIcon Symbol="FolderOpenVertical20"
-                                                                  FontSize="12"
-                                                                  Foreground="{DynamicResource Text.SecondaryBrush}"
-                                                                  Opacity="0.7"
-                                                                  Visibility="{Binding HasChildren, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                                  ToolTip="Has subcategories"
-                                                                  Margin="0,2,0,0" />
+                                                <!-- Statistics Area -->
+                                                <StackPanel Grid.Row="2"
+                                                            Orientation="Horizontal"
+                                                            VerticalAlignment="Center"
+                                                            Margin="0,8,0,0">
 
-                                                <!-- Optional: Quick Action Buttons (e.g., on hover of the card) -->
-                                                <StackPanel Orientation="Horizontal"
-                                                            HorizontalAlignment="Right"
-                                                            Margin="0,8,0,0"
-                                                            Visibility="{Binding IsMouseOver, ElementName=CardBorder, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <Button ToolTip="Edit Category"
-                                                            Command="{Binding DataContext.EditCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                            CommandParameter="{Binding}"
-                                                            Style="{DynamicResource IconButtonStyle}">
-                                                        <!-- Assuming a style for icon-only buttons -->
-                                                        <wpfUi:SymbolIcon Symbol="Edit24"
-                                                                          FontSize="16" />
-                                                    </Button>
-                                                    <Button ToolTip="Delete Category"
-                                                            Command="{Binding DataContext.DeleteCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                            CommandParameter="{Binding}"
-                                                            Style="{DynamicResource IconButtonStyle}"
-                                                            Margin="5,0,0,0">
-                                                        <wpfUi:SymbolIcon Symbol="Delete24"
-                                                                          FontSize="16" />
-                                                    </Button>
+                                                    <!-- Parts Count with Icon -->
+                                                    <Border Background="{DynamicResource Clinical.Appointment.AvailableBrush}"
+                                                            CornerRadius="8"
+                                                            Padding="8,4">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <wpfUi:SymbolIcon Symbol="Box20"
+                                                                              FontSize="14"
+                                                                              Foreground="{DynamicResource Text.SuccessBrush}"
+                                                                              VerticalAlignment="Center"
+                                                                              Margin="0,0,4,0" />
+                                                            <TextBlock FontSize="12"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="{DynamicResource Text.SuccessBrush}"
+                                                                       VerticalAlignment="Center">
+                                            <Run Text="{Binding PartCount}" />
+                                            <Run Text="Parts" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Border>
                                                 </StackPanel>
-                                            </StackPanel>
+
+                                                <!-- Parent Category (if exists) -->
+                                                <TextBlock Grid.Row="3"
+                                                           FontSize="10"
+                                                           Foreground="{DynamicResource Text.SecondaryBrush}"
+                                                           Margin="0,6,0,0"
+                                                           Visibility="{Binding ParentCategoryName, Converter={StaticResource NullOrEmptyToInverseVisibilityConverter}}">
+                                <Run Text="in" />
+                                <Run Text="{Binding ParentCategoryName}"
+                                                    FontWeight="SemiBold" />
+                                                </TextBlock>
+                                            </Grid>
                                         </Border>
+
+                                        <!-- Floating Action Buttons -->
+                                        <StackPanel x:Name="ActionButtonsPanel"
+                                                    Orientation="Vertical"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    Margin="0,0,12,32"
+                                                    Opacity="0">
+                                            <!-- Edit Button -->
+                                            <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                                          ButtonType="Primary"
+                                                          Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                          CommandParameter="{Binding}"
+                                                          ToolTip="{DynamicResource EditCategoryStr}"
+                                                          Cursor="Hand"
+                                                          Margin="0,0,0,8">
+                                                <xBtn:XButton.Effect>
+                                                    <DropShadowEffect Color="Black"
+                                                                      Direction="270"
+                                                                      ShadowDepth="2"
+                                                                      BlurRadius="8"
+                                                                      Opacity="0.3" />
+                                                </xBtn:XButton.Effect>
+                                                <wpfUi:SymbolIcon Symbol="Edit20"
+                                                                  FontSize="16"
+                                                                  Foreground="White" />
+                                            </xBtn:XButton>
+
+                                            <!-- Delete Button -->
+                                            <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                                          ButtonType="Danger"
+                                                          BorderThickness="0"
+                                                          Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                          CommandParameter="{Binding}"
+                                                          ToolTip="{DynamicResource DeleteCategoryStr}"
+                                                          Cursor="Hand">
+                                                <xBtn:XButton.Effect>
+                                                    <DropShadowEffect Color="Black"
+                                                                      Direction="270"
+                                                                      ShadowDepth="2"
+                                                                      BlurRadius="8"
+                                                                      Opacity="0.3" />
+                                                </xBtn:XButton.Effect>
+                                                <wpfUi:SymbolIcon Symbol="Delete20"
+                                                                  FontSize="16"
+                                                                  Foreground="White" />
+                                            </xBtn:XButton>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -297,8 +612,8 @@
                                           Height="200"
                                           Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
                 </Grid>
-                
-                
+
+
             </Grid>
 
             <!-- Status Bar -->

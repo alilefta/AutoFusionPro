@@ -9,7 +9,6 @@ using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.Views.Categories.Dialogs;
-using AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
@@ -19,7 +18,7 @@ using System.IO;
 
 namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
 {
-    public partial class AddRootCategoryDialogViewModel : BaseViewModel<AddRootCategoryDialogViewModel>, IDialogAware
+    public partial class AddSubCategoryDialogViewModel : InitializableViewModel<AddSubCategoryDialogViewModel>, IDialogAware
     {
 
         #region Fields
@@ -45,6 +44,9 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         [ObservableProperty]
         private string _descrition = string.Empty;
 
+        [ObservableProperty]
+        private CategoryDto _parentCategory;
+
 
         [ObservableProperty]
         private bool _isActive = true;
@@ -61,16 +63,50 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         #endregion
 
         #region Constructor
-        public AddRootCategoryDialogViewModel(ICategoryService categoryService, ILocalizationService localizationService, ILogger<AddRootCategoryDialogViewModel> logger) : base(localizationService, logger)
+        public AddSubCategoryDialogViewModel(ICategoryService categoryService, ILocalizationService localizationService, ILogger<AddSubCategoryDialogViewModel> logger) : base(localizationService, logger)
         {
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
         }
         #endregion
 
+
+
+        #region Initializer
+
+        /// <summary>
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> To Initialize <see cref="AddSubCategoryDialogViewModel"/>
+        /// </summary>
+        /// <param name="parameter"><see cref="CategoryDto"/></param>
+        /// <returns><see cref="Void"/></returns>
+        public override async Task InitializeAsync(object? parameter)
+        {
+            if (parameter is not CategoryDto categoryDto) {
+                _logger.LogError("The Parent Category was null for AddSubCategoryDialogViewModel");
+                throw new ArgumentNullException(nameof(categoryDto));
+                        }
+
+            if (IsInitialized)
+            {
+                return;
+            }
+
+            if (parameter == null) return;
+
+            var parentCategory = (CategoryDto)parameter;
+            ParentCategory = parentCategory;
+
+            _logger.LogInformation("AddSubCategoryDialogViewModel initialized with parameter {param}", parentCategory.Id);
+
+            await base.InitializeAsync(parameter);
+        }
+
+        #endregion
+
+
         #region Commands
         private bool CanAddCategory()
         {
-            return !string.IsNullOrEmpty(Name);
+            return !string.IsNullOrEmpty(Name) || ParentCategory != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanAddCategory))]
@@ -82,9 +118,10 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
 
                 // Saving image is handled by back-end service CompatibleVehicleService
                 var createCategoryDto = new CreateCategoryDto(
-                    Name, 
-                    string.IsNullOrWhiteSpace(Descrition) ? null : Descrition.Trim(), 
-                    ImagePath, null, 
+                    Name,
+                    string.IsNullOrWhiteSpace(Descrition) ? null : Descrition.Trim(),
+                    ImagePath, 
+                    ParentCategory.Id,
                     IsActive);
                 var newItem = await _categoryService.CreateCategoryAsync(createCategoryDto);
 
@@ -157,9 +194,9 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
                     System.Windows.Application.Current.Resources["UnexpectedErrorStr"] as string ?? "Unexpected Error",
                     System.Windows.Application.Current.Resources["UnexpectedErrorOccurredStr"] as string ?? "An unexpected error occurred. Please try again or contact support.",
                     true, CurrentWorkFlow);
-               
+
                 // For DEV:
-                throw new ViewModelException(ErrorMessages.CREATE_DATA_EXCEPTION_MESSAGE, nameof(AddRootCategoryDialogViewModel), nameof(AddCategoryAsync), Core.Helpers.Operations.MethodOperationType.ADD_DATA, ex);
+                throw new ViewModelException(ErrorMessages.CREATE_DATA_EXCEPTION_MESSAGE, nameof(AddSubCategoryDialogViewModel), nameof(AddCategoryAsync), Core.Helpers.Operations.MethodOperationType.ADD_DATA, ex);
             }
             finally
             {
@@ -228,7 +265,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         {
             if (dialog == null)
             {
-                _logger.LogError("The Dialog window was null on {VM}", nameof(AddRootCategoryDialog));
+                _logger.LogError("The Dialog window was null on {VM}", nameof(AddSubCategoryDialog));
                 return;
             }
 

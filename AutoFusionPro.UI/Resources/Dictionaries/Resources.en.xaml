@@ -156,7 +156,7 @@
 
 
     <!-- Vehicle Compatibility -->
-    <sys:String x:Key="PartsStr">Vehicle Parts</sys:String>
+    <sys:String x:Key="PartsStr">Parts</sys:String>
 
     <sys:String x:Key="NewModelForStr">Add New Model</sys:String>
     <sys:String x:Key="AddNewModelStr">Add New Model</sys:String>
@@ -342,7 +342,42 @@
     <sys:String x:Key="CategoriesStr">Categories</sys:String>
     <sys:String x:Key="ShowGridViewStr">Show Grid</sys:String>
     <sys:String x:Key="ShowListViewStr">Show List</sys:String>
+    <sys:String x:Key="ActiveStr">Active</sys:String>
+    <sys:String x:Key="DisabledStr">Disabled</sys:String>
 
+    <sys:String x:Key="UnexpectedErrorOccurredMsgStr">An unexpected error occurred. Please try again or contact support.</sys:String>
+    <sys:String x:Key="ItemUpdatedSuccessfullyFormatStr">'{0}' updated successfully!</sys:String>
+    <sys:String x:Key="ErrorOccurredPleaseTryAgainMsgStr">An error occurred, please try again!</sys:String>
+    <sys:String x:Key="InitializationErrorStr">Initialization Error</sys:String>
+    <sys:String x:Key="CannotEditCategoryInvalidDataMsgStr">Cannot edit category: Invalid data provided.</sys:String>
+    <sys:String x:Key="PleaseCorrectTheFollowingErrorsMsgStr">Please correct the following errors:</sys:String>
+    <sys:String x:Key="ErrorUpdatingImageDetailsSavedMsgStr">An error occurred while updating the category image. Details may have been saved.</sys:String>
+    <sys:String x:Key="ErrorUpdatingCategoryInDBMsgStr">A database error occurred while saving category updates. Please try again.</sys:String>
+
+    <!-- Image Handling -->
+    <sys:String x:Key="ImageLoadingErrorStr">Image Loading Error</sys:String>
+    <sys:String x:Key="FailedToLoadImageFormatStr">Failed to load image: {0}</sys:String>
+    <sys:String x:Key="SelectCategoryImageTitleStr">Select Category Image</sys:String>
+    <sys:String x:Key="EditCategoryStr">Edit Category</sys:String>
+    <sys:String x:Key="UpdateCategoryStr">Update Category</sys:String>
+    <sys:String x:Key="NavigationFailedStr">Navigation Failed</sys:String>
+    <sys:String x:Key="ReasonIsStr">Reason is </sys:String>
+    <sys:String x:Key="CategoryDetailsStr">Category Details</sys:String>
+    <sys:String x:Key="CategoryPartsStr">Category Parts</sys:String>
+    <sys:String x:Key="SubcategoriesStr">Sub Categories</sys:String>
+    <sys:String x:Key="TotalPartsStr">Total Parts</sys:String>
+    <sys:String x:Key="LowStockParts">Low Stock Parts</sys:String>
+    <sys:String x:Key="ActivePartsStr">Active Parts</sys:String>
+    <sys:String x:Key="StatusStr">Status</sys:String>
+    <sys:String x:Key="OpenCategoryDetailsStr">Open Category Details</sys:String>
+    <sys:String x:Key="DeleteCategoryStr">Delete Category</sys:String>
+    <sys:String x:Key="NoSubCategoriesFoundForThisCategoryStr">No Sub-categories found for the selected category. You can add sub-categories to organize your work.</sys:String>
+    <sys:String x:Key="AddSubCategoryStr">Add Sub-Category</sys:String>
+    <sys:String x:Key="NewSubCategoryForStr">New Sub-Category For </sys:String>
+    <sys:String x:Key="SubCategoryNameExampleStr">E.g., Lights, Batteries, Ignition System... </sys:String>
+    <sys:String x:Key="CategoryDescriptionExampleStr">Describe what this category do and what it should include</sys:String>
+    <sys:String x:Key="EditSubCategoryStr">Edit Sub-Category</sys:String>
+    <sys:String x:Key="ActiveCategoryStr">Activate The Category?</sys:String>
 
 
 </ResourceDictionary>

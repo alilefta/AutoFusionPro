@@ -135,9 +135,9 @@
 
     <!-- Selected -->
     <SolidColorBrush x:Key="TabViewItem.Selected.ForegroundBrush"
-                     Color="{StaticResource Primary500}" />
+                     Color="{StaticResource Neutral850}" />
     <SolidColorBrush x:Key="TabViewItem.Selected.BackgroundBrush"
-                     Color="{StaticResource Neutral150}" />
+                     Color="{StaticResource Neutral0}" />
 
     <SolidColorBrush x:Key="TabViewItem.Selected.BorderBrush"
                      Color="{StaticResource Primary500}" />
@@ -716,8 +716,50 @@
                      Color="#9CA3AF" />
     <SolidColorBrush x:Key="ScrollBar.Thumb.Pressed.BackgroundBrush"
                      Color="#6B7280" />
+    
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.ForegroundBrush"
+                     Color="{StaticResource Neutral0}" />
+
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.Blue.BackgroundBrush"
+                     Color="{StaticResource Primary500}" />
+
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.Green.BackgroundBrush"
+                     Color="{StaticResource Green100}" />
+
+    <SolidColorBrush x:Key="Indicator.Green.ForegroundBrush"
+                     Color="{StaticResource Green700}" />
+
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.Orange.BackgroundBrush"
+                     Color="{StaticResource Orange300}" />
+
+    <SolidColorBrush x:Key="Indicator.Orange.ForegroundBrush"
+                     Color="{StaticResource Orange300}" />
+
+    <SolidColorBrush x:Key="Indicator.Blue.ForegroundBrush"
+                     Color="{StaticResource Primary400}" />
+
+    <SolidColorBrush x:Key="Indicator.Red.ForegroundBrush"
+                     Color="{StaticResource Red900}" />
+
+    <SolidColorBrush x:Key="Border.Green.BordeBrush"
+                     Color="{StaticResource Green300}" />
+
+    <SolidColorBrush x:Key="Border.Orange.BordeBrush"
+                     Color="{StaticResource Orange300}" />
 
 
+    <SolidColorBrush x:Key="Border.Red.BordeBrush"
+                     Color="{StaticResource Red300}" />
+
+    <SolidColorBrush x:Key="Border.Blue.BordeBrush"
+                     Color="{StaticResource Primary300}" />
+
+    <SolidColorBrush x:Key="Border.Gray.BordeBrush"
+                     Color="{StaticResource Gray200}" />
 
 
 

@@ -1,15 +1,12 @@
 ﻿using AutoFusionPro.Application.DTOs.Category;
-using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Core.Exceptions.Validation;
-using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
-using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using AutoFusionPro.UI.Views.Categories.Dialogs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,12 +17,8 @@ using System.IO;
 
 namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
 {
-    /// <summary>
-    /// The EditRootCategoryDialogViewModel should inherit from <see cref="InitializableViewModel{TViewModel}"/> for initialization and <see cref="IDialogAware"/> to indicate that is a dialog and <see cref="_dialog"/> can be set to a value of <see cref="IDialogWindow"/>
-    /// </summary>
-    public partial class EditRootCategoryDialogViewModel: InitializableViewModel<EditRootCategoryDialogViewModel>, IDialogAware
+    public partial class EditSubCategoryDialogViewModel : InitializableViewModel<EditSubCategoryDialogViewModel>, IDialogAware
     {
-
         #region Fields
         /// <summary>
         /// Value Provided by DI container to manage Models.
@@ -68,11 +61,11 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         #endregion
 
         #region Constructor
-        public EditRootCategoryDialogViewModel(
+        public EditSubCategoryDialogViewModel(
             ICategoryService categoryService,
             ILocalizationService localizationService,
             IWpfToastNotificationService wpfToastNotificationService,
-            ILogger<EditRootCategoryDialogViewModel> logger) : base(localizationService, logger)
+            ILogger<EditSubCategoryDialogViewModel> logger) : base(localizationService, logger)
         {
             _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
             _wpfToastNotificationService = wpfToastNotificationService ?? throw new ArgumentNullException(nameof(wpfToastNotificationService));
@@ -83,7 +76,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         #region Initializer
 
         /// <summary>
-        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> to initialize <see cref="EditMakeDialogViewModel"/>
+        /// Provided by <see cref="InitializableViewModel{TViewModel}"/> to initialize <see cref="EditSubCategoryDialogViewModel"/>
         /// </summary>
         /// <param name="parameter"><see cref="MakeDto"/></param>
         /// <returns><see cref="Void"/></returns>
@@ -92,7 +85,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         {
             if (parameter is not CategoryDto categoryDto) // Use 'is not' for clearer null check and type check
             {
-                _logger.LogError("The parameter provided to EditRootCategoryDialogViewModel is null or not a CategoryDto.");
+                _logger.LogError("The parameter provided to EditSubCategoryDialogViewModel is null or not a CategoryDto.");
                 // Potentially close dialog or show error immediately
                 await MessageBoxHelper.ShowMessageWithTitleAsync("Error", "Initialization Error", "Cannot edit category: Invalid data provided.", true, CurrentWorkFlow);
                 SetResultAndClose(false); // Close dialog if initialization fails
@@ -194,7 +187,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
             {
                 _logger.LogError(ioEx, "File IO error while updating category (image handling): ID='{CategoryId}', Name='{CategoryName}'", CategoryToEdit.Id, Name);
                 await MessageBoxHelper.ShowMessageWithTitleAsync(
-                    System.Windows.Application.Current.Resources["ErrorStr"] as string ?? "Error",
+                System.Windows.Application.Current.Resources["ErrorStr"] as string ?? "Error",
                     System.Windows.Application.Current.Resources["FileOperationErrorStr"] as string ?? "File Operation Error",
                     System.Windows.Application.Current.Resources["ErrorUpdatingImageStr"] as string ?? "An error occurred while updating the category image. Details may have been saved.",
                     true, CurrentWorkFlow);
@@ -203,7 +196,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
             {
                 _logger.LogError(dbEx, "Database update error while updating category: ID='{CategoryId}', Name='{CategoryName}'", CategoryToEdit.Id, Name);
                 await MessageBoxHelper.ShowMessageWithTitleAsync(
-                    System.Windows.Application.Current.Resources["ErrorStr"] as string ?? "Error",
+                System.Windows.Application.Current.Resources["ErrorStr"] as string ?? "Error",
                     System.Windows.Application.Current.Resources["DatabaseErrorStr"] as string ?? "Database Error",
                     System.Windows.Application.Current.Resources["ErrorUpdatingCategoryInDBStr"] as string ?? "A database error occurred while saving category updates. Please try again.",
                     true, CurrentWorkFlow);
@@ -293,7 +286,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         {
             if (dialog == null)
             {
-                _logger.LogError("The Dialog window was null on the {Dialog}", nameof(EditRootCategoryDialog));
+                _logger.LogError("The Dialog window was null on the {Dialog}", nameof(EditSubCategoryDialog));
                 return;
             }
 

@@ -171,7 +171,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
             {
                 // Accessing _context directly for a different DbSet
                 // Or if PartRepository is on IUnitOfWork: _unitOfWork.Parts.ExistsAsync(p => p.CategoryId == categoryId);
-                return await _context.Categories.AnyAsync(p => p.Id == categoryId);
+                return await _context.Parts.AnyAsync(p => p.Id == categoryId);
             }
             catch (Exception ex)
             {

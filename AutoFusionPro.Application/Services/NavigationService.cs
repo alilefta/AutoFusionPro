@@ -3,6 +3,7 @@ using AutoFusionPro.Application.Interfaces.UI;
 using AutoFusionPro.Core.Enums.NavigationPages;
 using AutoFusionPro.Core.Exceptions.Navigation;
 using Microsoft.Extensions.Logging;
+using System.Runtime.Intrinsics.X86;
 using System.Windows.Controls;
 
 namespace AutoFusionPro.Application.Services
@@ -87,8 +88,8 @@ namespace AutoFusionPro.Application.Services
                 if (initializationParameter != null)
                 {
 
-                    await Task.Delay(1000);
-                    viewModel = _viewModelFactory.ResolveViewModelWithInitialization(page, initializationParameter);
+                    //await Task.Delay(1000);
+                    viewModel = await _viewModelFactory.ResolveViewModelWithInitialization(page, initializationParameter);
 
                 }
                 else
@@ -133,6 +134,23 @@ namespace AutoFusionPro.Application.Services
 
                 _logger.LogInformation("Navigated to page: {Page} with ViewModel: {ViewModelType}, and Parameter {Param}", page, viewModel.GetType(), initializationParameter);
             }
+            catch(ArgumentNullException anx)
+            {
+                _logger.LogError(anx.Message,
+                                    "Navigation failed for page: {Page} with parameter: {Param}. Because Parameter was null",
+                                    page,
+                                    initializationParameter);
+
+                // Fall back to dashboard
+                if (CanGoBack)
+                {
+                    GoBack();
+                }
+                else
+                {
+                    NavigateTo(ApplicationPage.Dashboard);
+                }
+            }
             catch (NavigationException navEx)
             {
                 // Specific navigation exceptions
@@ -142,7 +160,15 @@ namespace AutoFusionPro.Application.Services
                     initializationParameter);
 
                 // Fall back to dashboard
-                NavigateTo(ApplicationPage.Dashboard);
+                if (CanGoBack)
+                {
+                    GoBack();
+                }
+                else
+                {
+                    NavigateTo(ApplicationPage.Dashboard);
+                }
+                
             }
             catch (Exception ex)
             {

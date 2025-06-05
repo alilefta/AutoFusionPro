@@ -286,7 +286,7 @@
                                             CommandParameter="{x:Static pages:ApplicationPage.Parts}"
                                             IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                             IsCollapsedMode="{Binding Collapsed}"
-                                            IsSelected="{Binding IsPartsSelected}"
+                                            IsSelected="{Binding IsPartsSelected}" Margin="0,5,0,0"
                                             Symbol="WrenchScrewdriver24">
                             <ui:XSideMenuButton.Style>
                                 <Style TargetType="{x:Type ui:XSideMenuButton}"
@@ -316,6 +316,7 @@
                                             IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                             IsCollapsedMode="{Binding Collapsed}"
                                             IsSelected="{Binding IsVehiclesSelected}"
+                                            Margin="0,5,0,0"
                                             Symbol="VehicleCar48">
                             <ui:XSideMenuButton.Style>
                                 <Style TargetType="{x:Type ui:XSideMenuButton}"
@@ -345,6 +346,7 @@
                                             IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                             IsCollapsedMode="{Binding Collapsed}"
                                             IsSelected="{Binding IsVehicleCompatibilityManagementSelected}"
+                                            Margin="0,5,0,0"
                                             Symbol="VehicleCar48">
                             <ui:XSideMenuButton.Style>
                                 <Style TargetType="{x:Type ui:XSideMenuButton}"
@@ -374,6 +376,7 @@
                                             IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                             IsCollapsedMode="{Binding Collapsed}"
                                             IsSelected="{Binding IsCategoriesSelected}"
+                                            Margin="0,5,0,0"
                                             Symbol="Apps48">
                             <ui:XSideMenuButton.Style>
                                 <Style TargetType="{x:Type ui:XSideMenuButton}"
@@ -441,6 +444,7 @@
                                         IsEnabled="{Binding IsLoadingContent, Converter={StaticResource InverseBooleanConverter}}"
                                         IsCollapsedMode="{Binding Collapsed}"
                                         IsSelected="{Binding IsMyAccountSelected}"
+                                        Margin="0,5,0,0"
                                         Symbol="Person48">
                         <ui:XSideMenuButton.Style>
                             <Style TargetType="{x:Type ui:XSideMenuButton}"

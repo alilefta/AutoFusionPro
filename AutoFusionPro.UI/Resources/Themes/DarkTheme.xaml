@@ -691,6 +691,15 @@
     <SolidColorBrush x:Key="ScrollBar.Thumb.Pressed.BackgroundBrush"
                      Color="#9CA3AF" />
 
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.ForegroundBrush"
+                     Color="{StaticResource Neutral975}" />
+
+
+    <!-- Indicator Colors -->
+    <SolidColorBrush x:Key="Indicator.Blue.BackgroundBrush"
+                     Color="{StaticResource Primary600}" />
+
 
     <ResourceDictionary.MergedDictionaries>
         <wpfUi:ThemesDictionary Theme="Dark" />

@@ -320,6 +320,9 @@ namespace AutoFusionPro.UI
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
 
+                services.AddTransient<CategoryDetailView>();
+
+
                 // Vehicle Compatibility View Models
                 services.AddTransient<VehicleCompatibilityShellViewModel>();
 
@@ -353,8 +356,12 @@ namespace AutoFusionPro.UI
                 services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
 
                 services.AddTransient<AddRootCategoryDialogViewModel>();
+                services.AddTransient<EditRootCategoryDialogViewModel>();
 
+                services.AddTransient<AddSubCategoryDialogViewModel>();
+                services.AddTransient<EditSubCategoryDialogViewModel>();
 
+                services.AddTransient<CategoryDetailViewModel>();
 
 
 

@@ -38,6 +38,7 @@ namespace AutoFusionPro.UI.Services
                     ApplicationPage.Vehicles => _serviceProvider.GetRequiredService<VehiclesView>(),
                     ApplicationPage.VehicleCompatibilityManagement => _serviceProvider.GetRequiredService<VehicleCompatibilityView>(),
                     ApplicationPage.Categories => _serviceProvider.GetRequiredService<CategoriesView>(),
+                    ApplicationPage.CategoryDetails => _serviceProvider.GetRequiredService<CategoryDetailView>(),
                                       _ => throw new ArgumentOutOfRangeException(nameof(page), page, "Unsupported page type.")
                 };
                 
