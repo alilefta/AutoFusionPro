@@ -42,7 +42,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         private string _name = string.Empty;
 
         [ObservableProperty]
-        private string _descrition = string.Empty;
+        private string _description = string.Empty;
 
         [ObservableProperty]
         private CategoryDto _parentCategory;
@@ -119,13 +119,13 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
                 // Saving image is handled by back-end service CompatibleVehicleService
                 var createCategoryDto = new CreateCategoryDto(
                     Name,
-                    string.IsNullOrWhiteSpace(Descrition) ? null : Descrition.Trim(),
+                    string.IsNullOrWhiteSpace(Description) ? null : Description.Trim(),
                     ImagePath, 
                     ParentCategory.Id,
                     IsActive);
                 var newItem = await _categoryService.CreateCategoryAsync(createCategoryDto);
 
-                _logger.LogInformation("New categry with name = {categoryName} and ID = {ID} has been added successfully", newItem.Name, newItem.Id);
+                _logger.LogInformation("New category with name = {categoryName} and ID = {ID} has been added successfully", newItem.Name, newItem.Id);
 
                 var msg = System.Windows.Application.Current.Resources["ItemAddedSuccessfullyStr"] as string ?? "Item has been added successfully!";
 

@@ -13,8 +13,8 @@ namespace AutoFusionPro.UI.Resources.Converters
             if (value is bool boolValue)
             {
                 return boolValue
-                    ? "Yes"
-                    : "No";
+                    ? System.Windows.Application.Current.Resources["YesStr"] as string ?? "Yes"
+                    : System.Windows.Application.Current.Resources["NoStr"] as string ?? "No";
             }
 
             // If value is not a boolean, return an empty string or some default

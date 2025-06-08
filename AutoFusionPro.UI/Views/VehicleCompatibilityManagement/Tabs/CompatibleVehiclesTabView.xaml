@@ -9,6 +9,7 @@
              xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;assembly=AutoFusionPro.Application"
+             xmlns:filterDto="clr-namespace:AutoFusionPro.UI.Helpers.Filtration"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:CompatibleVehiclesViewModel}"
@@ -114,7 +115,7 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type dtos:ActiveFilterDisplayItem}">
+                                <DataTemplate DataType="{x:Type filterDto:ActiveFilterDisplayItem}">
                                     <Border Background="{DynamicResource ActiveFilter.BackgroundBrush}"
                                             CornerRadius="10"
                                             Padding="9,4"

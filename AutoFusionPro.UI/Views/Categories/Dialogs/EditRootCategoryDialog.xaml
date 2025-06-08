@@ -20,7 +20,7 @@
         Foreground="{DynamicResource Text.PrimaryBrush}"
         Title="{DynamicResource AddRootCategoryStr}"
         Height="Auto"
-        Width="400"
+        Width="450"
         WindowStyle="None"
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance Type=vm:EditRootCategoryDialogViewModel}"
@@ -135,7 +135,7 @@
 
             <!-- Content -->
             <Grid Grid.Row="1"
-                  Margin="8">
+                  Margin="10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -173,18 +173,18 @@
                                        VerticalAlignment="Center" />
                         </StackPanel>
                         <wpfUi:TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                       Height="100"
+                                       Height="80"
                                        Margin="0,8,0,0"
                                        PlaceholderText="{DynamicResource CategoryDescriptionExampleStr}" />
 
                     </StackPanel>
 
                     <!-- Is Active-->
-                    <StackPanel Margin="10,6"
+                    <StackPanel Margin="10,10,10,10"
                                 VerticalAlignment="Center"
-                                Orientation="Horizontal"
+                                Orientation="Vertical"
                                 ToolTip="{DynamicResource IsActiveToolTipStr}">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <wpfUi:SymbolIcon Symbol="Flag48"
                                               VerticalAlignment="Center" />
                             <TextBlock Text="{DynamicResource ActiveCategoryStr}"
@@ -192,7 +192,7 @@
                                        VerticalAlignment="Center"
                                        FontFamily="{DynamicResource DynamicFontFamilyBold}" />
                         </StackPanel>
-                        <CheckBox Margin="10,0,0,0"
+                        <CheckBox 
                                   VerticalAlignment="Center"
                                   IsChecked="{Binding IsActive}"
                                   Content="{Binding IsActive, Converter={StaticResource BooleanToStatusTextConverter}}" />
@@ -200,12 +200,12 @@
                     </StackPanel>
 
                     <!-- Image -->
-                    <StackPanel Margin="10,6">
+                    <StackPanel Margin="10,10">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
-                                <wpfUi:SymbolIcon Symbol="Flag48"
+                                <wpfUi:SymbolIcon Symbol="Image48"
                                                   VerticalAlignment="Center" />
-                                <TextBlock Text="{DynamicResource ActiveCategoryStr}"
+                                <TextBlock Text="{DynamicResource CategoryImageStr}"
                                            Margin="5,0,0,0"
                                            VerticalAlignment="Center"
                                            FontFamily="{DynamicResource DynamicFontFamilyBold}" />

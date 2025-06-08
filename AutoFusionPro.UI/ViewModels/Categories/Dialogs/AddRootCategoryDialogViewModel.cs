@@ -84,7 +84,8 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
                 var createCategoryDto = new CreateCategoryDto(
                     Name, 
                     string.IsNullOrWhiteSpace(Descrition) ? null : Descrition.Trim(), 
-                    ImagePath, null, 
+                    ImagePath, 
+                    null,  
                     IsActive);
                 var newItem = await _categoryService.CreateCategoryAsync(createCategoryDto);
 

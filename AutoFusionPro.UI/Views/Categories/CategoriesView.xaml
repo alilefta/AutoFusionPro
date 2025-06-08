@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="interact"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Categories"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Categories"
@@ -11,6 +11,7 @@
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.Category;assembly=AutoFusionPro.Application"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:filterDto="clr-namespace:AutoFusionPro.UI.Helpers.Filtration"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:CategoriesViewModel}"
              d:DesignHeight="550"
@@ -42,12 +43,11 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
                     <forms:SearchTextBox SearchQuery="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                                          PlaceholderText="{DynamicResource SearchForCompatibleVehiclesStr}"
-                                         ButtonCommand="{Binding ClearSearchAndReloadCommand}"
-                                         IsClearButtonEnabled="{Binding HasTextSearchQuery}"
-                                         ButtonVisibility="{Binding HasTextSearchQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         ButtonCommand="{Binding ClearCategorySearchCommand}"
+                                         IsClearButtonEnabled="{Binding HasTextCategorySearchQuery}"
+                                         ButtonVisibility="{Binding HasTextCategorySearchQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
                                          Height="40" />
 
                     <!-- Action Buttons -->
@@ -128,13 +128,74 @@
 
                 </Grid>
 
-
+                <!-- Active Filters Bar-->
+                <Border Grid.Row="1"
+                        Margin="8,10,8,5"
+                        Padding="8,5"
+                        MinHeight="30"
+                        Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource ActiveFiltersStr}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"
+                                   FontWeight="SemiBold" />
+                        <ItemsControl ItemsSource="{Binding ActiveFiltersDisplayCollection}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type filterDto:ActiveFilterDisplayItem}">
+                                    <Border Background="{DynamicResource ActiveFilter.BackgroundBrush}"
+                                            CornerRadius="10"
+                                            Padding="9,4"
+                                            BorderBrush="{DynamicResource ActiveFilter.BorderBrush}"
+                                            BorderThickness="0.6"
+                                            Margin="3">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                       Foreground="{DynamicResource ActiveFilter.ForegroundBrush}">
+                                                    <Run Text="{Binding FilterType}"
+                                                         FontWeight="SemiBold" />: <Run Text="{Binding FilterValueDisplay}" />
+                                            </TextBlock>
+                                            <Button Grid.Column="1"
+                                                    Padding="2"
+                                                    Width="16"
+                                                    Height="16"
+                                                    Margin="5,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    HorizontalContentAlignment="Center"
+                                                    Cursor="Hand"
+                                                    Command="{Binding DataContext.RemoveActiveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="{DynamicResource RemoveThisFilterStr}">
+                                                <wpfUi:SymbolIcon Symbol="Dismiss16"
+                                                                  FontSize="10"
+                                                                  Foreground="{DynamicResource ActiveFilter.ForegroundBrush}"
+                                                                  FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
+                                                                  Margin="0"
+                                                                  VerticalAlignment="Center" />
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
 
                 <!-- Data Grid -->
                 <Grid Grid.Row="2"
                       Margin="0,10,0,0">
 
-                    <wpfUi:DataGrid ItemsSource="{Binding CategoriesCollection}"
+                    <wpfUi:DataGrid ItemsSource="{Binding DisplayedCategories}"
                                     Visibility="{Binding IsCardViewActive, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                     Grid.Row="2"
                                     Margin="0,8,0,0"
@@ -153,14 +214,48 @@
                                     AlternatingRowBackground="{DynamicResource DataGrid.AlternatingRow.BackgroundBrush}"
                                     HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="{DynamicResource CategoryNameStr}"
+                            <DataGridTemplateColumn Header="{DynamicResource CategoryPhotoStr}"
+                                                    Width="130">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                               Height="40"
+                                               Width="80"
+                                               Stretch="Uniform"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="{DynamicResource NameStr}"
                                                 Binding="{Binding Name}"
                                                 Width="120" />
-                            <DataGridTextColumn Header="{DynamicResource ModelStr}"
-                                                Binding="{Binding IsActive}"
-                                                Width="120" />
-                            <DataGridTemplateColumn Header="{DynamicResource CategoryImageStr}"
-                                                    Width="120">
+                            <DataGridCheckBoxColumn Header="{DynamicResource StatusStr}"
+                                                    Binding="{Binding IsActive}"
+                                                    IsReadOnly="True"
+                                                    ElementStyle="{StaticResource BlueCheckBoxStyle}"
+                                                    Width="80">
+
+                            </DataGridCheckBoxColumn>
+                            <DataGridTemplateColumn Header="{DynamicResource SubcategoriesCountStr}"
+                                                    Width="180">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Children.Count}">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="Children" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="{DynamicResource PartsCountStr}"
+                                                    Width="140">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding PartCount}">
@@ -179,30 +274,35 @@
                                                     Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
 
                                             <!-- Details Button -->
                                             <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                                           ButtonType="Regular"
-                                                          Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                           CommandParameter="{Binding}"
                                                           ToolTip="{DynamicResource OpenCategoryDetailsStr}"
                                                           Cursor="Hand">
                                                 <xBtn:XButton.Effect>
                                                     <DropShadowEffect Color="Black"
                                                                       Direction="270"
-                                                                      ShadowDepth="2"
-                                                                      BlurRadius="8"
+                                                                      ShadowDepth="1"
+                                                                      BlurRadius="10"
                                                                       Opacity="0.2" />
                                                 </xBtn:XButton.Effect>
-                                                <wpfUi:SymbolIcon Symbol="AppsListDetail24"
-                                                                  FontSize="16" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{DynamicResource GoToDetailsStr}"
+                                                               VerticalAlignment="Center" />
+                                                    <wpfUi:SymbolIcon Symbol="Open48"
+                                                                      Margin="5,0,0,0"
+                                                                      VerticalAlignment="Center"
+                                                                      FontSize="16" />
+                                                </StackPanel>
                                             </xBtn:XButton>
                                             <xBtn:XButton Cursor="Hand"
                                                           Style="{DynamicResource RegularButtonStyle}"
                                                           ButtonType="Warning"
-                                                          Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                           CommandParameter="{Binding}"
                                                           Opacity="0.8"
                                                           Margin="5,0,0,0"
@@ -216,7 +316,7 @@
 
                                             <xBtn:XButton Cursor="Hand"
                                                           Style="{DynamicResource RegularButtonStyle}"
-                                                          Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                          Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                           CommandParameter="{Binding}"
                                                           ButtonType="Danger"
                                                           VerticalAlignment="Center"
@@ -235,7 +335,7 @@
                         </DataGrid.Columns>
                     </wpfUi:DataGrid>
 
-                    <ItemsControl ItemsSource="{Binding CategoriesCollection}"
+                    <ItemsControl ItemsSource="{Binding DisplayedCategories}"
                                   Visibility="{Binding IsCardViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -254,6 +354,13 @@
                                         CornerRadius="16"
                                         Cursor="Hand"
                                         SnapsToDevicePixels="True">
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                                   CommandParameter="{Binding}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
 
                                     <!-- Modern Card Shadow Effect -->
                                     <Border.Effect>
@@ -339,7 +446,6 @@
                                                         CenterX="140"
                                                         CenterY="160" />
                                     </Border.RenderTransform>
-
                                     <Grid ClipToBounds="True">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="180" />
@@ -623,7 +729,7 @@
                         <TextBlock Text="{DynamicResource TotalItemsStr}"
                                    FontFamily="{DynamicResource DynamicFontFamilyRegular}"
                                    VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding CompatibleVehiclesCollection.Count}"
+                        <TextBlock Text="{Binding DisplayedCategories.Count}"
                                    VerticalAlignment="Center"
                                    Margin="8,0,0,0"
                                    FontFamily="{DynamicResource DynamicFontFamilyRegular}" />

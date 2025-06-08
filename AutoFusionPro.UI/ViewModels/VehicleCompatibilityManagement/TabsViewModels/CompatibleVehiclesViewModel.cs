@@ -7,6 +7,7 @@ using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
 using AutoFusionPro.UI.Helpers;
+using AutoFusionPro.UI.Helpers.Filtration;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
@@ -17,8 +18,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
 
 namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels
 {
@@ -32,7 +31,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private readonly IWpfToastNotificationService _wpfToastNotificationService;
 
         private Timer? _searchDebounceTimer;
-        private const int SearchDebounceDelayMs = 500; // Adjust as needed (e.g., 300-750ms)
+        private const int SearchDebounceDelayMs = 300; // Adjust as needed (e.g., 300-750ms)
 
         #endregion
 

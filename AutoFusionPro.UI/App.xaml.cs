@@ -14,6 +14,7 @@ using AutoFusionPro.UI.ViewModels;
 using AutoFusionPro.UI.ViewModels.Authentication;
 using AutoFusionPro.UI.ViewModels.Categories;
 using AutoFusionPro.UI.ViewModels.Categories.Dialogs;
+using AutoFusionPro.UI.ViewModels.Categories.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts;
@@ -296,7 +297,7 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<VehicleCompatibilityView>();
 
-                services.AddScoped<CategoriesView>();
+                services.AddTransient<CategoriesView>();
 
 
 
@@ -315,7 +316,7 @@ namespace AutoFusionPro.UI
                 services.AddScoped<LoginViewModel>();
                 services.AddScoped<RegisterViewModel>();
 
-                services.AddScoped<CategoriesViewModel>();
+                services.AddTransient<CategoriesViewModel>();
 
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
@@ -363,6 +364,7 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<CategoryDetailViewModel>();
 
+                services.AddTransient<CategoryFilterOptionsDialogViewModel>();
 
 
                 // Dialogs

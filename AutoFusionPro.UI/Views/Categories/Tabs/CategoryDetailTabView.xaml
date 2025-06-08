@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Categories"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.Category;assembly=AutoFusionPro.Application"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
@@ -54,26 +55,27 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Image with Rounded Corners -->
-                    <Border CornerRadius="16,16,0,0"
-                            Height="400"
+                    <Border CornerRadius="16,16,0,0"  VerticalAlignment="Top"
+                            Height="300"
+                            Width="300"
                             ClipToBounds="True"
-                            Background="{DynamicResource Card.Header.BackgroundBrush}">
+                            Background="{DynamicResource Accent.Amethyst.BackgroundBrush}">
 
                         <!-- Image with Rounded Corners -->
                         <Grid>
                             <Grid.Clip>
-                                <RectangleGeometry Rect="0,0,300,400"
+                                <RectangleGeometry Rect="0,0,300,300"
                                                    RadiusX="16"
                                                    RadiusY="12" />
                             </Grid.Clip>
 
                             <!-- Background Image -->
                             <Image Source="{Binding CurrentCategory.ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
-                                   Stretch="Fill"
+                                   Stretch="Uniform"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center">
                                 <Image.Clip>
-                                    <RectangleGeometry Rect="0,0,300,400"
+                                    <RectangleGeometry Rect="0,0,300,300"
                                                        RadiusX="16"
                                                        RadiusY="12" />
                                 </Image.Clip>
@@ -81,12 +83,12 @@
                                 <Image.Style>
                                     <Style TargetType="Image">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ImagePath}"
+                                            <DataTrigger Binding="{Binding CurrentCategory.ImagePath}"
                                                          Value="{x:Null}">
                                                 <Setter Property="Visibility"
                                                         Value="Collapsed" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding ImagePath}"
+                                            <DataTrigger Binding="{Binding CurrentCategory.ImagePath}"
                                                          Value="">
                                                 <Setter Property="Visibility"
                                                         Value="Collapsed" />
@@ -102,12 +104,18 @@
                                            Opacity="0.1"
                                            RadiusX="16"
                                            RadiusY="16" />
-                                <wpfUi:SymbolIcon Symbol="AppFolder48"
-                                                  FontSize="48"
-                                                  Foreground="{DynamicResource Text.SecondaryBrush}"
-                                                  Opacity="0.6"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                <StackPanel VerticalAlignment="Center">
+
+                                    <wpfUi:SymbolIcon Symbol="AppFolder48"
+                                                      FontSize="48"
+                                                      Foreground="{DynamicResource Text.SecondaryBrush}"
+                                                      Opacity="0.6"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center" />
+
+                                    <TextBlock Text="{DynamicResource NoImageFoundStr}"
+                                               HorizontalAlignment="Center" Opacity="0.7" FontFamily="{DynamicResource DynamicFontFamilyRegular}" />
+                                </StackPanel>
                             </Grid>
 
                             <!-- Gradient Overlay with Rounded Corners -->
@@ -130,8 +138,47 @@
                     <StackPanel Grid.Column="1"
                                 Margin="32,0,0,0">
 
+                        <!-- Controls -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <xBtn:XButton Cursor="Hand"
+                                          Style="{DynamicResource RegularButtonStyle}"
+                                          ButtonType="Warning"
+                                          Command="{Binding ShowEditCategoryDialogCommand}"
+                                          CommandParameter="{Binding CurrentCategory}"
+                                          Opacity="0.8"
+                                          VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" 
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource EditCategoryStr}"
+                                               VerticalAlignment="Center" />
+                                    <wpfUi:SymbolIcon Symbol="Edit48"
+                                                      VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </xBtn:XButton>
+
+                            <xBtn:XButton Cursor="Hand"
+                                          Style="{DynamicResource RegularButtonStyle}"
+                                          Command="{Binding ShowDeleteCategoryDialogCommand}"
+                                          CommandParameter="{Binding CurrentCategory}"
+                                          ButtonType="Danger"
+                                          VerticalAlignment="Center"
+                                          Opacity="0.8"
+                                          Margin="5,0,0,0">
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource DeleteCategoryStr}"
+                                               VerticalAlignment="Center" />
+                                    <wpfUi:SymbolIcon Symbol="Delete48" Margin="5,0,0,0"
+                                                      VerticalAlignment="Center" />
+                                </StackPanel>
+                            </xBtn:XButton>
+                        </StackPanel>
+                        
+                        
                         <!-- Name -->
-                        <Border Padding="16,10,16,20"
+                        <Border Padding="16"
+                                Margin="0,14,0,0"
                                 BorderThickness="4,0,0,0"
                                 BorderBrush="{DynamicResource Toast.Primary.BackgroundBrush}"
                                 CornerRadius="10,0,0,10"
@@ -153,8 +200,8 @@
                         </Border>
 
                         <!-- Description -->
-                        <Border Padding="20,20"
-                                Margin="0,20,0,0"
+                        <Border Padding="16"
+                                Margin="0,14,0,0"
                                 VerticalAlignment="Bottom"
                                 BorderThickness="4,0,0,0"
                                 BorderBrush="{DynamicResource Toast.Primary.BackgroundBrush}"
@@ -170,9 +217,8 @@
                                                FontSize="{StaticResource FontSizeRegular}" />
 
                                 </StackPanel>
-                                <TextBlock Text="{Binding CurrentCategory.Description, Converter={StaticResource UserFriendlyNotFoundInfoConverter }, FallbackValue='Electronic components and parts for vehicles including batteries, alternators, starters, ignition systems, lighting systems, and various sensors used in modern automotive electrical systems.'}"
+                                <TextBlock Text="{Binding CurrentCategory.Description, Converter={StaticResource UserFriendlyNoDescriptionConverter }, FallbackValue='Electronic components and parts for vehicles including batteries, alternators, starters, ignition systems, lighting systems, and various sensors used in modern automotive electrical systems.'}"
                                            Margin="2,8,0,0"
-                                           Padding="0,24"
                                            Opacity="0.9"
                                            FontSize="{StaticResource FontSizeLarge}"
                                            TextWrapping="Wrap"
@@ -181,8 +227,8 @@
                         </Border>
 
                         <!-- Status  -->
-                        <Border Padding="16,10,16,20"
-                                Margin="0,20,0,0"
+                        <Border Padding="16"
+                                Margin="0,14,0,0"
                                 BorderThickness="4,0,0,0"
                                 BorderBrush="{DynamicResource Toast.Primary.BackgroundBrush}"
                                 CornerRadius="10,0,0,10"
@@ -329,7 +375,7 @@
                         <xBtn:XButton Style="{DynamicResource RegularButtonStyle}" Grid.Column="1" Command="{Binding ShowAddSubCategoryDialogCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{DynamicResource AddSubCategoryStr}"
-                                           VerticalAlignment="Center"></TextBlock>
+                                           VerticalAlignment="Center" />
                                 <wpfUi:SymbolIcon Symbol="Add48" Margin="8,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </xBtn:XButton>
@@ -360,6 +406,12 @@
                                             Cursor="Hand"
                                             SnapsToDevicePixels="True">
 
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.OpenSubCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                                       CommandParameter="{Binding}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                         <!-- Modern Card Shadow Effect -->
                                         <Border.Effect>
                                             <DropShadowEffect Color="Black"
@@ -670,7 +722,7 @@
                                                 <!-- Edit Button -->
                                                 <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                                               ButtonType="Primary"
-                                                              Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                              Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                               CommandParameter="{Binding}"
                                                               ToolTip="{DynamicResource EditCategoryStr}"
                                                               Cursor="Hand"
@@ -691,7 +743,7 @@
                                                 <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                                               ButtonType="Danger"
                                                               BorderThickness="0"
-                                                              Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                              Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                               CommandParameter="{Binding}"
                                                               ToolTip="{DynamicResource DeleteCategoryStr}"
                                                               Cursor="Hand">

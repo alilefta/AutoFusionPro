@@ -49,6 +49,7 @@
     <converters:BooleanToStatusTextConverter x:Key="BooleanToStatusTextConverter" />
     <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
     <converters:NullOrEmptyToInverseVisibilityConverter x:Key="NullOrEmptyToInverseVisibilityConverter" />
+    <converters:UserFriendlyNoDescriptionConverter x:Key="UserFriendlyNoDescriptionConverter" />
 
 
 

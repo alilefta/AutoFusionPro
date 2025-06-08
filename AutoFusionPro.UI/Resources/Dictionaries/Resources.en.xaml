@@ -344,6 +344,7 @@
     <sys:String x:Key="ShowListViewStr">Show List</sys:String>
     <sys:String x:Key="ActiveStr">Active</sys:String>
     <sys:String x:Key="DisabledStr">Disabled</sys:String>
+    <sys:String x:Key="InactiveStr">Inactive</sys:String>
 
     <sys:String x:Key="UnexpectedErrorOccurredMsgStr">An unexpected error occurred. Please try again or contact support.</sys:String>
     <sys:String x:Key="ItemUpdatedSuccessfullyFormatStr">'{0}' updated successfully!</sys:String>
@@ -378,6 +379,38 @@
     <sys:String x:Key="CategoryDescriptionExampleStr">Describe what this category do and what it should include</sys:String>
     <sys:String x:Key="EditSubCategoryStr">Edit Sub-Category</sys:String>
     <sys:String x:Key="ActiveCategoryStr">Activate The Category?</sys:String>
+    <sys:String x:Key="NameStr">Name</sys:String>
+    <sys:String x:Key="SubcategoriesCountStr">Subcategories Count</sys:String>
+    <sys:String x:Key="PartsCountStr">Parts Count</sys:String>
+    <sys:String x:Key="IconStr">Icon</sys:String>
+    <sys:String x:Key="CategoryPhotoStr">Category Photo</sys:String>
+    <sys:String x:Key="PhotoStr">Photo</sys:String>
+    <sys:String x:Key="GoToDetailsStr">Go To Details</sys:String>
+    <sys:String x:Key="NoDescriptionProvidedStr">No Description Provided</sys:String>
+    <sys:String x:Key="HasSubcategoriesStr">Has Subcategories</sys:String>
+    <sys:String x:Key="HasPartsStr">Has Parts</sys:String>
+    <sys:String x:Key="SortByStr">Sort By</sys:String>
+    <sys:String x:Key="NameAscStr">Name (A-Z)</sys:String>
+    <sys:String x:Key="NameDescStr">Name (Z-A)</sys:String>
+    <sys:String x:Key="LastUpdatedDescStr">Newest First</sys:String>
+    <sys:String x:Key="LastUpdatedAscStr">Oldest First</sys:String>
+    <sys:String x:Key="PartCountDescStr">Most Parts</sys:String>
+    <sys:String x:Key="PartCountAscStr">Fewest Parts</sys:String>
+
+    <sys:String x:Key="FilterByHasSubcategoriesStr">Filter by Subcategories</sys:String>
+    <sys:String x:Key="FilterByHasPartsStr">Filter by parts</sys:String>
+    <sys:String x:Key="FilterByIsActiveStr">Filter by Active State</sys:String>
+    <sys:String x:Key="AnyStr">Any</sys:String>
+    <sys:String x:Key="ShowOnlyActiveStr">Show Only Active Categories</sys:String>
+    <sys:String x:Key="ShowOnlyInactiveStr">Show Only Inactive Categories</sys:String>
+    <sys:String x:Key="ShowOnlyCategoryWithSubcategoriesStr">Show Only Categories With Subcategories</sys:String>
+    <sys:String x:Key="ShowOnlyCategoryWithoutSubcategoriesStr">Show Only Categories Without Subcategories</sys:String>
+    <sys:String x:Key="ShowOnlyCategoryWithPartsStr">Show Only Categories With Parts</sys:String>
+    <sys:String x:Key="ShowOnlyCategoryWithoutPartsStr">Show Only Categories Without Parts</sys:String>
+    <sys:String x:Key="AllCategoriesStr">All Categories</sys:String>
+    <sys:String x:Key="NoImageFoundStr">No Image Found</sys:String>
+    
+    
 
 
 </ResourceDictionary>

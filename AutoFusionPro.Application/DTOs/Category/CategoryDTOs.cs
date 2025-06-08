@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AutoFusionPro.Core.Enums.UI.Categories;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoFusionPro.Application.DTOs.Category
 {
@@ -14,6 +15,9 @@ namespace AutoFusionPro.Application.DTOs.Category
         public int? ParentCategoryId { get; set; }
         public string? ParentCategoryName { get; set; } // For display
         public bool IsActive { get; set; } // Added IsActive
+
+        public DateTime? ModifiedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         // For hierarchical display (e.g., TreeView)
         public List<CategoryDto> Children { get; set; } = new List<CategoryDto>();
@@ -56,4 +60,13 @@ namespace AutoFusionPro.Application.DTOs.Category
     /// Simple DTO for category selection (e.g., in ComboBoxes).
     /// </summary>
     public record CategorySelectionDto(int Id, string Name, int? ParentId); // ParentId can help in building dependent dropdowns
+
+
+    public record CategoryFilterCriteriaDto(
+        bool? IsActive = null,     // True for active, False for inactive, Null for all
+        bool? HasSubcategories = null, // True to show only categories with subcategories
+        bool? HasParts = null,         // True to show only categories with associated parts
+        int? ParentId = null,        // If you ever want to filter by a specific parent in a flat list
+        CategorySortBy SortBy = CategorySortBy.NameAsc // Default sort order
+    );
 }

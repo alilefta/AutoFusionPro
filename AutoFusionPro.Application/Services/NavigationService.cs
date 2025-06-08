@@ -75,11 +75,24 @@ namespace AutoFusionPro.Application.Services
             {
                 IsLoading = true;
 
-                if (page == CurrentViewName)
-                { 
-                    _logger.LogInformation("Attempted navigation to current page: {Page}", page);
-                    return;
+                if (page == CurrentViewName )
+                {
+                    if (initializationParameter == null)
+                    {
+                        _logger.LogInformation("Attempted re-navigation to current page '{Page}' without parameters.", page);
+                        IsLoading = false; return;
+                    }
+                    //// Specific check for pages that might be re-entered with same data
+                    //if (page == ApplicationPage.CategoryDetails && CurrentView?.DataContext is CategoryDetailViewModel currentVm)
+                    //{
+                    //    if (initializationParameter is CategoryDto newCatDto && currentVm.CurrentCategory?.Id == newCatDto.Id)
+                    //    {
+                    //        _logger.LogInformation("Attempted re-navigation to the exact same CategoryDetail instance: ID {CategoryId}", newCatDto.Id);
+                    //        IsLoading = false; return;
+                    //    }
+                    //}
                 }
+
 
                 // Create view
                 view = _viewFactory.CreateView(page);
