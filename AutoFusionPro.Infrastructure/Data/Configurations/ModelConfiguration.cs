@@ -18,13 +18,10 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
             // Unique constraint for Model Name within a Make
             builder.HasIndex(m => new { m.MakeId, m.Name }).IsUnique();
 
-            // Relationship: Many Models belong to One Make (already defined in MakeConfiguration)
-
-            // Relationship: One Model has Many TrimLevels
             builder.HasMany(m => m.TrimLevels)
-                .WithOne(t => t.Model)
+                .WithOne(t => t.Model) // Correct: TrimLevel has a 'Model' navigation property
                 .HasForeignKey(t => t.ModelId)
-                .OnDelete(DeleteBehavior.Cascade); // If a Model is deleted, its Trims are also deleted
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

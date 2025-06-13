@@ -48,9 +48,9 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
                 .HasColumnType("decimal(18,2)")
                 .HasDefaultValue(0);
 
-            builder.Property(i => i.Balance)
-                .HasColumnType("decimal(18,2)")
-                .HasComputedColumnSql("[Total] - [AmountPaid]");
+            //builder.Property(i => i.Balance)
+            //    .HasColumnType("decimal(18,2)")
+            //    .HasComputedColumnSql("[Total] - [AmountPaid]");
 
             // Relationships
             builder.HasOne(i => i.Customer)

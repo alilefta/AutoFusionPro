@@ -1,11 +1,10 @@
-﻿using AutoFusionPro.Application.DTOs.Vehicle;
+﻿using AutoFusionPro.Application.DTOs.VehicleAsset;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Application.Services;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
-using AutoFusionPro.Core.Models;
 using AutoFusionPro.UI.Services;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.Vehicles.Dialogs;
@@ -20,7 +19,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
     public partial class VehiclesViewModel : BaseViewModel<VehiclesViewModel>
     {
 
-        private readonly IVehicleService _vehicleService;
+        private readonly IVehicleAssetService _vehicleService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IWpfToastNotificationService _toastNotificationService;
         private readonly IDialogService _dialogService;
@@ -39,10 +38,10 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         private string _errorMessage = string.Empty;
 
         [ObservableProperty]
-        private ObservableCollection<VehicleSummaryDto> _vehicles = new();
+        private ObservableCollection<VehicleAssetSummaryDto> _vehicles = new();
 
         [ObservableProperty]
-        private VehicleDetailDto? _selectedVehicle;
+        private VehicleAssetDetailDto? _selectedVehicle;
 
         #endregion
 
@@ -104,7 +103,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         #endregion
 
 
-        public VehiclesViewModel(IVehicleService vehicleService,
+        public VehiclesViewModel(IVehicleAssetService vehicleService,
             IWpfToastNotificationService wpfToastNotificationService,
         ILocalizationService localizationService,
         IServiceProvider serviceProvider,
@@ -126,31 +125,31 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
 
         private async Task InitializeViewModelAsync()
         {
-            await LoadFilterOptionsAsync(); // Load dropdowns first
+            //await LoadFilterOptionsAsync(); // Load dropdowns first
             await LoadVehiclesAsync(); // Load initial data
         }
 
         // Placeholder for filter dropdown loading
-        private async Task LoadFilterOptionsAsync()
-        {
-            IsLoading = true; // Show loading indicator for options
-            try
-            {
-                AvailableMakes = (await _vehicleService.GetDistinctMakesAsync()).ToList();
-                // AvailableModels could be loaded dynamically based on SelectedMake
-                AvailableYears = (await _vehicleService.GetDistinctYearsAsync()).ToList();
-                _logger.LogInformation("Loaded distinct filter options (Makes, Years).");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to load filter options.");
-                _toastNotificationService.ShowError("Could not load filter options."); // Inform user
-            }
-            finally
-            {
-                IsLoading = false;
-            }
-        }
+        //private async Task LoadFilterOptionsAsync()
+        //{
+        //    IsLoading = true; // Show loading indicator for options
+        //    try
+        //    {
+        //        AvailableMakes = (await _vehicleService.Get()).ToList();
+        //        // AvailableModels could be loaded dynamically based on SelectedMake
+        //        AvailableYears = (await _vehicleService.GetDistinctYearsAsync()).ToList();
+        //        _logger.LogInformation("Loaded distinct filter options (Makes, Years).");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Failed to load filter options.");
+        //        _toastNotificationService.ShowError("Could not load filter options."); // Inform user
+        //    }
+        //    finally
+        //    {
+        //        IsLoading = false;
+        //    }
+        //}
 
 
         #endregion
@@ -170,52 +169,52 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
 
             try
             {
-                // 1. Prepare Filter Criteria DTO
-                var filterCriteria = new VehicleFilterCriteriaDto(
-                    SearchTerm: SearchText, // Assuming SearchText covers multiple fields
-                    Make: SelectedMake,
-                    Model: SelectedModel, // Ensure this is updated when Make changes
-                    MinYear: SelectedMinYear,
-                    MaxYear: SelectedMaxYear
-                );
+                //// 1. Prepare Filter Criteria DTO
+                //var filterCriteria = new VehicleFilterCriteriaDto(
+                //    SearchTerm: SearchText, // Assuming SearchText covers multiple fields
+                //    Make: SelectedMake,
+                //    Model: SelectedModel, // Ensure this is updated when Make changes
+                //    MinYear: SelectedMinYear,
+                //    MaxYear: SelectedMaxYear
+                //);
 
-                // 2. Call Service
-                PagedResult<VehicleSummaryDto> result = await _vehicleService.GetFilteredVehiclesAsync(
-                    filterCriteria,
-                    CurrentPage,
-                    PageSize
-                );
+                //// 2. Call Service
+                //PagedResult<VehicleSummaryDto> result = await _vehicleService.GetFilteredVehiclesAsync(
+                //    filterCriteria,
+                //    CurrentPage,
+                //    PageSize
+                //);
 
-                // 3. Process Result
-                if (result != null)
-                {
-                    // Update ObservableCollection efficiently
-                    Vehicles.Clear();
-                    if (result.Items != null)
-                    {
-                        foreach (var vehicleDto in result.Items)
-                        {
-                            Vehicles.Add(vehicleDto);
-                        }
-                    }
+                //// 3. Process Result
+                //if (result != null)
+                //{
+                //    // Update ObservableCollection efficiently
+                //    Vehicles.Clear();
+                //    if (result.Items != null)
+                //    {
+                //        foreach (var vehicleDto in result.Items)
+                //        {
+                //            Vehicles.Add(vehicleDto);
+                //        }
+                //    }
 
-                    // Update Pagination Properties
-                    CurrentPage = result.PageNumber; // Ensure it reflects the actual page returned
-                    TotalItems = result.TotalCount;
-                    PageSize = result.PageSize; // Update if service could change it
-                    TotalPages = result.TotalPages; // Use calculated property from PagedResult
+                //    // Update Pagination Properties
+                //    CurrentPage = result.PageNumber; // Ensure it reflects the actual page returned
+                //    TotalItems = result.TotalCount;
+                //    PageSize = result.PageSize; // Update if service could change it
+                //    TotalPages = result.TotalPages; // Use calculated property from PagedResult
 
-                    _logger.LogInformation("Successfully loaded {Count} vehicles. Total items: {TotalItems}, Total pages: {TotalPages}", result.Items.Count(), TotalItems, TotalPages);
-                }
-                else
-                {
-                    // Handle null result from service if possible (though service should ideally throw or return empty PagedResult)
-                    _logger.LogWarning("Received null PagedResult from VehicleService.");
-                    Vehicles.Clear();
-                    TotalItems = 0;
-                    TotalPages = 1; // Reset pagination
-                    CurrentPage = 1;
-                }
+                //    _logger.LogInformation("Successfully loaded {Count} vehicles. Total items: {TotalItems}, Total pages: {TotalPages}", result.Items.Count(), TotalItems, TotalPages);
+                //}
+                //else
+                //{
+                //    // Handle null result from service if possible (though service should ideally throw or return empty PagedResult)
+                //    _logger.LogWarning("Received null PagedResult from VehicleService.");
+                //    Vehicles.Clear();
+                //    TotalItems = 0;
+                //    TotalPages = 1; // Reset pagination
+                //    CurrentPage = 1;
+                //}
             }
             catch (Exception ex)
             {
@@ -297,33 +296,33 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles
         partial void OnSelectedMakeChanged(string? value)
         {
             // Asynchronously load models based on the selected make
-            _ = LoadModelsForMakeAsync(value);
+            //_ = LoadModelsForMakeAsync(value);
             // Reset current model selection
             SelectedModel = null;
             // Optionally apply filters immediately or wait for Apply button
             // await ApplyFiltersAsync();
         }
 
-        private async Task LoadModelsForMakeAsync(string? make)
-        {
-            if (string.IsNullOrWhiteSpace(make))
-            {
-                AvailableModels = new List<string>(); // Clear models if no make selected
-                return;
-            }
-            // Show loading indicator specifically for models? Optional.
-            try
-            {
-                AvailableModels = (await _vehicleService.GetDistinctModelsAsync(make)).ToList();
-                _logger.LogInformation("Loaded {Count} models for Make: {Make}", AvailableModels.Count, make);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to load models for Make: {Make}", make);
-                AvailableModels = new List<string>(); // Clear on error
-                _toastNotificationService.ShowError($"Could not load models for {make}.");
-            }
-        }
+        //private async Task LoadModelsForMakeAsync(string? make)
+        //{
+        //    if (string.IsNullOrWhiteSpace(make))
+        //    {
+        //        AvailableModels = new List<string>(); // Clear models if no make selected
+        //        return;
+        //    }
+        //    // Show loading indicator specifically for models? Optional.
+        //    try
+        //    {
+        //        AvailableModels = (await _vehicleService.GetDistinctModelsAsync(make)).ToList();
+        //        _logger.LogInformation("Loaded {Count} models for Make: {Make}", AvailableModels.Count, make);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Failed to load models for Make: {Make}", make);
+        //        AvailableModels = new List<string>(); // Clear on error
+        //        _toastNotificationService.ShowError($"Could not load models for {make}.");
+        //    }
+        //}
 
 
 

@@ -20,7 +20,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
     public partial class AddVehicleDialogViewModel : BaseViewModel<AddVehicleDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog;
-        private readonly IVehicleService _vehicleService;
+        private readonly IVehicleAssetService _vehicleService;
 
         #region Properties
 
@@ -148,7 +148,7 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
 
         #endregion
 
-        public AddVehicleDialogViewModel(IVehicleService vehicleService, 
+        public AddVehicleDialogViewModel(IVehicleAssetService vehicleService, 
             ILocalizationService localizationService, 
             ILogger<AddVehicleDialogViewModel> logger) : base(localizationService, logger)
         {
@@ -350,21 +350,21 @@ namespace AutoFusionPro.UI.ViewModels.Vehicles.Dialogs
                     return;
                 }
 
-                // Create the vehicle
-                var vehicle = new Application.DTOs.Vehicle.CreateVehicleDto
-                (
-                    Make = Make,
-                    Model = Model,
-                    Year = Year,
-                    string.IsNullOrWhiteSpace(Vin) ? null : Vin,
-                    Engine = Engine,
-                    Transmission = Transmission,
-                    string.IsNullOrWhiteSpace(TrimLevel) ? null : TrimLevel,
-                    string.IsNullOrWhiteSpace(BodyType) ? null : BodyType
-                );
+                //// Create the vehicle
+                //var vehicle = new Application.DTOs.VehicleAsset.CreateVehicleAssetDto
+                //(
+                //    Make = Make,
+                //    Model = Model,
+                //    Year = Year,
+                //    string.IsNullOrWhiteSpace(Vin) ? null : Vin,
+                //    Engine = Engine,
+                //    Transmission = Transmission,
+                //    string.IsNullOrWhiteSpace(TrimLevel) ? null : TrimLevel,
+                //    string.IsNullOrWhiteSpace(BodyType) ? null : BodyType
+                //);
 
                 // Save the vehicle
-                await _vehicleService.CreateVehicleAsync(vehicle);
+                //await _vehicleService.CreateVehicleAsync(vehicle);
 
                 await MessageBoxHelper.ShowMessageWithoutTitleAsync("Vehicle has been added successfully", false, CurrentWorkFlow);
 

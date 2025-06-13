@@ -1,7 +1,11 @@
 ﻿using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.Base;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Interfaces.Repository.VehicleInventory;
+using AutoFusionPro.Domain.Models.Base;
 using AutoFusionPro.Infrastructure.Data.Context;
+using AutoFusionPro.Infrastructure.Data.Repositories.VehicleInventory;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -14,6 +18,7 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
     {
 
         private readonly ApplicationDbContext _context;
+
         private IDbContextTransaction _transaction;
         private ILogger<UnitOfWork> _logger;
 
@@ -21,7 +26,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         public IUserRepository Users { get; }
         public IPartRepository Parts { get; }
         public INotificationRepository Notifications { get; }
-        public IVehicleRepository Vehicles { get; }
 
         public ICompatibleVehicleRepository CompatibleVehicles { get; }
         public IMakeRepository Makes { get; }
@@ -30,20 +34,45 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         public IEngineTypeRepository EngineTypes { get; }
         public ITransmissionTypeRepository TransmissionTypes { get; }
         public ITrimLevelRepository TrimLevels { get; }
+        public ISupplierRepository Suppliers { get; }
+        public IInventoryTransactionRepository InventoryTransactions { get; }
+        public IUnitOfMeasureRepository UnitOfMeasures { get; }
+
+        public IVehicleDocumentRepository VehicleDocuments { get; }
+        public IVehicleDamageImageRepository VehicleDamageImages { get; }
+        public IVehicleServiceHistoryRepository VehicleServiceHistories { get; }
+        public IVehicleDamageLogRepository VehicleDamageLogs { get; }
+        public IVehicleImageRepository VehicleImages { get; }
+        public IVehicleRepository Vehicles { get; }
+
+
+        public IPartCompatibilityRepository PartCompatibilities { get; }
+        public ISupplierPartRepository SupplierParts { get; } 
 
         public UnitOfWork(ApplicationDbContext context, 
                         IUserRepository userRepository,
                         IPartRepository partRepository,
                         INotificationRepository notifications,
                         ICategoryRepository categoryRepository,
-                        IVehicleRepository vehicleRepository,
                         ICompatibleVehicleRepository compatibleVehicleRepository,
                         IMakeRepository makeRepository,
                         IModelRepository modelRepository,
                         IBodyTypeRepository bodyTypeRepository,
                         IEngineTypeRepository engineTypeRepository,
                         ITransmissionTypeRepository transmissionTypeRepository,
-                        ITrimLevelRepository trimLevelRepository,
+                        ITrimLevelRepository trimLevelRepository, 
+                        ISupplierRepository supplierRepository,
+                        IPartCompatibilityRepository partCompatibilityRepository,
+                        ISupplierPartRepository supplierPartRepository,
+                        IInventoryTransactionRepository inventoryTransactionRepository,
+                        IUnitOfMeasureRepository unitOfMeasureRepository,
+
+                        IVehicleDocumentRepository vehicleDocumentRepository,
+                        IVehicleDamageImageRepository vehicleDamageImageRepository,
+                        IVehicleServiceHistoryRepository vehicleServiceHistoryRepository,
+                        IVehicleDamageLogRepository vehicleDamageLogRepository,
+                        IVehicleImageRepository vehicleImageRepository,
+                        IVehicleRepository vehicleRepository,
                         ILogger<UnitOfWork> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -52,7 +81,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             Parts = partRepository ?? throw new ArgumentNullException(nameof(partRepository));
             Categories = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             Notifications = notifications ?? throw new ArgumentNullException(nameof(notifications));
-            Vehicles = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
 
             CompatibleVehicles = compatibleVehicleRepository ?? throw new ArgumentNullException(nameof(compatibleVehicleRepository));
             Makes = makeRepository ?? throw new ArgumentNullException(nameof(makeRepository));
@@ -61,6 +89,20 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             EngineTypes = engineTypeRepository ?? throw new ArgumentNullException(nameof(engineTypeRepository));
             TransmissionTypes = transmissionTypeRepository ?? throw new ArgumentNullException(nameof(transmissionTypeRepository));
             TrimLevels = trimLevelRepository ?? throw new ArgumentNullException(nameof(trimLevelRepository));
+            Suppliers = supplierRepository ?? throw new ArgumentNullException(nameof(supplierRepository));
+
+            PartCompatibilities = partCompatibilityRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRepository));
+            SupplierParts = supplierPartRepository ?? throw new ArgumentNullException(nameof(supplierPartRepository));
+            InventoryTransactions = inventoryTransactionRepository ?? throw new ArgumentNullException(nameof(inventoryTransactionRepository));
+            UnitOfMeasures = unitOfMeasureRepository ?? throw new ArgumentNullException(nameof(unitOfMeasureRepository));
+
+            VehicleDocuments = vehicleDocumentRepository ?? throw new ArgumentNullException(nameof(vehicleDocumentRepository));
+            VehicleDamageImages = vehicleDamageImageRepository ?? throw new ArgumentNullException(nameof(vehicleDamageImageRepository));
+            VehicleServiceHistories = vehicleServiceHistoryRepository ?? throw new ArgumentNullException(nameof(vehicleServiceHistoryRepository));
+            VehicleDamageLogs = vehicleDamageLogRepository ?? throw new ArgumentNullException(nameof(vehicleDamageLogRepository));
+            VehicleImages = vehicleImageRepository ?? throw new ArgumentNullException(nameof(vehicleImageRepository));
+            Vehicles = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
+
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -289,5 +331,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
                 _transaction = null!; // Mark as disposed
             }
         }
+
     }
 }

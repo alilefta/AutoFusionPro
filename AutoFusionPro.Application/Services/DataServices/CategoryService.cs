@@ -637,6 +637,8 @@ namespace AutoFusionPro.Application.Services.DataServices
                 ParentCategoryId = category.ParentCategoryId,
                 ParentCategoryName = category.ParentCategory?.Name,
                 IsActive = category.IsActive,
+                CreatedAt = category.CreatedAt,
+                ModifiedAt = category.ModifiedAt,
                 // For PartCount, it's better to query if not already loaded.
                 // For now, assuming Parts collection might not be loaded for performance in lists.
                 // PartCount = category.Parts?.Count ?? await _unitOfWork.Categories.GetPartCountAsync(category.Id), // Example if repo method exists

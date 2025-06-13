@@ -6,6 +6,7 @@
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.Base;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
+using AutoFusionPro.Domain.Models.VehiclesInventory;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoFusionPro.Infrastructure.Data.Context
@@ -18,7 +19,6 @@ namespace AutoFusionPro.Infrastructure.Data.Context
 
         public DbSet<Part> Parts { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<PartCompatibility> PartCompatibilities { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -34,7 +34,22 @@ namespace AutoFusionPro.Infrastructure.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
 
+        public DbSet<CompatibleVehicle> CompatibleVehicles { get; set; }
+        public DbSet<Make> Makes { get; set; }
+        public DbSet<Model> Models { get; set; }
+        public DbSet<TrimLevel> TrimLevels { get; set; }
+        public DbSet<BodyType> BodyTypes { get; set; }
+        public DbSet<EngineType> EngineTypes { get; set; }
+        public DbSet<TransmissionType> TransmissionTypes { get; set; }
+
+        public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<VehicleDamageImage> VehicleDamageImages { get; set; }
+        public DbSet<VehicleDamageLog> VehicleDamageLogs { get; set; }
+        public DbSet<VehicleDocument> VehicleDocuments { get; set; }
+        public DbSet<VehicleImage> VehicleImages { get; set; }
+        public DbSet<VehicleServiceHistory> VehicleServiceHistories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,8 +62,10 @@ namespace AutoFusionPro.Infrastructure.Data.Context
             // --- Seed Data ---
             SeedVehicleTaxonomyData(modelBuilder);
             SeedLookupData(modelBuilder);
+            SeedUnitOfMeasures(modelBuilder);
         }
 
+        #region Context Methods
         // Override SaveChanges to handle audit trails and timestamps
         public override int SaveChanges()
         {
@@ -61,7 +78,6 @@ namespace AutoFusionPro.Infrastructure.Data.Context
             UpdateTimestamps();
             return base.SaveChangesAsync(cancellationToken);
         }
-
 
         private void UpdateTimestamps()
         {
@@ -85,6 +101,10 @@ namespace AutoFusionPro.Infrastructure.Data.Context
                 }
             }
         }
+
+        #endregion
+
+        #region Seed Initial Data
 
         private void SeedLookupData(ModelBuilder modelBuilder)
         {
@@ -216,5 +236,20 @@ namespace AutoFusionPro.Infrastructure.Data.Context
             //    new TransmissionType { Id = 1003, Name = "CVT", CreatedAt = utcNow }
             //// ...
         }
+
+        private void SeedUnitOfMeasures(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UnitOfMeasure>().HasData(
+                new UnitOfMeasure { Id = 1, Name = "Piece", Symbol = "pcs", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 2, Name = "Liter", Symbol = "L", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 3, Name = "Kilogram", Symbol = "kg", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 4, Name = "Box", Symbol = "box", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 5, Name = "Meter", Symbol = "m", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 6, Name = "Pair", Symbol = "pr", CreatedAt = DateTime.UtcNow },
+                new UnitOfMeasure { Id = 7, Name = "Set", Symbol = "set", CreatedAt = DateTime.UtcNow }
+            );
+        }
+
+        #endregion
     }
 }

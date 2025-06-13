@@ -42,7 +42,6 @@ namespace AutoFusionPro.UI.ViewModels.Categories
         private CategoryDto? _currentCategory;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(HasSubcategories))]
         private ObservableCollection<CategoryDto> _subcategories;
 
         [ObservableProperty]
@@ -61,10 +60,13 @@ namespace AutoFusionPro.UI.ViewModels.Categories
         private bool _isLoadingSubcategories = false;
 
         [ObservableProperty]
-        private bool _isLoadingParts = false;
-
-
-        public bool HasSubcategories => Subcategories.Count > 0;
+        private bool _isLoadingParts = false;       
+        
+        [ObservableProperty]
+        private bool _isEditingCategory = false;       
+        
+        [ObservableProperty]
+        private bool _isDeletingCategory = false;
 
         [ObservableProperty]
         private int _activePartsCount;
@@ -74,6 +76,8 @@ namespace AutoFusionPro.UI.ViewModels.Categories
 
         [ObservableProperty]
         private ObservableCollection<CategoryBreadcrumbDTO> _breadcrumbItems = new();
+
+        public bool HasSubcategories => Subcategories?.Any() ?? false;
         #endregion
 
 
@@ -92,6 +96,10 @@ namespace AutoFusionPro.UI.ViewModels.Categories
 
             Subcategories = new ObservableCollection<CategoryDto>();
             PartsInCategory = new ObservableCollection<PartSummaryDto>();
+
+            Subcategories.CollectionChanged += (s, e) => OnPropertyChanged(nameof(HasSubcategories));
+
+            RegisterCleanup(() => Subcategories.CollectionChanged -= (s, e) => OnPropertyChanged(nameof(HasSubcategories)));
         }
 
         #region Initialization and Loading
@@ -202,6 +210,12 @@ namespace AutoFusionPro.UI.ViewModels.Categories
             }
         }
 
+        // TODO : Using IPartService
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ViewModelException"></exception>
         private async Task LoadPartsAsync()
         {
             try
@@ -256,39 +270,40 @@ namespace AutoFusionPro.UI.ViewModels.Categories
         /// </summary>
         /// <param name="categoryDto"></param>
         /// <returns></returns>
-        private async Task BuildBreadcrumbTrailAsync(CategoryDto categoryDto)
+        private async Task BuildBreadcrumbTrailAsync(CategoryDto initialCategoryDto)
         {
             BreadcrumbItems.Clear();
 
-
-            // Add Top Level Parent
+            // 1. Add the "All Categories" root link
             var allCategoriesStr = System.Windows.Application.Current.Resources["AllCategoriesStr"] as string ?? "All Categories";
-            BreadcrumbItems.Add(new CategoryBreadcrumbDTO(allCategoriesStr, null));
+            BreadcrumbItems.Add(new CategoryBreadcrumbDTO(allCategoriesStr, null)); // Null DTO signifies root navigation
 
-            Stack<CategoryDto> children = new Stack<CategoryDto>();
+            // 2. Build the path from the current category up to its root parent
+            var pathStack = new Stack<CategoryBreadcrumbDTO>();
+            CategoryDto? currentTraversalCategory = initialCategoryDto;
+            int safetyBreak = 0; // Prevent infinite loops
 
-            children.Push(categoryDto);
-
-            CategoryDto currentCategory = categoryDto;
-
-            while (currentCategory.ParentCategoryId.HasValue && currentCategory.ParentCategoryId.Value != 0)
+            while (currentTraversalCategory != null && safetyBreak++ < 10) // Max 10 levels for breadcrumb
             {
-                var parent =  await _categoryService.GetCategoryByIdAsync(currentCategory.ParentCategoryId.Value);
+                // Add current item to the front of the path (to be popped later for correct order)
+                pathStack.Push(new CategoryBreadcrumbDTO(currentTraversalCategory.Name, currentTraversalCategory));
 
-                if(parent == null) break;
-                
-                children.Push(parent);
-
-                currentCategory = parent;
+                if (currentTraversalCategory.ParentCategoryId.HasValue && currentTraversalCategory.ParentCategoryId.Value != 0)
+                {
+                    // Fetch the full parent DTO to get its name and its own ParentCategoryId
+                    currentTraversalCategory = await _categoryService.GetCategoryByIdAsync(currentTraversalCategory.ParentCategoryId.Value);
+                }
+                else
+                {
+                    currentTraversalCategory = null; // Reached a root category (or error fetching parent)
+                }
             }
 
-
-            while(children.Count > 0)
+            // 3. Add the path items to the BreadcrumbItems collection in the correct display order
+            while (pathStack.Count > 0)
             {
-                var category = children.Pop();
-                BreadcrumbItems.Add(new CategoryBreadcrumbDTO(CategoryName: category.Name, CategoryItemDTO: category));
+                BreadcrumbItems.Add(pathStack.Pop());
             }
-
         }
 
 
@@ -302,6 +317,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories
             if (categoryToEdit == null) return;
             try
             {
+                IsEditingCategory = true;
 
                 bool? results;
                 // Check if the Category is Root or not
@@ -335,6 +351,11 @@ namespace AutoFusionPro.UI.ViewModels.Categories
                 _toastNotificationService.ShowError(msg);
                 return;
             }
+            finally
+            {
+                IsEditingCategory = false;
+
+            }
         }
 
         [RelayCommand]
@@ -342,70 +363,81 @@ namespace AutoFusionPro.UI.ViewModels.Categories
         {
             if (categoryToDelete == null) return;
 
-            var results = _dialogService.ShowConfirmDeleteItemsDialog(1);
-
-            if (results.HasValue && results.Value == true)
+            try
             {
+                IsDeletingCategory = true;
 
-                try
+                var results = _dialogService.ShowConfirmDeleteItemsDialog(1);
+
+                if (results.HasValue && results.Value == true)
                 {
-                    await _categoryService.DeleteCategoryAsync(categoryToDelete.Id);
 
-
-                    var msg = System.Windows.Application.Current.Resources["ItemDeletedSuccessfullyStr"] as string ?? "Item Has Been Deleted Successfully!";
-
-
-                    _toastNotificationService.ShowSuccess(msg);
-
-                    _logger.LogInformation("Category with ID={ID} has been deleted successfully!", categoryToDelete.Id);
-
-                    _navigationService.GoBack();
-
-
-                }
-                catch (DeletionBlockedException dx)
-                {
-                    _logger.LogError(dx, "{ErrorMessage}. Entity: {EntityName}, Key: {EntityKey}, Dependents: {Dependents}",
-                        ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, dx.EntityName, dx.EntityKey, string.Join(", ", dx.DependentEntityTypes ?? Enumerable.Empty<string>()));
-
-                    // Construct a more user-friendly message
-                    string entityDisplayName = dx.EntityName ?? "the item"; // Fallback
-                    string dependentItemsText = "other items"; // Default
-                    if (dx.DependentEntityTypes != null && dx.DependentEntityTypes.Any())
+                    try
                     {
-                        dependentItemsText = string.Join(" and ", dx.DependentEntityTypes.Select(FormatDependentTypeName));
+                        await _categoryService.DeleteCategoryAsync(categoryToDelete.Id);
+
+
+                        var msg = System.Windows.Application.Current.Resources["ItemDeletedSuccessfullyStr"] as string ?? "Item Has Been Deleted Successfully!";
+
+
+                        _toastNotificationService.ShowSuccess(msg);
+
+                        _logger.LogInformation("Category with ID={ID} has been deleted successfully!", categoryToDelete.Id);
+
+                        _navigationService.GoBack();
+
+
                     }
+                    catch (DeletionBlockedException dx)
+                    {
+                        _logger.LogError(dx, "{ErrorMessage}. Entity: {EntityName}, Key: {EntityKey}, Dependents: {Dependents}",
+                            ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, dx.EntityName, dx.EntityKey, string.Join(", ", dx.DependentEntityTypes ?? Enumerable.Empty<string>()));
 
-                    var msgTitle = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
-                    var msg = System.Windows.Application.Current.Resources["BecauseTheFollowingItemsDependOnItStr"] as string ?? $"Because the following Items Depends on it:";
+                        // Construct a more user-friendly message
+                        string entityDisplayName = dx.EntityName ?? "the item"; // Fallback
+                        string dependentItemsText = "other items"; // Default
+                        if (dx.DependentEntityTypes != null && dx.DependentEntityTypes.Any())
+                        {
+                            dependentItemsText = string.Join(" and ", dx.DependentEntityTypes.Select(FormatDependentTypeName));
+                        }
 
-
-                    _toastNotificationService.Show($"{msg}\n{dependentItemsText}", msgTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(10));
-                    return;
-                }
-                catch (ServiceException ex)
-                {
-                    _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting category Item");
-                    var msg = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
-
-                    _toastNotificationService.ShowError(msg);
-
-                    // FOR DEV ONLY
-                    throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(CategoryDetailViewModel), nameof(ShowDeleteCategoryDialogAsync), MethodOperationType.DELETE_DATA, ex);
+                        var msgTitle = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
+                        var msg = System.Windows.Application.Current.Resources["BecauseTheFollowingItemsDependOnItStr"] as string ?? $"Because the following Items Depends on it:";
 
 
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting category Item");
-                    var msg = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
+                        _toastNotificationService.Show($"{msg}\n{dependentItemsText}", msgTitle, Core.Enums.UI.ToastType.Error, TimeSpan.FromSeconds(10));
+                        return;
+                    }
+                    catch (ServiceException ex)
+                    {
+                        _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting category Item");
+                        var msg = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
 
-                    _toastNotificationService.ShowError(msg);
+                        _toastNotificationService.ShowError(msg);
 
-                    // FOR DEV ONLY
-                    throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(CategoryDetailViewModel), nameof(ShowDeleteCategoryDialogAsync), MethodOperationType.DELETE_DATA, ex);
+                        // FOR DEV ONLY
+                        throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(CategoryDetailViewModel), nameof(ShowDeleteCategoryDialogAsync), MethodOperationType.DELETE_DATA, ex);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"{ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE}, while deleting category Item");
+                        var msg = System.Windows.Application.Current.Resources["DeleteOperationFailedStr"] as string ?? "Cannot Delete the Item!";
+
+                        _toastNotificationService.ShowError(msg);
+
+                        // FOR DEV ONLY
+                        throw new ViewModelException(ErrorMessages.DELETE_DATA_EXCEPTION_MESSAGE, nameof(CategoryDetailViewModel), nameof(ShowDeleteCategoryDialogAsync), MethodOperationType.DELETE_DATA, ex);
+                    }
                 }
             }
+            finally
+            {
+                IsDeletingCategory = false;
+
+            }
+
         }
 
         [RelayCommand]
@@ -503,6 +535,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories
                 return;
             }
         }
+
 
         #endregion
 

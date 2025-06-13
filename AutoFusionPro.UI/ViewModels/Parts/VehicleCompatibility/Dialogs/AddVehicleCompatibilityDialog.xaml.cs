@@ -10,7 +10,7 @@ namespace AutoFusionPro.UI.ViewModels.Parts.VehicleCompatibility.Dialogs
     /// </summary>
     public partial class AddVehicleCompatibilityDialog : Window
     {
-        private readonly IVehicleService _vehicleService;
+        private readonly IVehicleAssetService _vehicleService;
         private List<string> _makes;
         private Dictionary<string, List<string>> _modelsByMake;
         private Dictionary<string, List<string>> _enginesByModel;
@@ -18,7 +18,7 @@ namespace AutoFusionPro.UI.ViewModels.Parts.VehicleCompatibility.Dialogs
 
         public PartCompatibility Result { get; private set; }
 
-        public AddVehicleCompatibilityDialog(IVehicleService vehicleService, Part currentPart)
+        public AddVehicleCompatibilityDialog(IVehicleAssetService vehicleService, Part currentPart)
         {
             InitializeComponent();
             _vehicleService = vehicleService;

@@ -6,54 +6,137 @@ namespace AutoFusionPro.Domain.Interfaces.Repository
 {
     public interface IPartRepository : IBaseRepository<Part>
     {
+        // --- SINGLE ENTITY FETCH METHODS ---
+
+        /// <summary>
+        /// Gets a single Part by its ID, optionally including Unit of Measures
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includeUoMs"></param>
+        /// <returns></returns>
+        Task<Part?> GetByIdAsync(int id, bool includeUoMs = false);
+
+
+        /// <summary>
+        /// Gets a single Part by its ID, optionally including detailed related entities
+        /// like Category, Suppliers (with Supplier details), and CompatibleVehicles (with Vehicle details).
+        /// </summary>
+        /// <param name="id">The ID of the Part.</param>
+        /// <param name="includeCategory">Whether to include the Category.</param>
+        /// <param name="includeSuppliers">Whether to include Suppliers and their details.</param>
+        /// <param name="includeCompatibility">Whether to include CompatibleVehicles and their details.</param>
+        /// <returns>The Part entity with specified details, or null if not found.</returns>
+        Task<Part?> GetByIdWithDetailsAsync(int id,
+            bool includeCategory = true,
+            bool includeSuppliers = false,
+            bool includeCompatibility = false,
+            bool includeUnitOfMeasures = true);
+
+        /// <summary>
+        /// Gets a Part by its unique PartNumber, optionally including its Category.
+        /// </summary>
+        /// <param name="partNumber">The unique part number.</param>
+        /// <param name="includeCategory">Whether to include the Category.</param>
+        /// <returns>The Part entity, or null if not found.</returns>
+        Task<Part?> GetByPartNumberAsync(string partNumber, bool includeCategory = true);
+
+        /// <summary>
+        /// Get Parts by Specific Category ID
+        /// </summary>
+        /// <param name="categoryId">Category ID</param>
+        /// <returns>List of Parts</returns>
         Task<IEnumerable<Part>> GetPartsByCategory(int categoryId);
-        Task<IEnumerable<Part>> GetLowStockParts(int thresholdQuantity);
-        Task<IEnumerable<Part>> GetPartsByManufacturer(string manufacturer);
-        Task<IEnumerable<Part>> SearchParts(string searchTerm);
-        Task<IEnumerable<Part>> GetPartsByVehicle(int vehicleId);
-       // Task<bool> UpdatePartStock(int partId, int newQuantity, string reason = null);
-        Task<Part?> GetPartByPartNumber(string partNumber);
-        Task<IEnumerable<Part>> GetActivePartsWithPagination(int pageNumber, int pageSize);
-        Task<IEnumerable<Part>> GetPartsWithSuppliers();
 
+
+        // --- MULTIPLE ENTITY FETCH METHODS (FILTERING & SEARCHING) ---
 
         /// <summary>
-        /// Gets a Part by its unique PartNumber, optionally including related entities.
+        /// Gets a collection of Parts based on a flexible filter predicate.
+        /// Allows specifying which related entities to include for performance.
         /// </summary>
-        Task<Part?> GetByPartNumberAsync(string partNumber, bool includeDetails = false);
+        /// <param name="predicate">The filter condition.</param>
+        /// <param name="includeCategory">Whether to include the Category for each part.</param>
+        /// <param name="includeSuppliers">Whether to include Suppliers for each part.</param>
+        /// <param name="orderBy">Optional ordering expression.</param>
+        /// <param name="take">Optional limit on the number of results.</param>
+        /// <returns>A collection of matching Part entities.</returns>
+        Task<IEnumerable<Part>> FindPartsAsync(Expression<Func<Part, bool>> predicate,
+            bool includeCategory = false,
+            bool includeSuppliers = false,
+            Func<IQueryable<Part>, IOrderedQueryable<Part>>? orderBy = null,
+            int? take = null);
 
         /// <summary>
-        /// Gets a single Part by ID, including detailed related entities like Category, Suppliers, Compatibility.
+        /// Gets a paginated list of Parts based on filter criteria and search term.
+        /// This method is designed to be flexible for complex filtering UIs.
         /// </summary>
-        Task<Part?> GetByIdWithDetailsAsync(int id);
-
+        /// <param name="pageNumber">The current page number (1-based).</param>
+        /// <param name="pageSize">The number of items per page.</param>
+        /// <param name="filterPredicate">Optional direct filter on Part entity.</param>
+        /// <param name="categoryId">Optional filter by Category ID.</param>
+        /// <param name="manufacturer">Optional filter by Manufacturer name (case-insensitive).</param>
+        /// <param name="supplierId">Optional filter by Supplier ID.</param>
+        /// <param name="restrictToCompatibleVehicleIds">Optional filter by CompatibleVehicle ID.</param>
+        /// <param name="searchTerm">Optional search term for PartNumber, Name, Description, Barcode.</param>
+        /// <param name="isActive">Optional filter by IsActive status.</param>
+        /// <param name="isLowStock">Optional filter for low stock parts (CurrentStock <= ReorderLevel).</param>
+        /// <param name="includeCategory">Whether to include the Category.</param>
+        /// <param name="includeSuppliers">Whether to include Suppliers.</param>
+        /// <returns>A collection of matching Part entities for the current page.</returns>
+        Task<IEnumerable<Part>> GetFilteredPartsPagedAsync(
+            int pageNumber,
+            int pageSize,
+            Expression<Func<Part, bool>>? filterPredicate = null,
+            int? categoryId = null,
+            string? manufacturer = null,
+            int? supplierId = null,
+            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+            string? searchTerm = null,
+            bool? isActive = true, // Default to active parts
+            bool? isLowStock = null,
+            bool includeCategory = true,
+            bool includeSuppliers = false,
+            bool includeStockingUnitOfMeasure = true);
         /// <summary>
-        /// Finds parts based on a predicate, optionally including Category for summary display.
+        /// Gets the total count of Parts matching the specified filter criteria.
+        /// Parameters should mirror GetFilteredPartsPagedAsync for accurate counts.
         /// </summary>
-        Task<IEnumerable<Part>> FindWithCategoryAsync(Expression<Func<Part, bool>> predicate);
+        Task<int> GetTotalFilteredPartsCountAsync(
+            Expression<Func<Part, bool>>? filterPredicate = null,
+            int? categoryId = null,
+            string? manufacturer = null,
+            int? supplierId = null,
+            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+            string? searchTerm = null,
+            bool? isActive = true,
+            bool? isLowStock = null);
 
-        /// <summary>
-        /// Searches parts based on a search term across multiple fields (optimized query).
-        /// </summary>
-        Task<IEnumerable<Part>> SearchPartsAsync(string searchTerm);
 
-        /// <summary>
-        /// Gets parts with pagination, optionally including Category.
-        /// </summary>
-        Task<IEnumerable<Part>> GetPartsPagedAsync(int pageNumber, int pageSize, bool includeCategory = true, Expression<Func<Part, bool>>? filter = null);
-
-        /// <summary>
-        /// Gets the total count of parts, potentially applying a filter.
-        /// </summary>
-        Task<int> GetTotalPartsCountAsync(Expression<Func<Part, bool>>? filter = null);
+        // --- UTILITY / VALIDATION METHODS ---
 
         /// <summary>
         /// Checks if a PartNumber already exists, optionally excluding a specific Part ID.
         /// </summary>
+        /// <param name="partNumber">The part number to check.</param>
+        /// <param name="excludePartId">Optional ID of a part to exclude from the check (for updates).</param>
+        /// <returns>True if the part number exists, false otherwise.</returns>
         Task<bool> PartNumberExistsAsync(string partNumber, int? excludePartId = null);
 
-        // Add other specific query methods if needed (e.g., GetPartsBySupplierIdAsync)
+        /// <summary>
+        /// Checks if a Barcode already exists, optionally excluding a specific Part ID.
+        /// (Assumes Barcode should be unique if not null/empty)
+        /// </summary>
+        /// <param name="barcode">The barcode to check.</param>
+        /// <param name="excludePartId">Optional ID of a part to exclude from the check.</param>
+        /// <returns>True if the barcode exists and is not null/empty, false otherwise.</returns>
+        Task<bool> BarcodeExistsAsync(string barcode, int? excludePartId = null);
 
-        // REMOVED: UpdatePartStock - This logic belongs in a service layer.
+        /// <summary>
+        /// Gets a list of Parts that are low on stock (CurrentStock <= ReorderLevel).
+        /// </summary>
+        /// <param name="includeCategory">Whether to include Category information.</param>
+        /// <param name="take">Optional limit on the number of results.</param>
+        /// <returns>A collection of low stock Part entities.</returns>
+        Task<IEnumerable<Part>> GetLowStockPartsAsync(bool includeCategory = true, int? take = null);
     }
 }

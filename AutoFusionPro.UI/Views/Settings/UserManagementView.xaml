@@ -94,7 +94,7 @@
                     <!-- Apply the ListViewItem Style -->
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem"
-                               BasedOn="{StaticResource ListViewItemsStyle}" />
+                               BasedOn="{DynamicResource ListViewItemsStyle}" />
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>

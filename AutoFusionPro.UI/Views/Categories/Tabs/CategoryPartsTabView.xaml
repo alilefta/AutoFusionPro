@@ -1,12 +1,174 @@
 ﻿<UserControl x:Class="AutoFusionPro.UI.Views.Categories.Tabs.CategoryPartsTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Categories.Tabs"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Categories"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:dtos="clr-namespace:AutoFusionPro.Application.DTOs.Category;assembly=AutoFusionPro.Application"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:CategoryDetailViewModel}"
+             Background="{DynamicResource Window.BackgroundBrush}"
+             Foreground="{DynamicResource Text.PrimaryBrush}"
+             FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+             d:DesignHeight="1200"
+             d:DesignWidth="1000">
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             
-    </Grid>
+            
+            <!-- Heading -->
+            
+            
+            <!-- Content -->
+            <wpfUi:DataGrid ItemsSource="{Binding PartsInCategory}"
+                            Grid.Row="1"
+                            Margin="0,8,0,0"
+                            SelectedItem="{Binding SelectedPart}"
+                            Style="{DynamicResource ModernDataGridStyle}"
+                            AutoGenerateColumns="False"
+                            CanUserAddRows="False"
+                            IsReadOnly="True"
+                            CanUserDeleteRows="False"
+                            CanUserReorderColumns="True"
+                            CanUserResizeColumns="True"
+                            CanUserSortColumns="True"
+                            SelectionMode="Single"
+                            GridLinesVisibility="Horizontal"
+                            AlternationCount="2"
+                            AlternatingRowBackground="{DynamicResource DataGrid.AlternatingRow.BackgroundBrush}"
+                            HeadersVisibility="Column">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{DynamicResource CategoryPhotoStr}"
+                                            Width="130">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                       Height="40"
+                                       Width="80"
+                                       Stretch="Uniform"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{DynamicResource NameStr}"
+                                        Binding="{Binding Name}"
+                                        Width="120" />
+                    <DataGridCheckBoxColumn Header="{DynamicResource StatusStr}"
+                                            Binding="{Binding IsActive}"
+                                            IsReadOnly="True"
+                                            ElementStyle="{StaticResource BlueCheckBoxStyle}"
+                                            Width="80">
+
+                    </DataGridCheckBoxColumn>
+                    <DataGridTemplateColumn Header="{DynamicResource SubcategoriesCountStr}"
+                                            Width="180">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Children.Count}">
+                                    <TextBlock.Foreground>
+                                        <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                            <Binding Path="Children" />
+                                            <Binding Path="IsSelected"
+                                                     RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                        </MultiBinding>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="{DynamicResource PartsCountStr}"
+                                            Width="140">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding PartCount}">
+                                    <TextBlock.Foreground>
+                                        <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                            <Binding Path="PartCount" />
+                                            <Binding Path="IsSelected"
+                                                     RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                        </MultiBinding>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{DynamicResource ManageStr}"
+                                            Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+
+                                    <!-- Details Button -->
+                                    <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                                  ButtonType="Regular"
+                                                  Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                  CommandParameter="{Binding}"
+                                                  ToolTip="{DynamicResource OpenCategoryDetailsStr}"
+                                                  Cursor="Hand">
+                                        <xBtn:XButton.Effect>
+                                            <DropShadowEffect Color="Black"
+                                                              Direction="270"
+                                                              ShadowDepth="1"
+                                                              BlurRadius="10"
+                                                              Opacity="0.2" />
+                                        </xBtn:XButton.Effect>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource GoToDetailsStr}"
+                                                       VerticalAlignment="Center" />
+                                            <wpfUi:SymbolIcon Symbol="Open48"
+                                                              Margin="5,0,0,0"
+                                                              VerticalAlignment="Center"
+                                                              FontSize="16" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
+                                    <xBtn:XButton Cursor="Hand"
+                                                  Style="{DynamicResource RegularButtonStyle}"
+                                                  ButtonType="Warning"
+                                                  Command="{Binding DataContext.ShowEditCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                  CommandParameter="{Binding}"
+                                                  Opacity="0.8"
+                                                  Margin="5,0,0,0"
+                                                  VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <wpfUi:SymbolIcon Symbol="Edit48"
+                                                              VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
+
+                                    <xBtn:XButton Cursor="Hand"
+                                                  Style="{DynamicResource RegularButtonStyle}"
+                                                  Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                  CommandParameter="{Binding}"
+                                                  ButtonType="Danger"
+                                                  VerticalAlignment="Center"
+                                                  Opacity="0.8"
+                                                  Margin="5,0,0,0">
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <wpfUi:SymbolIcon Symbol="Delete48"
+                                                              VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </xBtn:XButton>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </wpfUi:DataGrid>
+
+        </Grid>
+    </Border>
 </UserControl>

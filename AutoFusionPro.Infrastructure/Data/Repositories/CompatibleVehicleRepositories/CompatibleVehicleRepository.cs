@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Core.Exceptions.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories.Base;

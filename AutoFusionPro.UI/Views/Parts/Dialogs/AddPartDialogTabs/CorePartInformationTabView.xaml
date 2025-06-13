@@ -1,0 +1,310 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.Parts.Dialogs.AddPartDialogTabs.CorePartInformationTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts.Dialogs"
+             xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:behaviors="clr-namespace:AutoFusionPro.UI.Resources.Behaviors"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Parts.Dialogs.AddPartDialogTabs"
+             xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             xmlns:cards="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             Background="{DynamicResource Card.Header.BackgroundBrush}"
+             Foreground="{DynamicResource Text.PrimaryBrush}"
+             d:DataContext="{d:DesignInstance Type=vm:AddPartDialogViewModel}"
+             FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+             FlowDirection="{Binding CurrentWorkFlow}">
+    <Grid>
+        <!-- Content -->
+        <Grid Grid.Row="1"
+              Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Form Fields -->
+            <ScrollViewer Padding="8,0">
+                <StackPanel>
+
+                    <GroupBox Header="{DynamicResource CorePartInformationStr}"
+                              Padding="10">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Part Number -->
+                                <StackPanel VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource RootCategoryNameToolTipStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="NumberSymbolSquare24"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource PartNumberStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartNumberTooltipMessageStr}" />
+                                    </StackPanel>
+                                    <wpfUi:TextBox Text="{Binding PartNumber, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="0,8,0,0"
+                                                   PlaceholderText="{DynamicResource PartNumberExampleStr}"
+                                                   ToolTip="{DynamicResource PartNumberTooltipMessageStr}" />
+
+                                </StackPanel>
+
+                                <!-- Part Name -->
+                                <StackPanel Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource RootCategoryNameToolTipStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Tag32"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource PartNameStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartNameTooltipMessageStr}" />
+                                    </StackPanel>
+                                    <wpfUi:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="0,8,0,0"
+                                                   PlaceholderText="{DynamicResource PartNameExampleStr}"
+                                                   ToolTip="{DynamicResource PartNameTooltipMessageStr}" />
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0,15,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Category -->
+                                <StackPanel VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource RootCategoryNameToolTipStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Group24"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource CategoryStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartCategoryTooltipMessageStr}" />
+                                    </StackPanel>
+                                    <Grid Margin="0,8,0,0">
+                                        <ComboBox ItemsSource="{Binding MakesCollection}"
+                                                  x:Name="categoryCombobox"
+                                                  SelectedItem="{Binding SelectedMake}"
+                                                  Panel.ZIndex="0"
+                                                  ToolTip="{DynamicResource PartCategoryTooltipMessageStr}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <wpfUi:TextBlock Text="{DynamicResource SelectSomethingStr}"
+                                                         IsHitTestVisible="False"
+                                                         FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                                                         FontSize="14"
+                                                         Padding="8,5"
+                                                         Margin="5,0,0,0"
+                                                         VerticalAlignment="Center"
+                                                         Foreground="{DynamicResource GrayBrush}"
+                                                         Panel.ZIndex="1">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility"
+                                                            Value="Hidden" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=categoryCombobox,Path=SelectedItem}"
+                                                                     Value="{x:Null}">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </wpfUi:TextBlock>
+                                    </Grid>
+
+                                </StackPanel>
+
+                                <!-- Manufacturer -->
+                                <StackPanel Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource RootCategoryNameToolTipStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Tag32"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource PartManufacturerStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartManufacturerTooltipMessageStr}" />
+                                        <TextBlock Text="{DynamicResource OptionalStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontSize="12"
+                                                   Opacity="0.7"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <wpfUi:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="0,8,0,0"
+                                                   ToolTip="{DynamicResource PartManufacturerTooltipMessageStr}"
+                                                   PlaceholderText="{DynamicResource PartManufacturerExampleStr}" />
+
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Description-->
+                            <StackPanel Margin="0,15,0,0"
+                                        VerticalAlignment="Center"
+                                        ToolTip="{DynamicResource DescriptionToolTipStr}">
+                                <StackPanel Orientation="Horizontal">
+                                    <wpfUi:SymbolIcon Symbol="Text32"
+                                                      VerticalAlignment="Center" />
+                                    <TextBlock Text="{DynamicResource DescriptionStr}"
+                                               Margin="5,0,0,0"
+                                               FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Text="{DynamicResource OptionalStr}"
+                                               Margin="5,0,0,0"
+                                               FontSize="12"
+                                               Opacity="0.7"
+                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                                <wpfUi:TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                               Height="100"
+                                               Margin="0,8,0,0"
+                                               TextWrapping="Wrap"
+                                               PlaceholderText="{DynamicResource PartDescriptionTooltipMessageStr}" />
+
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="{DynamicResource AttributesAndLocationStr}"
+                              Padding="10"
+                              Margin="0,15,0,0">
+
+                        <StackPanel>
+                            <!-- Location & Barcode-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Location -->
+                                <StackPanel VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource RootCategoryNameToolTipStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Location48"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource PartLocationStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartLocationExampleStr}" />
+                                        <TextBlock Text="{DynamicResource OptionalStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontSize="12"
+                                                   Opacity="0.7"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <wpfUi:TextBox Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="0,8,0,0"
+                                                   PlaceholderText="{DynamicResource PartLocationExampleStr}"
+                                                   ToolTip="{DynamicResource PartLocationExampleStr}" />
+
+                                </StackPanel>
+
+                                <!-- Part Name -->
+                                <StackPanel Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource PartBarcodeTooltipMessageStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="BarcodeScanner24"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource BarcodeStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartBarcodeTooltipMessageStr}" />
+                                        <TextBlock Text="{DynamicResource OptionalStr}"
+                                                   Margin="5,0,0,0"
+                                                   FontSize="12"
+                                                   Opacity="0.7"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <wpfUi:TextBox Text="{Binding Barcode, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="0,8,0,0"
+                                                   ToolTip="{DynamicResource PartBarcodeTooltipMessageStr}" />
+
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- IsActive & IsOriginal-->
+                            <Grid Margin="0,15,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="15" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- IsActive -->
+                                <StackPanel VerticalAlignment="Center"
+                                            ToolTip="{DynamicResource PartIsActiveTooltipMessageStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Flag48"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource IsPartActiveStr}"
+                                                   Margin="5,0,0,0"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartIsActiveTooltipMessageStr}" />
+                                    </StackPanel>
+                                    <CheckBox VerticalAlignment="Center"
+                                              IsChecked="{Binding IsActive}"
+                                              ToolTip="{DynamicResource PartIsActiveTooltipMessageStr}"
+                                              Content="{Binding IsActive, Converter={StaticResource BooleanToStatusTextConverter}}" />
+
+                                </StackPanel>
+
+                                <!-- IsOriginal -->
+                                <StackPanel VerticalAlignment="Center"
+                                            Grid.Column="2"
+                                            ToolTip="{DynamicResource PartIsOriginalTooltipMessageStr}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <wpfUi:SymbolIcon Symbol="Star48"
+                                                          VerticalAlignment="Center" />
+                                        <TextBlock Text="{DynamicResource IsPartOriginalStr}"
+                                                   Margin="5,0,0,0"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                                   ToolTip="{DynamicResource PartIsOriginalTooltipMessageStr}" />
+                                    </StackPanel>
+                                    <CheckBox VerticalAlignment="Center"
+                                              IsChecked="{Binding IsOriginal}"
+                                              ToolTip="{DynamicResource PartIsOriginalTooltipMessageStr}"
+                                              Content="{Binding IsOriginal, Converter={StaticResource BooleanToIsOriginalConverter}}" />
+
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

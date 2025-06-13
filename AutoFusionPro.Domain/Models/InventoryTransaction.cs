@@ -13,8 +13,8 @@ namespace AutoFusionPro.Domain.Models
         public int Quantity { get; set; }
         public int NewQuantity { get; set; }
         public InventoryTransactionType TransactionType { get; set; }
-        public string ReferenceNumber { get; set; }
-        public string Notes { get; set; }
+        public string? ReferenceNumber { get; set; }
+        public string? Notes { get; set; }
 
         // Optional: For tracking who performed the transaction
         public int UserId { get; set; }

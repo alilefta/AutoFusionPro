@@ -20,7 +20,6 @@ namespace AutoFusionPro.Domain.Models
 
         public UserRole Role { get; set; }
 
-
         public NotificationType Type { get; set; }
 
         // Navigation Properties

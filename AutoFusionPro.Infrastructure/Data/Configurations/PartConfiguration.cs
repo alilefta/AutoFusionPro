@@ -46,11 +46,34 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
             builder.Property(p => p.Notes)
                 .HasMaxLength(1000);
 
+            builder.HasOne(p => p.StockingUnitOfMeasure)
+             .WithMany(uom => uom.PartsStockingUnit) // Updated inverse navigation
+             .HasForeignKey(p => p.StockingUnitOfMeasureId)
+             .IsRequired()
+             .OnDelete(DeleteBehavior.Restrict); // Cannot delete UoM if parts use it as stocking unit
+
+            builder.HasOne(p => p.SalesUnitOfMeasure)
+                .WithMany(uom => uom.PartsSalesUnit) // Updated inverse navigation
+                .HasForeignKey(p => p.SalesUnitOfMeasureId)
+                .IsRequired(false) // Sales UoM can be optional (defaults to stocking UoM)
+                .OnDelete(DeleteBehavior.SetNull); // If Sales UoM deleted, set Part.SalesUnitOfMeasureId to null
+
+            builder.HasOne(p => p.PurchaseUnitOfMeasure)
+                .WithMany(uom => uom.PartsPurchaseUnit) // Updated inverse navigation
+                .HasForeignKey(p => p.PurchaseUnitOfMeasureId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Property(p => p.SalesConversionFactor).HasColumnType("decimal(18,4)"); // Allow precision
+            builder.Property(p => p.PurchaseConversionFactor).HasColumnType("decimal(18,4)");
+
             // Relationships
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Parts)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }

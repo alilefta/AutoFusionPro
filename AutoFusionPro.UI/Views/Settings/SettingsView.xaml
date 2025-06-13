@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Settings"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Settings.Tabs"
              xmlns:viewModel="clr-namespace:AutoFusionPro.UI.ViewModels.Settings"
              xmlns:controls="clr-namespace:AutoFusionPro.UI.Controls.Cards"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
@@ -50,6 +50,7 @@
                             <TextBlock Text="{DynamicResource UserAccountsStr}" />
                         </StackPanel>
                     </TabItem.Header>
+                    <!-- TODO : Add User management or remove-->
                     <Grid Background="{DynamicResource WhiteBrush}">
                         <TextBlock Text="{DynamicResource UserAccountsStr}"
                                    FontSize="24"
@@ -67,12 +68,7 @@
                             <TextBlock Text="{DynamicResource BackupAndRestoreStr}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Background="{DynamicResource WhiteBrush}">
-                        <TextBlock Text="Backup &amp; Restore Content"
-                                   FontSize="24"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                    </Grid>
+                    <local:BackupAndRestoreTabView Padding="10,20,10,10" />
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
@@ -84,12 +80,22 @@
                             <TextBlock Text="{DynamicResource AboutStr}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Background="{DynamicResource WhiteBrush}">
-                        <TextBlock Text="About Content"
-                                   FontSize="24"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                    </Grid>
+                    <local:AppAboutTabView Padding="10,20,10,10" />
+
+                </TabItem>
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE142;"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            <TextBlock Text="{DynamicResource UnitsOfMeasuresStr}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <local:UnitsOfMeasuresTabView Padding="10,20,10,10" />
+
                 </TabItem>
             </TabControl>
             <StackPanel Grid.Row="2"

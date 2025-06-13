@@ -1,8 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.Part;
-using AutoFusionPro.Application.DTOs.Vehicle;
-using AutoFusionPro.Application.Interfaces.DataServices;
-using AutoFusionPro.Domain.Interfaces.Repository.Base;
 using AutoFusionPro.Domain.Interfaces;
+using AutoFusionPro.Domain.Models;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -14,98 +12,117 @@ namespace AutoFusionPro.Application.Validators.PartValidators
         private readonly ILogger<CreatePartDtoValidator> _logger;
 
         // Inject IUnitOfWork to access repositories for database checks
-        public CreatePartDtoValidator(ILogger<CreatePartDtoValidator> logger, IUnitOfWork unitOfWork)
+        public CreatePartDtoValidator(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            RuleFor(p => p.PartNumber)
+            RuleFor(x => x.PartNumber)
                 .NotEmpty().WithMessage("Part Number is required.")
                 .MaximumLength(50).WithMessage("Part Number cannot exceed 50 characters.")
-                // Custom async rule to check for uniqueness
-                .MustAsync(async (partNumber, cancellationToken) =>
-                {
-                    // Only check if partNumber is not empty to avoid unnecessary DB call
-                    if (string.IsNullOrWhiteSpace(partNumber)) return true;
-                    return !await _unitOfWork.Parts.PartNumberExistsAsync(partNumber);
-                })
-                .WithMessage(p => $"Part Number '{p.PartNumber}' already exists."); // Dynamic error message
+                .MustAsync(async (partNumber, token) => !await _unitOfWork.Parts.PartNumberExistsAsync(partNumber))
+                .WithMessage(dto => $"Part Number '{dto.PartNumber}' already exists.");
 
-            RuleFor(p => p.Name)
+            RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Part Name is required.")
                 .MaximumLength(100).WithMessage("Part Name cannot exceed 100 characters.");
 
-            RuleFor(p => p.CategoryId)
-                .GreaterThan(0).WithMessage("A valid Category must be selected.")
-                // Check if the category actually exists
-                .MustAsync(async (categoryId, cancellationToken) =>
-                {
-                    if (categoryId <= 0) return true; // Handled by GreaterThan(0)
-                    // Assuming ICategoryRepository is added to IUnitOfWork or you use context directly
-                    // Option 1: Using Repository (preferred if exists)
-                    // return await _unitOfWork.Categories.ExistsAsync(c => c.Id == categoryId); // Requires ICategoryRepository
-                    // Option 2: If no CategoryRepository, check via DbContext (less ideal abstraction-wise)
-                    // return await _unitOfWork.Context.Set<Domain.Models.Category>().AnyAsync(c => c.Id == categoryId, cancellationToken);
-                    // For now, let's assume you'll add ICategoryRepository
-                    return await CategoryExists(categoryId); // Use helper method
-                })
-                .WithMessage("Selected Category does not exist.");
-
-
-            RuleFor(p => p.CostPrice)
-                .GreaterThanOrEqualTo(0).WithMessage("Cost Price cannot be negative.");
-
-            RuleFor(p => p.SellingPrice)
-                .GreaterThanOrEqualTo(0).WithMessage("Selling Price cannot be negative.");
-            // Optional: RuleFor(p => p.SellingPrice).GreaterThanOrEqualTo(p => p.CostPrice).WithMessage("Selling Price should not be less than Cost Price.");
-
-            RuleFor(p => p.ReorderLevel)
-                .GreaterThanOrEqualTo(0).WithMessage("Reorder Level cannot be negative.");
-
-            RuleFor(p => p.MinimumStock)
-                .GreaterThanOrEqualTo(0).WithMessage("Minimum Stock cannot be negative.");
-
-            RuleFor(p => p.Description)
+            RuleFor(x => x.Description)
                 .MaximumLength(500).WithMessage("Description cannot exceed 500 characters.");
 
-            RuleFor(p => p.Manufacturer)
+            RuleFor(x => x.Manufacturer)
                 .MaximumLength(100).WithMessage("Manufacturer cannot exceed 100 characters.");
 
-            RuleFor(p => p.Location)
+            RuleFor(x => x.CostPrice)
+                .GreaterThanOrEqualTo(0).WithMessage("Cost Price must be zero or greater.");
+
+            RuleFor(x => x.SellingPrice)
+                .GreaterThanOrEqualTo(0).WithMessage("Selling Price must be zero or greater.");
+
+            RuleFor(x => x.StockQuantity) // Initial stock
+                .GreaterThanOrEqualTo(0).WithMessage("Initial Stock Quantity must be zero or greater.");
+
+            RuleFor(x => x.ReorderLevel)
+                .GreaterThanOrEqualTo(0).WithMessage("Reorder Level must be zero or greater.");
+
+            RuleFor(x => x.MinimumStock)
+                .GreaterThanOrEqualTo(0).WithMessage("Minimum Stock must be zero or greater.");
+
+            RuleFor(x => x.Location)
                 .MaximumLength(50).WithMessage("Location cannot exceed 50 characters.");
 
-            RuleFor(p => p.ImagePath)
+            RuleFor(x => x.ImagePath)
                 .MaximumLength(255).WithMessage("Image Path cannot exceed 255 characters.");
 
-            RuleFor(p => p.Notes)
-               .MaximumLength(1000).WithMessage("Notes cannot exceed 1000 characters.");
+            RuleFor(x => x.Notes)
+                .MaximumLength(1000).WithMessage("Notes cannot exceed 1000 characters.");
 
-            // Add rules for InitialCompatibleVehicles, InitialSuppliers if needed
-            // e.g., RuleForEach(p => p.InitialSuppliers).SetValidator(new PartSupplierCreateDtoValidator());
+            RuleFor(x => x.Barcode)
+                .MaximumLength(100).WithMessage("Barcode cannot exceed 100 characters.") // Adjust length as needed
+                .MustAsync(async (barcode, token) =>
+                    string.IsNullOrWhiteSpace(barcode) || !await _unitOfWork.Parts.BarcodeExistsAsync(barcode))
+                .WithMessage(dto => $"Barcode '{dto.Barcode}' already exists.")
+                .When(x => !string.IsNullOrWhiteSpace(x.Barcode)); // Only validate if barcode is provided
 
+            RuleFor(x => x.CategoryId)
+                .GreaterThan(0).WithMessage("A valid Category must be selected.")
+                .MustAsync(async (categoryId, token) => await _unitOfWork.Categories.ExistsAsync(c => c.Id == categoryId))
+                .WithMessage("Selected Category does not exist.");
+
+            RuleFor(x => x.StockingUnitOfMeasureId)
+                .GreaterThan(0).WithMessage("A valid stocking unit of measure must be selected.")
+                .MustAsync(async (id, token) => await _unitOfWork.UnitOfMeasures.ExistsAsync(uom => uom.Id == id)) // Assuming generic Exists or UoM repo
+                .WithMessage("Selected stocking unit of measure does not exist.");
+
+            // Sales UoM
+            When(x => x.SalesUnitOfMeasureId.HasValue && x.SalesUnitOfMeasureId.Value > 0, () => {
+                RuleFor(x => x.SalesUnitOfMeasureId)
+                    .MustAsync(async (id, token) => await _unitOfWork.UnitOfMeasures.ExistsAsync(uom => uom.Id == id!.Value))
+                    .WithMessage("Selected sales unit of measure does not exist.");
+
+                // If SalesUoM is different from StockingUoM, SalesConversionFactor is required and must be > 0
+                RuleFor(x => x.SalesConversionFactor)
+                    .NotNull().WithMessage("Sales conversion factor is required when Sales Unit is different from Stocking Unit.")
+                    .GreaterThan(0).WithMessage("Sales conversion factor must be greater than zero.")
+                    .When(x => x.SalesUnitOfMeasureId.HasValue && x.SalesUnitOfMeasureId.Value != x.StockingUnitOfMeasureId);
+            });
+            // If SalesUoM is NOT set OR is THE SAME as StockingUoM, SalesConversionFactor should NOT be set (or be 1 and hidden in UI)
+            When(x => !x.SalesUnitOfMeasureId.HasValue || x.SalesUnitOfMeasureId.Value == 0 || x.SalesUnitOfMeasureId.Value == x.StockingUnitOfMeasureId, () => {
+                RuleFor(x => x.SalesConversionFactor)
+                    .Null().WithMessage("Sales conversion factor should not be set if Sales Unit is the same as Stocking Unit or not specified.");
+            });
+
+
+            // Purchase UoM (similar logic to Sales UoM)
+            When(x => x.PurchaseUnitOfMeasureId.HasValue && x.PurchaseUnitOfMeasureId.Value > 0, () => {
+                RuleFor(x => x.PurchaseUnitOfMeasureId)
+                    .MustAsync(async (id, token) => await _unitOfWork.UnitOfMeasures.ExistsAsync(uom => uom.Id == id!.Value))
+                    .WithMessage("Selected purchase unit of measure does not exist.");
+
+                RuleFor(x => x.PurchaseConversionFactor)
+                    .NotNull().WithMessage("Purchase conversion factor is required when Purchase Unit is different from Stocking Unit.")
+                    .GreaterThan(0).WithMessage("Purchase conversion factor must be greater than zero.")
+                    .When(x => x.PurchaseUnitOfMeasureId.HasValue && x.PurchaseUnitOfMeasureId.Value != x.StockingUnitOfMeasureId);
+            });
+            When(x => !x.PurchaseUnitOfMeasureId.HasValue || x.PurchaseUnitOfMeasureId.Value == 0 || x.PurchaseUnitOfMeasureId.Value == x.StockingUnitOfMeasureId, () => {
+                RuleFor(x => x.PurchaseConversionFactor)
+                    .Null().WithMessage("Purchase conversion factor should not be set if Purchase Unit is the same as Stocking Unit or not specified.");
+            });
+
+            // Optional: Validation for InitialSuppliers and InitialCompatibleVehicles
+            // This can get complex if you need to validate each item in the list
+            // or check existence of SupplierId/CompatibleVehicleId.
+            // For now, we assume the service layer might handle this or they are simpler.
+            // Example for InitialSuppliers:
+            // RuleForEach(x => x.InitialSuppliers).SetValidator(new PartSupplierCreateDtoValidator(unitOfWork));
+            // (You would need a PartSupplierCreateDtoValidator)
         }
+    
 
-        // Helper method to check category existence (assuming ICategoryRepository will be added to UoW)
-        private async Task<bool> CategoryExists(int categoryId)
-        {
-            // Placeholder: Implement using _unitOfWork.Categories.ExistsAsync or similar
-            // Example: return await _unitOfWork.Context.Set<Domain.Models.Category>().AnyAsync(c => c.Id == categoryId);
-            // Replace with your actual repository call
-            var categoryRepo = _unitOfWork.Categories; // Example if using generic repo access
-            if (categoryRepo != null)
-            {
-                return await categoryRepo.ExistsAsync(c => c.Id == categoryId);
-            }
-            // Fallback or throw if repo not available - depends on your UoW setup
-            _logger.LogWarning("Warning: ICategoryRepository not found in UnitOfWork for validation.");
-            return false; // Or true, depending on desired behaviour if repo missing
-        }
-
-        // Helper to access generic repository if needed for Category check
-        // Replace this with direct ICategoryRepository property if added to IUnitOfWork
-        public interface IUnitOfWorkWithGenericRepo : IUnitOfWork
-        {
-            IBaseRepository<T> Repository<T>() where T : class;
-        }
+        //// Helper to access generic repository if needed for Category check
+        //// Replace this with direct ICategoryRepository property if added to IUnitOfWork
+        //public interface IUnitOfWorkWithGenericRepo : IUnitOfWork
+        //{
+        //    IBaseRepository<T> Repository<T>() where T : class;
+        //}
     }
 }

@@ -2,9 +2,12 @@
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Interfaces.Repository.VehicleInventory;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories;
 using AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleRepositories;
+using AutoFusionPro.Infrastructure.Data.Repositories.JointTableRepositories;
+using AutoFusionPro.Infrastructure.Data.Repositories.VehicleInventory;
 using AutoFusionPro.Infrastructure.Data.UnitOfWork;
 using AutoFusionPro.Infrastructure.Services.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +43,14 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<IPartRepository, PartRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+
+
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IVehicleDamageImageRepository, VehicleDamageImageRepository>();
+            services.AddScoped<IVehicleDamageLogRepository, VehicleDamageLogRepository>();
+            services.AddScoped<IVehicleDocumentRepository, VehicleDocumentRepository>();
+            services.AddScoped<IVehicleImageRepository, VehicleImageRepository>();
+            services.AddScoped<IVehicleServiceHistoryRepository, VehicleServiceHistoryRepository>();
 
 
             services.AddScoped<ICompatibleVehicleRepository, CompatibleVehicleRepository>();
@@ -50,6 +60,15 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<IEngineTypeRepository, EngineTypeRepository>();
             services.AddScoped<ITransmissionTypeRepository, TransmissionTypeRepository>();
             services.AddScoped<ITrimLevelRepository, TrimLevelRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+            services.AddScoped<IPartCompatibilityRepository, PartCompatibilityRepository>();
+            services.AddScoped<ISupplierPartRepository, SupplierPartRepository>();
+            services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
+            services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
+
+
+
 
             // Services
             services.AddScoped<IImageFileService, LocalImageFileService>();

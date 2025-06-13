@@ -25,16 +25,41 @@ namespace AutoFusionPro.Domain.Models
 
         public string? Barcode { get; set; } = string.Empty;
 
-        public DateTime LastRestockDate { get; set; }
+        public DateTime? LastRestockDate { get; set; }
 
         // Navigation properties
         public int CategoryId { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual Category Category { get; set; } = null!;
 
-        public virtual ICollection<PartCompatibility> CompatibleVehicles { get; set; }
-        public virtual ICollection<SupplierPart> Suppliers { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
-        public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; }
+
+
+
+        // --- Unit of Measure Fields ---
+        public int StockingUnitOfMeasureId { get; set; } // The base unit in which stock is counted and valued
+        public virtual UnitOfMeasure StockingUnitOfMeasure { get; set; } = null!;
+
+        public int? SalesUnitOfMeasureId { get; set; }    // Unit in which it's typically sold (can be same as stocking)
+        public virtual UnitOfMeasure? SalesUnitOfMeasure { get; set; }
+        public decimal? SalesConversionFactor { get; set; } // e.g., If StockingUoM is Liter and SalesUoM is Milliliter, factor is 1000.
+                                                            // Factor to convert SalesUoM back to StockingUoM (StockingUoM = SalesUoM_Qty * SalesConversionFactor)
+                                                            // Or, more commonly: How many StockingUoM are in one SalesUoM.
+                                                            // Let's redefine: QuantityInBaseStockingUnitPerSalesUnit (e.g. 0.5 if SalesUnit is 500ml and StockingUnit is Liter)
+                                                            // OR: How many Sales Units are in one Stocking Unit.
+                                                            // For simplicity: SalesUnitsPerStockingUnit (e.g., if Stocking=Drum(20L), Sales=Bottle(1L), Factor=20)
+
+        public int? PurchaseUnitOfMeasureId { get; set; } // Unit in which it's typically purchased
+        public virtual UnitOfMeasure? PurchaseUnitOfMeasure { get; set; }
+        public decimal? PurchaseConversionFactor { get; set; } // e.g., If StockingUoM is Piece and PurchaseUoM is Box of 10, factor is 10.
+                                                               // (How many StockingUoM are in one PurchaseUoM)
+
+
+        public virtual ICollection<PartCompatibility> CompatibleVehicles { get; set; } = new List<PartCompatibility>();
+        public virtual ICollection<SupplierPart> Suppliers { get; set; } = new List<SupplierPart>(); // Links Part to specific Suppliers with details
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); // Sales Order Items
+        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
+
+        public virtual ICollection<PurchaseItem> PartPurchaseItems { get; set; } = new List<PurchaseItem>();
+
+        public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
     }
 }

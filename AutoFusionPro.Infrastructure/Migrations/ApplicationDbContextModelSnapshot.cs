@@ -25,6 +25,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
                     b.Property<string>("ActionType")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -34,12 +35,15 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EntityId")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EntityType")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -64,7 +68,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Category", b =>
@@ -146,49 +150,49 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9597),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8050),
                             Name = "Sedan"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9600),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8052),
                             Name = "SUV (Sport Utility Vehicle)"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9603),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8054),
                             Name = "Hatchback"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9605),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8057),
                             Name = "Coupe"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9607),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8059),
                             Name = "Convertible"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9610),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8061),
                             Name = "Minivan"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9612),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8063),
                             Name = "Truck (Pickup)"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9614),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8065),
                             Name = "Wagon (Estate)"
                         });
                 });
@@ -299,35 +303,35 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         {
                             Id = 1,
                             Code = "I4_GAS",
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9656),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8120),
                             Name = "Gasoline - Inline 4 (I4)"
                         },
                         new
                         {
                             Id = 2,
                             Code = "V6_GAS",
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9659),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8122),
                             Name = "Gasoline - V6"
                         },
                         new
                         {
                             Id = 3,
                             Code = "I4_DSL",
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9661),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8125),
                             Name = "Diesel - Inline 4 (I4)"
                         },
                         new
                         {
                             Id = 4,
                             Code = "ELEC",
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9664),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8127),
                             Name = "Electric"
                         },
                         new
                         {
                             Id = 5,
                             Code = "HYB",
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9667),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8129),
                             Name = "Hybrid"
                         });
                 });
@@ -369,28 +373,28 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Nissan.jpg",
                             Name = "نيسان"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Toyota.png",
                             Name = "تويوتا"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Kia.jpg",
                             Name = "كيا"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Hyundai.png",
                             Name = "هيونداي"
                         });
@@ -436,7 +440,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Altima.png",
                             MakeId = 1,
                             Name = "التيما"
@@ -444,7 +448,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Rogue.png",
                             MakeId = 1,
                             Name = "روج"
@@ -452,7 +456,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Sentra.png",
                             MakeId = 1,
                             Name = "سنترا"
@@ -460,7 +464,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Sunny.jpg",
                             MakeId = 1,
                             Name = "صني"
@@ -468,7 +472,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Kicks.jpg",
                             MakeId = 1,
                             Name = "كيكس"
@@ -476,7 +480,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Maxima.png",
                             MakeId = 1,
                             Name = "ماكزيما"
@@ -484,7 +488,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Qashqqai.png",
                             MakeId = 1,
                             Name = "قاشقاي"
@@ -525,31 +529,31 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9542),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7984),
                             Name = "Automatic"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9545),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7987),
                             Name = "Manual"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9547),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7989),
                             Name = "CVT (Continuously Variable Transmission)"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9549),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7991),
                             Name = "Semi-Automatic"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9551),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7993),
                             Name = "Dual-Clutch (DCT)"
                         });
                 });
@@ -591,140 +595,140 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 1,
                             Name = "S"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 1,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 1,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 1,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 1,
                             Name = "Platinum"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 3,
                             Name = "S"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 3,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 3,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 2,
                             Name = "S"
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 2,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 2,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 4,
                             Name = "S"
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 4,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 4,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "S"
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "Platinum"
                         },
                         new
                         {
                             Id = 20,
-                            CreatedAt = new DateTime(2025, 6, 1, 15, 29, 4, 960, DateTimeKind.Utc).AddTicks(9037),
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
                             ModelId = 6,
                             Name = "Platinum Reserve"
                         });
@@ -878,9 +882,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasDefaultValue(0m);
 
                     b.Property<decimal>("Balance")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("decimal(18,2)")
-                        .HasComputedColumnSql("[Total] - [AmountPaid]");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -1016,10 +1018,13 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Message")
                         .IsRequired()
+                        .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -1029,24 +1034,38 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RelatedEntityId")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.HasIndex("IsRead");
+
+                    b.HasIndex("Role");
+
+                    b.HasIndex("Timestamp");
+
+                    b.HasIndex("Type");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Order", b =>
@@ -1156,7 +1175,10 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int>("PartId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("QuantitySold")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UnitOfMeasureId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("UnitPrice")
@@ -1165,6 +1187,8 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PartId");
+
+                    b.HasIndex("UnitOfMeasureId");
 
                     b.HasIndex("OrderId", "PartId")
                         .IsUnique();
@@ -1210,7 +1234,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<bool>("IsOriginal")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastRestockDate")
+                    b.Property<DateTime?>("LastRestockDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Location")
@@ -1245,7 +1269,19 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("PurchaseConversionFactor")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int?>("PurchaseUnitOfMeasureId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ReorderLevel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("SalesConversionFactor")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int?>("SalesUnitOfMeasureId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("SellingPrice")
@@ -1254,12 +1290,21 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("StockingUnitOfMeasureId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("PartNumber")
                         .IsUnique();
+
+                    b.HasIndex("PurchaseUnitOfMeasureId");
+
+                    b.HasIndex("SalesUnitOfMeasureId");
+
+                    b.HasIndex("StockingUnitOfMeasureId");
 
                     b.ToTable("Parts", (string)null);
                 });
@@ -1292,14 +1337,9 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int>("PartId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("VehicleId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CompatibleVehicleId");
-
-                    b.HasIndex("VehicleId");
 
                     b.HasIndex("PartId", "CompatibleVehicleId")
                         .IsUnique();
@@ -1448,7 +1488,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("LineTotal")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
@@ -1462,14 +1502,16 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int>("PurchaseId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ReceivedQuantity")
-                        .HasColumnType("INTEGER");
+                    b.Property<int>("QuantityOrdered")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
 
                     b.Property<decimal>("UnitCost")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UnitOfMeasureId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -1477,7 +1519,9 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
                     b.HasIndex("PurchaseId");
 
-                    b.ToTable("PurchaseItems");
+                    b.HasIndex("UnitOfMeasureId");
+
+                    b.ToTable("PurchaseItems", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Supplier", b =>
@@ -1601,6 +1645,100 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("SupplierParts", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.UnitOfMeasure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Symbol")
+                        .IsUnique();
+
+                    b.ToTable("UnitOfMeasures", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8177),
+                            Name = "Piece",
+                            Symbol = "pcs"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8180),
+                            Name = "Liter",
+                            Symbol = "L"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8183),
+                            Name = "Kilogram",
+                            Symbol = "kg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8186),
+                            Name = "Box",
+                            Symbol = "box"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8188),
+                            Name = "Meter",
+                            Symbol = "m"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8191),
+                            Name = "Pair",
+                            Symbol = "pr"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8194),
+                            Name = "Set",
+                            Symbol = "set"
+                        });
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.User", b =>
@@ -1736,14 +1874,17 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.Vehicle", b =>
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BodyType")
-                        .HasColumnType("TEXT");
+                    b.Property<decimal?>("AskingPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BodyTypeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -1751,20 +1892,42 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Engine")
-                        .IsRequired()
+                    b.Property<int?>("DriveType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EngineTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExteriorColor")
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Make")
-                        .IsRequired()
+                    b.Property<string>("FeaturesList")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("FuelType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GeneralNotes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("InteriorColor")
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MakeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Mileage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MileageUnit")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
@@ -1772,12 +1935,46 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Transmission")
+                    b.Property<int?>("NumberOfDoors")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NumberOfSeats")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("PurchaseDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RegistrationCountryOrState")
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TrimLevel")
+                    b.Property<DateTime?>("RegistrationExpiryDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("RegistrationPlateNumber")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SoldDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("SoldPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("SoldToCustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TransmissionTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TrimLevelId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("VIN")
                         .HasMaxLength(17)
@@ -1788,9 +1985,260 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Make", "Model", "Year");
+                    b.HasIndex("BodyTypeId");
 
-                    b.ToTable("Vehicles", (string)null);
+                    b.HasIndex("EngineTypeId");
+
+                    b.HasIndex("MakeId");
+
+                    b.HasIndex("ModelId");
+
+                    b.HasIndex("SoldToCustomerId");
+
+                    b.HasIndex("TransmissionTypeId");
+
+                    b.HasIndex("TrimLevelId");
+
+                    b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VehicleDamageLogId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleDamageLogId");
+
+                    b.ToTable("VehicleDamageImages", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("ActualRepairCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateNoted")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("EstimatedRepairCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsRepaired")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RepairNotes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RepairedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleDamageLogs", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DocumentName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleDocuments", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleImages", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleServiceHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MileageAtService")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceProviderName")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleServiceHistories", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.AuditLog", b =>
@@ -1971,9 +2419,17 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AutoFusionPro.Domain.Models.UnitOfMeasure", "UnitOfMeasure")
+                        .WithMany()
+                        .HasForeignKey("UnitOfMeasureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Order");
 
                     b.Navigation("Part");
+
+                    b.Navigation("UnitOfMeasure");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Part", b =>
@@ -1984,7 +2440,29 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AutoFusionPro.Domain.Models.UnitOfMeasure", "PurchaseUnitOfMeasure")
+                        .WithMany("PartsPurchaseUnit")
+                        .HasForeignKey("PurchaseUnitOfMeasureId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AutoFusionPro.Domain.Models.UnitOfMeasure", "SalesUnitOfMeasure")
+                        .WithMany("PartsSalesUnit")
+                        .HasForeignKey("SalesUnitOfMeasureId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AutoFusionPro.Domain.Models.UnitOfMeasure", "StockingUnitOfMeasure")
+                        .WithMany("PartsStockingUnit")
+                        .HasForeignKey("StockingUnitOfMeasureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("PurchaseUnitOfMeasure");
+
+                    b.Navigation("SalesUnitOfMeasure");
+
+                    b.Navigation("StockingUnitOfMeasure");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibility", b =>
@@ -2000,10 +2478,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AutoFusionPro.Domain.Models.Vehicle", null)
-                        .WithMany("CompatibleParts")
-                        .HasForeignKey("VehicleId");
 
                     b.Navigation("CompatibleVehicle");
 
@@ -2051,9 +2525,9 @@ namespace AutoFusionPro.Infrastructure.Migrations
             modelBuilder.Entity("AutoFusionPro.Domain.Models.PurchaseItem", b =>
                 {
                     b.HasOne("AutoFusionPro.Domain.Models.Part", "Part")
-                        .WithMany()
+                        .WithMany("PartPurchaseItems")
                         .HasForeignKey("PartId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AutoFusionPro.Domain.Models.Purchase", "Purchase")
@@ -2062,9 +2536,17 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AutoFusionPro.Domain.Models.UnitOfMeasure", "UnitOfMeasure")
+                        .WithMany()
+                        .HasForeignKey("UnitOfMeasureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Part");
 
                     b.Navigation("Purchase");
+
+                    b.Navigation("UnitOfMeasure");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.SupplierPart", b =>
@@ -2084,6 +2566,110 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("Part");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.BodyType", "BodyType")
+                        .WithMany()
+                        .HasForeignKey("BodyTypeId");
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.EngineType", "EngineType")
+                        .WithMany()
+                        .HasForeignKey("EngineTypeId");
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Make", "Make")
+                        .WithMany()
+                        .HasForeignKey("MakeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.Customer", "SoldToCustomer")
+                        .WithMany()
+                        .HasForeignKey("SoldToCustomerId");
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TransmissionType", "TransmissionType")
+                        .WithMany()
+                        .HasForeignKey("TransmissionTypeId");
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TrimLevel", "TrimLevel")
+                        .WithMany()
+                        .HasForeignKey("TrimLevelId");
+
+                    b.Navigation("BodyType");
+
+                    b.Navigation("EngineType");
+
+                    b.Navigation("Make");
+
+                    b.Navigation("Model");
+
+                    b.Navigation("SoldToCustomer");
+
+                    b.Navigation("TransmissionType");
+
+                    b.Navigation("TrimLevel");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageImage", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageLog", "VehicleDamageLog")
+                        .WithMany("DamageImages")
+                        .HasForeignKey("VehicleDamageLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VehicleDamageLog");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageLog", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", "Vehicle")
+                        .WithMany("DamageLogs")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDocument", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", "Vehicle")
+                        .WithMany("Documents")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleImage", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", "Vehicle")
+                        .WithMany("Images")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleServiceHistory", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", "Vehicle")
+                        .WithMany("ServiceRecords")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Category", b =>
@@ -2161,6 +2747,8 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
                     b.Navigation("OrderItems");
 
+                    b.Navigation("PartPurchaseItems");
+
                     b.Navigation("Suppliers");
                 });
 
@@ -2174,6 +2762,15 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("Parts");
 
                     b.Navigation("Purchases");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.UnitOfMeasure", b =>
+                {
+                    b.Navigation("PartsPurchaseUnit");
+
+                    b.Navigation("PartsSalesUnit");
+
+                    b.Navigation("PartsStockingUnit");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.User", b =>
@@ -2191,9 +2788,20 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("Purchases");
                 });
 
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.Vehicle", b =>
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.Vehicle", b =>
                 {
-                    b.Navigation("CompatibleParts");
+                    b.Navigation("DamageLogs");
+
+                    b.Navigation("Documents");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("ServiceRecords");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.VehiclesInventory.VehicleDamageLog", b =>
+                {
+                    b.Navigation("DamageImages");
                 });
 #pragma warning restore 612, 618
         }

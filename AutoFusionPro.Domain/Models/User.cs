@@ -32,7 +32,7 @@ namespace AutoFusionPro.Domain.Models
 
 
         public DateTime? LastLoginDate { get; set; }
-        public DateTime DateRegistered { get; set; } = DateTime.Now;
+        public DateTime DateRegistered { get; set; } = DateTime.UtcNow;
 
         public string? SecurityQuestion { get; set; }
         public string? SecurityAnswerHash { get; set; } // The salt is the same for password
@@ -42,7 +42,7 @@ namespace AutoFusionPro.Domain.Models
         public bool IsTwoFactorEnabled { get; set; } = false;
         public string? TwoFactorSecret { get; set; }
 
-        public DateTime LastActive { get; set; } = DateTime.Now;
+        public DateTime LastActive { get; set; } = DateTime.UtcNow;
 
         // Change SystemRole to an enum
         public UserRole UserRole { get; set; } = UserRole.User;

@@ -50,7 +50,7 @@
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
                                               FontSize="12" />
-                            <TextBlock Text="Filters"
+                            <TextBlock Text="{DynamicResource FiltersStr}"
                                        FontSize="12"
                                        Margin="5,0,0,0" />
                         </StackPanel>
@@ -61,7 +61,7 @@
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="Add48"
                                               FontSize="12" />
-                            <TextBlock Text="Add New Part" FontSize="12" Margin="5,0,0,0"/>
+                            <TextBlock Text="{DynamicResource AddNewPartStr}" FontSize="12" Margin="5,0,0,0"/>
                         </StackPanel>
                     </xBtn:XButton>
                 </StackPanel>
@@ -168,7 +168,7 @@
 
                         <GridViewColumn Header="Category"
                                         Width="120"
-                                        DisplayMemberBinding="{Binding Category.Name}" />
+                                        DisplayMemberBinding="{Binding CategoryName}" />
                         <GridViewColumn Header="Location"
                                         Width="120"
                                         DisplayMemberBinding="{Binding Location}" />

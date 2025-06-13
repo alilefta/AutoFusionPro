@@ -106,7 +106,7 @@ namespace AutoFusionPro.UI.ViewModels.Categories.Dialogs
         #region Commands
         private bool CanAddCategory()
         {
-            return !string.IsNullOrEmpty(Name) || ParentCategory != null;
+            return !string.IsNullOrEmpty(Name) && ParentCategory != null;
         }
 
         [RelayCommand(CanExecute = nameof(CanAddCategory))]

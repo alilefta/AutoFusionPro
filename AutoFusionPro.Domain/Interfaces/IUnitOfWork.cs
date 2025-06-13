@@ -2,6 +2,7 @@
 
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Interfaces.Repository.VehicleInventory;
 using System.Linq.Expressions;
 
 namespace AutoFusionPro.Domain.Interfaces
@@ -12,7 +13,6 @@ namespace AutoFusionPro.Domain.Interfaces
         IUserRepository Users {  get; } 
         IPartRepository Parts {  get; } 
         ICategoryRepository Categories {  get; } 
-        IVehicleRepository Vehicles {  get; } 
         INotificationRepository Notifications {  get; } 
 
         ICompatibleVehicleRepository CompatibleVehicles { get; }
@@ -22,6 +22,20 @@ namespace AutoFusionPro.Domain.Interfaces
         IEngineTypeRepository EngineTypes { get; }
         ITransmissionTypeRepository TransmissionTypes { get; }
         ITrimLevelRepository TrimLevels { get; }
+        ISupplierRepository Suppliers { get; }
+        IInventoryTransactionRepository InventoryTransactions { get; }
+
+        IPartCompatibilityRepository PartCompatibilities { get; }
+        ISupplierPartRepository SupplierParts { get; }
+
+        IUnitOfMeasureRepository UnitOfMeasures { get; }
+
+        IVehicleDocumentRepository VehicleDocuments { get; }
+        IVehicleDamageImageRepository VehicleDamageImages { get; }
+        IVehicleServiceHistoryRepository VehicleServiceHistories { get; }
+        IVehicleDamageLogRepository VehicleDamageLogs { get; }
+        IVehicleImageRepository VehicleImages { get; }
+        IVehicleRepository Vehicles { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
@@ -34,6 +48,7 @@ namespace AutoFusionPro.Domain.Interfaces
         Task BeginTransactionAsync(CancellationToken cancellationToken = default); // Add CancellationToken here too
         Task CommitTransactionAsync(CancellationToken cancellationToken = default); // And here
         Task RollbackTransactionAsync(CancellationToken cancellationToken = default); // And here
+
 
         Task AddAsync<TEntity>(TEntity entity) where TEntity : class;
         Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;

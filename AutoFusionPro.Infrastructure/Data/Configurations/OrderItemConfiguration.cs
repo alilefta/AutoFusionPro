@@ -13,7 +13,7 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
             builder.HasKey(oi => oi.Id);
             builder.Property(oi => oi.Id).ValueGeneratedOnAdd();
 
-            builder.Property(oi => oi.Quantity)
+            builder.Property(oi => oi.QuantitySold)
                 .IsRequired();
 
             builder.Property(oi => oi.UnitPrice)
@@ -27,6 +27,12 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
             builder.Property(oi => oi.LineTotal)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
+            builder.HasOne(oi => oi.UnitOfMeasure)
+            .WithMany() // UoM can be used by many order items
+            .HasForeignKey(oi => oi.UnitOfMeasureId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
             // Relationships
             builder.HasOne(oi => oi.Order)

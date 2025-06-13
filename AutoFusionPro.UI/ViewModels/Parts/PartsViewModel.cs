@@ -49,9 +49,15 @@ namespace AutoFusionPro.UI.ViewModels.Parts
             try
             {
 
-                var partsData = await _partService.GetPartSummariesAsync();
+                var partsData = await _partService.GetAllPartsSummariesAsync();
 
-                Parts = new ObservableCollection<PartSummaryDto>(partsData);
+                if (partsData.Any())
+                {
+                    foreach (var part in partsData)
+                    {
+                        Parts.Add(part);
+                    }
+                }
 
             }
             catch (Exception ex)

@@ -12,27 +12,27 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
     /// <summary>
     /// Base Repository Wrapper
     /// </summary>
-    /// <typeparam name="T">Domain Model Type</typeparam>
-    /// <typeparam name="Repo">Child repository</typeparam>
-    public class Repository<T, Repo> : IBaseRepository<T> where T : class where Repo : class
+    /// <typeparam name="TEntity">Child Domain Model</typeparam>>
+    /// <typeparam name="TChildRepo">Child Repository</typeparam>>
+    public abstract class Repository<TEntity, TChildRepo> : IBaseRepository<TEntity> where TEntity : class where TChildRepo : class
     {
         protected readonly ApplicationDbContext _context;
-        protected readonly ILogger<Repo> _logger;
-        protected readonly DbSet<T> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
+        protected readonly ILogger<TChildRepo> _logger; // Generic logger
 
         // Implement event
-        public event EventHandler<DataChangedEventArgs<T>> DataChanged;
+        public event EventHandler<DataChangedEventArgs<TEntity>> DataChanged;
 
 
 
-        public Repository(ApplicationDbContext context, ILogger<Repo> logger)
+        public Repository(ApplicationDbContext context, ILogger<TChildRepo> logger)
         {
             _context = context;
-            _dbSet = context.Set<T>();
+            _dbSet = context.Set<TEntity>();
             _logger = logger;
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<TEntity?> GetByIdAsync(int id)
         {
             try
             {
@@ -45,12 +45,12 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
             }
             catch(Exception ex)
             {
-                _logger.LogError($"An error occurred while trying to get {typeof(T)}, in 'GetByIdAsync(int id)'");
+                _logger.LogError($"An error occurred while trying to get {typeof(TEntity)}, in 'GetByIdAsync(int id)'");
                 return null;
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             try
             {
@@ -62,7 +62,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
             }
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
            try
            {
@@ -75,7 +75,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
             }
         }
 
-        public async Task AddAsync(T entity)
+        public async Task AddAsync(TEntity entity)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 
         }
 
-        public async Task AddRangeAsync(IEnumerable<T> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
             }
         }
 
-        public void Update(T entity)
+        public void Update(TEntity entity)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 
         }
 
-        public void Delete(T entity)
+        public void Delete(TEntity entity)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 
         }
 
-        public void RemoveRange(IEnumerable<T> entities)
+        public void RemoveRange(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
         {
             try
             {
@@ -156,7 +156,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
             }
         }
 
-        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate = null)
         {
             try
             {
@@ -174,9 +174,9 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.Base
 
 
         // Trigger event in methods that modify data
-        protected virtual void OnDataChanged(T entity, DataChangeType changeType)
+        protected virtual void OnDataChanged(TEntity entity, DataChangeType changeType)
         {
-            DataChanged?.Invoke(this, new DataChangedEventArgs<T>
+            DataChanged?.Invoke(this, new DataChangedEventArgs<TEntity>
             {
                 Entity = entity,
                 ChangeType = changeType
