@@ -6,6 +6,7 @@
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.Base;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
+using AutoFusionPro.Domain.Models.PartCompatibilityRules;
 using AutoFusionPro.Domain.Models.VehiclesInventory;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,6 @@ namespace AutoFusionPro.Infrastructure.Data.Context
 
         public DbSet<Part> Parts { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<PartCompatibility> PartCompatibilities { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierPart> SupplierParts { get; set; }
@@ -36,7 +36,6 @@ namespace AutoFusionPro.Infrastructure.Data.Context
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
 
-        public DbSet<CompatibleVehicle> CompatibleVehicles { get; set; }
         public DbSet<Make> Makes { get; set; }
         public DbSet<Model> Models { get; set; }
         public DbSet<TrimLevel> TrimLevels { get; set; }
@@ -50,6 +49,13 @@ namespace AutoFusionPro.Infrastructure.Data.Context
         public DbSet<VehicleDocument> VehicleDocuments { get; set; }
         public DbSet<VehicleImage> VehicleImages { get; set; }
         public DbSet<VehicleServiceHistory> VehicleServiceHistories { get; set; }
+
+        public DbSet<PartCompatibilityRule> PartCompatibilityRules { get; set; }
+        public DbSet<PartCompatibilityRuleTrimLevel> PartCompatibilityRuleTrimLevels { get; set; }
+        public DbSet<PartCompatibilityRuleEngineType> PartCompatibilityRuleEngineTypes { get; set; }
+        public DbSet<PartCompatibilityRuleTransmissionType> PartCompatibilityRuleTransmissionTypes { get; set; }
+        public DbSet<PartCompatibilityRuleBodyType> PartCompatibilityRuleBodyTypes { get; set; }
+        public DbSet<PartImage> PartImages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

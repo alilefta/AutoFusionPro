@@ -150,115 +150,51 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8050),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1734),
                             Name = "Sedan"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8052),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1737),
                             Name = "SUV (Sport Utility Vehicle)"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8054),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1739),
                             Name = "Hatchback"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8057),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1740),
                             Name = "Coupe"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8059),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1742),
                             Name = "Convertible"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8061),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1744),
                             Name = "Minivan"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8063),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1745),
                             Name = "Truck (Pickup)"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8065),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1747),
                             Name = "Wagon (Estate)"
                         });
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.CompatibleVehicle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("BodyTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EngineTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ModelId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TransmissionTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TrimLevelId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("VIN")
-                        .HasMaxLength(20)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("YearEnd")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("YearStart")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BodyTypeId");
-
-                    b.HasIndex("EngineTypeId");
-
-                    b.HasIndex("TransmissionTypeId");
-
-                    b.HasIndex("TrimLevelId");
-
-                    b.HasIndex("VIN")
-                        .IsUnique()
-                        .HasFilter("[VIN] IS NOT NULL");
-
-                    b.HasIndex("ModelId", "YearStart", "YearEnd", "TrimLevelId", "TransmissionTypeId", "EngineTypeId", "BodyTypeId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_CompatibleVehicle_UniqueSpec");
-
-                    b.ToTable("CompatibleVehicles", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.EngineType", b =>
@@ -303,35 +239,35 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         {
                             Id = 1,
                             Code = "I4_GAS",
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8120),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1789),
                             Name = "Gasoline - Inline 4 (I4)"
                         },
                         new
                         {
                             Id = 2,
                             Code = "V6_GAS",
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8122),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1791),
                             Name = "Gasoline - V6"
                         },
                         new
                         {
                             Id = 3,
                             Code = "I4_DSL",
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8125),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1793),
                             Name = "Diesel - Inline 4 (I4)"
                         },
                         new
                         {
                             Id = 4,
                             Code = "ELEC",
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8127),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1795),
                             Name = "Electric"
                         },
                         new
                         {
                             Id = 5,
                             Code = "HYB",
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8129),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1797),
                             Name = "Hybrid"
                         });
                 });
@@ -373,28 +309,28 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Nissan.jpg",
                             Name = "نيسان"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Toyota.png",
                             Name = "تويوتا"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Kia.jpg",
                             Name = "كيا"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Makes/Hyundai.png",
                             Name = "هيونداي"
                         });
@@ -440,7 +376,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Altima.png",
                             MakeId = 1,
                             Name = "التيما"
@@ -448,7 +384,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Rogue.png",
                             MakeId = 1,
                             Name = "روج"
@@ -456,7 +392,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Sentra.png",
                             MakeId = 1,
                             Name = "سنترا"
@@ -464,7 +400,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Sunny.jpg",
                             MakeId = 1,
                             Name = "صني"
@@ -472,7 +408,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Kicks.jpg",
                             MakeId = 1,
                             Name = "كيكس"
@@ -480,7 +416,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Maxima.png",
                             MakeId = 1,
                             Name = "ماكزيما"
@@ -488,7 +424,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ImagePath = "pack://application:,,,/AutoFusionPro.UI;component/Assets/VehicleStructure/Models/Qashqqai.png",
                             MakeId = 1,
                             Name = "قاشقاي"
@@ -529,31 +465,31 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7984),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1684),
                             Name = "Automatic"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7987),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1687),
                             Name = "Manual"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7989),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1689),
                             Name = "CVT (Continuously Variable Transmission)"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7991),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1691),
                             Name = "Semi-Automatic"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7993),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1693),
                             Name = "Dual-Clutch (DCT)"
                         });
                 });
@@ -595,140 +531,140 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 1,
                             Name = "S"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 1,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 1,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 1,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 1,
                             Name = "Platinum"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 3,
                             Name = "S"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 3,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 3,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 2,
                             Name = "S"
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 2,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 2,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 4,
                             Name = "S"
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 4,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 4,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "S"
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "SV"
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "SL"
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "SR"
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "Platinum"
                         },
                         new
                         {
                             Id = 20,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(7360),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1116),
                             ModelId = 6,
                             Name = "Platinum Reserve"
                         });
@@ -824,7 +760,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
@@ -844,7 +779,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ReferenceNumber")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
@@ -1224,10 +1158,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ImagePath")
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
@@ -1309,13 +1239,13 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.ToTable("Parts", (string)null);
                 });
 
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibility", b =>
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CompatibleVehicleId")
+                    b.Property<int?>("CopiedFromRuleId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1324,27 +1254,252 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MakeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ModelId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PartId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("YearEnd")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("YearStart")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsTemplate");
+
+                    b.HasIndex("MakeId");
+
+                    b.HasIndex("ModelId");
+
+                    b.HasIndex("PartId");
+
+                    b.ToTable("PartCompatibilityRules", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleBodyType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BodyTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsExclusion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PartCompatibilityRuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BodyTypeId");
+
+                    b.HasIndex("PartCompatibilityRuleId", "BodyTypeId")
+                        .IsUnique();
+
+                    b.ToTable("PartCompatibilityRuleBodyTypes", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleEngineType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EngineTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsExclusion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PartCompatibilityRuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EngineTypeId");
+
+                    b.HasIndex("PartCompatibilityRuleId", "EngineTypeId")
+                        .IsUnique();
+
+                    b.ToTable("PartCompatibilityRuleEngineTypes", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleTransmissionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsExclusion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PartCompatibilityRuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TransmissionTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransmissionTypeId");
+
+                    b.HasIndex("PartCompatibilityRuleId", "TransmissionTypeId")
+                        .IsUnique();
+
+                    b.ToTable("PartCompatibilityRuleTransmissionTypes", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleTrimLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsExclusion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PartCompatibilityRuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TrimLevelId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrimLevelId");
+
+                    b.HasIndex("PartCompatibilityRuleId", "TrimLevelId")
+                        .IsUnique();
+
+                    b.ToTable("PartCompatibilityRuleTrimLevels", (string)null);
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Caption")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("PartId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompatibleVehicleId");
+                    b.HasIndex("PartId");
 
-                    b.HasIndex("PartId", "CompatibleVehicleId")
-                        .IsUnique();
-
-                    b.ToTable("PartCompatibilities", (string)null);
+                    b.ToTable("PartImages", (string)null);
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Payment", b =>
@@ -1693,49 +1848,49 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8177),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1842),
                             Name = "Piece",
                             Symbol = "pcs"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8180),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1845),
                             Name = "Liter",
                             Symbol = "L"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8183),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1848),
                             Name = "Kilogram",
                             Symbol = "kg"
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8186),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1851),
                             Name = "Box",
                             Symbol = "box"
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8188),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1853),
                             Name = "Meter",
                             Symbol = "m"
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8191),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1856),
                             Name = "Pair",
                             Symbol = "pr"
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 13, 12, 11, 44, 173, DateTimeKind.Utc).AddTicks(8194),
+                            CreatedAt = new DateTime(2025, 6, 26, 13, 28, 27, 60, DateTimeKind.Utc).AddTicks(1858),
                             Name = "Set",
                             Symbol = "set"
                         });
@@ -2134,6 +2289,10 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("VehicleId")
                         .HasColumnType("INTEGER");
 
@@ -2260,45 +2419,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.CompatibleVehicle", b =>
-                {
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.BodyType", "BodyType")
-                        .WithMany("CompatibleVehicleSpecs")
-                        .HasForeignKey("BodyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.EngineType", "EngineType")
-                        .WithMany("CompatibleVehicleSpecs")
-                        .HasForeignKey("EngineTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Model", "Model")
-                        .WithMany("CompatibleVehicleSpecs")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TransmissionType", "TransmissionType")
-                        .WithMany("CompatibleVehicleSpecs")
-                        .HasForeignKey("TransmissionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TrimLevel", "TrimLevel")
-                        .WithMany("CompatibleVehicleSpecs")
-                        .HasForeignKey("TrimLevelId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("BodyType");
-
-                    b.Navigation("EngineType");
-
-                    b.Navigation("Model");
-
-                    b.Navigation("TransmissionType");
-
-                    b.Navigation("TrimLevel");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Model", b =>
@@ -2465,21 +2585,114 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("StockingUnitOfMeasure");
                 });
 
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibility", b =>
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRule", b =>
                 {
-                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.CompatibleVehicle", "CompatibleVehicle")
-                        .WithMany("PartCompatibilities")
-                        .HasForeignKey("CompatibleVehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Make", "Make")
+                        .WithMany()
+                        .HasForeignKey("MakeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AutoFusionPro.Domain.Models.Part", "Part")
-                        .WithMany("CompatibleVehicles")
+                        .WithMany("CompatibilityRules")
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CompatibleVehicle");
+                    b.Navigation("Make");
+
+                    b.Navigation("Model");
+
+                    b.Navigation("Part");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleBodyType", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.BodyType", "BodyType")
+                        .WithMany()
+                        .HasForeignKey("BodyTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.PartCompatibilityRule", "PartCompatibilityRule")
+                        .WithMany("ApplicableBodyTypes")
+                        .HasForeignKey("PartCompatibilityRuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BodyType");
+
+                    b.Navigation("PartCompatibilityRule");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleEngineType", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.EngineType", "EngineType")
+                        .WithMany()
+                        .HasForeignKey("EngineTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.PartCompatibilityRule", "PartCompatibilityRule")
+                        .WithMany("ApplicableEngineTypes")
+                        .HasForeignKey("PartCompatibilityRuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EngineType");
+
+                    b.Navigation("PartCompatibilityRule");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleTransmissionType", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.PartCompatibilityRule", "PartCompatibilityRule")
+                        .WithMany("ApplicableTransmissionTypes")
+                        .HasForeignKey("PartCompatibilityRuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TransmissionType", "TransmissionType")
+                        .WithMany()
+                        .HasForeignKey("TransmissionTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PartCompatibilityRule");
+
+                    b.Navigation("TransmissionType");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRules.PartCompatibilityRuleTrimLevel", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.PartCompatibilityRule", "PartCompatibilityRule")
+                        .WithMany("ApplicableTrimLevels")
+                        .HasForeignKey("PartCompatibilityRuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TrimLevel", "TrimLevel")
+                        .WithMany()
+                        .HasForeignKey("TrimLevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PartCompatibilityRule");
+
+                    b.Navigation("TrimLevel");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartImage", b =>
+                {
+                    b.HasOne("AutoFusionPro.Domain.Models.Part", "Part")
+                        .WithMany("Images")
+                        .HasForeignKey("PartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Part");
                 });
@@ -2679,21 +2892,6 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("Subcategories");
                 });
 
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.BodyType", b =>
-                {
-                    b.Navigation("CompatibleVehicleSpecs");
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.CompatibleVehicle", b =>
-                {
-                    b.Navigation("PartCompatibilities");
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.EngineType", b =>
-                {
-                    b.Navigation("CompatibleVehicleSpecs");
-                });
-
             modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Make", b =>
                 {
                     b.Navigation("Models");
@@ -2701,19 +2899,7 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.Model", b =>
                 {
-                    b.Navigation("CompatibleVehicleSpecs");
-
                     b.Navigation("TrimLevels");
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TransmissionType", b =>
-                {
-                    b.Navigation("CompatibleVehicleSpecs");
-                });
-
-            modelBuilder.Entity("AutoFusionPro.Domain.Models.CompatibleVehicleModels.TrimLevel", b =>
-                {
-                    b.Navigation("CompatibleVehicleSpecs");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Customer", b =>
@@ -2739,7 +2925,9 @@ namespace AutoFusionPro.Infrastructure.Migrations
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Part", b =>
                 {
-                    b.Navigation("CompatibleVehicles");
+                    b.Navigation("CompatibilityRules");
+
+                    b.Navigation("Images");
 
                     b.Navigation("InventoryTransactions");
 
@@ -2750,6 +2938,17 @@ namespace AutoFusionPro.Infrastructure.Migrations
                     b.Navigation("PartPurchaseItems");
 
                     b.Navigation("Suppliers");
+                });
+
+            modelBuilder.Entity("AutoFusionPro.Domain.Models.PartCompatibilityRule", b =>
+                {
+                    b.Navigation("ApplicableBodyTypes");
+
+                    b.Navigation("ApplicableEngineTypes");
+
+                    b.Navigation("ApplicableTransmissionTypes");
+
+                    b.Navigation("ApplicableTrimLevels");
                 });
 
             modelBuilder.Entity("AutoFusionPro.Domain.Models.Purchase", b =>

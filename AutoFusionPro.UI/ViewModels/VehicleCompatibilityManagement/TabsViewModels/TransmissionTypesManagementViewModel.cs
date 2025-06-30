@@ -20,7 +20,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
     public partial class TransmissionTypesManagementViewModel : BaseViewModel<TransmissionTypesManagementViewModel>, ITabViewModel
     {
         private readonly IWpfToastNotificationService _wpfToastNotificationService;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _vehicleTaxonomyService;
         private readonly IDialogService _dialogService;
         [ObservableProperty]
         private bool _isVisible = false;
@@ -48,13 +48,13 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private TransmissionTypeDto _selectedTransmissionType = null;
 
         public TransmissionTypesManagementViewModel(IWpfToastNotificationService wpfToastNotificationService,
-            ICompatibleVehicleService compatibleVehicleService,
+            IVehicleTaxonomyService vehicleTaxonomyService,
             IDialogService dialogService,
             ILocalizationService localizationService,
             ILogger<TransmissionTypesManagementViewModel> logger) : base(localizationService, logger)
         {
             _wpfToastNotificationService = wpfToastNotificationService ?? throw new ArgumentNullException(nameof(wpfToastNotificationService));
-            _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
+            _vehicleTaxonomyService = vehicleTaxonomyService ?? throw new ArgumentNullException(nameof(vehicleTaxonomyService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             // Initialize collections
@@ -95,7 +95,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
             {
                 TransmissionTypesCollection.Clear();
 
-                var transmissionTypes = await _compatibleVehicleService.GetAllTransmissionTypesAsync();
+                var transmissionTypes = await _vehicleTaxonomyService.GetAllTransmissionTypesAsync();
                 if (transmissionTypes != null)
                 {
                     foreach (var make in transmissionTypes.OrderBy(m => m.Name))
@@ -193,7 +193,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 try
                 {
-                    await _compatibleVehicleService.DeleteTransmissionTypeAsync(transmissionTypeDto.Id);
+                    await _vehicleTaxonomyService.DeleteTransmissionTypeAsync(transmissionTypeDto.Id);
 
                     await LoadTransmissionTypesAsync();
 

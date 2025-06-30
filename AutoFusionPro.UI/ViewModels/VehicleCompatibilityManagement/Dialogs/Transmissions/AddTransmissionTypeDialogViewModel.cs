@@ -19,7 +19,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Tra
     {
 
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         [ObservableProperty]
         private bool _isAdding = false;
 
@@ -27,7 +27,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Tra
         [NotifyCanExecuteChangedFor(nameof(AddTransmissionTypeCommand))]
         private string _name = string.Empty;
 
-        public AddTransmissionTypeDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddTransmissionTypeDialogViewModel> logger) : base(localizationService, logger)
+        public AddTransmissionTypeDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddTransmissionTypeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }

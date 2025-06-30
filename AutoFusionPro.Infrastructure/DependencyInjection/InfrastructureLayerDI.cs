@@ -2,11 +2,13 @@
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Interfaces.Repository.PartCompatibilityRulesRepositories;
 using AutoFusionPro.Domain.Interfaces.Repository.VehicleInventory;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories;
 using AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleRepositories;
 using AutoFusionPro.Infrastructure.Data.Repositories.JointTableRepositories;
+using AutoFusionPro.Infrastructure.Data.Repositories.PartCompatibilityRules;
 using AutoFusionPro.Infrastructure.Data.Repositories.VehicleInventory;
 using AutoFusionPro.Infrastructure.Data.UnitOfWork;
 using AutoFusionPro.Infrastructure.Services.Storage;
@@ -53,7 +55,6 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<IVehicleServiceHistoryRepository, VehicleServiceHistoryRepository>();
 
 
-            services.AddScoped<ICompatibleVehicleRepository, CompatibleVehicleRepository>();
             services.AddScoped<IMakeRepository, MakeRepository>();
             services.AddScoped<IModelRepository, ModelRepository>();
             services.AddScoped<IBodyTypeRepository, BodyTypeRepository>();
@@ -62,7 +63,14 @@ namespace AutoFusionPro.Infrastructure.DependencyInjection
             services.AddScoped<ITrimLevelRepository, TrimLevelRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
 
-            services.AddScoped<IPartCompatibilityRepository, PartCompatibilityRepository>();
+            services.AddScoped<IPartCompatibilityRuleRepository, PartCompatibilityRuleRepository>();
+            services.AddScoped<IPartCompatibilityRuleEngineTypeRepository, PartCompatibilityRuleEngineTypeRepository>();
+            services.AddScoped<IPartCompatibilityRuleBodyTypeRepository, PartCompatibilityRuleBodyTypeRepository>();
+            services.AddScoped<IPartCompatibilityRuleTransmissionTypeRepository, PartCompatibilityRuleTransmissionTypeRepository>();
+            services.AddScoped<IPartCompatibilityRuleTrimLevelRepository, PartCompatibilityRuleTrimLevelRepository>();
+            services.AddScoped<IPartImageRepository, PartImageRepository>();
+
+
             services.AddScoped<ISupplierPartRepository, SupplierPartRepository>();
             services.AddScoped<IInventoryTransactionRepository, InventoryTransactionRepository>();
             services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();

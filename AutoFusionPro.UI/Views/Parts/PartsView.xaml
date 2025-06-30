@@ -1,17 +1,16 @@
 ﻿<UserControl x:Class="AutoFusionPro.UI.Views.Parts.PartsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Parts"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:designVM="clr-namespace:AutoFusionPro.UI.ViewModels.Parts.DesignTimeViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:PartsViewModel}"
-             d:DesignHeight="550" 
-             d:DesignWidth="1200" 
+             d:DesignHeight="550"
+             d:DesignWidth="1200"
              Background="{DynamicResource Window.BackgroundBrush}"
              FlowDirection="{Binding CurrentWorkFlow}"
              Foreground="{DynamicResource Text.PrimaryBrush}"
@@ -25,7 +24,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <!-- Search, Filters and Action Buttons -->
             <Grid Margin="8,0,8,0">
                 <Grid.ColumnDefinitions>
@@ -33,9 +32,9 @@
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                
+
                 <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
-                <TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}" 
+                <TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}"
                          Grid.Column="0"
                          Tag="Search for Parts By Name, Car Model, Part Number" />
 
@@ -43,36 +42,53 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="2"
                             Margin="8,0,0,0">
-
                     <xBtn:XButton ButtonType="Light"
+                                  IsLoading="False"
+                                  Command="{Binding RefreshDataCommand}"
+                                  Style="{StaticResource RegularButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <wpfUi:SymbolIcon Symbol="ArrowSync24"
+                                              FontSize="14" />
+                            <TextBlock Text="{DynamicResource RefreshStr}"
+                                       FontSize="13"
+                                       Margin="5,0,0,0" />
+                        </StackPanel>
+                    </xBtn:XButton>
+                    <xBtn:XButton ButtonType="Light"
+                                  Margin="8,0,0,0"
                                   IsLoading="False"
                                   Style="{StaticResource RegularButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
-                                              FontSize="12" />
+                                              FontSize="14" />
                             <TextBlock Text="{DynamicResource FiltersStr}"
-                                       FontSize="12"
+                                       FontSize="13"
                                        Margin="5,0,0,0" />
                         </StackPanel>
                     </xBtn:XButton>
-                    
-                    <xBtn:XButton ButtonType="Primary" IsLoading="{Binding IsAddingPart}" Margin="8,0,0,0" Command="{Binding ShowAddPartDialogCommand}" 
+
+                    <xBtn:XButton ButtonType="Primary"
+                                  IsLoading="{Binding IsAddingPart}"
+                                  Margin="8,0,0,0"
+                                  Command="{Binding ShowAddPartDialogCommand}"
                                   Style="{StaticResource RegularButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="Add48"
-                                              FontSize="12" />
-                            <TextBlock Text="{DynamicResource AddNewPartStr}" FontSize="12" Margin="5,0,0,0"/>
+                                              FontSize="14" />
+                            <TextBlock Text="{DynamicResource AddNewPartStr}"
+                                       FontSize="13"
+                                       Margin="5,0,0,0" />
                         </StackPanel>
                     </xBtn:XButton>
                 </StackPanel>
 
             </Grid>
-            
-            
+
+
             <!-- Active Filters Bar-->
-            <Grid Grid.Row="1" Margin="5,10"
-                  d:DataContext="{d:DesignInstance Type=designVM:ActiveFilters, IsDesignTimeCreatable=True}">
-                <ItemsControl ItemsSource="{Binding Filters}" >
+            <Grid Grid.Row="1"
+                  Margin="5,10">
+                <ItemsControl ItemsSource="{Binding Filters}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <!-- Use WrapPanel so filters wrap nicely -->
@@ -80,7 +96,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type designVM:FilterItemViewModel}">
+                        <DataTemplate>
                             <Border Background="{DynamicResource Border.SecondaryBrush}"
                                     CornerRadius="4"
                                     Padding="6,3"
@@ -105,8 +121,9 @@
                                             Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding}"
                                             ToolTip="Remove Filter">
-                                        <wpfUi:SymbolIcon Symbol="Dismiss48" Margin="5,0,0,0"
-                                            FontSize="10" />
+                                        <wpfUi:SymbolIcon Symbol="Dismiss48"
+                                                          Margin="5,0,0,0"
+                                                          FontSize="10" />
                                     </Button>
                                 </Grid>
                             </Border>
@@ -114,7 +131,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
-            
+
             <!-- Data Grid -->
             <ListView Grid.Row="2"
                       ItemsSource="{Binding Parts}"
@@ -122,11 +139,11 @@
                       BorderThickness="0.2"
                       BorderBrush="{DynamicResource Border.FocusBrush}"
                       d:ItemsSource="{d:SampleData ItemCount=5}"
-                      ItemContainerStyle="{DynamicResource ListViewItemsStyle}" 
-                      VirtualizingPanel.IsVirtualizing="True"  
+                      ItemContainerStyle="{StaticResource ListViewItemsStyle}"
+                      VirtualizingPanel.IsVirtualizing="True"
                       VirtualizingPanel.VirtualizationMode="Recycling">
-                <ListView.View >
-                    <GridView> 
+                <ListView.View>
+                    <GridView>
                         <GridView.ColumnHeaderContainerStyle>
                             <Style TargetType="GridViewColumnHeader"
                                    BasedOn="{StaticResource GridViewColumnHeaderStyle}">
@@ -143,7 +160,7 @@
                         <GridViewColumn Width="40">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox  IsChecked="{Binding IsSelected, Mode=TwoWay}" 
+                                    <CheckBox  IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                                Style="{DynamicResource BlueCheckBoxStyle}"
                                                Checked="OnCheckBoxChecked"
                                                Unchecked="OnCheckBoxUnchecked"
@@ -181,32 +198,32 @@
                                         <xBtn:XButton Cursor="Hand"
                                                       Style="{StaticResource RegularButtonStyle}"
                                                       ButtonType="Light"
-                    
-                                                Command="{Binding DataContext.OpenEditItemCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
-                                                CommandParameter="{Binding}"
-                                                VerticalAlignment="Center" >
+                                                      Command="{Binding DataContext.ShowEditPartDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                      CommandParameter="{Binding}"
+                                                      VerticalAlignment="Center">
                                             <StackPanel Orientation="Horizontal">
                                                 <wpfUi:SymbolIcon Symbol="Edit48"
                                                                   FontSize="14"
                                                                   VerticalAlignment="Center" />
                                             </StackPanel>
                                         </xBtn:XButton>
-                                        
+
                                         <xBtn:XButton Cursor="Hand"
                                                       Style="{StaticResource RegularButtonStyle}"
                                                       Command="{Binding DataContext.OpenSelectedPartCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
                                                       CommandParameter="{Binding}"
-                                                      ButtonType="Light" 
-                                                      VerticalAlignment="Center" 
+                                                      ButtonType="Light"
+                                                      VerticalAlignment="Center"
                                                       Margin="5,0,0,0">
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <wpfUi:SymbolIcon Symbol="CaretLeft24"
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <wpfUi:SymbolIcon Symbol="ArrowEnterUp24"
                                                                   FontSize="18"
                                                                   VerticalAlignment="Center" />
                                                 <wpfUi:TextBlock VerticalAlignment="Center"
-                                                                 Text="المزيد"
+                                                                 Text="{DynamicResource MoreStr}"
                                                                  LineHeight="15"
-                                                                 Margin="3,0,0,0"/>
+                                                                 Margin="3,0,0,0" />
                                             </StackPanel>
                                         </xBtn:XButton>
                                     </StackPanel>
@@ -216,10 +233,13 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            
+
             <!-- Pagination Button -->
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="3"
+                        Margin="10,0">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
                     <TextBlock Text="Showing:" />
                     <TextBlock Text="1-20"
                                Margin="3,0,0,0" />
@@ -230,13 +250,15 @@
                     <TextBlock Text="Items"
                                Margin="3,0,0,0" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="40,0">
-                    <Button >
+                <StackPanel Orientation="Horizontal"
+                            Margin="40,0">
+                    <Button>
                         <StackPanel Orientation="Horizontal">
                             <wpfUi:SymbolIcon Symbol="ArrowLeft32"
                                               VerticalAlignment="Center" />
                             <TextBlock Text="Previous Page"
-                                       Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                       Margin="5,0,0,0"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -251,7 +273,7 @@
                         </StackPanel>
                     </Button>
                 </StackPanel>
-                
+
             </StackPanel>
 
             <StatusBar Grid.Row="4">
@@ -261,7 +283,7 @@
                 <Separator />
                 <StatusBarItem>
                     <TextBlock Text="{Binding TotalValue, FallbackValue=0, StringFormat='Total Inventory Value: {0:C2}'}" />
-                </StatusBarItem> 
+                </StatusBarItem>
                 <StatusBarItem HorizontalAlignment="Right">
                     <ProgressBar Width="100"
                                  Height="15"

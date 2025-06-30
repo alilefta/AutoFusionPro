@@ -22,5 +22,9 @@
 	  <ProjectReference Include="..\AutoFusionPro.Domain\AutoFusionPro.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="DTOs\Suppliers\" />
+	</ItemGroup>
+
 
 </Project>

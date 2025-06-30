@@ -17,7 +17,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Eng
     public partial class AddEngineTypeDialogViewModel : BaseViewModel<AddEngineTypeDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         [ObservableProperty]
         private bool _isAdding = false;
 
@@ -25,7 +25,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Eng
         [NotifyCanExecuteChangedFor(nameof(AddEngineTypeCommand))]
         private string _name = string.Empty;
 
-        public AddEngineTypeDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddEngineTypeDialogViewModel> logger) : base(localizationService, logger)
+        public AddEngineTypeDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddEngineTypeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }

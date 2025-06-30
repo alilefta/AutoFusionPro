@@ -51,9 +51,6 @@ namespace AutoFusionPro.Application.Validators.PartValidators
             RuleFor(x => x.Location)
                 .MaximumLength(50).WithMessage("Location cannot exceed 50 characters.");
 
-            RuleFor(x => x.ImagePath)
-                .MaximumLength(255).WithMessage("Image Path cannot exceed 255 characters.");
-
             RuleFor(x => x.Notes)
                 .MaximumLength(1000).WithMessage("Notes cannot exceed 1000 characters.");
 

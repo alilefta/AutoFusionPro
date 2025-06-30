@@ -6,5 +6,7 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
     public interface IBodyTypeRepository : IBaseRepository<BodyType>
     {
         Task<bool> NameExistsAsync(string name, int? excludeBodyTypeId = null);
+        Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int bodyTypeId);
+
     }
 }

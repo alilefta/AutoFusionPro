@@ -22,43 +22,53 @@ namespace AutoFusionPro.UI.ViewModels.Base
 
         #endregion
 
+        #region props
+
+        [ObservableProperty]
+        private FlowDirection _currentWorkFlow;
+
+        [ObservableProperty]
+        private string _currentCurrency;
+        [ObservableProperty]
+        private string _currentCurrencyFullName;
+
+        #endregion
+
         public BaseViewModel(ILocalizationService localizationService, ILogger<VM> logger)
         {
             _localizationService = localizationService ?? throw new ArgumentNullException(nameof(localizationService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
+            CurrentCurrency = _localizationService.CurrentCurrencySymbol; 
+            CurrentCurrencyFullName = _localizationService.CurrentFullCurrencyName;
+
             _localizationService.FlowDirectionChanged += OnCurrentFlowDirectionChanged;
 
             RegisterCleanup(() => _localizationService.FlowDirectionChanged -= OnCurrentFlowDirectionChanged);
         }
 
-        public BaseViewModel()
-        {
-            
-        }
 
-        #region Flow Direction
 
-        [ObservableProperty]
-        private FlowDirection _currentWorkFlow;
 
-        #endregion
-
-        #region Helpers
+        #region Event Listeners
 
         private void OnCurrentFlowDirectionChanged()
         {
             CurrentWorkFlow = _localizationService.CurrentFlowDirection;
+            CurrentCurrency = _localizationService.CurrentCurrencySymbol;
+            CurrentCurrencyFullName = _localizationService.CurrentFullCurrencyName;
 
             LanguageDictionariesChanged?.Invoke(this, EventArgs.Empty);
         }
 
-
         #endregion
 
+
+        #region subscription & Disposition
+
         /// <summary>
-        /// Registers an event unsubscription action.
+        /// Registers an event unsubscripted action.
         /// </summary>
         protected void RegisterCleanup(Action cleanupAction)
         {
@@ -74,6 +84,30 @@ namespace AutoFusionPro.UI.ViewModels.Base
             }
             _cleanupActions.Clear();
         }
+
+        #endregion
+
+        #region Public Helpers
+
+        public string GetString(string resourceKey)
+        {
+            // Logic to find the current language ResourceDictionary and get the string
+            // This might involve looking up the active dictionary in Application.Current.Resources.MergedDictionaries
+            // or caching it.
+            var langCode = _localizationService.CurrentLangString.StartsWith("ar") ? "ar" : "en";
+            var dictSource = new Uri($"pack://application:,,,/AutoFusionPro.UI;component/Resources/Dictionaries/Resources.{langCode}.xaml", UriKind.Absolute);
+
+            var langDict = System.Windows.Application.Current.Resources.MergedDictionaries
+                .FirstOrDefault(d => d.Source == dictSource);
+
+            if (langDict != null && langDict.Contains(resourceKey))
+            {
+                return langDict[resourceKey]?.ToString() ?? $"[{resourceKey}_NotFound]";
+            }
+            return $"[{resourceKey}_DictOrKeyNotFound]";
+        }
+
+        #endregion
 
     }
 }

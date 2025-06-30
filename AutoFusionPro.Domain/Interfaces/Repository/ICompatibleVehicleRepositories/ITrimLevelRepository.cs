@@ -8,6 +8,6 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
         Task<bool> NameExistsForModelAsync(string trimLevelName, int modelId, int? excludeTrimLevelId = null);
         Task<IEnumerable<TrimLevel>> GetByModelIdAsync(int modelId);
         Task<TrimLevel?> GetByIdWithModelAsync(int trimLevelId); // Include Model for context
-        Task<bool> HasAssociatedCompatibleVehiclesAsync(int trimLevelId);
+        Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int trimLevelId);
     }
 }

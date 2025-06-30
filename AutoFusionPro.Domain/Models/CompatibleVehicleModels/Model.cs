@@ -13,7 +13,6 @@ namespace AutoFusionPro.Domain.Models.CompatibleVehicleModels
         // Navigation Property: A Model can have many TrimLevels
         public virtual ICollection<TrimLevel> TrimLevels { get; set; } = new List<TrimLevel>();
 
-        // Navigation Property: A Model (across years/trims) can be part of many CompatibleVehicle specs
-        public virtual ICollection<CompatibleVehicle> CompatibleVehicleSpecs { get; set; } = new List<CompatibleVehicle>();
+      
     }
 }

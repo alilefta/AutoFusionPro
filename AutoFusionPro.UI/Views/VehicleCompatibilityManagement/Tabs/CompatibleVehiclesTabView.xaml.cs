@@ -8,9 +8,9 @@ namespace AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs
     /// <summary>
     /// Interaction logic for CompatibleVehiclesTabView.xaml
     /// </summary>
-    public partial class CompatibleVehiclesTabView : UserControl
+    public partial class PartCompatibilityRulesTabView : UserControl
     {
-        public CompatibleVehiclesTabView()
+        public PartCompatibilityRulesTabView()
         {
             InitializeComponent();
         }
@@ -189,7 +189,7 @@ namespace AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs
             DependencyProperty.RegisterAttached(
                 "SortMemberPath",
                 typeof(string),
-                typeof(CompatibleVehiclesTabView),
+                typeof(PartCompatibilityRulesTabView),
                 new PropertyMetadata(null));
 
         public static void SetSortMemberPath(DependencyObject element, string value)
@@ -210,7 +210,7 @@ namespace AutoFusionPro.UI.Views.VehicleCompatibilityManagement.Tabs
             DependencyProperty.RegisterAttached(
                 "IsSortable",
                 typeof(bool),
-                typeof(CompatibleVehiclesTabView),
+                typeof(PartCompatibilityRulesTabView),
                 new PropertyMetadata(true));
 
         public static void SetIsSortable(DependencyObject element, bool value)

@@ -7,5 +7,7 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
     {
         Task<bool> NameExistsAsync(string name, int? excludeEngineTypeId = null);
         Task<bool> CodeExistsAsync(string? code, int? excludeEngineTypeId = null); // Code can be nullable
+        Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int engineTypeId);
+
     }
 }

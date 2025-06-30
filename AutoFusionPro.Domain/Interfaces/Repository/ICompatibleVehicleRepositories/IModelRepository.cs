@@ -9,6 +9,6 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
         Task<IEnumerable<Model>> GetByMakeIdAsync(int makeId);
         Task<Model?> GetByIdWithMakeAsync(int modelId); // For getting Make.Name easily
         Task<bool> HasAssociatedTrimLevelsAsync(int modelId);
-        Task<bool> HasAssociatedCompatibleVehiclesAsync(int modelId);
+        Task<bool> IsUsedInCompatibilityRulesAsync(int modelId);
     }
 }

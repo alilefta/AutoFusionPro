@@ -54,8 +54,9 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
         public async Task<Part?> GetByIdWithDetailsAsync(int id,
             bool includeCategory = true,
             bool includeSuppliers = false,
-            bool includeCompatibility = false,
-            bool includeUnitOfMeasures = true)
+            bool includeCompatibilityRules = false,
+            bool includeUnitOfMeasures = true,
+            bool includeImages = true)
         {
             if (id <= 0)
             {
@@ -64,7 +65,7 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
             }
 
             _logger.LogDebug("Attempting to retrieve part with details for ID: {PartId}. Includes: Category={IncCat}, Suppliers={IncSup}, Compatibility={IncComp}",
-                id, includeCategory, includeSuppliers, includeCompatibility);
+                id, includeCategory, includeSuppliers, includeCompatibilityRules);
 
             try
             {
@@ -81,24 +82,25 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                                      .ThenInclude(sp => sp.Supplier); // Also load the Supplier details for each SupplierPart
                 }
 
-                if (includeCompatibility)
+                if (includeCompatibilityRules)
                 {
-                    query = query.Include(p => p.CompatibleVehicles)
-                                     .ThenInclude(pc => pc.CompatibleVehicle)
-                                        .ThenInclude(cv => cv.Model)
-                                            .ThenInclude(m => m.Make) // Make
-                                 .Include(p => p.CompatibleVehicles) // Re-specify root for next ThenInclude chain
-                                     .ThenInclude(pc => pc.CompatibleVehicle)
-                                        .ThenInclude(cv => cv.TrimLevel) // TrimLevel
-                                 .Include(p => p.CompatibleVehicles) // Re-specify root
-                                     .ThenInclude(pc => pc.CompatibleVehicle)
-                                        .ThenInclude(cv => cv.TransmissionType) // TransmissionType
-                                 .Include(p => p.CompatibleVehicles) // Re-specify root
-                                     .ThenInclude(pc => pc.CompatibleVehicle)
-                                        .ThenInclude(cv => cv.EngineType) // EngineType
-                                 .Include(p => p.CompatibleVehicles) // Re-specify root
-                                     .ThenInclude(pc => pc.CompatibleVehicle)
-                                        .ThenInclude(cv => cv.BodyType); // BodyType
+                    query = query.Include(p => p.CompatibilityRules) // Load the rules for the part
+                                    .ThenInclude(cr => cr.Make)
+                                 .Include(p => p.CompatibilityRules)
+                                    .ThenInclude(cr => cr.Model)
+                                        .ThenInclude(m => m.Make) // If Model's Make needed and not always loaded by Model
+                                 .Include(p => p.CompatibilityRules)
+                                    .ThenInclude(cr => cr.ApplicableTrimLevels)
+                                        .ThenInclude(atl => atl.TrimLevel)
+                                 .Include(p => p.CompatibilityRules)
+                                    .ThenInclude(cr => cr.ApplicableBodyTypes)
+                                        .ThenInclude(bt => bt.BodyType)
+                                  .Include(p => p.CompatibilityRules)
+                                    .ThenInclude(cr => cr.ApplicableEngineTypes)
+                                        .ThenInclude(bt => bt.EngineType)
+                                  .Include(p => p.CompatibilityRules)
+                                    .ThenInclude(cr => cr.ApplicableTransmissionTypes)
+                                        .ThenInclude(bt => bt.TransmissionType);
                 }
 
 
@@ -107,6 +109,11 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                     query = query.Include(p => p.StockingUnitOfMeasure);
                     query = query.Include(p => p.SalesUnitOfMeasure);    // Include even if null, EF handles it
                     query = query.Include(p => p.PurchaseUnitOfMeasure); // Include even if null
+                }
+
+                if (includeImages)
+                {
+                    query = query.Include(p => p.Images);
                 }
 
                 return await query.FirstOrDefaultAsync(p => p.Id == id);
@@ -216,20 +223,21 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
             int? categoryId = null,
             string? manufacturer = null,
             int? supplierId = null,
-            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+            IEnumerable<int>? restrictToPartIds = null,
             string? searchTerm = null,
             bool? isActive = true,
             bool? isLowStock = null,
             bool includeCategory = true, // Defaulted to true as it's common for summaries
             bool includeSuppliers = false,
-            bool includeStockingUnitOfMeasure = true)
+            bool includeStockingUnitOfMeasure = true,
+            bool includePrimaryImage = true) // NEW: To get Part.Images for summary)
         {
             if (pageNumber < 1) pageNumber = 1;
             if (pageSize < 1) pageSize = 10;    // Default page size
             if (pageSize > 200) pageSize = 200; // Max page size safeguard
 
             _logger.LogDebug("Getting filtered paged parts. Page: {Page}, Size: {Size}, CategoryId: {CatId}, Manufacturer: {Manuf}, SupplierId: {SupId}, Compatible Vehicles Count: {VehId}, Search: '{Search}', IsActive: {Active}, IsLowStock: {LowStock}",
-                pageNumber, pageSize, categoryId, manufacturer, supplierId, restrictToCompatibleVehicleIds?.Count(), searchTerm, isActive, isLowStock);
+                pageNumber, pageSize, categoryId, manufacturer, supplierId, restrictToPartIds?.Count(), searchTerm, isActive, isLowStock);
 
             try
             {
@@ -269,9 +277,9 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                     query = query.Where(p => p.Suppliers.Any(sp => sp.SupplierId == supplierId.Value));
                 }
 
-                if (restrictToCompatibleVehicleIds != null && restrictToCompatibleVehicleIds.Count() > 0)
+                if (restrictToPartIds != null && restrictToPartIds.Any())
                 {
-                    query = query.Where(p => p.CompatibleVehicles.Any(pc => restrictToCompatibleVehicleIds.Contains(pc.CompatibleVehicleId)));
+                    query = query.Where(p => restrictToPartIds.Contains(p.Id));
                 }
 
                 if (isActive.HasValue)
@@ -307,6 +315,11 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                     query = query.Include(p => p.StockingUnitOfMeasure);
                 }
 
+                if (includePrimaryImage)
+                {
+                    query = query.Include(p => p.Images.Where(img => img.IsPrimary).OrderBy(img => img.Id).Take(1));
+                }
+
                 // Apply stable ordering for consistent pagination
                 // Service layer can provide a more specific OrderBy if needed via the `filterPredicate` or a separate param.
                 query = query.OrderBy(p => p.Name) // Default sort
@@ -334,13 +347,13 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
             int? categoryId = null,
             string? manufacturer = null,
             int? supplierId = null,
-            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+            IEnumerable<int>? restrictToPartIds = null,
             string? searchTerm = null,
             bool? isActive = true, // Default to active parts
             bool? isLowStock = null)
         {
             _logger.LogDebug("Getting total filtered parts count. CategoryId: {CatId}, Manufacturer: {Manual}, SupplierId: {SupId}, Compatible Vehicles Count: {VehId}, Search: '{Search}', IsActive: {Active}, IsLowStock: {LowStock}",
-                categoryId, manufacturer, supplierId, restrictToCompatibleVehicleIds?.Count(), searchTerm, isActive, isLowStock);
+                categoryId, manufacturer, supplierId, restrictToPartIds?.Count(), searchTerm, isActive, isLowStock);
 
             try
             {
@@ -373,9 +386,9 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories
                     query = query.Where(p => p.Suppliers.Any(sp => sp.SupplierId == supplierId.Value));
                 }
 
-                if (restrictToCompatibleVehicleIds != null && restrictToCompatibleVehicleIds.Count() > 0)
+                if (restrictToPartIds != null && restrictToPartIds.Any())
                 {
-                    query = query.Where(p => p.CompatibleVehicles.Any(pc => restrictToCompatibleVehicleIds.Contains(pc.CompatibleVehicleId)));
+                    query = query.Where(p => restrictToPartIds.Contains(p.Id));
                 }
 
                 if (isActive.HasValue)

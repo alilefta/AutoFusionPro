@@ -38,7 +38,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement
                 TransmissionTypesManagementViewModel transmissionTypesVM,
                 EngineTypesManagementViewModel engineTypesVM,
                 BodyTypesManagementViewModel bodyTypesVM,
-                CompatibleVehiclesViewModel compatibleVehiclesVM,
+                //CompatibleVehiclesViewModel compatibleVehiclesVM,
                 ILocalizationService localizationService,
                 ILogger<VehicleCompatibilityShellViewModel> logger
             ) : base(localizationService, logger)
@@ -50,7 +50,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement
                 transmissionTypesVM,
                 engineTypesVM,
                 bodyTypesVM,
-                compatibleVehiclesVM
+                //compatibleVehiclesVM // TODO Should be replaced with Part Compatibility Rules
             };
 
             SelectedTabViewModel = TabViewModels.FirstOrDefault(); // Select the first tab initially

@@ -19,13 +19,13 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
         private Mock<IUnitOfWork> _unitOfWorkMock;
         private Mock<IMakeRepository> _makeRepositoryMock;
         private Mock<IModelRepository> _modelRepositoryMock; // Needed for DeleteMakeAsync dependency check
-        private Mock<ILogger<Services.DataServices.CompatibleVehicleService>> _loggerMock;
+        private Mock<ILogger<Services.DataServices.VehicleTaxonomyService>> _loggerMock;
         private Mock<IImageFileService> _imageFileServiceMock;
         private Mock<IValidator<CreateMakeDto>> _createMakeValidatorMock;
         private Mock<IValidator<UpdateMakeDto>> _updateMakeValidatorMock;
 
         // Instance of the service to be tested
-        private Services.DataServices.CompatibleVehicleService _service;
+        private Services.DataServices.VehicleTaxonomyService _service;
 
         [SetUp]
         public void Setup()
@@ -33,7 +33,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _makeRepositoryMock = new Mock<IMakeRepository>();
             _modelRepositoryMock = new Mock<IModelRepository>();
-            _loggerMock = new Mock<ILogger<Services.DataServices.CompatibleVehicleService>>();
+            _loggerMock = new Mock<ILogger<Services.DataServices.VehicleTaxonomyService>>();
             _imageFileServiceMock = new Mock<IImageFileService>();
             _createMakeValidatorMock = new Mock<IValidator<CreateMakeDto>>();
             _updateMakeValidatorMock = new Mock<IValidator<UpdateMakeDto>>();
@@ -48,7 +48,7 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
             // IMPORTANT: Your CompatibleVehicleService constructor needs to accept these validators.
             // If it doesn't yet, you'll need to modify its constructor.
             // For now, I'll assume it does for the test setup.
-            _service = new Services.DataServices.CompatibleVehicleService(
+            _service = new Services.DataServices.VehicleTaxonomyService(
                 _unitOfWorkMock.Object,
                 _loggerMock.Object,
                 _imageFileServiceMock.Object,
@@ -60,8 +60,6 @@ namespace AutoFusionPro.Application.Tests.CompatibleVehicleService
 
                 Mock.Of<IValidator<CreateLookupDto>>(), // Assuming generic lookup validators
                 Mock.Of<IValidator<UpdateLookupDto>>(),
-                Mock.Of<IValidator<CreateCompatibleVehicleDto>>(),
-                Mock.Of<IValidator<UpdateCompatibleVehicleDto>>(),
 
                 Mock.Of<IValidator<CreateEngineTypeDto>>(),
                 Mock.Of<IValidator<UpdateEngineTypeDto>>(),

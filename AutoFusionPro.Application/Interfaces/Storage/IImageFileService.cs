@@ -1,4 +1,6 @@
-﻿namespace AutoFusionPro.Application.Interfaces.Storage
+﻿using System.IO;
+
+namespace AutoFusionPro.Application.Interfaces.Storage
 {
     /// <summary>
     /// Defines operations for managing image files within the application's storage.
@@ -36,6 +38,23 @@
         /// <param name="compressJpg">Whether to apply JPEG compression if the image is a JPG.</param>
         /// <returns>The absolute path to the saved image, or null if saving failed.</returns>
         Task<string?> SaveImageAsync(string sourceLocalPath, string targetSubfolderName, bool compressJpg = true);
+
+
+        /// <summary>
+        /// Saves an image from a stream to a specified subfolder within the application's image storage.
+        /// The originalFileName is used to determine the file extension.
+        /// Optionally compresses JPEG images.
+        /// </summary>
+        /// <param name="imageStream">The stream containing the image data.</param>
+        /// <param name="originalFileName">The original name of the file, used to extract the extension.</param>
+        /// <param name="targetSubfolderName">The name of the subfolder (e.g., "Parts", "Categories") within the base image storage.</param>
+        /// <param name="compressJpg">Whether to apply JPEG compression if the image is a JPG.</param>
+        /// <returns>The absolute path to the saved image, or null if saving failed or stream was invalid.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if imageStream or originalFileName is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if originalFileName is empty or has no extension.</exception>
+        /// <exception cref="System.IO.IOException">Thrown for file system errors during save.</exception>
+        /// <exception cref="System.InvalidOperationException">Thrown for image processing errors.</exception>
+        Task<string?> SaveImageAsync(Stream imageStream, string originalFileName, string targetSubfolderName, bool compressJpg = true);
 
         /// <summary>
         /// Deletes an image file from the application's storage given its absolute path.

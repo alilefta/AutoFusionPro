@@ -20,7 +20,7 @@ namespace AutoFusionPro.Domain.Models
         public string Location { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
         public bool IsOriginal { get; set; } = false;
-        public string? ImagePath { get; set; } = string.Empty;
+        //public string? ImagePath { get; set; } = string.Empty;
         public string? Notes { get; set; } = string.Empty;
 
         public string? Barcode { get; set; } = string.Empty;
@@ -53,7 +53,9 @@ namespace AutoFusionPro.Domain.Models
                                                                // (How many StockingUoM are in one PurchaseUoM)
 
 
-        public virtual ICollection<PartCompatibility> CompatibleVehicles { get; set; } = new List<PartCompatibility>();
+        // public virtual ICollection<PartCompatibility> CompatibleVehicles { get; set; } = new List<PartCompatibility>();
+        public virtual ICollection<PartCompatibilityRule> CompatibilityRules { get; set; } = new List<PartCompatibilityRule>();
+
         public virtual ICollection<SupplierPart> Suppliers { get; set; } = new List<SupplierPart>(); // Links Part to specific Suppliers with details
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); // Sales Order Items
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
@@ -61,5 +63,8 @@ namespace AutoFusionPro.Domain.Models
         public virtual ICollection<PurchaseItem> PartPurchaseItems { get; set; } = new List<PurchaseItem>();
 
         public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; } = new List<InventoryTransaction>();
+
+        public virtual ICollection<PartImage> Images { get; set; } = new List<PartImage>();
+
     }
 }

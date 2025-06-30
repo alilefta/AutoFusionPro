@@ -6,6 +6,8 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
     public interface IMakeRepository : IBaseRepository<Make>
     {
         Task<bool> NameExistsAsync(string name, int? excludeMakeId = null);
+        Task<bool> IsUsedInCompatibilityRulesAsync(int makeId);
+
 
     }
 }

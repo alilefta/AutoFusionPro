@@ -17,13 +17,14 @@ namespace AutoFusionPro.Application.Interfaces.Dialogs
         /// </summary>
         /// <typeparam name="TDialogViewModel">The Dialog View Model. The DialogViewModel MUST inherit from <see cref="IDialogAware"/></typeparam>
         /// <typeparam name="TView">The Dialog Window</typeparam>
-        /// <param name="param">Optional Object Parameter for initializing the view model that inherits from <see cref="InitializbleViewModel"/></param>
+        /// <param name="param">Optional Object Parameter for initializing the view model that its parent class is <see cref="InitializbleViewModel"/></param>       
+        /// <param name="owner">The owner for the dialog. If <see cref="MainWindow"/> then leave this param to be null.</param>
         /// <returns><see cref="bool?"/></returns>
         /// <example>
         /// await _dialogService.ShowDialogAsync<AddTrimLevelDialogViewModel, AddTrimLevelDialog>(SelectedModel); 
         /// // Results will be either true or false or null.
         /// </example>
-        Task<bool?> ShowDialogAsync<TDialogViewModel, TView>(object? param = null) where TDialogViewModel : class where TView : Window, new();
+        Task<bool?> ShowDialogAsync<TDialogViewModel, TView>(object? param = null, Window? owner = null) where TDialogViewModel : class where TView : Window, new();
 
         /// <summary>
         /// General Method to show a dialog, initialize it with ViewModel and Return general <see cref="Object"/> param.
@@ -32,12 +33,13 @@ namespace AutoFusionPro.Application.Interfaces.Dialogs
         /// <typeparam name="TView">The Dialog Window</typeparam>
         /// <typeparam name="TResult">The Type of the Return Type.</typeparam>
         /// <param name="param">Optional Object Parameter for initializing the view model that inherits from <see cref="InitializbleViewModel"/></param>
+        /// <param name="owner">The owner for the dialog. If <see cref="MainWindow"/> then leave this param to be null.</param>
         /// <returns><see cref="object?"/>Param</returns>
         /// <example>
         /// CompatibleVehicleFilterCriteriaDto filters = await _dialogService.ShowDialogWithResultsAsync<CompatibleVehicleFilterOptionsDialogViewModel, CompatibleVehicleFilterOptionsDialog>(null); 
         /// // Results will be <see cref="Nullable"/> <see cref="Object"/>.
         /// </example>
-        Task<TResult?> ShowDialogWithResultsAsync<TDialogViewModel, TView, TResult>(object? param = null) where TDialogViewModel : class, IDialogViewModelWithResult<TResult> where TView : Window, new();
+        Task<TResult?> ShowDialogWithResultsAsync<TDialogViewModel, TView, TResult>(object? param = null, Window? owner = null) where TDialogViewModel : class, IDialogViewModelWithResult<TResult> where TView : Window, new();
 
     }
 

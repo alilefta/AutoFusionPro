@@ -9,6 +9,8 @@ namespace AutoFusionPro.UI.Services.Dialogs
     public class DialogWindowAdapter : IDialogWindow
     {
         private readonly Window _window;
+        public Window CurrentDialogInstance => _window;
+
 
         public DialogWindowAdapter(Window window)
         {
@@ -20,6 +22,7 @@ namespace AutoFusionPro.UI.Services.Dialogs
             get => _window.DialogResult;
             set => _window.DialogResult = value;
         }
+
 
         public void Close()
         {

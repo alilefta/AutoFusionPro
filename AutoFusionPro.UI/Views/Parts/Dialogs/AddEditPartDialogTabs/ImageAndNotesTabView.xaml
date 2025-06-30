@@ -1,0 +1,350 @@
+﻿<UserControl x:Class="AutoFusionPro.UI.Views.Parts.Dialogs.AddEditPartDialogTabs.ImageAndNotesTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts.Dialogs"
+             xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+             xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+             xmlns:behaviors="clr-namespace:AutoFusionPro.UI.Resources.Behaviors"
+             xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Parts.Dialogs.AddEditPartDialogTabs"
+             xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             xmlns:cards="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             Background="{DynamicResource Card.Header.BackgroundBrush}"
+             Foreground="{DynamicResource Text.PrimaryBrush}"
+             d:DataContext="{d:DesignInstance Type=vm:AddEditPartDialogViewModel}"
+             FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+             FlowDirection="{Binding CurrentWorkFlow}">
+    <!-- Content -->
+    <Grid Grid.Row="1"
+          Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Form Fields -->
+        <ScrollViewer Padding="8,0">
+            <StackPanel>
+                <!-- Notes -->
+                <StackPanel VerticalAlignment="Center"
+                            ToolTip="{DynamicResource PartNotesTooltipMessageStr}">
+                    <StackPanel Orientation="Horizontal">
+                        <wpfUi:SymbolIcon Symbol="Text32"
+                                          VerticalAlignment="Center" />
+                        <TextBlock Text="{DynamicResource NotesStr}"
+                                   Margin="5,0,0,0"
+                                   FontFamily="{DynamicResource DynamicFontFamilyBold}"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="{DynamicResource OptionalStr}"
+                                   Margin="5,0,0,0"
+                                   FontSize="12"
+                                   Opacity="0.7"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                    <wpfUi:TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                   Height="100"
+                                   Margin="0,8,0,0"
+                                   TextWrapping="Wrap"
+                                   ToolTip="{DynamicResource PartNotesTooltipMessageStr}"
+                                   PlaceholderText="{DynamicResource TypeSomethingStr}" />
+
+                </StackPanel>
+
+                <!-- Images -->
+                <StackPanel Margin="0,24,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <wpfUi:SymbolIcon Symbol="Image48"
+                                              VerticalAlignment="Center" />
+                            <TextBlock Text="{DynamicResource PartImagesStr}"
+                                       Margin="5,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{DynamicResource DynamicFontFamilyBold}" />
+
+                            <TextBlock Text="{DynamicResource OptionalStr}"
+                                       Margin="5,0,0,0"
+                                       FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                       FontSize="12"
+                                       Opacity="0.6"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+
+                        <xBtn:XButton Command="{Binding LoadImageCommand}" Grid.Column="1" Margin="0,0,10,0"
+                                      Style="{DynamicResource RegularButtonStyle }"
+                                      VerticalAlignment="Center"
+                                      ButtonType="Primary">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{DynamicResource AddImageStr}" />
+                                <wpfUi:SymbolIcon Symbol="ImageAdd24"
+                                                  Margin="5,0,0,0" />
+
+                            </StackPanel>
+                        </xBtn:XButton>
+                    </Grid>
+
+
+                    <Grid Grid.Column="1"
+                          Margin="0,8,0,0">
+                        <Border Background="{DynamicResource Control.Background.PressedBrush}"
+                                CornerRadius="5"
+                                Padding="10"
+                                Margin="5,16,5,0">
+                            <Grid>
+                                
+                                <Grid Visibility="{Binding IsLoadingImages, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                                    <!-- Images Preview -->
+                                    <ItemsControl ItemsSource="{Binding PartImagesToDisplay}"
+                                                  Visibility="{Binding HasAnyImage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Padding="10">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel HorizontalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border VerticalAlignment="Center"
+                                                        Margin="8,8"
+                                                        BorderThickness="1"
+                                                        BorderBrush="#DDDDDD"
+                                                        Background="{DynamicResource Window.BackgroundBrush}"
+                                                        CornerRadius="8"
+                                                        Width="210">
+
+                                                    <Border.Triggers>
+                                                        <EventTrigger RoutedEvent="MouseEnter">
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                                     Storyboard.TargetProperty="ScaleX"
+                                                                                     To="1.05"
+                                                                                     Duration="0:0:0.2">
+                                                                        <DoubleAnimation.EasingFunction>
+                                                                            <CubicEase EasingMode="EaseOut" />
+                                                                        </DoubleAnimation.EasingFunction>
+                                                                    </DoubleAnimation>
+                                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                                     To="1.05"
+                                                                                     Duration="0:0:0.2">
+                                                                        <DoubleAnimation.EasingFunction>
+                                                                            <CubicEase EasingMode="EaseOut" />
+                                                                        </DoubleAnimation.EasingFunction>
+                                                                    </DoubleAnimation>
+                                                                    <DoubleAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                                     Storyboard.TargetProperty="Opacity"
+                                                                                     To="1"
+                                                                                     Duration="0:0:0.3" />
+                                                                    <ThicknessAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                                        Storyboard.TargetProperty="Margin"
+                                                                                        To="0,0,12,12"
+                                                                                        Duration="0:0:0.3">
+                                                                        <ThicknessAnimation.EasingFunction>
+                                                                            <BackEase EasingMode="EaseOut" />
+                                                                        </ThicknessAnimation.EasingFunction>
+                                                                    </ThicknessAnimation>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </EventTrigger>
+                                                        <EventTrigger RoutedEvent="MouseLeave">
+                                                            <BeginStoryboard>
+                                                                <Storyboard>
+                                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                                     Storyboard.TargetProperty="ScaleX"
+                                                                                     To="1"
+                                                                                     Duration="0:0:0.2">
+                                                                        <DoubleAnimation.EasingFunction>
+                                                                            <CubicEase EasingMode="EaseOut" />
+                                                                        </DoubleAnimation.EasingFunction>
+                                                                    </DoubleAnimation>
+                                                                    <DoubleAnimation Storyboard.TargetName="ScaleTransform"
+                                                                                     Storyboard.TargetProperty="ScaleY"
+                                                                                     To="1"
+                                                                                     Duration="0:0:0.2">
+                                                                        <DoubleAnimation.EasingFunction>
+                                                                            <CubicEase EasingMode="EaseOut" />
+                                                                        </DoubleAnimation.EasingFunction>
+                                                                    </DoubleAnimation>
+                                                                    <DoubleAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                                     Storyboard.TargetProperty="Opacity"
+                                                                                     To="0"
+                                                                                     Duration="0:0:0.2" />
+                                                                    <ThicknessAnimation Storyboard.TargetName="ActionButtonsPanel"
+                                                                                        Storyboard.TargetProperty="Margin"
+                                                                                        To="0,0,12,32"
+                                                                                        Duration="0:0:0.2" />
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </EventTrigger>
+                                                    </Border.Triggers>
+
+                                                    <Border.RenderTransform>
+                                                        <ScaleTransform x:Name="ScaleTransform"
+                                                                        ScaleX="1"
+                                                                        ScaleY="1"
+                                                                        CenterX="120"
+                                                                        CenterY="120" />
+                                                    </Border.RenderTransform>
+                                                    <Grid ClipToBounds="True" Margin="0,10">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="120" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <!-- Image Preview -->
+                                                        <Image Source="{Binding ImagePathForPreview, TargetNullValue={x:Null}}"
+                                                               Stretch="Uniform"
+                                                               Margin="5" />
+                                                        <!-- Primary Star Indicator (Always visible when primary) -->
+                                                        <Border Grid.Row="0"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Top"
+                                                                Margin="8,8"
+                                                                Background="#FFD700"
+                                                                CornerRadius="12"
+                                                                Width="24"
+                                                                Height="24"
+                                                                Visibility="{Binding IsPrimary, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                            <Border.Effect>
+                                                                <DropShadowEffect Color="Black"
+                                                                                  Direction="270"
+                                                                                  ShadowDepth="2"
+                                                                                  BlurRadius="6"
+                                                                                  Opacity="0.3" />
+                                                            </Border.Effect>
+                                                            <wpfUi:SymbolIcon Symbol="Star24"
+                                                                              FontSize="12"
+                                                                              Foreground="White"
+                                                                              HorizontalAlignment="Center"
+                                                                              VerticalAlignment="Center" />
+                                                        </Border>
+
+                                                        <!-- Floating Action Buttons -->
+                                                        <StackPanel x:Name="ActionButtonsPanel"
+                                                                    Orientation="Vertical"
+                                                                    HorizontalAlignment="Right"
+                                                                    VerticalAlignment="Top"
+                                                                    Margin="0,0,0,0"
+                                                                    Opacity="0">
+
+                                                            <!-- Set as Primary Star Button -->
+                                                            <xBtn:XButton BorderThickness="0"
+                                                                    Margin="0,0,0,8"
+                                                                    Command="{Binding SetAsPrimaryCommand}"
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip="{DynamicResource SetAsPrimaryPhotoForThisPartStr}"
+                                                                    Cursor="Hand"
+                                                                    ButtonType="Warning"
+                                                                    Visibility="{Binding IsPrimary, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
+                                                                    Style="{DynamicResource RegularButtonStyle}">
+                                                                <xBtn:XButton.Effect>
+                                                                    <DropShadowEffect Color="Black"
+                                                                                      Direction="270"
+                                                                                      ShadowDepth="2"
+                                                                                      BlurRadius="8"
+                                                                                      Opacity="0.3" />
+                                                                </xBtn:XButton.Effect>
+                                                                <wpfUi:SymbolIcon Symbol="Star24"
+                                                                                  FontSize="14" />
+                                                            </xBtn:XButton>
+                                                            <!-- Delete Button -->
+                                                            <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                                                          ButtonType="Danger"
+                                                                          BorderThickness="0"
+                                                                          Command="{Binding DataContext.RemoveImageCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                                          CommandParameter="{Binding}"
+                                                                          ToolTip="{DynamicResource RemoveImageStr}"
+                                                                          Cursor="Hand">
+                                                                <xBtn:XButton.Effect>
+                                                                    <DropShadowEffect Color="Black"
+                                                                                      Direction="270"
+                                                                                      ShadowDepth="2"
+                                                                                      BlurRadius="8"
+                                                                                      Opacity="0.3" />
+                                                                </xBtn:XButton.Effect>
+                                                                <wpfUi:SymbolIcon Symbol="Delete48"
+                                                                                  FontSize="14"
+                                                                                  Foreground="White" />
+                                                            </xBtn:XButton>
+                                                        </StackPanel>
+                                                        
+                                                        <!-- Content -->
+                                                        <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5,4">
+                                                            <wpfUi:TextBox Text="{Binding Caption}" PlaceholderText="{DynamicResource WriteCaptionStr}"/>
+                                                        </StackPanel>
+
+                                                    </Grid>
+
+
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <!-- Placeholder when no photos exists-->
+                                    <Border Padding="10,0"
+                                            Visibility="{Binding HasAnyImage, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{DynamicResource NoImagesHasBeenSelectedYetClickToAddStr}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+
+                                            <TextBlock Text="{DynamicResource ClickHereToAddStr}"
+                                                       Margin="5,0,0,0"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+
+                                            <xBtn:XButton Command="{Binding LoadImageCommand}"
+                                                          Margin="2,0,0,0"
+                                                          Grid.Column="1"
+                                                          Style="{DynamicResource RegularButtonStyle }"
+                                                          VerticalAlignment="Center"
+                                                          Foreground="{DynamicResource Text.PrimaryBrush}"
+                                                          ButtonType="Link">
+                                                <Border BorderThickness="0,0,0,1"
+                                                        BorderBrush="{DynamicResource Text.PrimaryBrush}">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,0,0,1">
+                                                        <TextBlock Text="{DynamicResource AddImageStr}" />
+                                                        <wpfUi:SymbolIcon Symbol="Add48"
+                                                                          Margin="5,0,0,0" />
+
+                                                    </StackPanel>
+                                                </Border>
+                                            </xBtn:XButton>
+                                            
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+
+                                <!-- Loading Spinner -->
+                                <StackPanel Orientation="Vertical"
+                                            Visibility="{Binding IsLoadingImages, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <spinner:DonutSpinner Width="40" />
+                                    <TextBlock Text="{DynamicResource IsLoadingPhotosStr}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

@@ -17,7 +17,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Bod
     public partial class EditBodyTypeDialogViewModel : InitializableViewModel<EditBodyTypeDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
 
         [ObservableProperty]
         private bool _isEditing = false;
@@ -30,7 +30,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Bod
         private BodyTypeDto? _bodyTypeToEdit;
 
 
-        public EditBodyTypeDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditBodyTypeDialogViewModel> logger) : base(localizationService, logger)
+        public EditBodyTypeDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditBodyTypeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
 

@@ -6,6 +6,8 @@ namespace AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositor
     public interface ITransmissionTypeRepository : IBaseRepository<TransmissionType>
     {
         Task<bool> NameExistsAsync(string name, int? excludeTransmissionTypeId = null);
+        Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int transmissionTypeId);
+
 
     }
 }

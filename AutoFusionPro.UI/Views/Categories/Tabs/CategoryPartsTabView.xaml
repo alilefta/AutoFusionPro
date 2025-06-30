@@ -48,7 +48,7 @@
                             AlternatingRowBackground="{DynamicResource DataGrid.AlternatingRow.BackgroundBrush}"
                             HeadersVisibility="Column">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="{DynamicResource CategoryPhotoStr}"
+                    <DataGridTemplateColumn Header="{DynamicResource PartPhotoStr}"
                                             Width="130">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -61,7 +61,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{DynamicResource NameStr}"
+                    <DataGridTextColumn Header="{DynamicResource PartNameStr}"
                                         Binding="{Binding Name}"
                                         Width="120" />
                     <DataGridCheckBoxColumn Header="{DynamicResource StatusStr}"
@@ -71,14 +71,14 @@
                                             Width="80">
 
                     </DataGridCheckBoxColumn>
-                    <DataGridTemplateColumn Header="{DynamicResource SubcategoriesCountStr}"
+                    <DataGridTemplateColumn Header="{DynamicResource PartNumberStr}"
                                             Width="180">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Children.Count}">
+                                <TextBlock Text="{Binding PartNumber}">
                                     <TextBlock.Foreground>
                                         <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
-                                            <Binding Path="Children" />
+                                            <Binding Path="PartNumber" />
                                             <Binding Path="IsSelected"
                                                      RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
                                         </MultiBinding>
@@ -88,14 +88,14 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="{DynamicResource PartsCountStr}"
+                    <DataGridTemplateColumn Header="{DynamicResource CurrentStockStr}"
                                             Width="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding PartCount}">
+                                <TextBlock Text="{Binding CurrentStock}">
                                     <TextBlock.Foreground>
                                         <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
-                                            <Binding Path="PartCount" />
+                                            <Binding Path="CurrentStock" />
                                             <Binding Path="IsSelected"
                                                      RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
                                         </MultiBinding>
@@ -111,7 +111,7 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <!-- Details Button -->
-                                    <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                    <!--<xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                                   ButtonType="Regular"
                                                   Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                   CommandParameter="{Binding}"
@@ -161,7 +161,7 @@
                                             <wpfUi:SymbolIcon Symbol="Delete48"
                                                               VerticalAlignment="Center" />
                                         </StackPanel>
-                                    </xBtn:XButton>
+                                    </xBtn:XButton>-->
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

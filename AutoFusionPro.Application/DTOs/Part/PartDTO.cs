@@ -1,6 +1,6 @@
-﻿using AutoFusionPro.Application.DTOs.Category;
+﻿using AutoFusionPro.Application.DTOs.PartCompatibilityDtos;
+using AutoFusionPro.Application.DTOs.PartImage;
 using AutoFusionPro.Core.Enums.DTOEnums;
-using AutoFusionPro.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace AutoFusionPro.Application.DTOs.Part
@@ -18,26 +18,11 @@ namespace AutoFusionPro.Application.DTOs.Part
         int CurrentStock,
         string? StockingUnitOfMeasureSymbol,
         bool IsActive,
-        string? ImagePath,
+        string? PrimaryImagePath,
         string? Location
     );
 
-    /// <summary>
-    /// DTO representing a vehicle compatibility link for display.
-    /// </summary>
-    public record PartCompatibilityDto(
-        int Id, // The ID of the PartCompatibility record itself
-        int CompatibleVehicleId, // Renamed from VehicleId for clarity
-        string VehicleMake,
-        string VehicleModel,
-        int VehicleYearStart, // Changed from VehicleYear to reflect range
-        int VehicleYearEnd,   // Added for range
-        string? TrimLevelName, // Added
-        string? EngineTypeName, // Added
-        string? TransmissionTypeName, // Added
-        string? Notes
-    );
-
+    
     /// <summary>
     /// DTO representing a supplier link for a part for display.
     /// </summary>
@@ -71,7 +56,6 @@ namespace AutoFusionPro.Application.DTOs.Part
         public string Location { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public bool IsOriginal { get; set; }
-        public string? ImagePath { get; set; }
         public string? Notes { get; set; }
         public string? Barcode { get; set; }
 
@@ -101,19 +85,13 @@ namespace AutoFusionPro.Application.DTOs.Part
         public DateTime? LastRestockDate { get; set; } // Made nullable, as a new part might not have been restocked
 
         // Related Collections for display
-        public List<PartCompatibilityDto> CompatibleVehicles { get; set; } = new(); // Initialize
-        public List<PartSupplierDto> Suppliers { get; set; } = new();          // Initialize
+        public List<PartCompatibilityRuleSummaryDto> CompatibilityRules { get; set; } = new();
+        public List<PartSupplierDto> Suppliers { get; set; } = new();
+
+        public List<PartImageDto> Images { get; set; } = new();
+
     }
 
-    /// <summary>
-    /// DTO for adding a new vehicle compatibility link.
-    /// </summary>
-    public record PartCompatibilityCreateDto(
-        [Range(1, int.MaxValue)] 
-        int CompatibleVehicleId, // The ID of the CompatibleVehicle spec
-
-        string? Notes
-    );
 
     /// <summary>
     /// DTO for adding a new supplier link to a part.
@@ -143,7 +121,6 @@ namespace AutoFusionPro.Application.DTOs.Part
          string? Location,
          bool IsActive,
          bool IsOriginal,
-         string? ImagePath, // Source path from client for NEW image
          string? Notes,
          string? Barcode, // Added
          [Range(1, int.MaxValue)] int CategoryId,
@@ -152,13 +129,7 @@ namespace AutoFusionPro.Application.DTOs.Part
          int? SalesUnitOfMeasureId,
          decimal? SalesConversionFactor,
          int? PurchaseUnitOfMeasureId,
-         decimal? PurchaseConversionFactor,
-
-         // For initial creation, it's often better to add suppliers/compatibility in separate steps/calls
-         // after the part is created and has an ID.
-         // If you MUST include them on creation:
-         List<PartSupplierCreateDto>? InitialSuppliers = null,
-         List<PartCompatibilityCreateDto>? InitialCompatibleVehicles = null
+         decimal? PurchaseConversionFactor
      );
 
     /// <summary>
@@ -179,7 +150,6 @@ namespace AutoFusionPro.Application.DTOs.Part
          string? Location,
          bool IsActive,
          bool IsOriginal,
-         string? ImagePath, // Source path from client if image changed, existing path if not, null to clear
          string? Notes,
          string? Barcode, // Added
          [Range(1, int.MaxValue)] int CategoryId,
@@ -202,7 +172,6 @@ namespace AutoFusionPro.Application.DTOs.Part
         int? CategoryId = null,
         string? Manufacturer = null,    // Allow direct text filter for manufacturer
         int? SupplierId = null,         // To find parts supplied by a specific supplier
-        int? CompatibleVehicleId = null, // To find parts compatible with a specific vehicle spec
         decimal? MinSellingPrice = null, // Renamed for clarity
         decimal? MaxSellingPrice = null, // Renamed for clarity
         StockStatusFilter? StockStatus = null,

@@ -938,4 +938,131 @@
         </Setter>
     </Style>
 
+
+    <Style x:Key="FlyoutButtonStyle"
+           TargetType="Button">
+        <!-- Base style -->
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource Button.Default.ForegroundBrush}" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="10,5" />
+        <Setter Property="Margin"
+                Value="0,1" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="MaxWidth"
+                Value="150" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Content}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover effect -->
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="{DynamicResource Button.Default.Background.HoverBrush}" />
+                        </Trigger>
+                        <!-- Pressed effect -->
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="{DynamicResource Button.Default.Background.PressedBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="YellowAccentButtonStyle"
+           TargetType="Button">
+        <!-- Base style -->
+        <Setter Property="Background"
+                Value="{DynamicResource YellowStar}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource WhiteBrush}" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="4" />
+        <Setter Property="Margin"
+                Value="0,1" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="MaxWidth"
+                Value="150" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="Cursor"
+                Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Content="{TemplateBinding Content}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover effect -->
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="{DynamicResource Button.Default.Background.HoverBrush}" />
+                        </Trigger>
+                        <!-- Pressed effect -->
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background"
+                                    Value="{DynamicResource Button.Default.Background.PressedBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 </ResourceDictionary>

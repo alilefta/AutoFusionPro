@@ -427,7 +427,7 @@
     <sys:String x:Key="PartDescriptionTooltipMessageStr">Provide a detailed description of the part, including any specific features or applications. Optional.</sys:String>
     <sys:String x:Key="CostPriceTooltipMessageStr">Enter the cost price of the part (what you pay for it). Required.</sys:String>
     <sys:String x:Key="SellingPriceTooltipMessageStr">Enter the selling price of the part (what you sell it for). Required.</sys:String>
-    <sys:String x:Key="InitialStockQuantityTooltipMessageStr">Enter the initial quantity of this part you have in stock. This will set the current stock level for this new part.</sys:String>
+    <sys:String x:Key="InitialStockQuantityTooltipMessageStr">Enter the quantity of this part you currently have in stock, measured in the 'Stocking Unit of Measure' selected below. For new parts only.</sys:String>
     <sys:String x:Key="ReorderLevelTooltipMessageStr">Set the stock level at which this part should be reordered. A low stock report will trigger when current stock reaches this level.</sys:String>
     <sys:String x:Key="MinimumStockTooltipMessageStr">Set the absolute minimum stock level that should be maintained for this part. Alerts may trigger if stock falls below this.</sys:String>
     <sys:String x:Key="PartLocationTooltipMessageStr">Enter the physical location of this part in your warehouse or store (e.g., 'Aisle 5, Shelf B, Bin 3'). Optional.</sys:String>
@@ -445,11 +445,15 @@
     <sys:String x:Key="PartManufacturerExampleStr">E.g., Bosch, NGK, ACDelco</sys:String>
     <sys:String x:Key="PartLocationStr">Part Location</sys:String>
     <sys:String x:Key="IsPartActiveStr">Is Part Active?</sys:String>
-    <sys:String x:Key="IsPartOriginalStr">Is Part Original?</sys:String>
+    <sys:String x:Key="IsPartOriginalStr">Is Part Original (OEM)?</sys:String>
+    <sys:String x:Key="IsOriginalToolTipStr">Is this an Original Equipment Manufacturer (OEM) part?</sys:String>
+    <sys:String x:Key="IsPartToolTipStr">Is this part currently active for sale/use?</sys:String>
+
+
     <sys:String x:Key="PartLocationExampleStr">E.g., Aisle 5, Shelf B, Bin 3</sys:String>
     <sys:String x:Key="BarcodeStr">Barcode</sys:String>
     <sys:String x:Key="AftermarketPartStr">Aftermarket Part</sys:String>
-    <sys:String x:Key="OriginalPartStr">Original Part</sys:String>
+    <sys:String x:Key="OriginalPartStr">Original (OEM) Part</sys:String>
     <sys:String x:Key="PartImageStr">Part Image</sys:String>
     <sys:String x:Key="NotesStr">Notes</sys:String>
     <sys:String x:Key="CostPriceStr">Cost Price</sys:String>
@@ -458,8 +462,100 @@
     <sys:String x:Key="CostPriceExampleStr">E.g., $10</sys:String>
     <sys:String x:Key="SellingPriceExampleStr">E.g., $18</sys:String>
     <sys:String x:Key="UnitsOfMeasuresStr">Units of Measure</sys:String>
-    
-    
+    <sys:String x:Key="AddPartDialogTitleStr">Add New Part</sys:String>
+    <sys:String x:Key="EditPartDialogTitleStr">Edit Part</sys:String>
+    <sys:String x:Key="SelectUnitOfMeasureStr">-- Select Unit of Measure --</sys:String>
+    <sys:String x:Key="InitialStockQuantityPlaceholderStr">e.g., 50</sys:String>
+    <sys:String x:Key="ReorderLevelPlaceholderStr">e.g., 2</sys:String>
+    <sys:String x:Key="ReorderLevelToolTipStr">Set the stock level (in 'Stocking UoM') at which this part should be flagged for reordering. Helps prevent stockouts.</sys:String>
+    <sys:String x:Key="MinimumStockStr">Minimum Stock</sys:String>
+    <sys:String x:Key="MinimumStockPlaceholderStr">e.g., 5</sys:String>
+    <sys:String x:Key="MinimumStockToolTipStr">Set the absolute minimum stock level (in 'Stocking UoM') that should ideally be maintained. Critical alerts might trigger if stock falls below this.</sys:String>
+    <sys:String x:Key="StockingUnitOfMeasureStr">Stocking Unit of Measure</sys:String>
+    <sys:String x:Key="StockingUnitOfMeasureToolTipStr">Select the fundamental unit in which this part is stocked, counted, and its value is primarily tracked (e.g., Piece, Liter, Box). This is required.</sys:String>
+    <sys:String x:Key="SalesUnitOfMeasureStr">Sales Unit of Measure</sys:String>
+    <sys:String x:Key="SalesUnitOfMeasureToolTipStr">Optional. Select the unit in which this part is typically SOLD, if different from the stocking unit (e.g., stock in 'Pieces', sell in 'Pairs'). If same as stocking unit, leave blank or select the same unit.</sys:String>
+    <sys:String x:Key="PurchaseUnitOfMeasureStr">Purchase Unit of Measure</sys:String>
+    <sys:String x:Key="PurchaseUnitOfMeasureToolTipStr">If Sales Unit is different, enter how many STOCKING units make up ONE SALES unit. Example: If Stocking Unit is 'Piece' and Sales Unit is 'Pair', enter '2'. If Stocking Unit is 'Liter' and Sales Unit is '500ml Bottle', enter '0.5'.</sys:String>
+    <sys:String x:Key="SalesConversionFactorStr">Sales Conversion Factor</sys:String>
+    <sys:String x:Key="PurchaseConversionFactorStr">Purchase Conversion Factor</sys:String>
+    <sys:String x:Key="InitialStockQuantityStr">Initial Stock Quantity</sys:String>
+    <sys:String x:Key="MinimumStockQuantityStr">Minimum Stock Quantity</sys:String>
+    <sys:String x:Key="ReorderLevelStr">Reorder Level</sys:String>
+    <sys:String x:Key="SelectUnitStr">Select Unit...</sys:String>
+    <sys:String x:Key="UnitOfMeasureInfoStr">Unit of Measure Information:</sys:String>
+    <sys:String x:Key="StockingUOMInfoStr">The stocking unit is how you count inventory. Sales and purchase units can be different with conversion factors.</sys:String>
+    <sys:String x:Key="SalesConversionFactorPlaceholderStr">e.g., 0.5</sys:String>
+    <sys:String x:Key="SalesConversionFactorToolTipStr">If Sales Unit is different, enter how many STOCKING units make up ONE SALES unit. Example: If Stocking Unit is 'Piece' and Sales Unit is 'Pair', enter '2'. If Stocking Unit is 'Liter' and Sales Unit is '500ml Bottle', enter '0.5'.</sys:String>
+    <sys:String x:Key="PurchaseConversionFactorToolTipStr">If Purchase Unit is different, enter how many STOCKING units make up ONE PURCHASE unit. Example: If Stocking Unit is 'Piece' and Purchase Unit is 'Box of 10', enter '10'.</sys:String>
+    <sys:String x:Key="PurchaseConversionFactorPlaceholderStr">e.g., 10</sys:String>
+    <sys:String x:Key="SameAsStockUOMStr">Same as Stock Unit of Measure</sys:String>
+    <sys:String x:Key="SelectACategoryStr">-- Select a Category --</sys:String>
+    <sys:String x:Key="CurrencyStr">Currency</sys:String>
+    <sys:String x:Key="IQDStr">Thousand IQD</sys:String>
+    <sys:String x:Key="USDStr">US Dollar</sys:String>
+    <sys:String x:Key="InStr">In</sys:String>
+    <sys:String x:Key="AddNewSupplierStr">Add New Supplier</sys:String>
+    <sys:String x:Key="SupplierNameStr">Supplier Name</sys:String>
+    <sys:String x:Key="SupplierPartStr">Supplier Part #</sys:String>
+    <sys:String x:Key="CostStr">Cost</sys:String>
+    <sys:String x:Key="LeadTimeStr">Lead Time</sys:String>
+    <sys:String x:Key="MinOrderQuantityStr">Min Order Qty</sys:String>
+    <sys:String x:Key="PreferredStr">Preferred</sys:String>
+    <sys:String x:Key="EditSupplierPartStr">Edit Supplier For Part</sys:String>
+    <sys:String x:Key="LinkSupplierPartStr">Link Supplier For Part</sys:String>
+    <sys:String x:Key="AddSupplierPartStr">Add Supplier For Part</sys:String>
+    <sys:String x:Key="SupplierPartNumberForThisPartStr">Supplier Part Number For This Part</sys:String>
+    <sys:String x:Key="CostPriceForThisPartStr">Cost Price For This Part</sys:String>
+    <sys:String x:Key="LeadTimeInDaysForThisPartStr">Lead Time In Days For This Part</sys:String>
+    <sys:String x:Key="MinimumOrderQuantityForThisPartStr">Minimum Order Quantity For This Part</sys:String>
+    <sys:String x:Key="IsPreferredSupplierForThisPartStr">Is Preferred Supplier For This Part?</sys:String>
+    <sys:String x:Key="SelectSupplierStr">Select a Supplier</sys:String>
+    <sys:String x:Key="PartPhotoStr">Part Photo</sys:String>
+    <sys:String x:Key="CurrentStockStr">Current Stock</sys:String>
+    <sys:String x:Key="LinkNewPartCompatibilityStr">Link Vehicle-Compatibility</sys:String>
+    <sys:String x:Key="AddPartCompatibilityStr">Add Part-Vehicle Compatibility</sys:String>
+    <sys:String x:Key="ShowEditCompatibilityNotesCommandStr">Edit notes for this compatibility link</sys:String>
+    <sys:String x:Key="ShowRemoveCompatibilityNotesCommandStr">Remove this vehicle compatibility</sys:String>
+    <sys:String x:Key="YearsStr">Years</sys:String>
+    <sys:String x:Key="SelectCompatibleVehicleStr">Select Compatible Vehicle</sys:String>
+    <sys:String x:Key="SelectTrimLevelsStr">Select Trim Levels</sys:String>
+    <sys:String x:Key="AnyTrimLevelStr">Any Trim Level</sys:String>
+    <sys:String x:Key="AnyTransmissionTypeStr">Any Transmission Type</sys:String>
+    <sys:String x:Key="AnyEngineTypeStr">Any Engine Type</sys:String>
+    <sys:String x:Key="AnyBodyTypeStr">Any Body Type</sys:String>
+    <sys:String x:Key="DefineVehicleCompatibilityStr">Define Vehicle Compatibility</sys:String>
+    <sys:String x:Key="PartCompatibilitiesStr">Part Compatibilities</sys:String>
+    <sys:String x:Key="PartImagesStr">Part Images</sys:String>
+    <sys:String x:Key="AddImageStr">Add Image</sys:String>
+    <sys:String x:Key="ClearImagesStr">Clear Images</sys:String>
+    <sys:String x:Key="NoImagesHasBeenSelectedYetClickToAddStr">No Images Has Been Selected Yet.</sys:String>
+    <sys:String x:Key="ClickHereToAddStr">Click Here to include photos </sys:String>
+    <sys:String x:Key="IsLoadingPhotosStr">Please wait for Images to load ...</sys:String>
+    <sys:String x:Key="WriteCaptionStr">Write Caption</sys:String>
+    <sys:String x:Key="SetAsPrimaryPhotoForThisPartStr">Set Photo As Primary</sys:String>
+    <sys:String x:Key="AnyMakeStr">Any Make</sys:String>
+    <sys:String x:Key="AnyModelStr">Any Model</sys:String>
+    <sys:String x:Key="SelectCompatibileEnginesStr">Select Compatible Engines</sys:String>
+    <sys:String x:Key="SelectCompatibileBodyTypesStr">Select Compatible Body Types</sys:String>
+    <sys:String x:Key="SelectCompatibileTransmissionTypesStr">Select Compatible Transmission Types</sys:String>
+    <sys:String x:Key="PartCompatibilityNameStr">Compatibility Name</sys:String>
+    <sys:String x:Key="PartCompatibilityDescriptionStr">Compatibility Description</sys:String>
+    <sys:String x:Key="SelectExistingPartCompatibility">Select From Existing Template</sys:String>
+    <sys:String x:Key="GeneralCompatibilityRuleStr">General Compatibility Rule</sys:String>
+    <sys:String x:Key="AutoGeneratedAndYouCanChangeItStr">(You Can Change It)</sys:String>
+    <sys:String x:Key="ExcludesStr">Excludes</sys:String>
+    <sys:String x:Key="TrimsStr">Trims</sys:String>
+    <sys:String x:Key="EnginesStr">Engines</sys:String>
+    <sys:String x:Key="BodiesStr">Bodies</sys:String>
+    <sys:String x:Key="TransmissionsStr">Transmissions</sys:String>
+    <sys:String x:Key="FromStr">From</sys:String>
+    <sys:String x:Key="UpToStr">Up To</sys:String>
+    <sys:String x:Key="AnyYearStr">Any Year</sys:String>
+    <sys:String x:Key="RuleNameStr">Rule Name</sys:String>
+
+
+
 
 
 </ResourceDictionary>

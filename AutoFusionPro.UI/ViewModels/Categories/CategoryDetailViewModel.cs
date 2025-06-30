@@ -231,20 +231,24 @@ namespace AutoFusionPro.UI.ViewModels.Categories
                 ActivePartsCount = 10;
                 LowStockPartsCount = 10;
 
-                //parts = await _partService.GetPartsByCategoryAsync(CurrentCategory.Id, false);
+                var filter = new PartFilterCriteriaDto(CategoryId: CurrentCategory.Id);
 
-                //if (parts != null)
-                //{
-                //    foreach (var part in parts)
-                //    {
-                //        PartsInCategory.Add(part);
-                //    }
-                //    _logger.LogInformation("Loaded {Count} Parts.", PartsInCategory.Count);
-                //}
-                //else
-                //{
-                //    _logger.LogWarning("GetPartsByCategoryAsync() returned null.");
-                //}
+                var pagedResults = await _partService.GetFilteredPartSummariesAsync(filter, 0, 100);
+
+                parts = pagedResults.Items;
+
+                if (parts != null)
+                {
+                    foreach (var part in parts)
+                    {
+                        PartsInCategory.Add(part);
+                    }
+                    _logger.LogInformation("Loaded {Count} Parts.", PartsInCategory.Count);
+                }
+                else
+                {
+                    _logger.LogWarning("GetPartsByCategoryAsync() returned null.");
+                }
 
             }
             catch (Exception ex)

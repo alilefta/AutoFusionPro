@@ -437,8 +437,8 @@
                         </Trigger>
                         <Trigger Property="IsSelected"
                                  Value="true">
-                            <Setter Property="Background" TargetName="InnerBorder"
-                                    Value="{StaticResource ListView.Item.Selected.Background}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource ListView.Item.Selected.Background}" />
                             <Setter Property="BorderBrush"
                                     Value="{DynamicResource ListView.Item.Selected.BorderBrush}" />
                             <Setter Property="Foreground"

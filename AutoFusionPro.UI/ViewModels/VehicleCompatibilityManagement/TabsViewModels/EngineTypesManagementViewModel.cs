@@ -21,7 +21,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
     public partial class EngineTypesManagementViewModel : BaseViewModel<EngineTypesManagementViewModel>, ITabViewModel
     {
         private readonly IWpfToastNotificationService _wpfToastNotificationService;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         private readonly IDialogService _dialogService;
         [ObservableProperty]
         private bool _isVisible = false;
@@ -49,7 +49,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private EngineTypeDto _selectedEngineType = null;
 
         public EngineTypesManagementViewModel(IWpfToastNotificationService wpfToastNotificationService,
-            ICompatibleVehicleService compatibleVehicleService,
+            IVehicleTaxonomyService compatibleVehicleService,
             IDialogService dialogService,
             ILocalizationService localizationService,
             ILogger<EngineTypesManagementViewModel> logger) : base(localizationService, logger)

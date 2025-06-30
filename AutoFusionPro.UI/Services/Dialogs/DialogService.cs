@@ -4,6 +4,7 @@ using AutoFusionPro.UI.Extensions;
 using AutoFusionPro.UI.Services.Animations;
 using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.General.Dialogs;
+using AutoFusionPro.UI.Views;
 using AutoFusionPro.UI.Views.General.Dialogs;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -84,28 +85,48 @@ namespace AutoFusionPro.UI.Services.Dialogs
             }
         }
 
-        public async Task<bool?> ShowDialogAsync<TDialogViewModel, TView>(object? param = null)
+        /// <summary>
+        /// Show Dialog Async
+        /// </summary>
+        /// <typeparam name="TDialogViewModel">The Dialog view model of type either: <see cref="InitializableViewModel{TViewModel}"/> or <see cref="BaseViewModel{VM}"/></typeparam>
+        /// <typeparam name="TView">The Dialog window itself</typeparam>
+        /// <param name="param">Initialization Parameter for the <see cref="TDialogViewModel"/></param>
+        /// <param name="owner">The Owner Window for the requested Dialog</param>
+        /// <returns><see cref="bool?"/> of Results</returns>
+        public async Task<bool?> ShowDialogAsync<TDialogViewModel, TView>(object? param = null, Window? owner = null)
             where TDialogViewModel : class
             where TView : Window, new()
         {
-            var mainWindow = System.Windows.Application.Current.MainWindow;
-            double originalOpacity = mainWindow.DimBackground();
+            Window parentWindow;
 
+            if (owner is not null && owner is Window)
+            {
+                parentWindow = owner;
+            }
+            else
+            {
+                parentWindow = System.Windows.Application.Current.MainWindow;
+            }
+
+            double originalOpacity = parentWindow.DimBackground();
             try
             {
                 // Create the dialog
                 var dialog = new TView
                 {
-                    Owner = System.Windows.Application.Current.MainWindow,
+                    Owner = parentWindow,
                 };
 
                 // Get the ViewModel
                 var viewModel = _serviceProvider.GetRequiredService<TDialogViewModel>();
 
-                if(viewModel is IInitializableViewModel initializableViewModel)
+                if (viewModel is InitializableViewModel<TDialogViewModel> initializableViewModel)
                 {
                     await initializableViewModel.InitializeAsync(param);
                     await initializableViewModel.Initialized;
+                    // Optional: You might want to await the completion if InitializeAsync truly sets up critical state
+                    // before showing the dialog, but often it's about kicking off async loads.
+                    // await initializableViewModel.Initialized; // This would wait for _initializationComplete.TrySetResult
 
                 }
 
@@ -126,7 +147,7 @@ namespace AutoFusionPro.UI.Services.Dialogs
                 EventHandler closedHandler = null;
                 closedHandler = (sender, args) =>
                 {
-                    mainWindow.RestoreBackground(originalOpacity);
+                    parentWindow.RestoreBackground(originalOpacity);
                     dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
                 };
                 dialog.Closed += closedHandler;
@@ -137,24 +158,45 @@ namespace AutoFusionPro.UI.Services.Dialogs
             catch (Exception ex)
             {
                 // If exception occurs, restore opacity immediately
-                mainWindow.Opacity = originalOpacity;
+                parentWindow.Opacity = originalOpacity;
                 throw;
             }
         }
 
-        public async Task<TResult?> ShowDialogWithResultsAsync<TDialogViewModel, TView, TResult>(object? param = null)
+        /// <summary>
+        /// Show Dialog Async
+        /// </summary>
+        /// <typeparam name="TDialogViewModel">The Dialog view model of type either: <see cref="InitializableViewModel{TViewModel}"/> or <see cref="BaseViewModel{VM}"/></typeparam>
+        /// <typeparam name="TView">The Dialog window itself</typeparam>
+        /// <typeparam name="TResult">The Type of the Initialization Parameter</typeparam>
+        /// <param name="param">Initialization Parameter for the <see cref="TDialogViewModel"/></param>
+        /// <param name="owner">Owner Window for the requested Dialog</param>
+        /// <returns>Results of the dialogs of type <see cref="TResult"/></returns>
+        public async Task<TResult?> ShowDialogWithResultsAsync<TDialogViewModel, TView, TResult>(object? param = null, Window? owner = null)
             where TDialogViewModel : class, IDialogViewModelWithResult<TResult>
             where TView : Window, new()
         {
-            var mainWindow = System.Windows.Application.Current.MainWindow;
-            double originalOpacity = mainWindow.DimBackground();
+
+            Window parentWindow;
+
+            if (owner is not null && owner is Window)
+            {
+                parentWindow = owner;
+
+            }
+            else
+            {
+                parentWindow = System.Windows.Application.Current.MainWindow;
+            }
+
+            double originalOpacity = parentWindow.DimBackground();
 
             try
             {
                 // Create the dialog
                 var dialog = new TView
                 {
-                    Owner = System.Windows.Application.Current.MainWindow,
+                    Owner = parentWindow,
                 };
 
                 // Get the ViewModel
@@ -183,7 +225,7 @@ namespace AutoFusionPro.UI.Services.Dialogs
                 EventHandler closedHandler = null;
                 closedHandler = (sender, args) =>
                 {
-                    mainWindow.RestoreBackground(originalOpacity);
+                    parentWindow.RestoreBackground(originalOpacity);
                     dialog.Closed -= closedHandler; // Remove handler to prevent memory leaks
                 };
                 dialog.Closed += closedHandler;
@@ -202,7 +244,7 @@ namespace AutoFusionPro.UI.Services.Dialogs
             catch (Exception ex)
             {
                 // If exception occurs, restore opacity immediately
-                mainWindow.Opacity = originalOpacity;
+                parentWindow.Opacity = originalOpacity;
                 throw;
             }
         }

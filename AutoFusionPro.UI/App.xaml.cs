@@ -18,15 +18,15 @@ using AutoFusionPro.UI.ViewModels.Categories.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts;
+using AutoFusionPro.UI.ViewModels.Parts.Dialogs;
+using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEditPartDialogs;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.BodyTypes;
-using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.CompatibleVehicles;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.EngineTypes;
-using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Transmissions;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels;
@@ -43,6 +43,7 @@ using AutoFusionPro.UI.Views.Shell;
 using AutoFusionPro.UI.Views.User;
 using AutoFusionPro.UI.Views.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.Views.Vehicles;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -190,7 +191,7 @@ namespace AutoFusionPro.UI
 
                     var localizationService = _host.Services.GetRequiredService<ILocalizationService>();
 
-                    localizationService.ApplyLanguage(settings.Language);
+                    localizationService.ApplyLanguageAndCurrency(settings.Language, settings.SelectedCurrency);
                     localizationService.ApplyTheme(settings.IsDarkThemeEnabled);
 
                     // Load Splash Screen 
@@ -265,6 +266,8 @@ namespace AutoFusionPro.UI
         {
             try
             {
+
+
                 // DbContext
                 services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger), Log.Logger);
 
@@ -278,6 +281,9 @@ namespace AutoFusionPro.UI
                 services.AddTransient<ILoadingService, LoadingService>();
 
                 services.AddSingleton<IWpfToastNotificationService, ToastNotificationService>();
+
+                services.AddSingleton<IMessenger, WeakReferenceMessenger>();
+
 
                 // Views
                 services.AddSingleton<MainWindow>();
@@ -298,7 +304,6 @@ namespace AutoFusionPro.UI
                 services.AddTransient<VehicleCompatibilityView>();
 
                 services.AddTransient<CategoriesView>();
-
 
 
                 // ViewModels
@@ -330,7 +335,10 @@ namespace AutoFusionPro.UI
                 services.AddTransient<MakesModelsTrimsManagementViewModel>();
                 services.AddTransient<EngineTypesManagementViewModel>();
                 services.AddTransient<BodyTypesManagementViewModel>();
-                services.AddTransient<CompatibleVehiclesViewModel>();
+
+                // TODO: TO be replaced with PartCompatibilityRuleTabView
+                //services.AddTransient<CompatibleVehiclesViewModel>();
+
                 services.AddTransient<TransmissionTypesManagementViewModel>();
 
                 services.AddTransient<AddMakeDialogViewModel>();
@@ -351,10 +359,10 @@ namespace AutoFusionPro.UI
                 services.AddTransient<EditBodyTypeDialogViewModel>();                
                 
                 
-                services.AddTransient<AddCompatibleVehicleDialogViewModel>();
-                services.AddTransient<EditCompatibleVehicleDialogViewModel>();
+                //services.AddTransient<AddCompatibleVehicleDialogViewModel>();
+                //services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
-                services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
+                //services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
 
                 services.AddTransient<AddRootCategoryDialogViewModel>();
                 services.AddTransient<EditRootCategoryDialogViewModel>();
@@ -366,9 +374,18 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<CategoryFilterOptionsDialogViewModel>();
 
+                services.AddTransient<LinkNewSupplierDialogViewModel>();
+                services.AddTransient<EditSupplierLinkDialogViewModel>();
+                services.AddTransient<DefineVehicleSpecificationDialogViewModel>();
+
 
                 // Dialogs
                 services.AddTransient<AddVehicleDialogViewModel>();
+
+                // Parts Dialogs
+                services.AddTransient<AddEditPartDialogViewModel>();
+
+
 
                 // General
                 services.AddTransient<ConfirmDeleteItemsDialogViewModel>();

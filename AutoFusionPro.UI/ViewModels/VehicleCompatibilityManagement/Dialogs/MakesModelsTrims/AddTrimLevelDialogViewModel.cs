@@ -18,7 +18,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
     {
         #region Fields
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         #endregion
 
         #region Props
@@ -36,7 +36,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         #region Constructor
 
         public AddTrimLevelDialogViewModel(
-            ICompatibleVehicleService compatibleVehicleService, 
+            IVehicleTaxonomyService compatibleVehicleService, 
             ILocalizationService localizationService, 
             ILogger<AddTrimLevelDialogViewModel> logger) : base(localizationService, logger)
         {

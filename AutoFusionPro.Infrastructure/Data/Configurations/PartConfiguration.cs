@@ -40,8 +40,9 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
             builder.Property(p => p.Location)
                 .HasMaxLength(50);
 
-            builder.Property(p => p.ImagePath)
-                .HasMaxLength(255);
+            //builder.Property(p => p.ImagePath)
+            //    .HasMaxLength(255);
+            // Part image entity relation with Part is defined in PartImageConfiguration
 
             builder.Property(p => p.Notes)
                 .HasMaxLength(1000);
@@ -73,6 +74,16 @@ namespace AutoFusionPro.Infrastructure.Data.Configurations
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // --- UPDATED COMPATIBILITY RELATIONSHIP ---
+            // One-to-Many: Part to PartCompatibilityRule
+            // This is configured from PartCompatibilityRuleConfiguration (HasOne Part),
+            // so no explicit HasMany needed here unless you want to configure something specific
+            // about the collection on the Part side. EF Core typically infers this correctly.
+            // If PartCompatibilityRule.PartId is correctly an FK, this is fine.
+            // builder.HasMany(p => p.CompatibilityRules)
+            //        .WithOne(cr => cr.Part) // Assuming PartCompatibilityRule has 'Part' nav prop
+            //        .HasForeignKey(cr => cr.PartId)
+            //        .OnDelete(DeleteBehavior.Cascade); // This is now configured in PartCompatibilityRuleConfiguration
 
         }
     }

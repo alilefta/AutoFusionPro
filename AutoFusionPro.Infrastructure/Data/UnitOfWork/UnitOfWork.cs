@@ -2,6 +2,7 @@
 using AutoFusionPro.Domain.Interfaces.Repository;
 using AutoFusionPro.Domain.Interfaces.Repository.Base;
 using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Interfaces.Repository.PartCompatibilityRulesRepositories;
 using AutoFusionPro.Domain.Interfaces.Repository.VehicleInventory;
 using AutoFusionPro.Domain.Models.Base;
 using AutoFusionPro.Infrastructure.Data.Context;
@@ -16,18 +17,17 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-
         private readonly ApplicationDbContext _context;
-
-        private IDbContextTransaction _transaction;
+        private IDbContextTransaction? _transaction;
         private ILogger<UnitOfWork> _logger;
+        private bool _disposed = false;
+
 
         public ICategoryRepository Categories { get;}
         public IUserRepository Users { get; }
         public IPartRepository Parts { get; }
         public INotificationRepository Notifications { get; }
 
-        public ICompatibleVehicleRepository CompatibleVehicles { get; }
         public IMakeRepository Makes { get; }
         public IModelRepository Models { get; }
         public IBodyTypeRepository BodyTypes { get; }
@@ -46,15 +46,24 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
         public IVehicleRepository Vehicles { get; }
 
 
-        public IPartCompatibilityRepository PartCompatibilities { get; }
-        public ISupplierPartRepository SupplierParts { get; } 
+        public ISupplierPartRepository SupplierParts { get; }
+
+
+        public IPartCompatibilityRuleRepository PartCompatibilityRules { get; }
+        public IPartCompatibilityRuleBodyTypeRepository PartCompatibilityRuleBodyTypes { get; }
+        public IPartCompatibilityRuleEngineTypeRepository PartCompatibilityRuleEngineTypes { get; }
+        public IPartCompatibilityRuleTransmissionTypeRepository PartCompatibilityRuleTransmissionTypes { get; }
+        public IPartCompatibilityRuleTrimLevelRepository PartCompatibilityRuleTrimLevels { get; }
+
+        public IPartImageRepository PartImages { get; }
+
+
 
         public UnitOfWork(ApplicationDbContext context, 
                         IUserRepository userRepository,
                         IPartRepository partRepository,
                         INotificationRepository notifications,
                         ICategoryRepository categoryRepository,
-                        ICompatibleVehicleRepository compatibleVehicleRepository,
                         IMakeRepository makeRepository,
                         IModelRepository modelRepository,
                         IBodyTypeRepository bodyTypeRepository,
@@ -62,7 +71,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
                         ITransmissionTypeRepository transmissionTypeRepository,
                         ITrimLevelRepository trimLevelRepository, 
                         ISupplierRepository supplierRepository,
-                        IPartCompatibilityRepository partCompatibilityRepository,
                         ISupplierPartRepository supplierPartRepository,
                         IInventoryTransactionRepository inventoryTransactionRepository,
                         IUnitOfMeasureRepository unitOfMeasureRepository,
@@ -73,6 +81,17 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
                         IVehicleDamageLogRepository vehicleDamageLogRepository,
                         IVehicleImageRepository vehicleImageRepository,
                         IVehicleRepository vehicleRepository,
+
+
+                        IPartCompatibilityRuleRepository partCompatibilityRuleRepository,
+                        IPartCompatibilityRuleBodyTypeRepository partCompatibilityRuleBodyTypeRepository,
+                        IPartCompatibilityRuleEngineTypeRepository partCompatibilityRuleEngineTypeRepository,
+                        IPartCompatibilityRuleTransmissionTypeRepository partCompatibilityRuleTransmissionTypeRepository,
+                        IPartCompatibilityRuleTrimLevelRepository partCompatibilityRuleTrimLevelRepository,
+
+                        IPartImageRepository partImageRepository,
+            
+
                         ILogger<UnitOfWork> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -82,7 +101,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             Categories = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             Notifications = notifications ?? throw new ArgumentNullException(nameof(notifications));
 
-            CompatibleVehicles = compatibleVehicleRepository ?? throw new ArgumentNullException(nameof(compatibleVehicleRepository));
             Makes = makeRepository ?? throw new ArgumentNullException(nameof(makeRepository));
             Models = modelRepository ?? throw new ArgumentNullException(nameof(modelRepository));
             BodyTypes = bodyTypeRepository ?? throw new ArgumentNullException(nameof(bodyTypeRepository));
@@ -91,7 +109,6 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             TrimLevels = trimLevelRepository ?? throw new ArgumentNullException(nameof(trimLevelRepository));
             Suppliers = supplierRepository ?? throw new ArgumentNullException(nameof(supplierRepository));
 
-            PartCompatibilities = partCompatibilityRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRepository));
             SupplierParts = supplierPartRepository ?? throw new ArgumentNullException(nameof(supplierPartRepository));
             InventoryTransactions = inventoryTransactionRepository ?? throw new ArgumentNullException(nameof(inventoryTransactionRepository));
             UnitOfMeasures = unitOfMeasureRepository ?? throw new ArgumentNullException(nameof(unitOfMeasureRepository));
@@ -103,186 +120,126 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             VehicleImages = vehicleImageRepository ?? throw new ArgumentNullException(nameof(vehicleImageRepository));
             Vehicles = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
 
+            PartCompatibilityRules = partCompatibilityRuleRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRuleRepository));
+            PartCompatibilityRuleBodyTypes = partCompatibilityRuleBodyTypeRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRuleBodyTypeRepository));
+            PartCompatibilityRuleEngineTypes = partCompatibilityRuleEngineTypeRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRuleEngineTypeRepository));
+            PartCompatibilityRuleTransmissionTypes = partCompatibilityRuleTransmissionTypeRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRuleTransmissionTypeRepository));
+            PartCompatibilityRuleTrimLevels = partCompatibilityRuleTrimLevelRepository ?? throw new ArgumentNullException(nameof(partCompatibilityRuleTrimLevelRepository));
+
+            PartImages = partImageRepository ?? throw new ArgumentNullException(nameof(partImageRepository));
 
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         #region Transaction Management
 
-        public async Task BeginTransactionAsync()
-        {
-            _transaction = await _context.Database.BeginTransactionAsync();
-            _logger.LogWarning("Begin Transaction");
-        }
+        // Non-CancellationToken overload
+        public Task BeginTransactionAsync() => BeginTransactionAsync(CancellationToken.None);
 
-        public async Task CommitTransactionAsync()
-        {
-            //await context.Database.CommitTransactionAsync();
-
-            if (_transaction == null)
-            {
-                throw new InvalidOperationException("Transaction has not been started.");
-            }
-            try
-            {
-                await RetryOnLockAsync(async () =>
-                {
-                    await _context.SaveChangesAsync();
-                    await _transaction.CommitAsync();
-                });
-                _logger.LogWarning("Commuting Transaction");
-
-            }
-            finally
-            {
-                await DisposeTransactionAndContextAsync();
-
-                _logger.LogWarning("Disposing context and transaction");
-
-            }
-        }
-
-        public async Task RollbackTransactionAsync()
-        {
-
-            if (_transaction != null)
-            {
-                await _transaction.RollbackAsync();
-                await DisposeTransactionAndContextAsync();
-                _logger.LogWarning("Rollback the Transaction");
-                _logger.LogWarning("Disposing context and transaction");
-
-            }
-
-
-        }
-
-        private async Task RetryOnLockAsync(Func<Task> operation)
-        {
-            int retryCount = 0;
-            const int maxRetries = 3;
-            const int initialDelayMs = 100;
-
-            while (true)
-            {
-                try
-                {
-
-                    await operation();
-                    _logger.LogWarning("Retrying ... ");
-
-                    return;
-                }
-                catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY && retryCount < maxRetries)
-                {
-                    retryCount++;
-                    int delay = initialDelayMs * (int)Math.Pow(2, retryCount - 1);
-                    await Task.Delay(delay);
-
-                    _logger.LogWarning("Retry is awaited");
-
-                }
-            }
-        }
-
-        private async Task DisposeTransactionAndContextAsync()
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken)
         {
             if (_transaction != null)
             {
-                await _transaction.DisposeAsync();
+                _logger.LogWarning("Attempting to begin a new transaction while an existing one is active. The existing transaction will be disposed.");
+                await DisposeTransactionAsync(); // Dispose previous transaction before starting new
             }
-
-            if (_context != null)
-            {
-                await _context.DisposeAsync();
-            }
-        }
-
-
-        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
-        {
             _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-            _logger.LogInformation("Transaction begun."); // Changed from Warning to Info
+            _logger.LogInformation("Database transaction begun. TransactionId: {TransactionId}", _transaction.TransactionId);
         }
 
-        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        // Non-CancellationToken overload
+        public Task CommitTransactionAsync() => CommitTransactionAsync(CancellationToken.None);
+
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken)
         {
             if (_transaction == null)
             {
-                throw new InvalidOperationException("Transaction has not been started.");
+                throw new InvalidOperationException("Transaction has not been started or has already been completed.");
             }
+
             try
             {
-                // Pass cancellationToken to SaveChangesAsync if it's part of the commit logic
-                // The RetryOnLockAsync should also ideally accept and pass down the token.
+                // The service layer should have called SaveChangesAsync BEFORE calling CommitTransactionAsync.
+                // This method only commits the underlying DB transaction.
+                _logger.LogInformation("Attempting to commit database transaction. TransactionId: {TransactionId}", _transaction.TransactionId);
                 await RetryOnLockAsync(async () =>
                 {
-                    await _context.SaveChangesAsync(cancellationToken); // Pass token here
-                    await _transaction.CommitAsync(cancellationToken);  // Pass token here
-                }, cancellationToken); // Pass token to retry logic
-                _logger.LogInformation("Transaction committed."); // Changed from Warning to Info
+                    await _transaction.CommitAsync(cancellationToken);
+                }, cancellationToken);
+                _logger.LogInformation("Database transaction committed successfully. TransactionId: {TransactionId}", _transaction.TransactionId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error committing database transaction (TransactionId: {TransactionId}). Attempting to rollback.", _transaction.TransactionId);
+                await RollbackInternalAsync(cancellationToken); // Attempt rollback on commit failure
+                throw; // Re-throw the original exception that caused commit to fail
             }
             finally
             {
-                await DisposeTransactionAsync(); // No need for context disposal here usually
-                _logger.LogDebug("Transaction disposed after commit/rollback attempt.");
+                await DisposeTransactionAsync();
             }
         }
 
-        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        // Non-CancellationToken overload
+        public Task RollbackTransactionAsync() => RollbackTransactionAsync(CancellationToken.None);
+
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken)
+        {
+            await RollbackInternalAsync(cancellationToken);
+            await DisposeTransactionAsync(); // Always dispose after attempting rollback
+        }
+
+        private async Task RollbackInternalAsync(CancellationToken cancellationToken)
         {
             if (_transaction != null)
             {
+                var transactionId = _transaction.TransactionId; // Get ID before potential dispose
                 try
                 {
-                    await _transaction.RollbackAsync(cancellationToken); // Pass token here
-                    _logger.LogInformation("Transaction rolled back."); // Changed from Warning to Info
+                    _logger.LogInformation("Attempting to rollback database transaction. TransactionId: {TransactionId}", transactionId);
+                    await _transaction.RollbackAsync(cancellationToken);
+                    _logger.LogInformation("Database transaction rolled back successfully. TransactionId: {TransactionId}", transactionId);
                 }
-                finally
+                catch (Exception rbEx)
                 {
-                    await DisposeTransactionAsync();
-                    _logger.LogDebug("Transaction disposed after rollback.");
+                    _logger.LogError(rbEx, "An error occurred during transaction rollback (TransactionId: {TransactionId}). The transaction might be in an indeterminate state.", transactionId);
+                    // Do not re-throw here, as we are already in an error handling path for commit/rollback.
+                    // The primary error that led to rollback/commit failure is more important.
                 }
+            }
+            else
+            {
+                _logger.LogWarning("RollbackInternalAsync called but no active transaction found.");
             }
         }
 
-
-
-
-        // Update RetryOnLockAsync to accept and use CancellationToken
-        private async Task RetryOnLockAsync(Func<Task> operation, CancellationToken cancellationToken = default)
+        private async Task RetryOnLockAsync(Func<Task> operation, CancellationToken cancellationToken)
         {
             int retryCount = 0;
             const int maxRetries = 3;
-            const int initialDelayMs = 100;
+            const int initialDelayMs = 200;
 
             while (true)
             {
-                cancellationToken.ThrowIfCancellationRequested(); // Check for cancellation before each attempt
+                cancellationToken.ThrowIfCancellationRequested();
                 try
                 {
+                    _logger.LogDebug("Executing operation within RetryOnLockAsync, attempt {AttemptCount}", retryCount + 1);
                     await operation();
                     _logger.LogDebug("Operation within RetryOnLockAsync succeeded.");
-                    return;
+                    return; // Success
                 }
-                catch (SqliteException ex) when (ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY && retryCount < maxRetries)
+                catch (SqliteException ex) when ((ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_BUSY || ex.SqliteErrorCode == SQLitePCL.raw.SQLITE_LOCKED) && retryCount < maxRetries)
                 {
                     retryCount++;
                     int delay = initialDelayMs * (int)Math.Pow(2, retryCount - 1);
-                    _logger.LogWarning(ex, "SQLite BUSY error (Code: {ErrorCode}). Retrying attempt {RetryCount}/{MaxRetries} after {Delay}ms...",
+                    _logger.LogWarning(ex, "SQLite BUSY/LOCKED error (Code: {SqliteErrorCode}). Retrying attempt {RetryCount}/{MaxRetries} after {Delay}ms...",
                         ex.SqliteErrorCode, retryCount, maxRetries, delay);
-                    await Task.Delay(delay, cancellationToken); // Pass token to Task.Delay
+                    await Task.Delay(delay, cancellationToken);
                 }
-                // Removed re-throwing general exceptions, let the specific catch handle SqliteException
-                // and let others propagate if not Sqlite BUSY.
+                // If it's not a SqliteException we want to retry, or if maxRetries is reached, the exception will propagate.
             }
         }
-
-        // Remove DisposeTransactionAndContextAsync if context is managed by DI
-        // The context is typically disposed by the DI container when the scope ends.
-        // The UnitOfWork should generally only manage the lifetime of the transaction it creates.
-    
-
         #endregion
 
 
@@ -294,9 +251,15 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             // Optionally raise DataChanged event if needed for generic adds
         }
 
-        public async Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        //public async Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        //{
+        //    return await _context.Set<TEntity>().AnyAsync(predicate);
+        //}
+
+        public async Task<bool> ExistsAsync<TEntity>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default) where TEntity : class
         {
-            return await _context.Set<TEntity>().AnyAsync(predicate);
+            if (_disposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            return await _context.Set<TEntity>().AnyAsync(predicate, cancellationToken);
         }
 
         public async Task<int> SaveChangesAsync()
@@ -314,23 +277,74 @@ namespace AutoFusionPro.Infrastructure.Data.UnitOfWork
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
+        // Can be used
+        //public void Delete<TEntity>(TEntity entity) where TEntity : class // or BaseEntity
+        //{
+        //    if (_disposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+        //    _context.Set<TEntity>().Remove(entity);
+        //}
+
         #endregion
 
-        public void Dispose()
-        {
-            _transaction?.Dispose();
-            _context?.Dispose();
-        }
+        #region IDisposable & IAsyncDisposable
 
-        // Helper to dispose transaction asynchronously
+        // Dispose only the transaction, not the DbContext.
+        // DbContext lifetime is managed by the DI container.
         private async ValueTask DisposeTransactionAsync()
         {
             if (_transaction != null)
             {
                 await _transaction.DisposeAsync();
-                _transaction = null!; // Mark as disposed
+                _transaction = null; // Important to nullify after dispose
+                _logger.LogDebug("Active database transaction disposed.");
             }
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed state (managed objects).
+                    // _transaction?.Dispose(); // Sync dispose if it had one, but IDbContextTransaction is usually async
+                    // Forcibly wait for async dispose if called synchronously (not ideal but better than not disposing)
+                    if (_transaction != null)
+                    {
+                        _logger.LogWarning("Synchronous Dispose called on UnitOfWork with an active async transaction. Disposing transaction now.");
+                        _transaction.Dispose(); // Fallback to synchronous dispose
+                        _transaction = null;
+                    }
+                    // Do NOT dispose _context here.
+                }
+                _disposed = true;
+            }
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore();
+            Dispose(false); // Suppress finalization because async dispose has run
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            if (!_disposed) // Check disposed flag here too for async path
+            {
+                await DisposeTransactionAsync();
+                // Do NOT dispose _context here.
+                _disposed = true; // Mark as disposed after async resources handled
+            }
+        }
+        #endregion
+
 
     }
 }

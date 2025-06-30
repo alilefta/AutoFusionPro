@@ -38,6 +38,12 @@ namespace AutoFusionPro.UI.ViewModels.Settings
 
         public List<Languages> LanguageList { get; } = Enum.GetValues(typeof(Languages)).Cast<Languages>().ToList();
 
+
+        [ObservableProperty]
+        private Currency _selectedCurrencySetting; // For the ComboBox
+
+        public List<Currency> CurrencyList { get; } = Enum.GetValues(typeof(Currency)).Cast<Currency>().ToList();
+
         #region Commands
 
         public ICommand SaveSettingsCommand { get; }
@@ -56,6 +62,8 @@ namespace AutoFusionPro.UI.ViewModels.Settings
             Language = _settings.Language;
             IsDarkThemeEnabled = _settings.IsDarkThemeEnabled;
             SystemName = _settings.SystemName;
+
+            SelectedCurrencySetting = _settings.SelectedCurrency;
 
             SaveSettingsCommand = new RelayCommand(async _ => await SaveSettingsAsync(), canExecute: o => true);
             RestoreDefaultsCommand = new RelayCommand(async _ => await RestoreDefaultsAsync(), canExecute: o => true);
@@ -98,8 +106,9 @@ namespace AutoFusionPro.UI.ViewModels.Settings
                 Language = _settings.Language;
                 SystemName = _settings.SystemName ?? "AutoFusion Pro";
                 SystemLogo = new BitmapImage(new Uri("pack://application:,,,/AutoFusionPro.UI;component/Assets/Images/OscarLogo.png"));
+                SelectedCurrencySetting = _settings.SelectedCurrency; // Update VM property from new default settings
 
-                _localizationService.ApplyLanguage(Language);
+                _localizationService.ApplyLanguageAndCurrency(Language, SelectedCurrencySetting);
                 _localizationService.ApplyTheme(IsDarkThemeEnabled);
 
                 await MessageBoxHelper.ShowMessageWithoutTitleAsync("Default settings have been restored successfully", false, CurrentWorkFlow);
@@ -123,6 +132,7 @@ namespace AutoFusionPro.UI.ViewModels.Settings
             {
                 _settings.Language = Language;
                 _settings.IsDarkThemeEnabled = IsDarkThemeEnabled;
+                _settings.SelectedCurrency = SelectedCurrencySetting; // SAVE THE CURRENCY
 
                 // User cannot change Lab name and logo, if i decided against that, uncomment!
 
@@ -135,13 +145,15 @@ namespace AutoFusionPro.UI.ViewModels.Settings
                 //    _settings.LogoPath = newLogoPath;
                 //}
 
-                _localizationService.ApplyLanguage(Language);
+                _localizationService.ApplyLanguageAndCurrency(_settings.Language, _settings.SelectedCurrency);
                 _localizationService.ApplyTheme(IsDarkThemeEnabled);
 
                 SettingsManager.SaveSettings(_settings);
                 _globalSettingsService.UpdateSettings(_settings);
 
 
+                // Potentially trigger a "CurrencyChanged" event or method in LocalizationService if it affects formatting
+                // Example: _localizationService.ApplyCurrencyFormat(_settings.SelectedCurrency);
 
                 //if (!string.IsNullOrEmpty(newLogoPath))
                 //{

@@ -17,7 +17,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Bod
     public partial class AddBodyTypeDialogViewModel : BaseViewModel<AddBodyTypeDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         [ObservableProperty]
         private bool _isAdding = false;
 
@@ -25,7 +25,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Bod
         [NotifyCanExecuteChangedFor(nameof(AddBodyTypeCommand))]
         private string _name = string.Empty;
 
-        public AddBodyTypeDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddBodyTypeDialogViewModel> logger) : base(localizationService, logger)
+        public AddBodyTypeDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<AddBodyTypeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
         }

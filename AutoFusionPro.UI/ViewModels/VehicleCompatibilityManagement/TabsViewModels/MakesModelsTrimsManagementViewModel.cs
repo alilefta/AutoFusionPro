@@ -21,7 +21,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
     public partial class MakesModelsTrimsManagementViewModel : BaseViewModel<MakesModelsTrimsManagementViewModel>, ITabViewModel
     {
         private readonly IWpfToastNotificationService _wpfToastNotificationService;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _vehicleTaxonomyService;
         private readonly IDialogService _dialogService;
 
 
@@ -97,13 +97,13 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
         public MakesModelsTrimsManagementViewModel(
             IWpfToastNotificationService wpfToastNotificationService,
-            ICompatibleVehicleService compatibleVehicleService,
+            IVehicleTaxonomyService vehicleTaxonomyService,
             IDialogService dialogService,
             ILocalizationService localizationService,
             ILogger<MakesModelsTrimsManagementViewModel> logger) : base(localizationService, logger)
         {
             _wpfToastNotificationService = wpfToastNotificationService ?? throw new ArgumentNullException(nameof(wpfToastNotificationService));
-            _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
+            _vehicleTaxonomyService = vehicleTaxonomyService ?? throw new ArgumentNullException(nameof(vehicleTaxonomyService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             // Initialize collections
@@ -139,7 +139,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 MakesCollection.Clear(); // Clear before loading new data
 
-                var makes = await _compatibleVehicleService.GetAllMakesAsync();
+                var makes = await _vehicleTaxonomyService.GetAllMakesAsync();
                 if (makes != null) // Check for null before Any()
                 {
                     foreach (var make in makes.OrderBy(m => m.Id)) // Ensure ordered
@@ -183,7 +183,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 ModelsCollection.Clear(); // Clear before loading
 
-                var models = await _compatibleVehicleService.GetModelsByMakeIdAsync(makeId);
+                var models = await _vehicleTaxonomyService.GetModelsByMakeIdAsync(makeId);
                 if (models != null)
                 {
                     foreach (var model in models.OrderBy(m => m.Id))
@@ -221,7 +221,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
                 IsLoadingTrims = true;
                 TrimLevelsCollection.Clear(); // Clear before loading
 
-                var trimLevels = await _compatibleVehicleService.GetTrimLevelsByModelIdAsync(modelId);
+                var trimLevels = await _vehicleTaxonomyService.GetTrimLevelsByModelIdAsync(modelId);
                 if (trimLevels != null)
                 {
                     foreach (var trim in trimLevels.OrderBy(t => t.Name))
@@ -497,7 +497,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 try
                 {
-                    await _compatibleVehicleService.DeleteMakeAsync(makeToBeDeleted.Id);
+                    await _vehicleTaxonomyService.DeleteMakeAsync(makeToBeDeleted.Id);
 
                     await LoadMakesDataAsync();
 
@@ -551,7 +551,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 try
                 {
-                    await _compatibleVehicleService.DeleteModelAsync(modelToBeDeleted.Id);
+                    await _vehicleTaxonomyService.DeleteModelAsync(modelToBeDeleted.Id);
 
                     await LoadModelsForMakeAsync(modelToBeDeleted.MakeId);
 
@@ -604,7 +604,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
 
                 try
                 {
-                    await _compatibleVehicleService.DeleteTrimLevelAsync(trimToBeDeleted.Id);
+                    await _vehicleTaxonomyService.DeleteTrimLevelAsync(trimToBeDeleted.Id);
 
                     await LoadTrimsForModelAsync(trimToBeDeleted.ModelId);
 

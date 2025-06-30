@@ -29,8 +29,9 @@ namespace AutoFusionPro.Domain.Interfaces.Repository
         Task<Part?> GetByIdWithDetailsAsync(int id,
             bool includeCategory = true,
             bool includeSuppliers = false,
-            bool includeCompatibility = false,
-            bool includeUnitOfMeasures = true);
+            bool includeCompatibilityRules = false,
+            bool includeUnitOfMeasures = true,
+            bool includeImages = true);
 
         /// <summary>
         /// Gets a Part by its unique PartNumber, optionally including its Category.
@@ -90,13 +91,14 @@ namespace AutoFusionPro.Domain.Interfaces.Repository
             int? categoryId = null,
             string? manufacturer = null,
             int? supplierId = null,
-            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+             IEnumerable<int>? restrictToPartIds = null, // NEW: Filter by this list of Part IDs
             string? searchTerm = null,
             bool? isActive = true, // Default to active parts
             bool? isLowStock = null,
             bool includeCategory = true,
             bool includeSuppliers = false,
-            bool includeStockingUnitOfMeasure = true);
+            bool includeStockingUnitOfMeasure = true,
+            bool includePrimaryImage = true);
         /// <summary>
         /// Gets the total count of Parts matching the specified filter criteria.
         /// Parameters should mirror GetFilteredPartsPagedAsync for accurate counts.
@@ -106,7 +108,7 @@ namespace AutoFusionPro.Domain.Interfaces.Repository
             int? categoryId = null,
             string? manufacturer = null,
             int? supplierId = null,
-            IEnumerable<int>? restrictToCompatibleVehicleIds = null,
+            IEnumerable<int>? restrictToPartIds = null, // NEW: Filter by this list of Part IDs
             string? searchTerm = null,
             bool? isActive = true,
             bool? isLowStock = null);

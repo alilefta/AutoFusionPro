@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Application.Interfaces.Settings;
 using AutoFusionPro.Core.Configuration;
+using AutoFusionPro.Core.Enums.SystemEnum;
 using Microsoft.Extensions.Logging;
 using System.Windows.Media.Imaging;
 
@@ -15,8 +16,14 @@ namespace AutoFusionPro.UI.Services
         public string LogoPath => _currentSettings.LogoPath ?? "pack://application:,,,/AutoFusionPro.UI;component/Assets/Images/OscarLogo.png";
         public string IconPath => _currentSettings.LogoPath ?? "pack://application:,,,/AutoFusionPro.UI;component/Assets/Images/croppedRound.png";
         public string SystemName => _currentSettings.SystemName;
-
+        
         public event EventHandler SettingsChanged;
+
+
+        public Currency CurrentCurrency => _currentSettings.SelectedCurrency;
+
+        public string CurrentCurrencySymbol => GetCurrencySymbol(_currentSettings.SelectedCurrency);
+
 
         public GlobalSettingsService(ILogger<GlobalSettingsService> logger)
         {
@@ -26,9 +33,16 @@ namespace AutoFusionPro.UI.Services
 
         public void UpdateSettings(AppSettings newSettings)
         {
+            var oldCurrency = _currentSettings.SelectedCurrency;
+
             _currentSettings = newSettings;
             SettingsManager.SaveSettings(_currentSettings);
             SettingsChanged?.Invoke(this, EventArgs.Empty);
+
+            // if (oldCurrency != _currentSettings.SelectedCurrency && CurrencyChanged != null)
+            // {
+            //     CurrencyChanged.Invoke();
+            // }
         }
 
         public BitmapImage GetLogoImage()
@@ -101,6 +115,17 @@ namespace AutoFusionPro.UI.Services
 
             }
 
+        }
+
+        private string GetCurrencySymbol(Currency currency)
+        {
+            // This could be more sophisticated, perhaps using CultureInfo or a resource file for localization
+            return currency switch
+            {
+                Currency.USD => "$",
+                Currency.IQD => "IQD", // Or "د.ع" if you handle RTL/LTR text display correctly
+                _ => currency.ToString(), // Fallback
+            };
         }
     }
 }

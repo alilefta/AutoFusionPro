@@ -1,5 +1,7 @@
 ﻿using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.DTOs.Part;
+using AutoFusionPro.Application.DTOs.PartCompatibilityDtos;
+using AutoFusionPro.Application.DTOs.PartImage;
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Application.Interfaces.Storage;
 using AutoFusionPro.Core.Enums.DTOEnums;
@@ -22,28 +24,38 @@ namespace AutoFusionPro.Application.Services.DataServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PartService> _logger;
         private readonly IImageFileService _imageFileService; // Will be used later
-        private readonly ICompatibleVehicleService _compatibleVehicleService; // Will be used later
+        private readonly IPartCompatibilityRuleService _partCompatibilityRuleService; // Will be used later
 
-        // Validators - will be injected and used in Create/Update methods
         private readonly IValidator<CreatePartDto> _createPartValidator;
         private readonly IValidator<UpdatePartDto> _updatePartValidator;
+
+        private readonly IValidator<CreatePartImageDto> _createPartImageValidator;
+        private readonly IValidator<UpdatePartImageDto> _updatePartImageValidator;
+
+
         #endregion
 
         #region Constructor
         public PartService(
                    IUnitOfWork unitOfWork,
                    ILogger<PartService> logger,
-                   IImageFileService imageFileService, // Will be used later
+                   IImageFileService imageFileService, 
                    IValidator<CreatePartDto> createPartValidator,
                    IValidator<UpdatePartDto> updatePartValidator,
-                   ICompatibleVehicleService compatibleVehicleService)
+                   IValidator<CreatePartImageDto> createPartImageValidator,
+                   IValidator<UpdatePartImageDto> updatePartImageValidator,
+                   IPartCompatibilityRuleService partCompatibilityRuleService)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _imageFileService = imageFileService ?? throw new ArgumentNullException(nameof(imageFileService));
             _createPartValidator = createPartValidator ?? throw new ArgumentNullException(nameof(createPartValidator));
             _updatePartValidator = updatePartValidator ?? throw new ArgumentNullException(nameof(updatePartValidator));
-            _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
+            _partCompatibilityRuleService = partCompatibilityRuleService ?? throw new ArgumentNullException(nameof(partCompatibilityRuleService));
+
+            _createPartImageValidator = createPartImageValidator ?? throw new ArgumentNullException(nameof(createPartImageValidator));
+            _updatePartImageValidator = updatePartImageValidator ?? throw new ArgumentNullException(nameof(updatePartImageValidator)); 
+
         }
 
         #endregion
@@ -70,8 +82,9 @@ namespace AutoFusionPro.Application.Services.DataServices
                 var partEntity = await _unitOfWork.Parts.GetByIdWithDetailsAsync(
                     id,
                     includeCategory: true,
-                    includeSuppliers: true,
-                    includeCompatibility: true
+                    includeSuppliers: false,
+                    includeImages: false,
+                    includeCompatibilityRules: false
                 );
 
                 if (partEntity == null)
@@ -81,7 +94,16 @@ namespace AutoFusionPro.Application.Services.DataServices
                 }
 
                 _logger.LogInformation("Successfully retrieved part details for ID {PartId}: {PartName}", id, partEntity.Name);
-                return MapPartToDetailDto(partEntity);
+                var partDetailDto = MapPartToDetailDto(partEntity);
+
+                if (partDetailDto != null && partEntity != null)
+                {
+                    partDetailDto.Images = (await GetImagesForPartAsync(partEntity.Id))?.ToList() ?? new List<PartImageDto>();
+                    partDetailDto.Suppliers = (await GetSuppliersForPartAsync(partEntity.Id))?.ToList() ?? new List<PartSupplierDto>();
+                    partDetailDto.CompatibilityRules = (await _partCompatibilityRuleService.GetRulesForPartAsync(partEntity.Id))?.ToList() ?? new List<PartCompatibilityRuleSummaryDto>();
+                }
+
+                return partDetailDto;
             }
             catch (Exception ex)
             {
@@ -184,25 +206,8 @@ namespace AutoFusionPro.Application.Services.DataServices
 
             try
             {
-                // The repository method GetFilteredPartsPagedAsync needs individual filter parameters.
-                // The service layer is responsible for translating the PartFilterCriteriaDto.
-                // The repository's GetFilteredPartsPagedAsync should have includeCategory=true by default or as a param.
-
-                // Note: The PartFilterCriteriaDto has MakeId, ModelId, TrimId, SpecificYear.
-                // The IPartRepository.GetFilteredPartsPagedAsync currently has `compatibleVehicleId`.
-                // This implies a potential mismatch or that the service needs to first find CompatibleVehicle IDs
-                // based on Make/Model/Trim/Year and then pass those IDs to the repository,
-                // or the repository method needs to be enhanced to take these individual criteria.
-
-                // For now, let's assume the repository's GetFilteredPartsPagedAsync can handle the basic criteria directly
-                // and we might enhance it or the service logic later for complex vehicle filtering.
-                // We will pass compatibleVehicleId directly if present in filterCriteria.
-                // If MakeId, ModelId etc. are present, the service would typically find the corresponding
-                // CompatibleVehicle IDs first and then filter parts. This is a more advanced step.
-                // Let's proceed with what the current repository signature supports.
-
-
-                IEnumerable<int>? vehicleSpecIdsToFilterBy = null;
+                IEnumerable<int>? compatiblePartIds = null;
+                bool filterByCompatibility = false;
 
                 // Check if vehicle-specific filters are present in PartFilterCriteriaDto
                 if (filterCriteria.MakeId.HasValue ||
@@ -210,32 +215,33 @@ namespace AutoFusionPro.Application.Services.DataServices
                     filterCriteria.TrimId.HasValue || // Assuming TrimId is in your DTO
                     filterCriteria.SpecificYear.HasValue /* || other vehicle criteria */)
                 {
-                    // 1. Construct a CompatibleVehicleFilterCriteriaDto from PartFilterCriteriaDto
-                    var vehicleFilter = new CompatibleVehicleFilterCriteriaDto(
-                        MakeId: filterCriteria.MakeId,
-                        ModelId: filterCriteria.ModelId,
-                        TrimLevelId: filterCriteria.TrimId,
-                        ExactYear: filterCriteria.SpecificYear
-                    // Map other relevant vehicle criteria if present in PartFilterCriteriaDto
+                    filterByCompatibility = true;
+                    var vehicleSpec = new VehicleSpecificationDto( // From PartCompatibilityDtos namespace
+                        filterCriteria.MakeId, filterCriteria.ModelId, filterCriteria.TrimId,
+                        null, null, null, // Assuming Transmission, Engine, Body not in PartFilterCriteriaDto for now
+                        filterCriteria.SpecificYear ?? DateTime.Now.Year // Needs a year; default or handle if null
                     );
 
-                    _logger.LogInformation("Part filter requires vehicle spec filtering. Criteria: {@VehicleFilter}", vehicleFilter);
+                    // Prepare rule filters (e.g., only consider active parts/rules)
+                    var ruleFilters = new PartCompatibilityRuleFilterDto(
+                        OnlyActiveRules: true, // Example
+                        OnlyActiveParts: filterCriteria.IsActive ?? true, // Align with part filter
+                        PartCategoryId: filterCriteria.CategoryId
+                    );
 
-                    // 2. Call ICompatibleVehicleService to get matching CompatibleVehicle IDs
-                    // You might want a method on ICompatibleVehicleService that just returns IDs for efficiency:
-                    // Task<IEnumerable<int>> GetMatchingCompatibleVehicleIdsAsync(CompatibleVehicleFilterCriteriaDto criteria);
-                    // Or use the existing method and extract IDs:
-                    var matchingVehicleSpecs = await _compatibleVehicleService.GetAllFilteredCompatibleVehiclesAsync(vehicleFilter);
-                    vehicleSpecIdsToFilterBy = matchingVehicleSpecs?.Select(vs => vs.Id).ToList();
+                    compatiblePartIds = await _partCompatibilityRuleService.FindPartIdsMatchingVehicleSpecAsync(vehicleSpec, ruleFilters);
 
-                    if (vehicleSpecIdsToFilterBy == null || !vehicleSpecIdsToFilterBy.Any())
+                    if (compatiblePartIds == null || !compatiblePartIds.Any())
                     {
-                        _logger.LogInformation("No compatible vehicle specs found matching the part filter's vehicle criteria. Returning empty result for parts.");
+                        _logger.LogInformation("No parts found matching vehicle specification via compatibility rules.");
                         return new PagedResult<PartSummaryDto> { Items = Enumerable.Empty<PartSummaryDto>(), TotalCount = 0, PageNumber = pageNumber, PageSize = pageSize };
                     }
-                    _logger.LogInformation("Found {Count} vehicle spec IDs to filter parts by.", vehicleSpecIdsToFilterBy.Count());
+                    _logger.LogInformation("Found {Count} vehicle spec IDs to filter parts by.", compatiblePartIds.Count());
                 }
 
+                // Now call the IPartRepository method, passing compatiblePartIds if applicable.
+                // The IPartRepository methods need to be updated to accept 'IEnumerable<int>? restrictToPartIds = null'
+                // and add 'query = query.Where(p => restrictToPartIds.Contains(p.Id))' if provided.
 
                 var partEntities = await _unitOfWork.Parts.GetFilteredPartsPagedAsync(
                     pageNumber: pageNumber,
@@ -244,8 +250,8 @@ namespace AutoFusionPro.Application.Services.DataServices
                     categoryId: filterCriteria.CategoryId,
                     manufacturer: filterCriteria.Manufacturer,
                     supplierId: filterCriteria.SupplierId,
-                     // compatibleVehicleId: filterCriteria.CompatibleVehicleId, // This might be redundant if using the list below
-                     restrictToCompatibleVehicleIds: vehicleSpecIdsToFilterBy, // NEW PARAMETER
+                    // compatibleVehicleId: filterCriteria.CompatibleVehicleId, // This might be redundant if using the list below
+                    restrictToPartIds: filterByCompatibility ? compatiblePartIds : null, // Pass the list of IDs
                      searchTerm: filterCriteria.SearchTerm,
                     isActive: filterCriteria.IsActive,
                     isLowStock: filterCriteria.StockStatus == StockStatusFilter.LowStock ? true :
@@ -261,7 +267,7 @@ namespace AutoFusionPro.Application.Services.DataServices
                     categoryId: filterCriteria.CategoryId,
                     manufacturer: filterCriteria.Manufacturer,
                     supplierId: filterCriteria.SupplierId,
-                    restrictToCompatibleVehicleIds: vehicleSpecIdsToFilterBy,
+                    restrictToPartIds: filterByCompatibility ? compatiblePartIds : null,
                     searchTerm: filterCriteria.SearchTerm,
                     isActive: filterCriteria.IsActive,
                     isLowStock: filterCriteria.StockStatus == StockStatusFilter.LowStock ? true :
@@ -337,18 +343,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             // Note: The validator should already check for PartNumber uniqueness and Barcode uniqueness (if barcode provided).
             // It also checks if CategoryId exists.
 
-            string? persistentImagePath = null;
             try
             {
-                // 2. Handle Image Saving (if an image path is provided)
-                if (!string.IsNullOrWhiteSpace(createDto.ImagePath))
-                {
-                    _logger.LogInformation("Image source path provided: '{SourcePath}'. Saving image for new part.", createDto.ImagePath);
-                    persistentImagePath = await _imageFileService.SaveImageAsync(createDto.ImagePath, "Parts"); // "Parts" subfolder
-                    _logger.LogInformation("Image saved. Persistent path: '{PersistentPath}' for new part.", persistentImagePath);
-                }
 
-                // 3. Map DTO to Domain Entity
                 var newPart = new Part
                 {
                     PartNumber = createDto.PartNumber.Trim().ToUpperInvariant(), // Normalize PartNumber
@@ -364,7 +361,6 @@ namespace AutoFusionPro.Application.Services.DataServices
                     Location = string.IsNullOrWhiteSpace(createDto.Location) ? string.Empty : createDto.Location.Trim(),
                     IsActive = createDto.IsActive,
                     IsOriginal = createDto.IsOriginal,
-                    ImagePath = persistentImagePath, // Store the final persistent path (or null)
                     Notes = string.IsNullOrWhiteSpace(createDto.Notes) ? null : createDto.Notes.Trim(),
                     Barcode = string.IsNullOrWhiteSpace(createDto.Barcode) ? null : createDto.Barcode.Trim(), // Normalize Barcode
                     StockingUnitOfMeasureId = createDto.StockingUnitOfMeasureId,
@@ -393,25 +389,53 @@ namespace AutoFusionPro.Application.Services.DataServices
                 _logger.LogInformation("Part created successfully: ID={PartId}, PartNumber='{PartNumber}'",
                     newPart.Id, newPart.PartNumber);
 
-                // 6. Handle Initial Suppliers and Compatibilities (if provided and if part creation was successful)
-                // These are often better handled as separate calls after the main part is created,
-                // but if included in CreatePartDto, process them here.
-                if (createDto.InitialSuppliers != null && createDto.InitialSuppliers.Any())
-                {
-                    foreach (var supDto in createDto.InitialSuppliers)
-                    {
-                        // Assuming AddSupplierToPartAsync handles validation of SupplierId
-                        await AddSupplierToPartAsync(newPart.Id, supDto);
-                    }
-                }
-                if (createDto.InitialCompatibleVehicles != null && createDto.InitialCompatibleVehicles.Any())
-                {
-                    foreach (var compDto in createDto.InitialCompatibleVehicles)
-                    {
-                        // Assuming AddCompatibilityAsync handles validation of CompatibleVehicleId
-                        await AddCompatibilityAsync(newPart.Id, compDto);
-                    }
-                }
+
+
+                // Initial Images, Suppliers and PartCompatibilityRules are removed in respect to the two stage process, save part, then add other properties
+
+                //// 6. Handle Initial Suppliers and Compatibilities (if provided and if part creation was successful)
+                //// These are often better handled as separate calls after the main part is created,
+                //// but if included in CreatePartDto, process them here.
+                //if (createDto.InitialSuppliers != null && createDto.InitialSuppliers.Any())
+                //{
+                //    foreach (var supDto in createDto.InitialSuppliers)
+                //    {
+                //        // Assuming AddSupplierToPartAsync handles validation of SupplierId
+                //        await AddSupplierToPartAsync(newPart.Id, supDto);
+                //    }
+                //}
+
+                // In case we added support for adding initial Part Compatibility Rule, uncomment this!
+                // if (createDto.InitialCompatibilityRules != null && createDto.InitialCompatibilityRules.Any())
+                // {
+                //     foreach (var ruleDto in createDto.InitialCompatibilityRules)
+                //     {
+                //         // The PartId is newPart.Id
+                //         await _partCompatibilityRuleService.CreateRuleForPartAsync(newPart.Id, ruleDto);
+                //     }
+                // }
+
+                //if (createDto.InitialImages != null && createDto.InitialImages.Any())
+                //{
+                //    _logger.LogInformation("Adding initial images for Part ID: {PartId}", newPart.Id);
+                //    foreach (var imgDto in createDto.InitialImages)
+                //    {
+                //        // This is tricky because AddImageToPartAsync expects a Stream.
+                //        // The UI ViewModel would need to open streams for each SourceClientPath.
+                //        // Or, AddImageToPartAsync is refactored or a new helper is made.
+                //        // For now, let's assume you have a way to get the stream for imgDto.SourceClientPath.
+                //        // This is a simplified example of the call:
+                //        // using (var stream = File.OpenRead(imgDto.SourceClientPath))
+                //        // {
+                //        //    await AddImageToPartAsync(newPart.Id,
+                //        //        new CreatePartImageDto(imgDto.Caption, imgDto.IsPrimary, imgDto.DisplayOrder),
+                //        //        stream,
+                //        //        Path.GetFileName(imgDto.SourceClientPath));
+                //        // }
+                //    }
+                //}
+
+
                 // Note: If adding suppliers/compatibility fails after part creation, the part is still created.
                 // Consider if these should be part of the same transaction, or if failures are acceptable.
 
@@ -419,7 +443,11 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 7. Re-fetch with full details for return DTO
                 var createdPartWithDetails = await _unitOfWork.Parts.GetByIdWithDetailsAsync(
-                    newPart.Id, includeCategory: true, includeSuppliers: true, includeCompatibility: true);
+                    newPart.Id, 
+                    includeCategory: true, 
+                    includeSuppliers: true, 
+                    includeCompatibilityRules: true,
+                    includeImages: true);
 
                 if (createdPartWithDetails == null) // Should ideally not happen
                 {
@@ -432,18 +460,13 @@ namespace AutoFusionPro.Application.Services.DataServices
             catch (DuplicationException dupEx) // If validator doesn't catch all or for race conditions
             {
                 _logger.LogWarning(dupEx, "Duplication error during part creation.");
-                await AttemptImageCleanupOnErrorAsync(persistentImagePath, "part creation (duplication)");
                 throw;
             }
-            catch (IOException ioEx)
-            {
-                _logger.LogError(ioEx, "File IO error saving image for new part '{PartName}'. Part not created.", createDto.Name);
-                throw new ServiceException("Error saving part image. Part creation failed.", ioEx);
-            }
+
             catch (DbUpdateException dbEx)
             {
+                await _unitOfWork.RollbackTransactionAsync(); // Ensure rollback on DB error
                 _logger.LogError(dbEx, "Database error creating part '{PartName}'.", createDto.Name);
-                await AttemptImageCleanupOnErrorAsync(persistentImagePath, "part creation (DB error)");
                 if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true ||
                     dbEx.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase))
                 {
@@ -453,12 +476,8 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
             catch (Exception ex)
             {
-
-                await _unitOfWork.RollbackTransactionAsync();
-
-
+                await _unitOfWork.RollbackTransactionAsync(); // Ensure rollback on general error
                 _logger.LogError(ex, "Unexpected error creating part '{PartName}'.", createDto.Name);
-                await AttemptImageCleanupOnErrorAsync(persistentImagePath, "part creation (unexpected error)");
                 throw new ServiceException($"Unexpected error creating part '{createDto.Name}'.", ex);
             }
         }
@@ -494,30 +513,11 @@ namespace AutoFusionPro.Application.Services.DataServices
                 throw new ServiceException(notFoundMsg); // Or custom NotFoundException
             }
 
-            string? oldPersistentImagePath = existingPart.ImagePath;
-            string? newPersistentImagePath = existingPart.ImagePath; // Assume no change initially
-            bool imageFileSavedForThisOperation = false;
+            await _unitOfWork.BeginTransactionAsync();
 
             try
             {
-                // 3. Handle Image Update/Removal
-                if (updateDto.ImagePath != oldPersistentImagePath) // Intent to change image state
-                {
-                    if (!string.IsNullOrWhiteSpace(updateDto.ImagePath))
-                    {
-                        _logger.LogInformation("New image source path provided: '{SourcePath}'. Saving new image for Part ID {PartId}.", updateDto.ImagePath, updateDto.Id);
-                        newPersistentImagePath = await _imageFileService.SaveImageAsync(updateDto.ImagePath, "Parts");
-                        imageFileSavedForThisOperation = true;
-                        _logger.LogInformation("New image saved. Persistent path: '{PersistentPath}' for Part ID {PartId}.", newPersistentImagePath, updateDto.Id);
-                    }
-                    else // User wants to remove image
-                    {
-                        _logger.LogInformation("Request to remove image for Part ID {PartId}.", updateDto.Id);
-                        newPersistentImagePath = null;
-                    }
-                }
 
-                // 4. Map DTO changes to existing Domain Entity
                 existingPart.PartNumber = updateDto.PartNumber.Trim().ToUpperInvariant();
                 existingPart.Name = updateDto.Name.Trim();
                 existingPart.Description = string.IsNullOrWhiteSpace(updateDto.Description) ? null : updateDto.Description.Trim();
@@ -525,13 +525,11 @@ namespace AutoFusionPro.Application.Services.DataServices
                 existingPart.CostPrice = updateDto.CostPrice;
                 existingPart.SellingPrice = updateDto.SellingPrice;
                 existingPart.StockQuantity = updateDto.StockQuantity; // Base/defined stock
-                // CurrentStock is NOT updated here. It's managed by Inventory transactions.
                 existingPart.ReorderLevel = updateDto.ReorderLevel;
                 existingPart.MinimumStock = updateDto.MinimumStock;
                 existingPart.Location = string.IsNullOrWhiteSpace(updateDto.Location) ? string.Empty : updateDto.Location.Trim();
                 existingPart.IsActive = updateDto.IsActive;
                 existingPart.IsOriginal = updateDto.IsOriginal;
-                existingPart.ImagePath = newPersistentImagePath;
                 existingPart.Notes = string.IsNullOrWhiteSpace(updateDto.Notes) ? null : updateDto.Notes.Trim();
                 existingPart.Barcode = string.IsNullOrWhiteSpace(updateDto.Barcode) ? null : updateDto.Barcode.Trim();
                 existingPart.StockingUnitOfMeasureId = updateDto.StockingUnitOfMeasureId;
@@ -548,32 +546,26 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 // 5. Save Changes to Database
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Part with ID {PartId} database record updated successfully. ImagePath is now: '{FinalImagePath}'",
-                    updateDto.Id, existingPart.ImagePath ?? "<null>");
+                _logger.LogInformation("Part core details with ID {PartId} updated successfully in database.", updateDto.Id);
 
-                // 6. Clean Up Old Image File
-                if (!string.IsNullOrWhiteSpace(oldPersistentImagePath) && oldPersistentImagePath != newPersistentImagePath)
-                {
-                    await AttemptImageCleanupOnErrorAsync(oldPersistentImagePath, $"part update (old image cleanup, ID: {updateDto.Id})", isCleanupForOld: true);
-                }
+                // REMOVE Old Image File Cleanup logic from here
+
+                // 6. Commit Transaction
+                await _unitOfWork.CommitTransactionAsync();
+                _logger.LogInformation("Part with ID {PartId} core update process completed successfully.", updateDto.Id);
             }
             catch (ValidationException valEx) { _logger.LogWarning(valEx, "Validation failed during part update for ID: {PartId}.", updateDto.Id); throw; }
             catch (DuplicationException dupEx)
             {
                 _logger.LogWarning(dupEx, "Duplication error during part update for ID: {PartId}.", updateDto.Id);
-                if (imageFileSavedForThisOperation) await AttemptImageCleanupOnErrorAsync(newPersistentImagePath, $"part update (duplication, ID: {updateDto.Id})");
                 throw;
             }
-            catch (IOException ioEx)
-            {
-                _logger.LogError(ioEx, "File IO error during image management for Part ID {PartId}.", updateDto.Id);
-                throw new ServiceException("Error managing part image file. Part details may or may not have been saved.", ioEx);
-            }
+
             catch (DbUpdateException dbEx)
             {
+                await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(dbEx, "Database error updating part ID {PartId}.", updateDto.Id);
-                if (imageFileSavedForThisOperation) await AttemptImageCleanupOnErrorAsync(newPersistentImagePath, $"part update (DB error, ID: {updateDto.Id})");
-
+                // No new image to clean up here
                 if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true ||
                     dbEx.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase))
                 {
@@ -583,8 +575,9 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackTransactionAsync();
                 _logger.LogError(ex, "Unexpected error updating part ID {PartId}.", updateDto.Id);
-                if (imageFileSavedForThisOperation) await AttemptImageCleanupOnErrorAsync(newPersistentImagePath, $"part update (unexpected error, ID: {updateDto.Id})");
+                // No new image to clean up here
                 throw new ServiceException($"Unexpected error updating part ID {updateDto.Id}.", ex);
             }
         }
@@ -697,272 +690,406 @@ namespace AutoFusionPro.Application.Services.DataServices
 
         #endregion
 
-        #region Part Image Handling
+        #region Part Image Management New 
 
         /// <summary>
-        /// Updates the image path for a specific part. Handles saving new image and deleting old one if necessary.
+        /// Adds an image to a specific Part. Handles file saving and database record creation.
+        /// If IsPrimary is true, it will unset other primary images for the part.
         /// </summary>
-        public async Task UpdatePartImageAsync(int partId, string? sourceImagePath)
+        public async Task<PartImageDto> AddImageToPartAsync(int partId, CreatePartImageDto imageDto)
         {
+            ArgumentNullException.ThrowIfNull(imageDto, nameof(imageDto));
             if (partId <= 0) throw new ArgumentException("Invalid Part ID.", nameof(partId));
+            if (string.IsNullOrWhiteSpace(imageDto.ImagePath)) // Validate path from DTO
+                throw new ArgumentException("Source image path cannot be empty.", nameof(imageDto.ImagePath));
+            if (!File.Exists(imageDto.ImagePath)) // Ensure file exists
+                throw new FileNotFoundException("Source image file not found.", imageDto.ImagePath);
 
-            _logger.LogInformation("Attempting to update image for Part ID: {PartId}. New source image path: '{SourceImagePath}'",
-                partId, sourceImagePath ?? "<null_or_empty_to_clear>");
 
-            // 1. Fetch Existing Part
-            var existingPart = await _unitOfWork.Parts.GetByIdAsync(partId);
-            if (existingPart == null)
+            _logger.LogInformation("Attempting to add image to Part ID: {PartId}. SourcePath: '{SourcePath}', IsPrimary: {IsPrimary}",
+                partId, imageDto.ImagePath, imageDto.IsPrimary);
+
+            // 1. Validate DTO (CreatePartImageDtoValidator)
+            var validationResult = await _createPartImageValidator.ValidateAsync(imageDto);
+            if (!validationResult.IsValid)
             {
-                string notFoundMsg = $"Part with ID {partId} not found. Cannot update image.";
-                _logger.LogWarning(notFoundMsg);
-                throw new ServiceException(notFoundMsg); // Or a custom NotFoundException
+                _logger.LogWarning("Validation failed for CreatePartImageDto: {Errors}", validationResult.ToString("~"));
+                throw new ValidationException(validationResult.Errors);
             }
 
-            string? oldPersistentImagePath = existingPart.ImagePath;
-            string? newPersistentImagePath = existingPart.ImagePath; // Assume no change initially
-            bool imageFileSavedForThisOperation = false;
-
-            try
-            {
-                // 2. Handle Image Update/Removal logic (same as in UpdatePartAsync)
-                if (sourceImagePath != oldPersistentImagePath) // An intent to change image state
-                {
-                    if (!string.IsNullOrWhiteSpace(sourceImagePath))
-                    {
-                        // User provided a new source image path
-                        _logger.LogInformation("New image source path provided: '{SourcePath}'. Saving new image for Part ID {PartId}.", sourceImagePath, partId);
-                        newPersistentImagePath = await _imageFileService.SaveImageAsync(sourceImagePath, "Parts");
-                        imageFileSavedForThisOperation = true;
-                        _logger.LogInformation("New image saved. Persistent path: '{PersistentPath}' for Part ID {PartId}.", newPersistentImagePath, partId);
-                    }
-                    else // sourceImagePath is null or whitespace, meaning user wants to remove the image
-                    {
-                        _logger.LogInformation("Request to remove image for Part ID {PartId}. Old path was: '{OldPath}'", partId, oldPersistentImagePath ?? "<none>");
-                        newPersistentImagePath = null;
-                    }
-                }
-
-                // 3. Update only the ImagePath on the entity if it has changed
-                if (existingPart.ImagePath != newPersistentImagePath)
-                {
-                    existingPart.ImagePath = newPersistentImagePath;
-                    // existingPart.ModifiedAt = DateTime.UtcNow; // Or handled by DbContext
-
-                    // 4. Save Changes to Database
-                    await _unitOfWork.SaveChangesAsync();
-                    _logger.LogInformation("Part ID {PartId} database record updated successfully with ImagePath: '{FinalImagePath}'",
-                        partId, existingPart.ImagePath ?? "<null>");
-                }
-                else
-                {
-                    _logger.LogInformation("Image path for Part ID {PartId} is unchanged. No database update needed for image path.", partId);
-                }
-
-
-                // 5. Clean Up Old Image File (if applicable and different from new)
-                if (!string.IsNullOrWhiteSpace(oldPersistentImagePath) && oldPersistentImagePath != newPersistentImagePath)
-                {
-                    _logger.LogInformation("Attempting to delete old image '{OldImagePath}' for Part ID {PartId}.", oldPersistentImagePath, partId);
-                    await _imageFileService.DeleteImageAsync(oldPersistentImagePath);
-                    _logger.LogInformation("Old image '{OldImagePath}' for Part ID {PartId} deleted successfully.", oldPersistentImagePath, partId);
-                }
-
-                _logger.LogInformation("Part image update process for ID {PartId} completed.", partId);
-            }
-            catch (IOException ioEx)
-            {
-                _logger.LogError(ioEx, "File IO error during image management for Part ID {PartId}.", partId);
-                throw new ServiceException("An error occurred managing the image file. The part image could not be updated.", ioEx);
-            }
-            catch (DbUpdateException dbEx) // Should be rare for just updating an image path unless concurrency issues
-            {
-                _logger.LogError(dbEx, "Database error occurred while updating image path for Part ID {PartId}.", partId);
-                if (imageFileSavedForThisOperation && newPersistentImagePath != oldPersistentImagePath)
-                {
-                    await AttemptImageCleanupOnErrorAsync(newPersistentImagePath, $"part image update (DB error, ID: {partId})");
-                }
-                throw new ServiceException("A database error occurred while updating the part's image information.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An unexpected error occurred while updating image for Part ID {PartId}", partId);
-                if (imageFileSavedForThisOperation && newPersistentImagePath != oldPersistentImagePath)
-                {
-                    await AttemptImageCleanupOnErrorAsync(newPersistentImagePath, $"part image update (unexpected error, ID: {partId})");
-                }
-                throw new ServiceException($"An error occurred while updating image for part with ID {partId}.", ex);
-            }
-        }
-
-        #endregion
-
-        #region Compatible Vehicle 
-
-        /// <summary>
-        /// Adds a CompatibleVehicle specification to a Part.
-        /// </summary>
-        public async Task AddCompatibilityAsync(int partId, PartCompatibilityCreateDto compatibilityDto)
-        {
-            ArgumentNullException.ThrowIfNull(compatibilityDto, nameof(compatibilityDto));
-            if (partId <= 0) throw new ArgumentException("Invalid Part ID.", nameof(partId));
-            if (compatibilityDto.CompatibleVehicleId <= 0) throw new ArgumentException("Invalid CompatibleVehicle ID.", nameof(compatibilityDto.CompatibleVehicleId));
-
-            _logger.LogInformation("Attempting to add compatibility link: PartId={PartId}, CompatibleVehicleId={CompatibleVehicleId}",
-                partId, compatibilityDto.CompatibleVehicleId);
-
-            // 1. Validate existence of Part and CompatibleVehicle
-            // (Could also be done via FluentValidator for PartCompatibilityCreateDto if it took partId)
+            // 2. Validate Part Existence
             if (!await _unitOfWork.Parts.ExistsAsync(p => p.Id == partId))
             {
-                string msg = $"Part with ID {partId} not found. Cannot add compatibility.";
+                string msg = $"Part with ID {partId} not found. Cannot add image.";
                 _logger.LogWarning(msg);
-                throw new ServiceException(msg); // Or NotFoundException
+                throw new ServiceException(msg);
             }
 
-            if (!await _unitOfWork.CompatibleVehicles.ExistsAsync(cv => cv.Id == compatibilityDto.CompatibleVehicleId))
-            {
-                string msg = $"CompatibleVehicle specification with ID {compatibilityDto.CompatibleVehicleId} not found. Cannot add compatibility.";
-                _logger.LogWarning(msg);
-                throw new ServiceException(msg); // Or NotFoundException
-            }
-
-            // 2. Check if this specific compatibility link already exists
-            // Assumes IPartCompatibilityRepository is exposed via _unitOfWork.PartCompatibilities
-            // And it has a method like: Task<bool> ExistsAsync(int partId, int compatibleVehicleId);
-            // Or use the generic ExistsAsync:
-            bool linkExists = await _unitOfWork.ExistsAsync<PartCompatibility>(
-                pc => pc.PartId == partId && pc.CompatibleVehicleId == compatibilityDto.CompatibleVehicleId
-            );
-
-            if (linkExists)
-            {
-                string duplicateMsg = $"Compatibility link between Part ID {partId} and CompatibleVehicle ID {compatibilityDto.CompatibleVehicleId} already exists.";
-                _logger.LogWarning(duplicateMsg);
-                throw new DuplicationException(duplicateMsg, "PartCompatibility", "PartId_CompatibleVehicleId", $"{partId}_{compatibilityDto.CompatibleVehicleId}");
-            }
-
+            string? persistentImagePath = null;
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // 3. Create new PartCompatibility entity
-                var newCompatibilityLink = new PartCompatibility
+                // 3. Save the physical image file using the PATH-BASED method
+                _logger.LogDebug("Saving physical image file for Part ID: {PartId}, source path: {SourcePath}", partId, imageDto.ImagePath);
+                persistentImagePath = await _imageFileService.SaveImageAsync(imageDto.ImagePath, "Parts"); // Target subfolder "Parts"
+
+                if (string.IsNullOrWhiteSpace(persistentImagePath))
+                {
+                    throw new ServiceException("Failed to save image file. Path returned was null or empty from image service.");
+                }
+                _logger.LogInformation("Image file saved for Part ID: {PartId}. Persistent path: '{PersistentPath}'", partId, persistentImagePath);
+
+                // 4. Handle IsPrimary logic
+                if (imageDto.IsPrimary)
+                {
+                    _logger.LogDebug("New image is primary. Clearing other primary flags for Part ID: {PartId}", partId);
+                    await _unitOfWork.PartImages.ClearPrimaryFlagsForPartAsync(partId, null);
+                }
+
+                // 5. Create PartImage entity
+                var newPartImage = new PartImage
                 {
                     PartId = partId,
-                    CompatibleVehicleId = compatibilityDto.CompatibleVehicleId,
-                    Notes = string.IsNullOrWhiteSpace(compatibilityDto.Notes) ? null : compatibilityDto.Notes.Trim(),
-                    CreatedAt = DateTime.UtcNow // Or handled by BaseEntity/DbContext
+                    ImagePath = persistentImagePath,
+                    Caption = string.IsNullOrWhiteSpace(imageDto.Caption) ? null : imageDto.Caption.Trim(),
+                    IsPrimary = imageDto.IsPrimary,
+                    DisplayOrder = imageDto.DisplayOrder,
+                    CreatedAt = DateTime.UtcNow
                 };
 
-                // 4. Add to Repository (assuming a repository for PartCompatibility)
-                // If no dedicated repo, add directly to context:
-                // await _unitOfWork.Context.Set<PartCompatibility>().AddAsync(newCompatibilityLink);
-                // OR if you have a generic Add method on UoW:
-                await _unitOfWork.AddAsync(newCompatibilityLink); // Using a hypothetical generic Add on UoW
-                // OR if Part.CompatibleVehicles is a collection you can add to:
-                // var part = await _unitOfWork.Parts.GetByIdAsync(partId); // Fetch part if not already loaded
-                // part.CompatibleVehicles.Add(newCompatibilityLink); // EF Core tracks this relationship
-
-                // For clarity and consistency, let's assume a generic way to add the join entity.
-                // If you have DbSet<PartCompatibility> on your DbContext, the generic add is simplest.
-                // If you have a dedicated IPartCompatibilityRepository, use that.
-
-
-                // 5. Save Changes
+                // 6. Add to Repository and Save Changes
+                await _unitOfWork.PartImages.AddAsync(newPartImage);
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Successfully added compatibility link: PartId={PartId}, CompatibleVehicleId={CompatibleVehicleId}, LinkId={LinkId}",
-                    partId, compatibilityDto.CompatibleVehicleId, newCompatibilityLink.Id);
 
-                // Note: No DTO is typically returned for a simple "add link" operation.
-                // The caller usually refreshes its list of compatibilities for the part.
+                _logger.LogInformation("PartImage record created successfully for Part ID: {PartId}. Image ID: {ImageId}", partId, newPartImage.Id);
+
+                // 7. Commit Transaction
+                await _unitOfWork.CommitTransactionAsync();
+
+                // 8. Map to DTO and return
+                return MapPartImageToDto(newPartImage);
+            }
+            catch (ValidationException) { await _unitOfWork.RollbackTransactionAsync(); throw; }
+            catch (FileNotFoundException fnfEx) // Specific catch for image source not found
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(fnfEx, "Source image file not found for Part ID {PartId}, Path '{SourcePath}'.", partId, imageDto.ImagePath);
+                throw new ServiceException($"Source image file not found: {imageDto.ImagePath}", fnfEx);
+            }
+            catch (IOException ioEx) // From _imageFileService.SaveImageAsync
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ioEx, "File IO error saving image for Part ID {PartId}, SourcePath '{SourcePath}'.", partId, imageDto.ImagePath);
+                throw new ServiceException("An error occurred saving the image file. The image was not added.", ioEx);
             }
             catch (DbUpdateException dbEx)
             {
-                _logger.LogError(dbEx, "Database error adding compatibility: PartId={PartId}, CompatibleVehicleId={CompatibleVehicleId}.",
-                    partId, compatibilityDto.CompatibleVehicleId);
-                // Check for specific constraint violations if needed
-                throw new ServiceException("A database error occurred while adding the compatibility link.", dbEx);
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(dbEx, "Database error adding image record for Part ID {PartId}.", partId);
+                await AttemptImageCleanupOnErrorAsync(persistentImagePath, $"add image to part {partId} (DB error)");
+                throw new ServiceException("A database error occurred while saving the image record.", dbEx);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error adding compatibility: PartId={PartId}, CompatibleVehicleId={CompatibleVehicleId}.",
-                    partId, compatibilityDto.CompatibleVehicleId);
-                throw new ServiceException("An unexpected error occurred while adding the compatibility link.", ex);
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Unexpected error adding image to Part ID {PartId}.", partId);
+                await AttemptImageCleanupOnErrorAsync(persistentImagePath, $"add image to part {partId} (unexpected error)");
+                throw new ServiceException($"An unexpected error occurred while adding image to part {partId}.", ex);
             }
         }
 
 
         /// <summary>
-        /// Removes a specific PartCompatibility link by its own ID.
+        /// Updates metadata for an existing part image (e.g., caption, IsPrimary, DisplayOrder).
+        /// If IsPrimary is set to true, other images for the same part will be unset as primary.
         /// </summary>
-        public async Task RemoveCompatibilityAsync(int partCompatibilityId)
+        public async Task UpdatePartImageDetailsAsync(UpdatePartImageDto imageDetailsDto)
         {
-            if (partCompatibilityId <= 0)
+            ArgumentNullException.ThrowIfNull(imageDetailsDto, nameof(imageDetailsDto));
+
+            _logger.LogInformation("Attempting to update details for PartImage ID: {PartImageId}. IsPrimary: {IsPrimary}",
+                imageDetailsDto.Id, imageDetailsDto.IsPrimary);
+
+            // 1. Validate DTO
+            var validationResult = await _updatePartImageValidator.ValidateAsync(imageDetailsDto);
+            if (!validationResult.IsValid)
             {
-                _logger.LogWarning("Attempted to remove compatibility link with invalid ID: {PartCompatibilityId}", partCompatibilityId);
-                throw new ArgumentException("Invalid PartCompatibility ID.", nameof(partCompatibilityId));
+                _logger.LogWarning("Validation failed for UpdatePartImageDto (ID: {PartImageId}): {Errors}",
+                    imageDetailsDto.Id, validationResult.ToString("~"));
+                throw new ValidationException(validationResult.Errors);
             }
 
-            _logger.LogInformation("Attempting to remove PartCompatibility link with ID: {PartCompatibilityId}", partCompatibilityId);
+            // 2. Fetch Existing PartImage Entity
+            // We need to include PartId to clear other primary flags if this one becomes primary.
+            // A specific repository method might be slightly cleaner: GetByIdWithPartIdAsync(int imageId)
+            // Or fetch it and then access PartId.
+            var existingPartImage = await _unitOfWork.PartImages.GetByIdAsync(imageDetailsDto.Id);
+            // The validator already ensures it exists, but a defensive check is good.
+            if (existingPartImage == null)
+            {
+                string notFoundMsg = $"PartImage with ID {imageDetailsDto.Id} not found. Cannot update.";
+                _logger.LogWarning(notFoundMsg);
+                throw new ServiceException(notFoundMsg); // Should have been caught by validator
+            }
 
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // 1. Fetch the PartCompatibility link entity
-                var linkToDelete = await _unitOfWork.PartCompatibilities.GetByIdAsync(partCompatibilityId);
-
-                if (linkToDelete == null)
+                // 3. Handle IsPrimary logic
+                // If this image is being set as primary AND it wasn't primary before
+                if (imageDetailsDto.IsPrimary && !existingPartImage.IsPrimary)
                 {
-                    string notFoundMsg = $"PartCompatibility link with ID {partCompatibilityId} not found.";
-                    _logger.LogWarning(notFoundMsg);
-                    throw new ServiceException(notFoundMsg); // Or custom NotFoundException
+                    _logger.LogDebug("Setting PartImage ID {PartImageId} as primary. Clearing other primary flags for Part ID: {PartId}",
+                        imageDetailsDto.Id, existingPartImage.PartId);
+                    // Clear primary flag for other images of the same part, excluding this one
+                    await _unitOfWork.PartImages.ClearPrimaryFlagsForPartAsync(existingPartImage.PartId, imageDetailsDto.Id);
                 }
+                // If this image is being unset as primary, and no other image is being set as primary in this call,
+                // the part might end up with no primary image. This is usually acceptable.
+                // If a rule "must have one primary" exists, that's more complex UI/service logic (e.g., when unsetting, prompt to pick another).
 
-                // 2. Remove the entity
-                _unitOfWork.PartCompatibilities.Delete(linkToDelete);
+                // 4. Update properties on the entity
+                existingPartImage.Caption = string.IsNullOrWhiteSpace(imageDetailsDto.Caption) ? null : imageDetailsDto.Caption.Trim();
+                existingPartImage.IsPrimary = imageDetailsDto.IsPrimary;
+                existingPartImage.DisplayOrder = imageDetailsDto.DisplayOrder;
+                // existingPartImage.ModifiedAt = DateTime.UtcNow; // Or handled by DbContext
 
-                // 3. Save Changes
+                // 5. Save Changes (EF Core tracks changes to existingPartImage)
                 await _unitOfWork.SaveChangesAsync();
-                _logger.LogInformation("Successfully removed PartCompatibility link with ID: {PartCompatibilityId} (PartId: {PartId}, CompatibleVehicleId: {CVId})",
-                    partCompatibilityId, linkToDelete.PartId, linkToDelete.CompatibleVehicleId);
+
+                // 6. Commit Transaction
+                await _unitOfWork.CommitTransactionAsync();
+
+                _logger.LogInformation("PartImage ID {PartImageId} details updated successfully.", imageDetailsDto.Id);
             }
-            catch (DbUpdateException dbEx) // For potential concurrency issues or unexpected DB errors
+            catch (ValidationException) { await _unitOfWork.RollbackTransactionAsync(); throw; }
+            catch (DbUpdateException dbEx)
             {
-                _logger.LogError(dbEx, "Database error while removing PartCompatibility link ID {PartCompatibilityId}.", partCompatibilityId);
-                throw new ServiceException("A database error occurred while removing the compatibility link.", dbEx);
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(dbEx, "Database error updating PartImage ID {PartImageId}.", imageDetailsDto.Id);
+                throw new ServiceException("A database error occurred while updating the part image details.", dbEx);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error while removing PartCompatibility link ID {PartCompatibilityId}.", partCompatibilityId);
-                throw new ServiceException($"An unexpected error occurred while removing compatibility link ID {partCompatibilityId}.", ex);
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Unexpected error updating PartImage ID {PartImageId}.", imageDetailsDto.Id);
+                throw new ServiceException($"An unexpected error occurred while updating part image details for ID {imageDetailsDto.Id}.", ex);
             }
         }
 
         /// <summary>
-        /// Gets all compatibility links (as DTOs) for a specific part.
+        /// Removes an image from a Part asset by the PartImage record's ID.
+        /// Also deletes the physical file via IImageFileService.
         /// </summary>
-        public async Task<IEnumerable<PartCompatibilityDto>> GetCompatibilitiesForPartAsync(int partId)
+        public async Task RemoveImageFromPartAsync(int partImageId)
+        {
+            if (partImageId <= 0)
+            {
+                _logger.LogWarning("Attempted to remove part image with invalid ID: {PartImageId}", partImageId);
+                throw new ArgumentException("Part Image ID must be greater than zero.", nameof(partImageId));
+            }
+
+            _logger.LogInformation("Attempting to remove PartImage with ID: {PartImageId}", partImageId);
+
+            // 1. Fetch Existing PartImage Entity to get its path and ensure it exists
+            // It's good to fetch it even if we just need the path, to confirm it's a valid record to delete.
+            var imageToDelete = await _unitOfWork.PartImages.GetByIdAsync(partImageId);
+
+            if (imageToDelete == null)
+            {
+                string notFoundMsg = $"PartImage with ID {partImageId} not found. Cannot remove.";
+                _logger.LogWarning(notFoundMsg);
+                // Depending on strictness, you might not throw if it's already gone, or throw a NotFoundException.
+                // For this operation, if it's not found, our job is arguably done, but logging is good.
+                // Let's throw to indicate the requested operation couldn't be performed on a non-existent entity.
+                throw new ServiceException(notFoundMsg);
+            }
+
+            string? persistentImagePath = imageToDelete.ImagePath; // Get path before DB record is gone
+
+            // 2. Begin Transaction (to ensure DB delete and file delete are somewhat coordinated,
+            //    though true atomicity across DB and file system is hard)
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                // 3. Delete the database record for PartImage
+                _unitOfWork.PartImages.Delete(imageToDelete);
+                await _unitOfWork.SaveChangesAsync();
+                _logger.LogInformation("PartImage record ID {PartImageId} deleted from database successfully.", partImageId);
+
+                // 4. Delete the physical image file AFTER successful DB deletion
+                // This order is generally preferred: if file deletion fails, the DB record is gone,
+                // which is better than an orphaned DB record pointing to a non-existent file.
+                // The main risk is an orphaned file if the app crashes between DB commit and file delete.
+                if (!string.IsNullOrWhiteSpace(persistentImagePath))
+                {
+                    _logger.LogInformation("Attempting to delete physical image file '{ImagePath}' for PartImage ID {PartImageId}.",
+                        persistentImagePath, partImageId);
+                    await _imageFileService.DeleteImageAsync(persistentImagePath); // This should be resilient
+                    _logger.LogInformation("Physical image file '{ImagePath}' for PartImage ID {PartImageId} deletion attempted.",
+                        persistentImagePath, partImageId);
+                }
+                else
+                {
+                    _logger.LogWarning("No image path found for PartImage ID {PartImageId}. No physical file to delete.", partImageId);
+                }
+
+                // 5. Commit Transaction
+                await _unitOfWork.CommitTransactionAsync();
+                _logger.LogInformation("PartImage ID {PartImageId} removal process completed.", partImageId);
+
+                // Business Rule: If the deleted image was primary, a new primary might need to be selected.
+                // This logic is usually handled by the UI/ViewModel layer prompting the user,
+                // or by a background process, or by automatically selecting the next image by DisplayOrder.
+                // For now, this service method focuses on the deletion itself.
+                // If a rule exists that a part MUST have a primary image (if it has any images),
+                // this service method might need to enforce it by trying to set another image as primary.
+                if (imageToDelete.IsPrimary)
+                {
+                    _logger.LogInformation("Deleted image (ID: {PartImageId}) was primary for PartID: {PartId}. Consider prompting for a new primary.",
+                        partImageId, imageToDelete.PartId);
+                    // Optionally, add logic here to automatically set a new primary if desired:
+                    // var remainingImages = await _unitOfWork.PartImages.GetByPartIdAsync(imageToDelete.PartId);
+                    // if (remainingImages.Any() && !remainingImages.Any(img => img.IsPrimary))
+                    // {
+                    //     var newPrimary = remainingImages.OrderBy(img => img.DisplayOrder).ThenBy(img => img.Id).First();
+                    //     newPrimary.IsPrimary = true;
+                    //     await _unitOfWork.SaveChangesAsync(); // This would need to be part of the same transaction
+                    //     _logger.LogInformation("Automatically set ImageID {NewPrimaryImageId} as primary for PartID {PartId}.", newPrimary.Id, imageToDelete.PartId);
+                    // }
+                }
+            }
+            catch (DbUpdateException dbEx)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(dbEx, "Database error while deleting PartImage record ID {PartImageId}.", partImageId);
+                throw new ServiceException("A database error occurred while deleting the part image record.", dbEx);
+            }
+            catch (IOException ioEx) // If _imageFileService.DeleteImageAsync throws for critical reasons
+            {
+                // Transaction was likely committed for DB delete. The file system delete failed.
+                // This results in an orphaned file. This is hard to make truly atomic.
+                // Log thoroughly.
+                _logger.LogError(ioEx, "File IO error occurred while deleting physical image file '{ImagePath}' for PartImage ID {PartImageId}. The database record was deleted.",
+                    persistentImagePath, partImageId);
+                throw new ServiceException($"The image record was deleted, but an error occurred deleting its physical file '{persistentImagePath}'. Manual cleanup may be required.", ioEx);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "An unexpected error occurred while removing PartImage ID {PartImageId}.", partImageId);
+                throw new ServiceException($"An error occurred while removing part image ID {partImageId}.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets a specific image as the primary display image for a part.
+        /// Ensures other images for the same part are unset as primary.
+        /// </summary>
+        public async Task SetPrimaryPartImageAsync(int partId, int partImageId)
+        {
+            if (partId <= 0)
+                throw new ArgumentException("Invalid Part ID.", nameof(partId));
+            if (partImageId <= 0)
+                throw new ArgumentException("Invalid Part Image ID.", nameof(partImageId));
+
+            _logger.LogInformation("Attempting to set PartImage ID {PartImageId} as primary for Part ID: {PartId}",
+                partImageId, partId);
+
+            // 1. Fetch the PartImage to be set as primary
+            // It's good to ensure it belongs to the specified partId as well.
+            var imageToSetAsPrimary = await _unitOfWork.PartImages.GetByIdAsync(partImageId);
+
+            if (imageToSetAsPrimary == null)
+            {
+                string msg = $"PartImage with ID {partImageId} not found.";
+                _logger.LogWarning(msg);
+                throw new ServiceException(msg); // Or custom NotFoundException
+            }
+
+            // 2. Verify the image belongs to the correct part
+            if (imageToSetAsPrimary.PartId != partId)
+            {
+                string mismatchMsg = $"PartImage ID {partImageId} does not belong to Part ID {partId}. Operation aborted.";
+                _logger.LogError(mismatchMsg);
+                throw new ServiceException(mismatchMsg); // Or a more specific InvalidOperationException
+            }
+
+            // 3. If it's already primary, no action needed (idempotency)
+            if (imageToSetAsPrimary.IsPrimary)
+            {
+                _logger.LogInformation("PartImage ID {PartImageId} is already set as primary for Part ID {PartId}. No changes made.",
+                    partImageId, partId);
+                return;
+            }
+
+            // 4. Begin Transaction
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                // 5. Clear IsPrimary flag for all other images of this part
+                // Pass `partImageId` to exclude the current image from being unset if it was somehow already primary
+                // (though the check above handles that, this makes ClearPrimaryFlagsForPartAsync more robust).
+                await _unitOfWork.PartImages.ClearPrimaryFlagsForPartAsync(partId, partImageId);
+
+                // 6. Set the target image as primary
+                imageToSetAsPrimary.IsPrimary = true;
+                // imageToSetAsPrimary.ModifiedAt = DateTime.UtcNow; // Or handled by DbContext
+
+                // 7. Save Changes (EF Core tracks changes to imageToSetAsPrimary and those from ClearPrimaryFlags)
+                await _unitOfWork.SaveChangesAsync();
+
+                // 8. Commit Transaction
+                await _unitOfWork.CommitTransactionAsync();
+
+                _logger.LogInformation("PartImage ID {PartImageId} successfully set as primary for Part ID {PartId}.",
+                    partImageId, partId);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(dbEx, "Database error setting primary image for Part ID {PartId}, Image ID {PartImageId}.",
+                    partId, partImageId);
+                throw new ServiceException("A database error occurred while setting the primary image.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Unexpected error setting primary image for Part ID {PartId}, Image ID {PartImageId}.",
+                    partId, partImageId);
+                throw new ServiceException($"An error occurred while setting primary image for Part ID {partId}.", ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets all images for a specific part, ordered by DisplayOrder then ID.
+        /// </summary>
+        public async Task<IEnumerable<PartImageDto>> GetImagesForPartAsync(int partId)
         {
             if (partId <= 0)
             {
-                _logger.LogWarning("Attempted to get compatibilities for invalid Part ID: {PartId}", partId);
-                return Enumerable.Empty<PartCompatibilityDto>();
+                _logger.LogWarning("Attempted to get images for invalid Part ID: {PartId}", partId);
+                return Enumerable.Empty<PartImageDto>(); // Or throw ArgumentException
             }
 
-            _logger.LogInformation("Attempting to retrieve compatibility links for Part ID: {PartId}", partId);
+            _logger.LogInformation("Attempting to retrieve all images for Part ID: {PartId}", partId);
             try
             {
-                // We need to fetch PartCompatibility entities and include their related CompatibleVehicle details
-                var compatibilityEntities = await _unitOfWork.PartCompatibilities.GetByPartIdWithCompatibleVehicleDetailsAsync(partId);
+                // Use the repository method that gets images by PartId and orders them
+                var imageEntities = await _unitOfWork.PartImages.GetByPartIdAsync(partId);
 
-                var dtos = compatibilityEntities.Select(MapPartCompatibilityToDto).ToList();
-                _logger.LogInformation("Successfully retrieved {Count} compatibility links for Part ID {PartId}.", dtos.Count, partId);
+                var dtos = imageEntities.Select(MapPartImageToDto).ToList();
+
+                _logger.LogInformation("Successfully retrieved {Count} images for Part ID {PartId}.", dtos.Count, partId);
                 return dtos;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving compatibility links for Part ID {PartId}.", partId);
-                throw new ServiceException($"Could not retrieve compatibility links for Part ID {partId}.", ex);
+                _logger.LogError(ex, "An error occurred while retrieving images for Part ID {PartId}.", partId);
+                throw new ServiceException($"Could not retrieve images for Part ID {partId}.", ex);
             }
         }
-
 
         #endregion
 
@@ -1423,7 +1550,6 @@ namespace AutoFusionPro.Application.Services.DataServices
                 Location = part.Location,
                 IsActive = part.IsActive,
                 IsOriginal = part.IsOriginal,
-                ImagePath = part.ImagePath,
                 Notes = part.Notes,
                 Barcode = part.Barcode,
 
@@ -1446,30 +1572,6 @@ namespace AutoFusionPro.Application.Services.DataServices
 
                 CurrentStock = part.CurrentStock, // Actual live stock
                 LastRestockDate = part.LastRestockDate == DateTime.MinValue ? null : part.LastRestockDate, // Handle default DateTime
-
-                CompatibleVehicles = part.CompatibleVehicles?.Select(pc => new PartCompatibilityDto(
-                    pc.Id,
-                    pc.CompatibleVehicleId,
-                    pc.CompatibleVehicle?.Model?.Make?.Name ?? "N/A",
-                    pc.CompatibleVehicle?.Model?.Name ?? "N/A",
-                    pc.CompatibleVehicle?.YearStart ?? 0,
-                    pc.CompatibleVehicle?.YearEnd ?? 0,
-                    pc.CompatibleVehicle?.TrimLevel?.Name,
-                    pc.CompatibleVehicle?.EngineType?.Name,
-                    pc.CompatibleVehicle?.TransmissionType?.Name,
-                    pc.Notes
-                )).ToList() ?? new List<PartCompatibilityDto>(),
-
-                Suppliers = part.Suppliers?.Select(sp => new PartSupplierDto(
-                    sp.Id,
-                    sp.SupplierId,
-                    sp.Supplier?.Name ?? "N/A",
-                    sp.SupplierPartNumber,
-                    sp.Cost,
-                    sp.IsPreferredSupplier,
-                    sp.LeadTimeInDays,
-                    sp.MinimumOrderQuantity
-                )).ToList() ?? new List<PartSupplierDto>()
             };
         }
 
@@ -1484,43 +1586,15 @@ namespace AutoFusionPro.Application.Services.DataServices
                 part.Category?.Name ?? "N/A", // Assumes Category is loaded by repository
                 part.Manufacturer,
                 part.SellingPrice,
-                part.CurrentStock, 
+                part.CurrentStock,
                 part.StockingUnitOfMeasure?.Symbol,
                 part.IsActive,
-                part.ImagePath,
+                part.Images.FirstOrDefault(img => img.IsPrimary)?.ImagePath,
                 part.Location
 
 
             );
         }
-
-        private PartCompatibilityDto MapPartCompatibilityToDto(PartCompatibility pc)
-        {
-            if (pc == null) throw new ArgumentNullException(nameof(pc));
-            if (pc.CompatibleVehicle == null)
-            {
-                // This case should ideally not happen if includes are correct and data is consistent
-                _logger.LogWarning("PartCompatibility ID {PartCompatibilityId} has a null CompatibleVehicle navigation property during mapping.", pc.Id);
-                // Return a DTO with minimal info or throw, depending on how strict you want to be.
-                return new PartCompatibilityDto(pc.Id, pc.CompatibleVehicleId, "Error", "Error", 0, 0, null, null, null, pc.Notes);
-            }
-
-            return new PartCompatibilityDto(
-                pc.Id,
-                pc.CompatibleVehicleId,
-                pc.CompatibleVehicle.Model?.Make?.Name ?? "N/A",
-                pc.CompatibleVehicle.Model?.Name ?? "N/A",
-                pc.CompatibleVehicle.YearStart,
-                pc.CompatibleVehicle.YearEnd,
-                pc.CompatibleVehicle.TrimLevel?.Name,
-                pc.CompatibleVehicle.EngineType?.Name,
-                pc.CompatibleVehicle.TransmissionType?.Name,
-                // BodyType was missing in your DTO, but your CompatibleVehicle model has it.
-                // Assuming PartCompatibilityDto doesn't need it, or you'll add it.
-                pc.Notes
-            );
-        }
-
 
         /// <summary>
         /// Helper to ensure only one preferred supplier per part.
@@ -1586,6 +1660,13 @@ namespace AutoFusionPro.Application.Services.DataServices
             );
         }
 
+
+        // Helper for mapping PartImage to PartImageDto
+        private PartImageDto MapPartImageToDto(PartImage image)
+        {
+            if (image == null) throw new ArgumentNullException(nameof(image));
+            return new PartImageDto(image.Id, image.ImagePath, image.Caption, image.IsPrimary, image.DisplayOrder);
+        }
         #endregion
 
     }

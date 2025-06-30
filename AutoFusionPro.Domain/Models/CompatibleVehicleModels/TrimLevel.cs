@@ -8,8 +8,6 @@ namespace AutoFusionPro.Domain.Models.CompatibleVehicleModels
 
         public int ModelId { get; set; } // Foreign Key
         public virtual Model Model { get; set; } = null!; // Navigation to parent Model
-
-        // Navigation Property: A TrimLevel can be used in many CompatibleVehicle specs
-        public virtual ICollection<CompatibleVehicle> CompatibleVehicleSpecs { get; set; } = new List<CompatibleVehicle>();
+      
     }
 }

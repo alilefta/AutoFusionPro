@@ -761,6 +761,10 @@
     <SolidColorBrush x:Key="Border.Gray.BordeBrush"
                      Color="{StaticResource Gray200}" />
 
+    
+    <!-- Misc. -->
+    <SolidColorBrush x:Key="YellowStar" Color="{StaticResource Yellow400}" />
+
 
 
 

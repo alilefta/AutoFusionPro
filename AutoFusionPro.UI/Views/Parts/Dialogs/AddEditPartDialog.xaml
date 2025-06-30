@@ -1,0 +1,301 @@
+﻿<Window x:Class="AutoFusionPro.UI.Views.Parts.Dialogs.AddEditPartDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts.Dialogs"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+        xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
+        xmlns:behaviors="clr-namespace:AutoFusionPro.UI.Resources.Behaviors"
+        xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Parts.Dialogs.AddEditPartDialogTabs"
+        xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+        xmlns:cards="clr-namespace:AutoFusionPro.UI.Controls.Cards"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{DynamicResource Card.Header.BackgroundBrush}"
+        Foreground="{DynamicResource Text.PrimaryBrush}"
+        Title="{Binding DialogTitle}"
+        Height="Auto"
+        Width="1000"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance Type=vm:AddEditPartDialogViewModel}"
+        FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+        FlowDirection="{Binding CurrentWorkFlow}">
+    <Window.Resources>
+        <DropShadowEffect x:Key="WindowShadow"
+                          BlurRadius="15"
+                          Direction="0"
+                          ShadowDepth="3"
+                          Opacity="0.5"
+                          Color="#202020" />
+    </Window.Resources>
+
+    <!-- Window Chrome for custom title bar behavior -->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40"
+                      ResizeBorderThickness="0"
+                      GlassFrameThickness="0"
+                      CornerRadius="8"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Border CornerRadius="8"
+            Background="{DynamicResource Card.Header.BackgroundBrush}"
+            BorderThickness="1"
+            BorderBrush="{DynamicResource Card.BorderBrush}"
+            Effect="{StaticResource WindowShadow}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <!-- Custom title bar -->
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <!-- Content -->
+            </Grid.RowDefinitions>
+
+            <!-- Custom Title Bar -->
+            <Grid Grid.Row="0"
+                  Background="{DynamicResource Window.BackgroundBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Title and Icon -->
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center">
+                    <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
+                                      Foreground="{DynamicResource Text.PrimaryBrush}"
+                                      FontSize="18"
+                                      Margin="0,0,8,0" />
+                    <TextBlock Text="{Binding DialogTitle}"
+                               FontSize="14"
+                               FontFamily="{DynamicResource DynamicFontFamilyMedium}"
+                               Foreground="{DynamicResource Text.PrimaryBrush}"
+                               VerticalAlignment="Center" />
+
+                </StackPanel>
+
+                <!-- Draggable region -->
+                <Grid Grid.Column="1"
+                      Background="Transparent"
+                      WindowChrome.IsHitTestVisibleInChrome="False" />
+
+                <!-- Window control buttons -->
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,5,0">
+                    <!-- Close button -->
+                    <Button Width="30"
+                            Height="30"
+                            WindowChrome.IsHitTestVisibleInChrome="True"
+                            Command="{Binding CancelCommand}"
+                            Style="{StaticResource {x:Type Button}}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="border"
+                                        Background="Transparent"
+                                        CornerRadius="4">
+                                    <wpfUi:SymbolIcon x:Name="icon"
+                                                      Symbol="Dismiss48"
+                                                      Foreground="{DynamicResource Text.PrimaryBrush}"
+                                                      FontSize="12" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter TargetName="border"
+                                                Property="Background"
+                                                Value="#E81123" />
+                                        <Setter TargetName="icon"
+                                                Property="Foreground"
+                                                Value="White" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Content -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ProgressBar Minimum="0" 
+                             Maximum="5" 
+                             Value="2" 
+                             Foreground="{DynamicResource Border.AccentBrush}" 
+                             Height="6" 
+                             Margin="10,0"/>
+                <!-- Tab Control -->
+                <TabControl Style="{DynamicResource ModernAnimatedTabControlStyle2}" 
+                            Grid.Row="1" SelectedIndex="{Binding CurrentTabIndex}">
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE713;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="{DynamicResource CorePartInformationStr}"
+                                           VerticalAlignment="Center"
+                                           FontFamily="{DynamicResource AlmaraiRegular}"
+                                           FontWeight="Regular" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <local:CorePartInformationTabView Padding="5,10,5,10" />
+                    </TabItem>
+                    <TabItem IsEnabled="{Binding IsImageAndNotesTabEnabled}">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE713;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="{DynamicResource ImagesAndNotesStr}"
+                                           VerticalAlignment="Center"
+                                           FontFamily="{DynamicResource AlmaraiRegular}"
+                                           FontWeight="Regular" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <local:ImageAndNotesTabView Padding="5,10,5,10" />
+                    </TabItem>
+                    <TabItem IsEnabled="{Binding IsPricingAndStockTabEnabled}">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE156;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="{DynamicResource PricingAndStockStr}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <local:PricingAndStockTabView Padding="5,10,5,10" />
+                    </TabItem>
+                    <TabItem IsEnabled="{Binding IsSupplierTabEnabled}">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE136;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="{DynamicResource SuppliersStr}"
+                                           VerticalAlignment="Center" />
+                               
+                            </StackPanel>
+                        </TabItem.Header>
+                        <local:SuppliersTabView Padding="5,10,5,10" />
+                    </TabItem>
+                    <TabItem IsEnabled="{Binding IsVehicleCompatibilityTabEnabled}">
+                        <TabItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE136;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+                                <TextBlock Text="{DynamicResource PartCompatibilitiesStr}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <local:VehicleCompatibilityTabView Padding="5,10,5,10" />
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <!-- Buttons -->
+            <Grid Grid.Row="2"
+                  Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Back Button -->
+                <xBtn:XButton Grid.Column="0"
+                              ButtonType="Secondary"
+                              Visibility="{Binding BackButtonVisibility}"
+                              Command="{Binding GoToPreviousStepCommand}"
+                              Style="{DynamicResource RegularButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <wpfUi:SymbolIcon Symbol="ArrowLeft48"
+                                          VerticalAlignment="Center" />
+                        <TextBlock Text="{DynamicResource BackStr}"
+                                   Margin="5,0,0,0"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center" />
+
+
+                    </StackPanel>
+                </xBtn:XButton>
+
+                <!-- Cancel Button -->
+                <xBtn:XButton Grid.Column="0"
+                              ButtonType="Secondary"
+                              Visibility="{Binding CancelButtonVisibility}"
+                              Command="{Binding CancelCommand}"
+                              Style="{DynamicResource RegularButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource CancelStr}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center" />
+                        <wpfUi:SymbolIcon Symbol="Dismiss48"
+                                          VerticalAlignment="Center"
+                                          Margin="5,0,0,0" />
+
+                    </StackPanel>
+                </xBtn:XButton>
+
+                <!-- Next Button -->
+                <xBtn:XButton Grid.Column="2"
+                              ButtonType="Primary"
+                              Visibility="{Binding NextButtonVisibility}"
+                              Command="{Binding GoToNextStepCommand}"
+                              Style="{DynamicResource RegularButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{DynamicResource NextStr}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center"
+                                   LineHeight="15" />
+                        <wpfUi:SymbolIcon Symbol="{Binding NextButtonIcon}"
+                                          Margin="5,0,0,0"
+                                          VerticalAlignment="Center" />
+                    </StackPanel>
+                </xBtn:XButton>
+
+                <!-- Finish Button -->
+                <xBtn:XButton Grid.Column="2"
+                              ButtonType="Primary"
+                              Visibility="{Binding SaveButtonVisibility}"
+                              IsLoading="{Binding IsSaving}"
+                              Command="{Binding SavePartCommand}"
+                              Style="{DynamicResource RegularButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock Text="{DynamicResource SaveChangesStr}"
+                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                   VerticalAlignment="Center" />
+                        <wpfUi:SymbolIcon Symbol="Checkmark48"
+                                          VerticalAlignment="Center"
+                                          Margin="5,0,0,0" />
+                    </StackPanel>
+                </xBtn:XButton>
+            </Grid>
+
+
+        </Grid>
+    </Border>
+</Window>

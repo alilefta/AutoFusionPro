@@ -20,7 +20,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Eng
     public partial class EditEngineTypeDialogViewModel : InitializableViewModel<EditEngineTypeDialogViewModel>, IDialogAware
     {
         private IDialogWindow _dialog = null!;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
 
         [ObservableProperty]
         private bool _isEditing = false;
@@ -33,7 +33,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Eng
         private EngineTypeDto? _engineTypeToEdit;
 
 
-        public EditEngineTypeDialogViewModel(ICompatibleVehicleService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditEngineTypeDialogViewModel> logger) : base(localizationService, logger)
+        public EditEngineTypeDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<EditEngineTypeDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
 

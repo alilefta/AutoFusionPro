@@ -1,6 +1,8 @@
-﻿using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+﻿using AutoFusionPro.Core.Exceptions.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
+using AutoFusionPro.Domain.Models.PartCompatibilityRules;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,23 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleReposi
                 query = query.Where(et => et.Id != excludeEngineTypeId.Value);
             }
             return await query.AnyAsync();
+        }
+
+        public async Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int engineTypeId)
+        {
+            if (engineTypeId <= 0) return false;
+            _logger.LogDebug("Checking if engineTypeId {EngineTypeId} is used in any PartCompatibilityRuleEngineTypes.", engineTypeId);
+            try
+            {
+                // Check if any PartCompatibilityRuleEngineType uses this EngineTypeId
+                return await _context.Set<PartCompatibilityRuleEngineType>() // Assuming DbSet is PartCompatibilityRuleEngineTypes
+                                     .AnyAsync(ruleEngine => ruleEngine.EngineTypeId == engineTypeId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if engineTypeId {BodyTypeId} is used in compatibility rule attributes.", engineTypeId);
+                throw new RepositoryException($"Could not check if BodyTypeId {engineTypeId} is in use by compatibility rule attributes.", ex);
+            }
         }
     }
 }

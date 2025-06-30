@@ -26,7 +26,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
         /// <summary>
         /// Value Provided by DI container to manage Models.
         /// </summary>
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         /// <summary>
         /// Value Provided by <see cref="IDialogAware"/> from <see cref="IDialogService"/>
         /// </summary>
@@ -57,7 +57,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Mak
 
         #region Constructor
         public EditMakeDialogViewModel(
-            ICompatibleVehicleService compatibleVehicleService, 
+            IVehicleTaxonomyService compatibleVehicleService, 
             ILocalizationService localizationService, 
             ILogger<EditMakeDialogViewModel> logger) : base(localizationService, logger)
         {

@@ -10,5 +10,8 @@ namespace AutoFusionPro.Core.Configuration
         public string SystemName { get; set; } = "AutoFusion Pro"; // Default to light theme
         public string? LogoPath { get; set; } // Default to light theme
 
+        // --- NEW CURRENCY SETTING ---
+        public Currency SelectedCurrency { get; set; } = Currency.USD; // Default to USD
+
     }
 }

@@ -80,6 +80,8 @@ namespace AutoFusionPro.UI.Services
                 IsDarkThemeEnabled = false,
                 SystemName = "AutoFusion Pro",
                 LogoPath = "",
+                SelectedCurrency = Currency.USD // Add default currency
+
             };
         }
 

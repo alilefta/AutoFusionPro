@@ -130,6 +130,99 @@ namespace AutoFusionPro.Infrastructure.Services.Storage
             }
         }
 
+        /// <summary>
+        /// Saves an image from a stream to a specified subfolder within the application's image storage.
+        /// </summary>
+        public async Task<string?> SaveImageAsync(Stream imageStream, string originalFileName, string targetSubfolderName, bool compressJpg = true)
+        {
+            if (imageStream == null)
+                throw new ArgumentNullException(nameof(imageStream), "Image stream cannot be null.");
+            if (imageStream.Length == 0)
+                throw new ArgumentException("Image stream cannot be empty.", nameof(imageStream));
+            if (string.IsNullOrWhiteSpace(originalFileName))
+                throw new ArgumentNullException(nameof(originalFileName), "Original file name cannot be null or empty.");
+            if (string.IsNullOrWhiteSpace(targetSubfolderName))
+                throw new ArgumentException("Target subfolder name cannot be null or whitespace.", nameof(targetSubfolderName));
+
+            string fileExtension = Path.GetExtension(originalFileName)?.ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(fileExtension))
+                throw new ArgumentException("Original file name must have a valid extension.", nameof(originalFileName));
+
+            string targetDirectory = Path.Combine(_baseStoragePath, targetSubfolderName);
+
+            try
+            {
+                Directory.CreateDirectory(targetDirectory); // Ensure target directory exists
+
+                string uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                string destinationPath = Path.Combine(targetDirectory, uniqueFileName);
+
+                _logger.LogDebug("Attempting to save image from stream (Original: {OriginalFile}) to {DestinationPath}", originalFileName, destinationPath);
+
+                imageStream.Position = 0; // Ensure stream is at the beginning if it was read before
+
+                await Task.Run(() => // Perform file operations on a background thread
+                {
+                    using (var image = System.Drawing.Image.FromStream(imageStream)) // Load image from stream
+                    {
+                        if (compressJpg && (fileExtension == ".jpg" || fileExtension == ".jpeg"))
+                        {
+                            SaveWithJpegCompression(image, destinationPath);
+                        }
+                        else if (fileExtension == ".png")
+                        {
+                            image.Save(destinationPath, ImageFormat.Png);
+                        }
+                        // Add handling for other common types like .gif, .bmp if needed
+                        // else if (fileExtension == ".gif") { image.Save(destinationPath, ImageFormat.Gif); }
+                        else
+                        {
+                            // For other/unknown types, if Image.FromStream succeeded, try saving in its original format.
+                            // If this fails, it means GDI+ might not know how to save it back properly.
+                            // In such a case, saving the raw stream to file is an alternative.
+                            try
+                            {
+                                image.Save(destinationPath, image.RawFormat); // Try to save in its original format
+                            }
+                            catch (Exception saveEx)
+                            {
+                                _logger.LogWarning(saveEx, "Failed to save image using Image.Save with RawFormat for {OriginalFile}. Falling back to stream copy.", originalFileName);
+                                // Fallback: Save the raw stream directly to the file (less ideal as it bypasses GDI+ processing)
+                                // Ensure stream is at position 0 again if previous Image.FromStream consumed it.
+                                imageStream.Position = 0;
+                                using (var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
+                                {
+                                    imageStream.CopyTo(fileStream);
+                                }
+                            }
+                        }
+                    }
+                });
+
+                _logger.LogInformation("Image successfully saved from stream: {DestinationPath}", destinationPath);
+                return destinationPath;
+            }
+            catch (UnauthorizedAccessException uaEx)
+            {
+                _logger.LogError(uaEx, "Unauthorized access while saving image from stream (Original: {OriginalFile}) to {TargetDirectory}", originalFileName, targetDirectory);
+                throw new ServiceException($"Permission denied while saving image to '{targetDirectory}'.", uaEx);
+            }
+            catch (IOException ioEx)
+            {
+                _logger.LogError(ioEx, "IO error while saving image from stream (Original: {OriginalFile}) to {TargetDirectory}", originalFileName, targetDirectory);
+                throw new ServiceException("A file system error occurred while saving the image.", ioEx);
+            }
+            catch (ArgumentException argEx) when (argEx.Message.Contains("Parameter is not valid.")) // Often from Image.FromStream for invalid image data
+            {
+                _logger.LogError(argEx, "Invalid image data in stream for {OriginalFile}. Could not load image.", originalFileName);
+                throw new InvalidOperationException("The provided image data is invalid or not a supported format.", argEx);
+            }
+            catch (Exception ex) // Catch-all for other errors (e.g., System.Drawing issues)
+            {
+                _logger.LogError(ex, "Failed to process and save image from stream (Original: {OriginalFile}) to {TargetDirectory}", originalFileName, targetDirectory);
+                throw new InvalidOperationException("An error occurred while processing the image from the stream.", ex);
+            }
+        }
 
         public async Task<bool> DeleteImageAsync(string? absolutePathToImage)
         {

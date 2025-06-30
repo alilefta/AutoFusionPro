@@ -1,6 +1,8 @@
-﻿using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+﻿using AutoFusionPro.Core.Exceptions.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
+using AutoFusionPro.Domain.Models.PartCompatibilityRules;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,23 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleReposi
                 query = query.Where(tt => tt.Id != excludeTransmissionTypeId.Value);
             }
             return await query.AnyAsync();
+        }
+
+        public async Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int transmissionTypeId)
+        {
+            if (transmissionTypeId <= 0) return false;
+            _logger.LogDebug("Checking if transmissionTypeId {TransmissionTypeId} is used in any PartCompatibilityRuleTransmissionTypes.", transmissionTypeId);
+            try
+            {
+                // Check if any PartCompatibilityRuleEngineType uses this transmissionTypeId
+                return await _context.Set<PartCompatibilityRuleTransmissionType>() // Assuming DbSet is PartCompatibilityRuleEngineTypes
+                                     .AnyAsync(ruleTransmssion => ruleTransmssion.TransmissionTypeId == transmissionTypeId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if transmissionTypeId {TransmissionTypeId} is used in compatibility rule attributes.", transmissionTypeId);
+                throw new RepositoryException($"Could not check if transmissionTypeId {transmissionTypeId} is in use by compatibility rule attributes.", ex);
+            }
         }
     }
 }

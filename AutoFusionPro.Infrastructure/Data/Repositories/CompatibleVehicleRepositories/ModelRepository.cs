@@ -1,4 +1,6 @@
-﻿using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+﻿using AutoFusionPro.Core.Exceptions.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories.Base;
@@ -47,9 +49,21 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleReposi
             return await _context.Set<TrimLevel>().AnyAsync(t => t.ModelId == modelId);
         }
 
-        public async Task<bool> HasAssociatedCompatibleVehiclesAsync(int modelId)
+        public async Task<bool> IsUsedInCompatibilityRulesAsync(int modelId)
         {
-            return await _context.Set<CompatibleVehicle>().AnyAsync(cv => cv.ModelId == modelId);
+            if (modelId <= 0) return false;
+            _logger.LogDebug("Checking if ModelID {ModelId} is used in any PartCompatibilityRules.", modelId);
+            try
+            {
+                // Check if any PartCompatibilityRule uses this ModelId
+                return await _context.Set<PartCompatibilityRule>() // Assuming DbSet is named PartCompatibilityRules in DbContext
+                                     .AnyAsync(rule => rule.ModelId == modelId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if ModelID {ModelId} is used in compatibility rules.", modelId);
+                throw new RepositoryException($"Could not check if ModelID {modelId} is in use by compatibility rules.", ex);
+            }
         }
     }
 }

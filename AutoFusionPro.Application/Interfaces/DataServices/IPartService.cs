@@ -1,5 +1,7 @@
 ﻿using AutoFusionPro.Application.DTOs.Part;
+using AutoFusionPro.Application.DTOs.PartImage;
 using AutoFusionPro.Core.Models;
+using System.IO;
 
 namespace AutoFusionPro.Application.Interfaces.DataServices
 {
@@ -57,36 +59,6 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
 
         #endregion
 
-        #region Part Image Management
-
-        /// <summary>
-        /// Updates the image path for a specific part. Handles saving new image and deleting old one.
-        /// </summary>
-        /// <param name="partId">The ID of the part.</param>
-        /// <param name="sourceImagePath">The source path of the new image (from client), or null/empty to clear the image.</param>
-        Task UpdatePartImageAsync(int partId, string? sourceImagePath); // Renamed for clarity
-
-        #endregion
-
-        #region Part Compatibility Management
-
-        /// <summary>
-        /// Adds a CompatibleVehicle specification to a Part.
-        /// </summary>
-        Task AddCompatibilityAsync(int partId, PartCompatibilityCreateDto compatibilityDto);
-
-        /// <summary>
-        /// Removes a specific PartCompatibility link by its own ID.
-        /// </summary>
-        Task RemoveCompatibilityAsync(int partCompatibilityId);
-
-        /// <summary>
-        /// Gets all compatibility links (as DTOs) for a specific part.
-        /// </summary>
-        Task<IEnumerable<PartCompatibilityDto>> GetCompatibilitiesForPartAsync(int partId);
-
-        #endregion
-
         #region Part Supplier Management
 
         /// <summary>
@@ -136,6 +108,16 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
         /// (This might call an InventoryService or query a denormalized field).
         /// </summary>
         Task<int> GetCurrentStockForPartAsync(int partId);
+
+        #endregion
+
+        #region Part Images 
+
+        Task<PartImageDto> AddImageToPartAsync(int partId, CreatePartImageDto imageDto);
+        Task UpdatePartImageDetailsAsync(UpdatePartImageDto imageDetailsDto); // For caption, IsPrimary, DisplayOrder
+        Task RemoveImageFromPartAsync(int partImageId);
+        Task SetPrimaryPartImageAsync(int partId, int partImageId);
+        Task<IEnumerable<PartImageDto>> GetImagesForPartAsync(int partId);
 
         #endregion
     }

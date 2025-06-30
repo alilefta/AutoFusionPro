@@ -1,6 +1,8 @@
-﻿using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
+﻿using AutoFusionPro.Core.Exceptions.Repository;
+using AutoFusionPro.Domain.Interfaces.Repository.ICompatibleVehicleRepositories;
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.CompatibleVehicleModels;
+using AutoFusionPro.Domain.Models.PartCompatibilityRules;
 using AutoFusionPro.Infrastructure.Data.Context;
 using AutoFusionPro.Infrastructure.Data.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -43,9 +45,21 @@ namespace AutoFusionPro.Infrastructure.Data.Repositories.CompatibleVehicleReposi
                                .FirstOrDefaultAsync(t => t.Id == trimLevelId);
         }
 
-        public async Task<bool> HasAssociatedCompatibleVehiclesAsync(int trimLevelId)
+        public async Task<bool> IsUsedInCompatibilityRuleAttributesAsync(int trimLevelId)
         {
-            return await _context.Set<CompatibleVehicle>().AnyAsync(cv => cv.TrimLevelId == trimLevelId);
+            if (trimLevelId <= 0) return false;
+            _logger.LogDebug("Checking if TrimLevelID {TrimLevelId} is used in any PartCompatibilityRuleTrimLevels.", trimLevelId);
+            try
+            {
+                // Check if any PartCompatibilityRuleTrimLevel uses this TrimLevelId
+                return await _context.Set<PartCompatibilityRuleTrimLevel>() // Assuming DbSet is PartCompatibilityRuleTrimLevels
+                                     .AnyAsync(ruleTrim => ruleTrim.TrimLevelId == trimLevelId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if TrimLevelID {TrimLevelId} is used in compatibility rule attributes.", trimLevelId);
+                throw new RepositoryException($"Could not check if TrimLevelID {trimLevelId} is in use by compatibility rule attributes.", ex);
+            }
         }
     }
 }

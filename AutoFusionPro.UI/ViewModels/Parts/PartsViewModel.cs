@@ -1,5 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.Part;
 using AutoFusionPro.Application.Interfaces.DataServices;
+using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
@@ -9,7 +10,6 @@ using AutoFusionPro.UI.ViewModels.Parts.Dialogs;
 using AutoFusionPro.UI.Views.Parts.Dialogs;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 
@@ -17,10 +17,17 @@ namespace AutoFusionPro.UI.ViewModels.Parts
 {
     public partial class PartsViewModel : BaseViewModel<PartsViewModel>
     {
-        private readonly IPartService _partService;
-        private readonly IServiceProvider _serviceProvider;
+        #region Fields
 
-        public ObservableCollection<PartSummaryDto> Parts { get; private set; }
+        private readonly IPartService _partService;
+        private readonly IDialogService _dialogService;
+
+        #endregion
+
+        #region Props
+
+        [ObservableProperty]
+        private ObservableCollection<PartSummaryDto> _parts = new();
 
         [ObservableProperty]
         private bool _isLoading = false;        
@@ -28,13 +35,18 @@ namespace AutoFusionPro.UI.ViewModels.Parts
         [ObservableProperty]
         private bool _isAddingPart = false;
 
+        [ObservableProperty]
+        private bool _isEditingPart = false;
+
+        #endregion
+
         public PartsViewModel(IPartService partService, 
             ILocalizationService localizationService, 
-            IServiceProvider serviceProvider,
+            IDialogService dialogService,
             ILogger<PartsViewModel> logger) : base(localizationService, logger)
         {
             _partService = partService ?? throw new ArgumentNullException(nameof(partService));
-            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             _ = LoadPartsData();
         }
@@ -48,12 +60,15 @@ namespace AutoFusionPro.UI.ViewModels.Parts
 
             try
             {
+                Parts.Clear();
 
-                var partsData = await _partService.GetAllPartsSummariesAsync();
+                var filterCriteria = new PartFilterCriteriaDto();
 
-                if (partsData.Any())
-                {
-                    foreach (var part in partsData)
+                var partsData = await _partService.GetFilteredPartSummariesAsync(filterCriteria, 0, 50);
+
+                if (partsData.Items.Any())
+                { 
+                    foreach (var part in partsData.Items)
                     {
                         Parts.Add(part);
                     }
@@ -73,37 +88,74 @@ namespace AutoFusionPro.UI.ViewModels.Parts
 
         #endregion
 
+        #region Commands 
+
         [RelayCommand]
-        public void ShowAddPartDialog() 
+        public async Task ShowAddPartDialogAsync() 
         {
             IsAddingPart = true;
             try
             {
-                var addPartDialog = new AddPartDialog();
-                var addPartsDialogViewModelLogger = _serviceProvider.GetRequiredService<ILogger<AddPartDialogViewModel>>();
-                var addPartDialogViewModel = new AddPartDialogViewModel(_partService, _localizationService, addPartsDialogViewModelLogger);
-
-
-                addPartDialog.DataContext = addPartDialogViewModel;
-                addPartDialog.Owner = System.Windows.Application.Current.MainWindow;
-
-                bool? result = addPartDialog.ShowDialog();
-
-                if (result == true)
+                bool? result = await _dialogService.ShowDialogAsync<AddEditPartDialogViewModel, AddEditPartDialog>(null);
+               
+                if (result.HasValue && result.Value == true)
                 {
                     RefreshData();
+                    _logger.LogInformation("AddEditPartDialog was called and returned results.");
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An exception happened while opening AddPartDialog, {ex.Message}");
-                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(PartsViewModel), nameof(ShowAddPartDialog), MethodOperationType.OPEN_DIALOG, ex);
+                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(PartsViewModel), nameof(ShowAddPartDialogAsync), MethodOperationType.OPEN_DIALOG, ex);
             }finally
             {
                 IsAddingPart = false;
             }
 
         }
+
+        [RelayCommand]
+        public async Task ShowEditPartDialogAsync(PartSummaryDto? partToEdit)
+        {
+            if(partToEdit is null)
+            {
+                _logger.LogError("The Part Details was null");
+                return;
+            }
+
+            IsEditingPart = true;
+            try
+            {
+
+                var partDetails = await _partService.GetPartDetailsByIdAsync(partToEdit.Id);
+
+                bool? result = await _dialogService.ShowDialogAsync<AddEditPartDialogViewModel, AddEditPartDialog>(partDetails);
+
+                if (result.HasValue && result.Value == true)
+                {
+                    RefreshData();
+                    _logger.LogInformation("AddEditPartDialog was called and returned results.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An exception happened while opening AddPartDialog, {ex.Message}");
+                throw new ViewModelException(ErrorMessages.OPEN_DIALOG_EXCEPTION_MESSAGE, nameof(PartsViewModel), nameof(ShowAddPartDialogAsync), MethodOperationType.OPEN_DIALOG, ex);
+            }
+            finally
+            {
+                IsEditingPart = false;
+            }
+
+        }
+
+        [RelayCommand]
+        private async Task RefreshDataAsync()
+        {
+            await LoadPartsData();
+        }
+        #endregion
 
         public async void RefreshData()
         {

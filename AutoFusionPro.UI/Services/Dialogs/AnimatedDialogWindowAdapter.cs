@@ -17,6 +17,9 @@ namespace AutoFusionPro.UI.Services.Dialogs
         private readonly AnimationHelpers.AnimationType _closeAnimationType;
         private bool _isAnimatingClose = false;
 
+        public Window CurrentDialogInstance => _window;
+
+
         public AnimatedDialogWindowAdapter(
             Window window,
             AnimationHelpers.AnimationType showAnimationType = AnimationHelpers.AnimationType.FadeIn,
@@ -32,6 +35,7 @@ namespace AutoFusionPro.UI.Services.Dialogs
             get => _window.DialogResult;
             set => _window.DialogResult = value;
         }
+
 
         public void Close()
         {

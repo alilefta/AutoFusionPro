@@ -20,7 +20,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
     public partial class BodyTypesManagementViewModel : BaseViewModel<BodyTypesManagementViewModel>, ITabViewModel
     {
         private readonly IWpfToastNotificationService _wpfToastNotificationService;
-        private readonly ICompatibleVehicleService _compatibleVehicleService;
+        private readonly IVehicleTaxonomyService _compatibleVehicleService;
         private readonly IDialogService _dialogService;
         [ObservableProperty]
         private bool _isVisible = false;
@@ -48,7 +48,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private BodyTypeDto _selectedBodyType = null;
 
         public BodyTypesManagementViewModel(IWpfToastNotificationService wpfToastNotificationService,
-            ICompatibleVehicleService compatibleVehicleService,
+            IVehicleTaxonomyService compatibleVehicleService,
             IDialogService dialogService,
             ILocalizationService localizationService,
             ILogger<BodyTypesManagementViewModel> logger) : base(localizationService, logger)

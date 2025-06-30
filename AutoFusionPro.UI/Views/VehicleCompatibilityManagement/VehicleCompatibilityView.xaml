@@ -34,9 +34,9 @@
         <DataTemplate DataType="{x:Type vmTabs:BodyTypesManagementViewModel}">
             <localViews:BodyTypesTabView Padding="10,10,10,0" />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vmTabs:CompatibleVehiclesViewModel}">
-            <localViews:CompatibleVehiclesTabView Padding="10,10,10,0" />
-        </DataTemplate>
+        <!--<DataTemplate DataType="{x:Type vmTabs:CompatibleVehiclesViewModel}">
+            <localViews:PartCompatibilityRulesTabView Padding="10,10,10,0" />
+        </DataTemplate>-->
         <!-- Add other DataTemplates as needed -->
     </UserControl.Resources>
     <Border Padding="0,0,0,10">

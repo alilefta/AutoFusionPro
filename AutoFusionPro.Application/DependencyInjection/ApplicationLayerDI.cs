@@ -2,6 +2,8 @@
 using AutoFusionPro.Application.DTOs.CompatibleVehicleDTOs;
 using AutoFusionPro.Application.DTOs.InventoryTransactions;
 using AutoFusionPro.Application.DTOs.Part;
+using AutoFusionPro.Application.DTOs.PartCompatibilityDtos;
+using AutoFusionPro.Application.DTOs.PartImage;
 using AutoFusionPro.Application.DTOs.UnitOfMeasure;
 using AutoFusionPro.Application.Interfaces.Authentication;
 using AutoFusionPro.Application.Interfaces.DataServices;
@@ -13,6 +15,8 @@ using AutoFusionPro.Application.Services.DataServices;
 using AutoFusionPro.Application.Validators.Category;
 using AutoFusionPro.Application.Validators.CompatibleVehicleValidator;
 using AutoFusionPro.Application.Validators.Inventory;
+using AutoFusionPro.Application.Validators.PartCompatibilityRule;
+using AutoFusionPro.Application.Validators.PartImage;
 using AutoFusionPro.Application.Validators.PartValidators;
 using AutoFusionPro.Application.Validators.UnitOfMeasure;
 using FluentValidation;
@@ -44,20 +48,21 @@ namespace AutoFusionPro.Application.DependencyInjection
             // Data Services
             services.AddSingleton<IUserService, UserService>();
             services.AddScoped<IPartService, PartService>();
-            services.AddScoped<ICompatibleVehicleService, CompatibleVehicleService>();
+            services.AddScoped<IPartCompatibilityRuleService, PartCompatibilityRuleService>();
+            services.AddScoped<IVehicleTaxonomyService, VehicleTaxonomyService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IInventoryTransactionService, InventoryTransactionService>();
             services.AddScoped<IUnitOfMeasureService, UnitOfMeasureService>();
 
-            //services.AddScoped<IVehicleAssetService, VehicleAssetService>(); // TODO To be commented out
+            services.AddScoped<IVehicleAssetService, VehicleAssetService>(); // TODO To be commented out
 
 
             // Validators
             //services.AddScoped<IValidator<CreateVehicleDto>, CreateVehicleDtoValidator>();
             //services.AddScoped<IValidator<UpdateVehicleDto>, UpdateVehicleDtoValidator>();
 
-            services.AddScoped<IValidator<CreateCompatibleVehicleDto>, CreateCompatibleVehicleDtoValidator>();
-            services.AddScoped<IValidator<UpdateCompatibleVehicleDto>, UpdateCompatibleVehicleDtoValidator>();
+            services.AddScoped<IValidator<CreatePartCompatibilityRuleDto>, CreatePartCompatibilityRuleDtoValidator>();
+            services.AddScoped<IValidator<UpdatePartCompatibilityRuleDto>, UpdatePartCompatibilityRuleDtoValidator>();
 
             services.AddScoped<IValidator<CreateMakeDto>, CreateMakeDtoValidator>();
             services.AddScoped<IValidator<UpdateMakeDto>, UpdateMakeDtoValidator>();
@@ -88,6 +93,10 @@ namespace AutoFusionPro.Application.DependencyInjection
 
             services.AddScoped<IValidator<CreateUnitOfMeasureDto>, CreateUnitOfMeasureDtoValidator>();
             services.AddScoped<IValidator<UpdateUnitOfMeasureDto>, UpdateUnitOfMeasureDtoValidator>();
+
+
+            services.AddScoped<IValidator<CreatePartImageDto>, CreatePartImageDtoValidator>();
+            services.AddScoped<IValidator<UpdatePartImageDto>, UpdatePartImageDtoValidator>();
         }
     }
 }
