@@ -15,6 +15,36 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoFusionPro.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoFusionPro.Application.Tests", "AutoFusionPro.Application.Tests\AutoFusionPro.Application.Tests.csproj", "{866BECD9-2B12-42D9-82F3-0A5457CDA9CB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wiki", "Wiki", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoFusionPro.Application", "AutoFusionPro.Application", "{B95BFDBD-5A79-4BF9-86B1-2222A06DBFB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{88395074-A466-48FF-9187-30DC20814416}"
+	ProjectSection(SolutionItems) = preProject
+		RelayCommand.md = RelayCommand.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{33116B35-FD16-4A8A-B041-F98340A70AA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{9F0AAF41-F783-4CF0-9FC8-535CAC2BFBA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentication", "{568663BA-613B-4FA2-8E23-855156FF43F0}"
+	ProjectSection(SolutionItems) = preProject
+		IAuthenticationService.md = IAuthenticationService.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataServices", "DataServices", "{377EAFC0-1946-44D1-944B-BB2E5D8B4FC7}"
+	ProjectSection(SolutionItems) = preProject
+		ICategoryService.md = ICategoryService.md
+		IInventoryTransactionService.md = IInventoryTransactionService.md
+		IPartCompatibilityRuleService.md = IPartCompatibilityRuleService.md
+		IPartService.md = IPartService.md
+		IPasswordHashingService.md = IPasswordHashingService.md
+		IUnitOfMeasureService.md = IUnitOfMeasureService.md
+		IVehicleTaxonomyService.md = IVehicleTaxonomyService.md
+		IVehicleAssetService.md = IVehicleAssetService.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +78,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B95BFDBD-5A79-4BF9-86B1-2222A06DBFB7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{88395074-A466-48FF-9187-30DC20814416} = {B95BFDBD-5A79-4BF9-86B1-2222A06DBFB7}
+		{33116B35-FD16-4A8A-B041-F98340A70AA4} = {B95BFDBD-5A79-4BF9-86B1-2222A06DBFB7}
+		{9F0AAF41-F783-4CF0-9FC8-535CAC2BFBA1} = {B95BFDBD-5A79-4BF9-86B1-2222A06DBFB7}
+		{568663BA-613B-4FA2-8E23-855156FF43F0} = {9F0AAF41-F783-4CF0-9FC8-535CAC2BFBA1}
+		{377EAFC0-1946-44D1-944B-BB2E5D8B4FC7} = {9F0AAF41-F783-4CF0-9FC8-535CAC2BFBA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A376DB73-72B4-49FA-8055-BAAD98531B6A}

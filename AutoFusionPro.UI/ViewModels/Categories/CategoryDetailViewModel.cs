@@ -210,7 +210,6 @@ namespace AutoFusionPro.UI.ViewModels.Categories
             }
         }
 
-        // TODO : Using IPartService
         /// <summary>
         /// 
         /// </summary>
@@ -228,12 +227,18 @@ namespace AutoFusionPro.UI.ViewModels.Categories
 
                 IEnumerable<PartSummaryDto> parts;
 
-                ActivePartsCount = 10;
-                LowStockPartsCount = 10;
+                var activePartFilter = new PartFilterCriteriaDto(CategoryId: CurrentCategory.Id, IsActive: true);
+                var activeParts = await _partService.GetFilteredPartSummariesAsync(activePartFilter, 1, 100);
+                var lowStockParts = await _partService.GetFilteredPartSummariesAsync(new PartFilterCriteriaDto(CategoryId: CurrentCategory.Id, StockStatus: Core.Enums.DTOEnums.StockStatusFilter.LowStock), 1, 100);
+                ActivePartsCount = activeParts.TotalCount;
+                LowStockPartsCount = lowStockParts.TotalCount;
+
+
+                // Actual Parts
 
                 var filter = new PartFilterCriteriaDto(CategoryId: CurrentCategory.Id);
 
-                var pagedResults = await _partService.GetFilteredPartSummariesAsync(filter, 0, 100);
+                var pagedResults = await _partService.GetFilteredPartSummariesAsync(filter, 1, 100);
 
                 parts = pagedResults.Items;
 

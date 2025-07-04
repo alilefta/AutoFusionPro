@@ -1,6 +1,6 @@
 ﻿using AutoFusionPro.Application.DTOs.PartCompatibilityDtos;
 using AutoFusionPro.Core.Models;
-using AutoFusionPro.Domain.Models;
+using AutoFusionPro.Core.SharedDTOs.PartCompatibilityRule;
 
 namespace AutoFusionPro.Application.Interfaces.DataServices
 {
@@ -39,7 +39,16 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
         /// <param name="partId">The ID of the part.</param>
         /// <param name="onlyActiveRules">Flag to retrieve only active rules.</param>
         /// <returns>A collection of summary DTOs for the part's compatibility rules.</returns>
-        Task<IEnumerable<PartCompatibilityRuleSummaryDto>> GetRulesForPartAsync(int partId, bool onlyActiveRules = true);
+        Task<IEnumerable<PartCompatibilityRuleSummaryDto>> GetRulesForPartAsync(int partId, bool onlyActiveRules = false);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        Task<PagedResult<PartCompatibilityRuleSummaryDto>> GetFilteredRulesAsync(RuleFilterCriteriaDto criteria, int pageNumber, int pageSize);
 
         // --- Template Management (Future) ---
         /// <summary>

@@ -92,6 +92,8 @@ namespace AutoFusionPro.Application.DTOs.PartCompatibilityDtos
     );
 
 
+
+
     /// <summary>
     /// DTO for displaying a summary of a Part Compatibility Rule.
     /// </summary>
@@ -163,6 +165,8 @@ namespace AutoFusionPro.Application.DTOs.PartCompatibilityDtos
         List<string> AppliedRuleNames // Names of the rules that caused the match
     );
 
+    public record ShowRulesByActivityFilterDto(string title, bool? value);
+
     public record VehicleSpecificationDto( // Renamed to avoid confusion with old CompatibleVehicle entity DTOs
         int? MakeId,
         int? ModelId,
@@ -172,6 +176,8 @@ namespace AutoFusionPro.Application.DTOs.PartCompatibilityDtos
         int? BodyTypeId,
         int Year // A specific year for matching
     );
+
+
 
     // New DTO for filtering rules in FindPartIdsMatchingVehicleSpecAsync
     // This DTO can include criteria that apply to the PartCompatibilityRule itself

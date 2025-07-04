@@ -9,26 +9,6 @@ namespace AutoFusionPro.Application.Interfaces.DataServices
     /// </summary>
     public interface IVehicleTaxonomyService
     {
-        // --- CompatibleVehicle CRUD ---
-        //Task<CompatibleVehicleDetailDto?> GetCompatibleVehicleByIdAsync(int id);
-        //Task<PagedResult<CompatibleVehicleSummaryDto>> GetFilteredCompatibleVehiclesAsync(
-        //    CompatibleVehicleFilterCriteriaDto filterCriteria, int pageNumber, int pageSize);
-        //Task<CompatibleVehicleDetailDto> CreateCompatibleVehicleAsync(CreateCompatibleVehicleDto createDto);
-        //Task UpdateCompatibleVehicleAsync(UpdateCompatibleVehicleDto updateDto);
-        //Task DeleteCompatibleVehicleAsync(int id);
-        //Task<bool> CompatibleVehicleSpecExistsAsync(
-        //            int modelId, int yearStart, int yearEnd,
-        //            int? trimLevelId, int? transmissionTypeId, int? engineTypeId, int? bodyTypeId,
-        //            int? excludeCompatibleVehicleId = null);
-
-        //Task<CompatibleVehicleSummaryDto> GetCompatibleVehicleSummaryByIdAsync(int comaptibleVehicleId);
-
-        ///// <summary>
-        ///// Gets ALL CompatibleVehicle configurations matching the filter criteria. NO PAGINATION.
-        ///// </summary>
-        //Task<IEnumerable<CompatibleVehicleSummaryDto>> GetAllFilteredCompatibleVehiclesAsync(
-        //    CompatibleVehicleFilterCriteriaDto filterCriteria);
-
         // --- Make Management ---
         Task<IEnumerable<MakeDto>> GetAllMakesAsync();
         Task<MakeDto?> GetMakeByIdAsync(int id);

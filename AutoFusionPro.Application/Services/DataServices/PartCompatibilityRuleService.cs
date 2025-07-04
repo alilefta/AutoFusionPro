@@ -2,6 +2,7 @@
 using AutoFusionPro.Application.Interfaces.DataServices;
 using AutoFusionPro.Core.Exceptions.Service;
 using AutoFusionPro.Core.Models;
+using AutoFusionPro.Core.SharedDTOs.PartCompatibilityRule;
 using AutoFusionPro.Domain.Interfaces;
 using AutoFusionPro.Domain.Models;
 using AutoFusionPro.Domain.Models.PartCompatibilityRules;
@@ -404,7 +405,57 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
         }
 
+        /// <summary>
+        /// Gets a paginated list of part compatibility rules based on filter criteria.
+        /// </summary>
+        public async Task<PagedResult<PartCompatibilityRuleSummaryDto>> GetFilteredRulesAsync(
+            RuleFilterCriteriaDto criteria, int pageNumber, int pageSize)
+        {
+            ArgumentNullException.ThrowIfNull(criteria, nameof(criteria));
+            if (pageNumber <= 0) pageNumber = 1;
+            if (pageSize <= 0) pageSize = 10;
+            if (pageSize > 200) pageSize = 200; // Safeguard
 
+            _logger.LogInformation("Attempting to retrieve filtered compatibility rules. Page: {Page}, Size: {Size}, Criteria: {@Criteria}",
+                pageNumber, pageSize, criteria);
+
+            try
+            {
+                // 1. Fetch the total count of items matching the criteria
+                // It's good practice to fetch the count and the paged data in parallel if the operations are independent.
+                var totalCountTask = _unitOfWork.PartCompatibilityRules.GetTotalFilteredRulesCountAsync(criteria);
+
+                // 2. Fetch the paged data (entities) for the current page
+                var ruleEntitiesTask = _unitOfWork.PartCompatibilityRules.GetFilteredRulesPagedAsync(criteria, pageNumber, pageSize);
+
+                // Await both tasks to complete
+                await Task.WhenAll(totalCountTask, ruleEntitiesTask);
+
+                var totalCount = await totalCountTask;
+                var ruleEntities = await ruleEntitiesTask;
+
+                // 3. Map the fetched entities to their summary DTOs
+                // The repository method has already included all necessary details for mapping.
+                var summaryDtos = ruleEntities.Select(rule => MapRuleToSummaryDto(rule)).ToList();
+
+                _logger.LogInformation("Successfully retrieved {RetrievedCount} compatibility rule summaries for page {Page}. Total matching: {TotalCount}",
+                    summaryDtos.Count, pageNumber, totalCount);
+
+                // 4. Construct and return the PagedResult
+                return new PagedResult<PartCompatibilityRuleSummaryDto>
+                {
+                    Items = summaryDtos,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalCount = totalCount
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving filtered compatibility rules with criteria: {@Criteria}", criteria);
+                throw new ServiceException("Could not retrieve compatibility rules.", ex);
+            }
+        }
 
         #endregion
 
@@ -811,7 +862,7 @@ namespace AutoFusionPro.Application.Services.DataServices
 
             // These display strings will require some logic
             string makeDisplay = rule.Make?.Name ?? "Any Make";
-            string modelDisplay = rule.Model?.Name ?? (rule.MakeId.HasValue ? "Any Model for " + rule.Make!.Name : "Any Model");
+            string modelDisplay = rule.Model?.Name ?? (rule.MakeId.HasValue ? "Any Model" : "Any Model");
 
             string yearDisplay = "Any Year";
             if (rule.YearStart.HasValue && rule.YearEnd.HasValue)
@@ -830,22 +881,22 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
 
             return new PartCompatibilityRuleSummaryDto(
-                rule.Id,
-                rule.Name,
-                rule.Description,
-                makeDisplay,
-                modelDisplay,
-                yearDisplay,
-                FormatApplicableAttributesForSummary(rule.ApplicableTrimLevels?.Select(atl => new { atl.TrimLevel?.Name, atl.IsExclusion }), "Trim"),
-                FormatApplicableAttributesForSummary(rule.ApplicableEngineTypes?.Select(aet => new { aet.EngineType?.Name, aet.IsExclusion }), "Engine"),
-                FormatApplicableAttributesForSummary(rule.ApplicableTransmissionTypes?.Select(att => new { att.TransmissionType?.Name, att.IsExclusion }), "Transmission"),
-                FormatApplicableAttributesForSummary(rule.ApplicableBodyTypes?.Select(abt => new { abt.BodyType?.Name, abt.IsExclusion }), "Body Type"),
-                rule.IsActive,
-                rule.IsTemplate,
-                rule.CreatedAt,
-                rule.ModifiedAt,
-                rule.PartId,
-                rule.Part?.PartNumber ?? "N/A" // Assumes Part is loaded with the rule
+                Id: rule.Id,
+                Name: rule.Name,
+                Description: rule.Description,
+                MakeNameDisplay: makeDisplay,
+                ModelNameDisplay: modelDisplay,
+                YearRangeDisplay: yearDisplay,
+                TrimsDisplay: FormatApplicableAttributesForSummary(rule.ApplicableTrimLevels?.Select(atl => new { Name = atl.TrimLevel?.Name, atl.IsExclusion }), "Trim"),
+                EnginesDisplay: FormatApplicableAttributesForSummary(rule.ApplicableEngineTypes?.Select(aet => new { aet.EngineType?.Name, aet.IsExclusion }), "Engine"),
+                TransmissionsDisplay: FormatApplicableAttributesForSummary(rule.ApplicableTransmissionTypes?.Select(att => new { att.TransmissionType?.Name, att.IsExclusion }), "Transmission"),
+                BodyTypesDisplay: FormatApplicableAttributesForSummary(rule.ApplicableBodyTypes?.Select(abt => new { abt.BodyType?.Name, abt.IsExclusion }), "Body Type"),
+                IsActive: rule.IsActive,
+                IsTemplate: rule.IsTemplate,
+                CreatedAt: rule.CreatedAt,
+                ModifiedAt: rule.ModifiedAt,
+                PartId: rule.PartId,
+                PartNumber: rule.Part?.PartNumber ?? "N/A" // Assumes Part is loaded with the rule
             );
         }
 

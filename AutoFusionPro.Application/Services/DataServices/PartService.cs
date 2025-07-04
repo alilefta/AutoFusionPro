@@ -1061,7 +1061,6 @@ namespace AutoFusionPro.Application.Services.DataServices
             }
         }
 
-
         /// <summary>
         /// Gets all images for a specific part, ordered by DisplayOrder then ID.
         /// </summary>

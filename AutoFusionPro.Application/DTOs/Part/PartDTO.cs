@@ -163,24 +163,48 @@ namespace AutoFusionPro.Application.DTOs.Part
      // rather than trying to pass entire collections for update.
      );
 
+
+
+
     /// <summary>
     /// DTO encapsulating criteria for filtering parts lists.
-    /// Use null-able types to indicate a filter is not applied.
+    /// This is the central object for all part filtering operations.
     /// </summary>
     public record PartFilterCriteriaDto(
-        string? SearchTerm = null,      // Searches PartNumber, Name, Description, Manufacturer, Barcode, CategoryName
+        string? SearchTerm = null,      // Generic search for Part Name, Number, Barcode, etc.
+
+        // Part-Specific Filters
         int? CategoryId = null,
-        string? Manufacturer = null,    // Allow direct text filter for manufacturer
-        int? SupplierId = null,         // To find parts supplied by a specific supplier
-        decimal? MinSellingPrice = null, // Renamed for clarity
-        decimal? MaxSellingPrice = null, // Renamed for clarity
+        string? Manufacturer = null,    // Direct text search on manufacturer
+        int? SupplierId = null,         // Filter by a specific supplier
+        decimal? MinSellingPrice = null,
+        decimal? MaxSellingPrice = null,
         StockStatusFilter? StockStatus = null,
-        bool? IsActive = true,          // Default to true
-        bool? IsOriginal = null,
-        // For service layer, consider adding specific make/model/year etc. if direct joins are too complex for repo
+        bool? IsActive = true,          // Default to showing only active parts
+        bool? IsOriginal = null,        // True for OEM, False for Aftermarket, Null for both
+
+        // Vehicle Compatibility Filters
+        // These are used to find parts that are compatible with a certain vehicle spec.
         int? MakeId = null,
         int? ModelId = null,
         int? TrimId = null,
-        int? SpecificYear = null // To find parts where compatiblevehicle.yearstart <= year <= compatiblevehicle.yearend
+        int? EngineId = null,           // Added for consistency
+        int? TransmissionId = null,     // Added for consistency
+        int? BodyTypeId = null,         // Added for consistency
+        int? SpecificYear = null,       // To find parts where compatiblevehicle.yearstart <= year <= compatiblevehicle.yearend
+
+        // Sorting
+        PartSortBy? SortBy = null,       // Enum for sorting options
+        bool IsSortAscending = true     // Direction of sorting
     );
+
+    // New Enum for Sorting
+    public enum PartSortBy
+    {
+        Name,
+        PartNumber,
+        SellingPrice,
+        CurrentStock,
+        LastModified
+    }
 }

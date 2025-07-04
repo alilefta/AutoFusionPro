@@ -49,28 +49,28 @@
                             HeadersVisibility="Column">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="{DynamicResource PartPhotoStr}"
-                                            Width="130">
+                                            Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                <Image Source="{Binding PrimaryImagePath, Converter={StaticResource StringToImageSourceConverter}}" 
                                        Height="40"
                                        Width="80"
                                        Stretch="Uniform"
                                        VerticalAlignment="Center"
-                                       HorizontalAlignment="Left" />
+                                       HorizontalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="{DynamicResource PartNameStr}"
                                         Binding="{Binding Name}"
                                         Width="120" />
-                    <DataGridCheckBoxColumn Header="{DynamicResource StatusStr}"
+                    <!--<DataGridCheckBoxColumn Header="{DynamicResource StatusStr}"
                                             Binding="{Binding IsActive}"
                                             IsReadOnly="True"
                                             ElementStyle="{StaticResource BlueCheckBoxStyle}"
                                             Width="80">
 
-                    </DataGridCheckBoxColumn>
+                    </DataGridCheckBoxColumn>-->
                     <DataGridTemplateColumn Header="{DynamicResource PartNumberStr}"
                                             Width="180">
                         <DataGridTemplateColumn.CellTemplate>
@@ -89,18 +89,43 @@
                     </DataGridTemplateColumn>
 
                     <DataGridTemplateColumn Header="{DynamicResource CurrentStockStr}"
-                                            Width="140">
+                                            Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding CurrentStock}">
-                                    <TextBlock.Foreground>
-                                        <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
-                                            <Binding Path="CurrentStock" />
-                                            <Binding Path="IsSelected"
-                                                     RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
-                                        </MultiBinding>
-                                    </TextBlock.Foreground>
-                                </TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CurrentStock}"
+                                               Foreground="{Binding CurrentStock, Converter={StaticResource CurrentStockToForegroundBrushConverter}}" />
+                                    <TextBlock Text="{Binding StockingUnitOfMeasureSymbol, Converter={StaticResource UnitOfMeasureSymbolToUserFriendlyNameConverter}}"
+                                               Margin="5,0,0,0">
+                                        <TextBlock.Foreground>
+                                            <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                <Binding Path="CurrentStock" />
+                                                <Binding Path="IsSelected"
+                                                         RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                            </MultiBinding>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="{DynamicResource SellingPriceStr}"
+                                            Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding SellingPrice}" />
+                                    <TextBlock Text="{Binding DataContext.CurrentCurrencyFullName, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                               Margin="5,0,0,0">
+                                        <TextBlock.Foreground>
+                                            <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                <Binding Path="SellingPrice" />
+                                                <Binding Path="IsSelected"
+                                                         RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                            </MultiBinding>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -111,7 +136,7 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <!-- Details Button -->
-                                    <!--<xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
+                                    <xBtn:XButton Style="{DynamicResource RegularButtonStyle}"
                                                   ButtonType="Regular"
                                                   Command="{Binding DataContext.OpenCategoryDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                                   CommandParameter="{Binding}"
@@ -148,20 +173,20 @@
                                         </StackPanel>
                                     </xBtn:XButton>
 
-                                    <xBtn:XButton Cursor="Hand"
-                                                  Style="{DynamicResource RegularButtonStyle}"
-                                                  Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                                  CommandParameter="{Binding}"
-                                                  ButtonType="Danger"
-                                                  VerticalAlignment="Center"
-                                                  Opacity="0.8"
-                                                  Margin="5,0,0,0">
-                                        <StackPanel Orientation="Horizontal"
-                                                    VerticalAlignment="Center">
-                                            <wpfUi:SymbolIcon Symbol="Delete48"
-                                                              VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </xBtn:XButton>-->
+                                        <xBtn:XButton Cursor="Hand"
+                                                      Style="{DynamicResource RegularButtonStyle}"
+                                                      Command="{Binding DataContext.ShowDeleteCategoryDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                      CommandParameter="{Binding}"
+                                                      ButtonType="Danger"
+                                                      VerticalAlignment="Center"
+                                                      Opacity="0.8"
+                                                      Margin="5,0,0,0">
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <wpfUi:SymbolIcon Symbol="Delete48"
+                                                                  VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </xBtn:XButton>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -51,6 +51,9 @@
     <converters:NullOrEmptyToInverseVisibilityConverter x:Key="NullOrEmptyToInverseVisibilityConverter" />
     <converters:UserFriendlyNoDescriptionConverter x:Key="UserFriendlyNoDescriptionConverter" />
     <converters:BooleanToIsOriginalConverter x:Key="BooleanToIsOriginalConverter" />
+    <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    <converters:UnitOfMeasureSymbolToUserFriendlyNameConverter x:Key="UnitOfMeasureSymbolToUserFriendlyNameConverter" />
+    <converters:CurrentStockToForegroundBrushConverter x:Key="CurrentStockToForegroundBrushConverter" />
 
 
 

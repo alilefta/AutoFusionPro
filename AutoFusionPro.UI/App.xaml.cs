@@ -18,8 +18,10 @@ using AutoFusionPro.UI.ViewModels.Categories.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.General.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts;
+using AutoFusionPro.UI.ViewModels.Parts.Details;
 using AutoFusionPro.UI.ViewModels.Parts.Dialogs;
-using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEditPartDialogs;
+using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEdit;
+using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEdit.AddEditPartDialogs;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
@@ -27,6 +29,7 @@ using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.BodyTypes;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.EngineTypes;
+using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.MakesModelsTrims;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Transmissions;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewModels;
@@ -38,6 +41,7 @@ using AutoFusionPro.UI.Views.Authentication;
 using AutoFusionPro.UI.Views.Categories;
 using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Parts;
+using AutoFusionPro.UI.Views.Parts.Details;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.Shell;
 using AutoFusionPro.UI.Views.User;
@@ -322,11 +326,14 @@ namespace AutoFusionPro.UI
                 services.AddScoped<RegisterViewModel>();
 
                 services.AddTransient<CategoriesViewModel>();
+                services.AddTransient<CategoryDetailView>();
 
                 services.AddTransient<UserManagementViewModel>();
                 services.AddTransient<UserAccountViewModel>();
 
-                services.AddTransient<CategoryDetailView>();
+                services.AddTransient<PartDetailsView>();
+                services.AddTransient<PartDetailsViewModel>();
+
 
 
                 // Vehicle Compatibility View Models
@@ -335,9 +342,7 @@ namespace AutoFusionPro.UI
                 services.AddTransient<MakesModelsTrimsManagementViewModel>();
                 services.AddTransient<EngineTypesManagementViewModel>();
                 services.AddTransient<BodyTypesManagementViewModel>();
-
-                // TODO: TO be replaced with PartCompatibilityRuleTabView
-                //services.AddTransient<CompatibleVehiclesViewModel>();
+                services.AddTransient<CompatibilityRulesManagementViewModel>();
 
                 services.AddTransient<TransmissionTypesManagementViewModel>();
 
@@ -356,13 +361,13 @@ namespace AutoFusionPro.UI
                 services.AddTransient<EditEngineTypeDialogViewModel>();
 
                 services.AddTransient<AddBodyTypeDialogViewModel>();
-                services.AddTransient<EditBodyTypeDialogViewModel>();                
-                
-                
+                services.AddTransient<EditBodyTypeDialogViewModel>();
+
+
                 //services.AddTransient<AddCompatibleVehicleDialogViewModel>();
                 //services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
-                //services.AddTransient<VehicleCompatibilityFilterOptionsDialogViewModel>();
+                services.AddTransient<PartCompatibilityRuleFilterOptionsDialogViewModel>();
 
                 services.AddTransient<AddRootCategoryDialogViewModel>();
                 services.AddTransient<EditRootCategoryDialogViewModel>();
@@ -384,6 +389,7 @@ namespace AutoFusionPro.UI
 
                 // Parts Dialogs
                 services.AddTransient<AddEditPartDialogViewModel>();
+
 
 
 

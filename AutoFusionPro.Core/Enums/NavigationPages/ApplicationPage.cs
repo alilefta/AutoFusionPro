@@ -17,7 +17,8 @@ namespace AutoFusionPro.Core.Enums.NavigationPages
         Orders = 10,
         Vehicles = 11,
         VehicleCompatibilityManagement = 12,
-        CategoryDetails = 13
+        CategoryDetails = 13,
+        PartDetails = 14
 
     }
 }

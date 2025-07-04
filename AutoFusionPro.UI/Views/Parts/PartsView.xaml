@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:AutoFusionPro.UI.Views.Parts"
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
+             xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:PartsViewModel}"
@@ -29,21 +31,23 @@
             <Grid Margin="8,0,8,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <!--<wpfUi:TextBox Icon="{wpfUi:SymbolIcon Symbol=Search48}" PlaceholderText="Search for Parts By Name, Car Model, Part Number"/>-->
-                <TextBox Style="{StaticResource SearchFieldWithClearButtonStyle}"
-                         Grid.Column="0"
-                         Tag="Search for Parts By Name, Car Model, Part Number" />
-
+                <forms:SearchTextBox SearchQuery="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                                     PlaceholderText="Search for Parts By Name, Car Model, Part Number"
+                                     ButtonCommand="{Binding ClearSearchQueryCommand}"
+                                     IsClearButtonEnabled="{Binding HasTextSearchQuery}"
+                                     ButtonVisibility="{Binding HasTextSearchQuery, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                     Height="40" />
 
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="2"
                             Margin="8,0,0,0">
                     <xBtn:XButton ButtonType="Light"
-                                  IsLoading="False"
+                                  IsLoading="{Binding IsLoading}"
                                   Command="{Binding RefreshDataCommand}"
                                   Style="{StaticResource RegularButtonStyle}">
                         <StackPanel Orientation="Horizontal">
@@ -88,10 +92,9 @@
             <!-- Active Filters Bar-->
             <Grid Grid.Row="1"
                   Margin="5,10">
-                <ItemsControl ItemsSource="{Binding Filters}">
+                <ItemsControl ItemsSource="{Binding CurrentlyAppliedFilters}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <!-- Use WrapPanel so filters wrap nicely -->
                             <WrapPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
@@ -133,145 +136,185 @@
             </Grid>
 
             <!-- Data Grid -->
-            <ListView Grid.Row="2"
-                      ItemsSource="{Binding Parts}"
-                      Margin="10,8"
-                      BorderThickness="0.2"
-                      BorderBrush="{DynamicResource Border.FocusBrush}"
-                      d:ItemsSource="{d:SampleData ItemCount=5}"
-                      ItemContainerStyle="{StaticResource ListViewItemsStyle}"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.VirtualizationMode="Recycling">
-                <ListView.View>
-                    <GridView>
-                        <GridView.ColumnHeaderContainerStyle>
-                            <Style TargetType="GridViewColumnHeader"
-                                   BasedOn="{StaticResource GridViewColumnHeaderStyle}">
-                                <!--<EventSetter Event="Click"
-                                             Handler="OnColumnHeaderClick" />-->
-                                <!--<Setter Property="Background"
-                                        Value="{DynamicResource Window.BackgroundBrush}" />
-                                <Setter Property="BorderBrush"
-                                        Value="{DynamicResource Border.PrimaryBrush}" />-->
-                            </Style>
-                        </GridView.ColumnHeaderContainerStyle>
-
-                        <!-- Selection Check Box-->
-                        <GridViewColumn Width="40">
-                            <GridViewColumn.CellTemplate>
+            <Grid Grid.Row="2"
+                  Margin="0,10,0,0">
+                <wpfUi:DataGrid ItemsSource="{Binding Parts}"
+                                Grid.Row="2"
+                                Margin="0,8,0,0"
+                                SelectedItem="{Binding SelectedPart}"
+                                Style="{DynamicResource ModernDataGridStyle}"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                IsReadOnly="True"
+                                CanUserDeleteRows="False"
+                                CanUserReorderColumns="True"
+                                CanUserResizeColumns="True"
+                                CanUserSortColumns="True"
+                                SelectionMode="Single"
+                                GridLinesVisibility="Horizontal"
+                                AlternationCount="2"
+                                AlternatingRowBackground="{DynamicResource DataGrid.AlternatingRow.BackgroundBrush}"
+                                HeadersVisibility="Column">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="{DynamicResource PartImageStr}" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                               Style="{DynamicResource BlueCheckBoxStyle}"
-                                               Checked="OnCheckBoxChecked"
-                                               Unchecked="OnCheckBoxUnchecked"
-                                               Background="{DynamicResource Window.BackgroundBrush}" />
+                                    <Image Source="{Binding PrimaryImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                                           Height="40"
+                                           Width="80"
+                                           Stretch="Uniform"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left" />
                                 </DataTemplate>
-
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn Header="Part Number"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding PartNumber}" />
-                        <GridViewColumn Header="Name"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding Name}" />
-                        <GridViewColumn Header="Current Stock"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding CurrentStock}" />
-                        <GridViewColumn Header="Selling Price"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding SellingPrice}" />
-
-                        <GridViewColumn Header="Category"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding CategoryName}" />
-                        <GridViewColumn Header="Location"
-                                        Width="120"
-                                        DisplayMemberBinding="{Binding Location}" />
-
-                        <GridViewColumn Header="Manage"
-                                        Width="160">
-                            <GridViewColumn.CellTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource PartNameStr}"
+                                            Binding="{Binding Name}"
+                                            Width="Auto" />
+                        <DataGridTextColumn Header="{DynamicResource PartNumberStr}"
+                                            Binding="{Binding PartNumber}"
+                                            Width="Auto" />
+                        <DataGridTemplateColumn Header="{DynamicResource CurrentStockStr}"
+                                                Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding CurrentStock}"
+                                                   Foreground="{Binding CurrentStock, Converter={StaticResource CurrentStockToForegroundBrushConverter}}" />
+                                        <TextBlock Text="{Binding StockingUnitOfMeasureSymbol, Converter={StaticResource UnitOfMeasureSymbolToUserFriendlyNameConverter}}"
+                                                   Margin="5,0,0,0">
+                                            <TextBlock.Foreground>
+                                                <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="CurrentStock" />
+                                                    <Binding Path="IsSelected"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                                </MultiBinding>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource SellingPriceStr}"
+                                                Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding SellingPrice}" />
+                                        <TextBlock Text="{Binding DataContext.CurrentCurrencyFullName, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                   Margin="5,0,0,0">
+                                            <TextBlock.Foreground>
+                                            <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                    <Binding Path="SellingPrice" />
+                                                    <Binding Path="IsSelected"
+                                                         RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                            </MultiBinding>
+                                        </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="{DynamicResource CategoryStr}"
+                                            Binding="{Binding CategoryName}"
+                                            Width="Auto" />
+                        <DataGridTemplateColumn Header="{DynamicResource PartLocationStr}"
+                                                Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Location, Converter={StaticResource UserFriendlyNotFoundInfoConverter}}">
+                                        <TextBlock.Foreground>
+                                            <MultiBinding Converter="{StaticResource TextWithSelectionForegroundConverter}">
+                                                <Binding Path="Location" />
+                                                <Binding Path="IsSelected"
+                                                         RelativeSource="{RelativeSource AncestorType=DataGridRow}" />
+                                            </MultiBinding>
+                                        </TextBlock.Foreground>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="{DynamicResource ManageStr}"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <xBtn:XButton Cursor="Hand"
-                                                      Style="{StaticResource RegularButtonStyle}"
-                                                      ButtonType="Light"
-                                                      Command="{Binding DataContext.ShowEditPartDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                      Style="{DynamicResource RegularButtonStyle}"
+                                                      ButtonType="Regular"
+                                                      Command="{Binding DataContext.OpenPartDetailsViewCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                       CommandParameter="{Binding}"
+                                                      Opacity="0.8"
                                                       VerticalAlignment="Center">
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+                                                <wpfUi:SymbolIcon Symbol="Info24"
+                                                                  VerticalAlignment="Center" />
+                                                <TextBlock Text="{DynamicResource OpenDetailsStr}" Margin="5,0,0,0" VerticalAlignment="Center" FontFamily="{DynamicResource DynamicFontFamilyRegular}"/>
+                                            </StackPanel>
+                                        </xBtn:XButton>
+                                        <xBtn:XButton Cursor="Hand"
+                                                      Style="{DynamicResource RegularButtonStyle}"
+                                                      ButtonType="Warning"
+                                                      Command="{Binding DataContext.ShowEditPartDialogCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                      CommandParameter="{Binding}"
+                                                      Opacity="0.8"
+                                                      Margin="5,0,0,0"
+                                                      VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
                                                 <wpfUi:SymbolIcon Symbol="Edit48"
-                                                                  FontSize="14"
                                                                   VerticalAlignment="Center" />
                                             </StackPanel>
                                         </xBtn:XButton>
 
                                         <xBtn:XButton Cursor="Hand"
-                                                      Style="{StaticResource RegularButtonStyle}"
-                                                      Command="{Binding DataContext.OpenSelectedPartCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                      Style="{DynamicResource RegularButtonStyle}"
+                                                      Command="{Binding DataContext.DeleteSelectedPartCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                                       CommandParameter="{Binding}"
-                                                      ButtonType="Light"
+                                                      ButtonType="Danger"
                                                       VerticalAlignment="Center"
+                                                      Opacity="0.8"
                                                       Margin="5,0,0,0">
                                             <StackPanel Orientation="Horizontal"
                                                         VerticalAlignment="Center">
-                                                <wpfUi:SymbolIcon Symbol="ArrowEnterUp24"
-                                                                  FontSize="18"
+                                                <wpfUi:SymbolIcon Symbol="Delete48"
                                                                   VerticalAlignment="Center" />
-                                                <wpfUi:TextBlock VerticalAlignment="Center"
-                                                                 Text="{DynamicResource MoreStr}"
-                                                                 LineHeight="15"
-                                                                 Margin="3,0,0,0" />
                                             </StackPanel>
                                         </xBtn:XButton>
                                     </StackPanel>
                                 </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </wpfUi:DataGrid>
 
+                <spinner:DonutSpinner Width="200"
+                                      Height="200"
+                                      Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}" />
+            </Grid>
+            
             <!-- Pagination Button -->
             <StackPanel Orientation="Horizontal"
                         Grid.Row="3"
                         Margin="10,0">
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <TextBlock Text="Showing:" />
-                    <TextBlock Text="1-20"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="of"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="1200"
-                               Margin="3,0,0,0" />
-                    <TextBlock Text="Items"
-                               Margin="3,0,0,0" />
-                </StackPanel>
+                <TextBlock VerticalAlignment="Center">
+                    <Run Text="Page" />
+                    <Run Text="{Binding CurrentPage, FallbackValue=1}" />
+                    <Run Text="of" />
+                    <Run Text="{Binding TotalPages, FallbackValue=1}" />
+                    <Run Text="(" />
+                    <Run Text="{Binding TotalItems, FallbackValue=0}" />
+                    <Run Text="Total Items" />
+                    <Run Text=")" />
+                </TextBlock>
                 <StackPanel Orientation="Horizontal"
                             Margin="40,0">
-                    <Button>
-                        <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="ArrowLeft32"
-                                              VerticalAlignment="Center" />
-                            <TextBlock Text="Previous Page"
-                                       Margin="5,0,0,0"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Margin="5,0,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Next Page "
-                                       Margin="5,0,0,0"
-                                       VerticalAlignment="Center" />
-                            <wpfUi:SymbolIcon Symbol="ArrowRight48"
-                                              VerticalAlignment="Center" />
-
-                        </StackPanel>
-                    </Button>
+                    <Button Content="Previous"
+                            Command="{Binding GoToPreviousPageCommand}"
+                            Margin="0,0,5,0" />
+                    <Button Content="Next"
+                            Command="{Binding GoToNextPageCommand}" />
                 </StackPanel>
 
             </StackPanel>

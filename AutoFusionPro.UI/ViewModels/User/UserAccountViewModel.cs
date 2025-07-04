@@ -27,7 +27,6 @@ namespace AutoFusionPro.UI.ViewModels.User
         #region Fields
         private readonly IUserService _userService;
         private readonly ILogger<UserAccountViewModel> _logger;
-        private readonly ILocalizationService _localizationService;
         private readonly ISessionManager _sessionManager;
         private readonly INavigationService _navigationService;
         private readonly ShellViewModel _shellViewModel;
@@ -55,6 +54,8 @@ namespace AutoFusionPro.UI.ViewModels.User
         private string message = string.Empty;
 
         #endregion
+
+
 
         #region General Props
 

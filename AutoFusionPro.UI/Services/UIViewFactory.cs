@@ -4,6 +4,7 @@ using AutoFusionPro.Core.Exceptions.Navigation;
 using AutoFusionPro.UI.Views.Categories;
 using AutoFusionPro.UI.Views.Dashboard;
 using AutoFusionPro.UI.Views.Parts;
+using AutoFusionPro.UI.Views.Parts.Details;
 using AutoFusionPro.UI.Views.Settings;
 using AutoFusionPro.UI.Views.User;
 using AutoFusionPro.UI.Views.VehicleCompatibilityManagement;
@@ -39,6 +40,7 @@ namespace AutoFusionPro.UI.Services
                     ApplicationPage.VehicleCompatibilityManagement => _serviceProvider.GetRequiredService<VehicleCompatibilityView>(),
                     ApplicationPage.Categories => _serviceProvider.GetRequiredService<CategoriesView>(),
                     ApplicationPage.CategoryDetails => _serviceProvider.GetRequiredService<CategoryDetailView>(),
+                    ApplicationPage.PartDetails => _serviceProvider.GetRequiredService<PartDetailsView>(),
                                       _ => throw new ArgumentOutOfRangeException(nameof(page), page, "Unsupported page type.")
                 };
                 

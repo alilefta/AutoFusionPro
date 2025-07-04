@@ -80,16 +80,16 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(HasSelectedMake))]
         [NotifyPropertyChangedFor(nameof(ModelsColumnWidth))]
-        private MakeDto _selectedMake;
+        private MakeDto? _selectedMake;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(HasSelectedModel))]
         [NotifyPropertyChangedFor(nameof(TrimsColumnWidth))]
 
-        private ModelDto _selectedModel;
+        private ModelDto? _selectedModel;
 
         [ObservableProperty]
-        private TrimLevelDto _selectedTrimLevel;
+        private TrimLevelDto? _selectedTrimLevel;
 
         public bool HasSelectedMake => SelectedMake != null;
         public bool HasSelectedModel => SelectedModel != null;

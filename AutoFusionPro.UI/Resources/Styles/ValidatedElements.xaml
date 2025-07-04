@@ -1,0 +1,72 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml">
+    <Style x:Key="ValidatedTextBoxStyle"
+           TargetType="{x:Type wpfUi:TextBox}"
+           BasedOn="{StaticResource {x:Type wpfUi:TextBox}}">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <!-- This template is typically empty because we don't want the default red adorner box -->
+                <ControlTemplate />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource Border.ErrorBrush}" />
+                <Setter Property="BorderThickness"
+                        Value="1.5" />
+                <!-- The ToolTip will automatically be populated with the error message -->
+                <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ValidatedComboboxStyle"
+           TargetType="{x:Type ComboBox}"
+           BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <!-- This template is typically empty because we don't want the default red adorner box -->
+                <ControlTemplate />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource Border.ErrorBrush}" />
+                <Setter Property="BorderThickness"
+                        Value="1.5" />
+                <!-- The ToolTip will automatically be populated with the error message -->
+                <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ValidatedNumberBoxStyle"
+           TargetType="{x:Type wpfUi:NumberBox}"
+           BasedOn="{StaticResource {x:Type wpfUi:NumberBox}}">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <!-- This template is typically empty because we don't want the default red adorner box -->
+                <ControlTemplate />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource Border.ErrorBrush}" />
+                <Setter Property="BorderThickness"
+                        Value="1.5" />
+                <!-- The ToolTip will automatically be populated with the error message -->
+                <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

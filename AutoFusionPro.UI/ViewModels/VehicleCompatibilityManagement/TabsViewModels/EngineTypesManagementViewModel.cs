@@ -46,7 +46,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.TabsViewMod
         private ObservableCollection<EngineTypeDto> _engineTypesCollection;
 
         [ObservableProperty]
-        private EngineTypeDto _selectedEngineType = null;
+        private EngineTypeDto? _selectedEngineType;
 
         public EngineTypesManagementViewModel(IWpfToastNotificationService wpfToastNotificationService,
             IVehicleTaxonomyService compatibleVehicleService,

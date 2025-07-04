@@ -72,12 +72,12 @@ namespace AutoFusionPro.UI.ViewModels.Categories
 
         [ObservableProperty]
         private ObservableCollection<ActiveFilterDisplayItem> _activeFiltersDisplayCollection = new();
-        public bool IsFiltersActive => _appliedFilterCriteria != null &&
-                                       (_appliedFilterCriteria.IsActive.HasValue ||
-                                        _appliedFilterCriteria.HasSubcategories.HasValue ||
-                                        _appliedFilterCriteria.HasParts.HasValue ||
+        public bool IsFiltersActive => AppliedFilterCriteria != null &&
+                                       (AppliedFilterCriteria.IsActive.HasValue ||
+                                        AppliedFilterCriteria.HasSubcategories.HasValue ||
+                                        AppliedFilterCriteria.HasParts.HasValue ||
                                         // ParentId filter not relevant if always showing top-level
-                                        _appliedFilterCriteria.SortBy != CategorySortBy.NameAsc);
+                                        AppliedFilterCriteria.SortBy != CategorySortBy.NameAsc);
 
         #endregion
 
@@ -431,6 +431,12 @@ namespace AutoFusionPro.UI.ViewModels.Categories
             // ApplyFiltersAndSearchToDisplay(); // Already done by OnAppliedFilterCriteriaChanged if filters were active
             // Or if sorting is different per view type, re-apply here.
         }
+
+
+
+        #endregion
+
+        #region Filter Commands
 
         [RelayCommand(CanExecute = nameof(HasTextCategorySearchQuery))]
         private void ClearCategorySearch() // Renamed

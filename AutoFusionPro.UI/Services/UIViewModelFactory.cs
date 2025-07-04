@@ -5,6 +5,7 @@ using AutoFusionPro.UI.ViewModels.Base;
 using AutoFusionPro.UI.ViewModels.Categories;
 using AutoFusionPro.UI.ViewModels.Dashboard;
 using AutoFusionPro.UI.ViewModels.Parts;
+using AutoFusionPro.UI.ViewModels.Parts.Details;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.User;
 using AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement;
@@ -54,6 +55,8 @@ namespace AutoFusionPro.UI.Services
             {
                 ApplicationPage.CategoryDetails =>
                    await ResolveInitializableViewModel<CategoryDetailViewModel>(parameter),
+                ApplicationPage.PartDetails =>
+                    await ResolveInitializableViewModel<PartDetailsViewModel>(parameter),
 
 
                 //ApplicationPage.AppointmentDetails =>

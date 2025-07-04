@@ -553,6 +553,22 @@
     <sys:String x:Key="UpToStr">Up To</sys:String>
     <sys:String x:Key="AnyYearStr">Any Year</sys:String>
     <sys:String x:Key="RuleNameStr">Rule Name</sys:String>
+    <sys:String x:Key="RuleActivityStr">Rule Activity</sys:String>
+    <sys:String x:Key="TemplatesOnlyeStr">Templates Only</sys:String>
+    <sys:String x:Key="ShowAllRulesStr">Show All Rules</sys:String>
+    <sys:String x:Key="ShowOnlyActiveRulesStr">Show Only Active Rules</sys:String>
+    <sys:String x:Key="ShowOnlyInactiveRulesStr">Show Only Inactive Rules</sys:String>
+    <sys:String x:Key="ShowOnlyTemplatesStr">Show Only Templates</sys:String>
+    <sys:String x:Key="FilterRulesByActivityStr">Filter Rules By Activity</sys:String>
+    <sys:String x:Key="PcsStr">Pcs</sys:String>
+    <sys:String x:Key="MeterStr">Meter</sys:String>
+    <sys:String x:Key="LiterStr">Liter</sys:String>
+    <sys:String x:Key="BoxStr">Box</sys:String>
+    <sys:String x:Key="SetStr">Set</sys:String>
+    <sys:String x:Key="PairStr">Pair</sys:String>
+    <sys:String x:Key="KGStr">Kg</sys:String>
+    <sys:String x:Key="OpenDetailsStr">Open Details</sys:String>
+    <sys:String x:Key="PartDetailsStr">Part Details</sys:String>
 
 
 
