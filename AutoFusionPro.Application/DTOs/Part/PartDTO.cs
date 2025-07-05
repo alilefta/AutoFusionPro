@@ -180,7 +180,7 @@ namespace AutoFusionPro.Application.DTOs.Part
         decimal? MinSellingPrice = null,
         decimal? MaxSellingPrice = null,
         StockStatusFilter? StockStatus = null,
-        bool? IsActive = true,          // Default to showing only active parts
+        bool? IsActive = null,          // Default to showing only active parts
         bool? IsOriginal = null,        // True for OEM, False for Aftermarket, Null for both
 
         // Vehicle Compatibility Filters
@@ -197,6 +197,10 @@ namespace AutoFusionPro.Application.DTOs.Part
         PartSortBy? SortBy = null,       // Enum for sorting options
         bool IsSortAscending = true     // Direction of sorting
     );
+
+    public record SortByComboboxSelectableItemDto(string title, PartSortBy? value);
+    public record StockStatusComboboxSelectableItemDto(string title, StockStatusFilter? value);
+
 
     // New Enum for Sorting
     public enum PartSortBy

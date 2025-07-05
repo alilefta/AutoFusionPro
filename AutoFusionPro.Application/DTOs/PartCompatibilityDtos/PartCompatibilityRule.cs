@@ -165,7 +165,7 @@ namespace AutoFusionPro.Application.DTOs.PartCompatibilityDtos
         List<string> AppliedRuleNames // Names of the rules that caused the match
     );
 
-    public record ShowRulesByActivityFilterDto(string title, bool? value);
+
 
     public record VehicleSpecificationDto( // Renamed to avoid confusion with old CompatibleVehicle entity DTOs
         int? MakeId,

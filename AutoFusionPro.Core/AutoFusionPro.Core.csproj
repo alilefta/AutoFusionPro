@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Enums\Helpers\" />
+	  <Folder Include="Enums\UI\FiltersDto\" />
 	</ItemGroup>
 	
 </Project>

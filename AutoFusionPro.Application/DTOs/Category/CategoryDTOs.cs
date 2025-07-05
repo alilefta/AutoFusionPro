@@ -27,6 +27,7 @@ namespace AutoFusionPro.Application.DTOs.Category
         public int PartCount { get; set; } // How many parts are directly in this category
     }
 
+
     /// <summary>
     /// DTO for creating a new category.
     /// </summary>

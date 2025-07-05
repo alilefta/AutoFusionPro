@@ -22,6 +22,7 @@ using AutoFusionPro.UI.ViewModels.Parts.Details;
 using AutoFusionPro.UI.ViewModels.Parts.Dialogs;
 using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEdit;
 using AutoFusionPro.UI.ViewModels.Parts.Dialogs.AddEdit.AddEditPartDialogs;
+using AutoFusionPro.UI.ViewModels.Parts.Dialogs.Filters;
 using AutoFusionPro.UI.ViewModels.Settings;
 using AutoFusionPro.UI.ViewModels.Settings.UserManagement;
 using AutoFusionPro.UI.ViewModels.Shell;
@@ -367,8 +368,6 @@ namespace AutoFusionPro.UI
                 //services.AddTransient<AddCompatibleVehicleDialogViewModel>();
                 //services.AddTransient<EditCompatibleVehicleDialogViewModel>();
 
-                services.AddTransient<PartCompatibilityRuleFilterOptionsDialogViewModel>();
-
                 services.AddTransient<AddRootCategoryDialogViewModel>();
                 services.AddTransient<EditRootCategoryDialogViewModel>();
 
@@ -377,11 +376,15 @@ namespace AutoFusionPro.UI
 
                 services.AddTransient<CategoryDetailViewModel>();
 
-                services.AddTransient<CategoryFilterOptionsDialogViewModel>();
-
                 services.AddTransient<LinkNewSupplierDialogViewModel>();
                 services.AddTransient<EditSupplierLinkDialogViewModel>();
                 services.AddTransient<DefineVehicleSpecificationDialogViewModel>();
+
+
+                // Filter Dialogs
+                services.AddTransient<CategoryFilterOptionsDialogViewModel>();
+                services.AddTransient<PartCompatibilityRuleFilterOptionsDialogViewModel>();
+                services.AddTransient<PartFilterOptionsDialogViewModel>();
 
 
                 // Dialogs

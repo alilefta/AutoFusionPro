@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:AutoFusionPro.UI.ViewModels.Parts"
              xmlns:xBtn="clr-namespace:AutoFusionPro.UI.Controls.Buttons"
              xmlns:forms="clr-namespace:AutoFusionPro.UI.Controls.Forms"
+             xmlns:filterDto="clr-namespace:AutoFusionPro.UI.Helpers.Filtration"
              xmlns:spinner="clr-namespace:AutoFusionPro.UI.Controls.LoadingSpinners"
              xmlns:wpfUi="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
@@ -58,19 +59,28 @@
                                        Margin="5,0,0,0" />
                         </StackPanel>
                     </xBtn:XButton>
-                    <xBtn:XButton ButtonType="Light"
+                    <xBtn:XButton ButtonType="Regular"
                                   Margin="8,0,0,0"
-                                  IsLoading="False"
-                                  Style="{StaticResource RegularButtonStyle}">
+                                  Style="{DynamicResource RegularButtonStyle}"
+                                  IsLoading="{Binding IsShowingFilters}"
+                                  Command="{Binding ShowFilterDialogCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <wpfUi:SymbolIcon Symbol="WrenchScrewdriver24"
-                                              FontSize="14" />
                             <TextBlock Text="{DynamicResource FiltersStr}"
-                                       FontSize="13"
-                                       Margin="5,0,0,0" />
+                                       VerticalAlignment="Center"
+                                       FontSize="13" />
+                            <wpfUi:SymbolIcon Symbol="Filter24"
+                                              Margin="5,0,0,0"
+                                              VerticalAlignment="Center"
+                                              FontSize="16" />
+
+                            <!-- Filters Selected Indicator-->
+                            <Ellipse Width="10"
+                                     Height="10"
+                                     Margin="15,0,0,0"
+                                     Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                     Fill="{DynamicResource Border.ErrorBrush}" />
                         </StackPanel>
                     </xBtn:XButton>
-
                     <xBtn:XButton ButtonType="Primary"
                                   IsLoading="{Binding IsAddingPart}"
                                   Margin="8,0,0,0"
@@ -90,50 +100,67 @@
 
 
             <!-- Active Filters Bar-->
-            <Grid Grid.Row="1"
-                  Margin="5,10">
-                <ItemsControl ItemsSource="{Binding CurrentlyAppliedFilters}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Background="{DynamicResource Border.SecondaryBrush}"
-                                    CornerRadius="4"
-                                    Padding="6,3"
-                                    Margin="3,3">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="{Binding Name}"
-                                               TextWrapping="Wrap"
-                                               FontFamily="{DynamicResource DynamicFontFamilyRegular}"
-                                               FontSize="12" />
-                                    <Button Grid.Column="1"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Padding="2"
-                                            Cursor="Hand"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                            CommandParameter="{Binding}"
-                                            ToolTip="Remove Filter">
-                                        <wpfUi:SymbolIcon Symbol="Dismiss48"
-                                                          Margin="5,0,0,0"
-                                                          FontSize="10" />
-                                    </Button>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
+            <Border Grid.Row="1"
+                    Margin="8,10,8,5"
+                    Padding="8,5"
+                    MinHeight="30"
+                    Visibility="{Binding IsFiltersActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{DynamicResource ActiveFiltersStr}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,10,0"
+                               FontWeight="SemiBold" />
+                    <ItemsControl ItemsSource="{Binding ActiveFiltersDisplayCollection}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type filterDto:ActiveFilterDisplayItem}">
+                                <Border Background="{DynamicResource ActiveFilter.BackgroundBrush}"
+                                        CornerRadius="10"
+                                        Padding="9,4"
+                                        BorderBrush="{DynamicResource ActiveFilter.BorderBrush}"
+                                        BorderThickness="0.6"
+                                        Margin="3">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontFamily="{DynamicResource DynamicFontFamilyRegular}"
+                                                   Foreground="{DynamicResource ActiveFilter.ForegroundBrush}">
+                                                    <Run Text="{Binding FilterType}"
+                                                         FontWeight="SemiBold" />: <Run Text="{Binding FilterValueDisplay}" />
+                                        </TextBlock>
+                                        <Button Grid.Column="1"
+                                                Padding="2"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="5,0,0,0"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalContentAlignment="Center"
+                                                Cursor="Hand"
+                                                Command="{Binding DataContext.RemoveActiveFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding}"
+                                                ToolTip="{DynamicResource RemoveThisFilterStr}">
+                                            <wpfUi:SymbolIcon Symbol="Dismiss16"
+                                                              FontSize="10"
+                                                              Foreground="{DynamicResource ActiveFilter.ForegroundBrush}"
+                                                              FontFamily="{DynamicResource FluentSystemIconsFontRegular}"
+                                                              Margin="0"
+                                                              VerticalAlignment="Center" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
 
             <!-- Data Grid -->
             <Grid Grid.Row="2"

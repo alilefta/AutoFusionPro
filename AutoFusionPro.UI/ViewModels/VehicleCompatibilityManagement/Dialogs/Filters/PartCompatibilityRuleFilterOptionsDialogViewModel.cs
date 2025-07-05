@@ -5,6 +5,7 @@ using AutoFusionPro.Application.Interfaces.Dialogs;
 using AutoFusionPro.Core.Exceptions.ViewModel;
 using AutoFusionPro.Core.Helpers.ErrorMessages;
 using AutoFusionPro.Core.Helpers.Operations;
+using AutoFusionPro.Core.SharedDTOs.ComboboxFillDto;
 using AutoFusionPro.Core.SharedDTOs.PartCompatibilityRule;
 using AutoFusionPro.UI.Helpers;
 using AutoFusionPro.UI.Services;
@@ -97,34 +98,34 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         private YearFilterItem? _selectedExactYear;
 
         [ObservableProperty]
-        private ObservableCollection<MakeDto> _makesCollection;
+        private ObservableCollection<MakeDto> _makesCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<ModelDto> _modelsCollection;
+        private ObservableCollection<ModelDto> _modelsCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<TrimLevelDto> _trimLevelsCollection;
+        private ObservableCollection<TrimLevelDto> _trimLevelsCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<TransmissionTypeDto> _transmissionTypesCollection;
+        private ObservableCollection<TransmissionTypeDto> _transmissionTypesCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<BodyTypeDto> _bodyTypesCollection;
+        private ObservableCollection<BodyTypeDto> _bodyTypesCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<EngineTypeDto> _engineTypesCollection;
+        private ObservableCollection<EngineTypeDto> _engineTypesCollection = new();
 
         [ObservableProperty]
-        private ObservableCollection<YearFilterItem> _yearsCollection;
+        private ObservableCollection<YearFilterItem> _yearsCollection = new();
 
 
         [ObservableProperty]
-        private ObservableCollection<ShowRulesByActivityFilterDto> _showRulesByActivityFilterDtos = new();
+        private ObservableCollection<ComboboxSelectableItemDto> _showRulesByActivityFilterDtos = new();
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsShowByActivityNotDefault))]
         [NotifyPropertyChangedFor(nameof(AnyFilterSelected))]
-        private ShowRulesByActivityFilterDto? _selectedShowByActivityItem;
+        private ComboboxSelectableItemDto? _selectedShowByActivityItem;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsShowOnlyTemplatesApplied))]
@@ -150,14 +151,6 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         public PartCompatibilityRuleFilterOptionsDialogViewModel(IVehicleTaxonomyService compatibleVehicleService, ILocalizationService localizationService, ILogger<PartCompatibilityRuleFilterOptionsDialogViewModel> logger) : base(localizationService, logger)
         {
             _compatibleVehicleService = compatibleVehicleService ?? throw new ArgumentNullException(nameof(compatibleVehicleService));
-
-            MakesCollection = new ObservableCollection<MakeDto>();
-            ModelsCollection = new ObservableCollection<ModelDto>();
-            TrimLevelsCollection = new ObservableCollection<TrimLevelDto>();
-            TransmissionTypesCollection = new ObservableCollection<TransmissionTypeDto>();
-            BodyTypesCollection = new ObservableCollection<BodyTypeDto>();
-            EngineTypesCollection = new ObservableCollection<EngineTypeDto>();
-            YearsCollection = new ObservableCollection<YearFilterItem>();
         }
         #endregion
 
@@ -176,7 +169,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             await LoadTransmissionTypesAsync();
             await LoadBodyTypesAsync();
 
-            PopulaShowByActivityCombobox();
+            PopulateShowByActivityCombobox();
             PopulateYearsCollection();
 
             // Populate fields if Parameter (CompatibleVehicleFilterCriteriaDto) already have filters.
@@ -559,7 +552,7 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
         }
 
 
-        private void PopulaShowByActivityCombobox()
+        private void PopulateShowByActivityCombobox()
         {
             ShowRulesByActivityFilterDtos.Clear();
             var defaultItemStr = GetString("ShowAllRulesStr");
@@ -567,9 +560,9 @@ namespace AutoFusionPro.UI.ViewModels.VehicleCompatibilityManagement.Dialogs.Fil
             var showOnlyInactiveRulesStr = GetString("ShowOnlyInactiveRulesStr");
 
 
-            var defaultNullItem = new ShowRulesByActivityFilterDto(defaultItemStr, null);
-            var showOnlyActiveRulesItem = new ShowRulesByActivityFilterDto(showOnlyActiveRulesStr, true);
-            var showOnlyInactiveRulesItem = new ShowRulesByActivityFilterDto(showOnlyInactiveRulesStr, false);
+            var defaultNullItem = new ComboboxSelectableItemDto(defaultItemStr, null);
+            var showOnlyActiveRulesItem = new ComboboxSelectableItemDto(showOnlyActiveRulesStr, true);
+            var showOnlyInactiveRulesItem = new ComboboxSelectableItemDto(showOnlyInactiveRulesStr, false);
 
             ShowRulesByActivityFilterDtos.Add(defaultNullItem);
             ShowRulesByActivityFilterDtos.Add(showOnlyActiveRulesItem);

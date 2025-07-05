@@ -569,7 +569,38 @@
     <sys:String x:Key="KGStr">Kg</sys:String>
     <sys:String x:Key="OpenDetailsStr">Open Details</sys:String>
     <sys:String x:Key="PartDetailsStr">Part Details</sys:String>
+    <sys:String x:Key="ShowAllPartsStr">Show All Parts</sys:String>
+    <sys:String x:Key="ShowOnlyActivePartsStr">Show Only Active Parts</sys:String>
+    <sys:String x:Key="ShowOnlyInactivePartsStr">Show Only Inactive Parts</sys:String>
+    <sys:String x:Key="ShowOnlyOriginalPartsStr">Show Only Original (OEM) Parts</sys:String>
+    <sys:String x:Key="ShowOnlyAftermarketPartsStr">Show Only Aftermarket Parts</sys:String>
+    <sys:String x:Key="FilterPartsByOriginalityStr">Filter Parts By Originality</sys:String>
+    <sys:String x:Key="SortByNameStr">Sort By Name</sys:String>
+    <sys:String x:Key="SortByPartNumberStr">Sort By Part Number</sys:String>
+    <sys:String x:Key="SortBySellingPriceStr">Sort By Selling Price</sys:String>
+    <sys:String x:Key="SortByCurrentStockStr">Sort By Current Stock</sys:String>
+    <sys:String x:Key="SortByLastModifiedStr">Sort By Last Modified</sys:String>
+    <sys:String x:Key="InStockStr">In Stock</sys:String>
+    <sys:String x:Key="OutOfStockStr">Out of Stock</sys:String>
+    <sys:String x:Key="LowStockStr">Low Stock</sys:String>
+    <sys:String x:Key="SortByStockStatusStr">Sort By Stock Status</sys:String>
+    <sys:String x:Key="FilterByManufacturerStr">Filter By Manufacturer</sys:String>
+    <sys:String x:Key="SearchByManufacturerNameStr">Search By Manufacturer Name</sys:String>
+    <sys:String x:Key="StockStatusStr">Stock Status</sys:String>
+    <sys:String x:Key="TypeStr">Type</sys:String>
+    <sys:String x:Key="LastModifiedStr">Last Modified</sys:String>
+    <sys:String x:Key="SortDirectionStr">Sort Direction</sys:String>
+    <sys:String x:Key="AscendingStr">Ascending</sys:String>
+    <sys:String x:Key="DescendingStr">Descending</sys:String>
 
+    <sys:String x:Key="GeneralFiltersStr">General Filters</sys:String>
+    <sys:String x:Key="VehicleFiltersStr">Vehicle Filters</sys:String>
+    <sys:String x:Key="CategoryAndSupplierStr">Category &amp; Supplier</sys:String>
+    <sys:String x:Key="PriceRangeStr">Price Range</sys:String>
+    <sys:String x:Key="MinPriceStr">Min Price</sys:String>
+    <sys:String x:Key="MaxPriceStr">Max Price</sys:String>
+    <sys:String x:Key="StockAndStatusStr">Stock &amp; Status</sys:String>
+    <sys:String x:Key="SortingOptionsStr">Sorting Options</sys:String>
 
 
 
